@@ -1,0 +1,6 @@
+node_modules/
+
+# Sequelize database
+data.db
+
+.env
