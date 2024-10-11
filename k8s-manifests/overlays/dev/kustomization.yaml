@@ -1,0 +1,66 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# The YAML that is part of this overlay
+resources:
+  - dev.deployment.yaml
+  # Bases. Base directories must have their own kustomization.yaml file with resources listed.
+  - ../../base/test-dmsp-ai
+  # Overlay resources
+  - dev.namespace.yaml
+  - dev.ingress.yaml
+  - dev.frontendconfig.yaml
+  - dev.backendconfig.yaml
+  # Secrets folder. Contents are copied in from Google Secret Manager during build.
+  - ./secrets
+
+# The number of replica Pods to create
+replicas:
+  - count: 1
+    name: test-dmsp-ai-api-deployment
+  - count: 1
+    name: test-dmsp-ai-react-deployment
+
+# The namespace for all resources
+namespace: dev-default
+
+# This will be prefixed to all resource names
+namePrefix: dev-
+
+# These labels will be applied to all resources.
+# https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
+commonLabels:
+  app.kubernetes.io/instance: test-dmsp-ai-dev
+  app.kubernetes.io/part-of: test-dmsp-ai-app
+
+images:
+  - name: test-dmsp-ai-api-image
+    newName: test-dmsp-ai-api
+    newTag: latest
+  - name: test-dmsp-ai-react-image
+    newName: test-dmsp-ai-react
+    newTag: latest
+
+# Generates the Kubernetes secret which holds the SSL certificate and key. The files
+# should be copied in from Google Secret Manager during the build process.
+secretGenerator:
+  - files:
+      - tls.crt
+      - tls.key
+    name: test-dmsp-ai-tls
+    type: kubernetes.io/tls
+
+vars:
+  - fieldref: {}
+    # The FrontendConfig name is referenced in an annotation on the Ingress resouce.
+    name: INGRESS_FRONTEND_CONFIG_NAME
+    objref:
+      apiVersion: networking.gke.io/v1beta1
+      kind: FrontendConfig
+      name: test-dmsp-ai-frontend-config
+  - fieldref: {}
+    # The BackendConfig name is referenced in an annotation on the Service resource.
+    name: INGRESS_BACKEND_CONFIG_NAME
+    objref:
+      apiVersion: cloud.google.com/v1
+      kind: BackendConfig
+      name: test-dmsp-ai-backend-config

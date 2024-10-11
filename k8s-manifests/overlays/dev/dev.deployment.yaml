@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-dmsp-ai-api-deployment
+  labels:
+    app.kubernetes.io/name: test-dmsp-ai-api
+    app.kubernetes.io/component: web-api-deployment
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: test-dmsp-ai-api
+      app.kubernetes.io/component: web-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: test-dmsp-ai-api
+        app.kubernetes.io/component: web-api
+    spec:
+      serviceAccountName: test-dmsp-ai
+      containers:
+        - name: api-web
+          image: test-dmsp-ai-api-image
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: test-dmsp-ai-secret
+          env:
+            - name: API_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: PORT
+                  name: test-dmsp-ai-secret
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: JWT_SECRET
+                  name: test-dmsp-ai-secret
+            - name: JWT_EXPIRATION_SECS
+              valueFrom:
+                secretKeyRef:
+                  key: JWT_EXPIRATION_SECS
+                  name: test-dmsp-ai-secret
+            - name: DMPTOOL_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: DMPTOOL_CLIENT_ID
+                  name: test-dmsp-ai-secret
+            - name: DMPTOOL_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: DMPTOOL_CLIENT_SECRET
+                  name: test-dmsp-ai-secret
+            - name: KE_LLM_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: KE_LLM_ACCESS_TOKEN
+                  name: test-dmsp-ai-secret
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              port: 5000
+              path: /health
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-dmsp-ai-react-deployment
+  labels:
+    app.kubernetes.io/name: test-dmsp-ai-react
+    app.kubernetes.io/component: web-react-deployment
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: test-dmsp-ai-react
+      app.kubernetes.io/component: web-react
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: test-dmsp-ai-react
+        app.kubernetes.io/component: web-react
+    spec:
+      serviceAccountName: test-dmsp-ai
+      containers:
+        - name: react-web
+          image: test-dmsp-ai-react-image
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              port: 3000
+              path: /

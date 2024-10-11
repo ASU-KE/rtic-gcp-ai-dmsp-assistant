@@ -1,0 +1,6 @@
+resources:
+  - serviceaccount.yaml
+  - service.yaml
+  - horizontalpodautoscaler.yaml
+  - np.allow-http-ingress.yaml
+  - np.default-deny-ingress.yaml

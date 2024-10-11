@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/v1beta1.FrontendConfig: "$(INGRESS_FRONTEND_CONFIG_NAME)"
+    kubernetes.io/ingress.global-static-ip-name: "dev-test-dmsp-ai"
+  name: test-dmsp-ai-ingress
+  labels:
+    app.kubernetes.io/component: "ingress"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: test-dmsp-ai-api-service
+                port:
+                  number: 8081
+      host: api.dmsp-ai.dev.rtd.asu.edu
+    - http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: test-dmsp-ai-react-service
+                port:
+                  number: 8082
+      host: dmsp-ai.dev.rtd.asu.edu
+  tls:
+    - secretName: test-dmsp-ai-tls
+      hosts:
+        - dmsp-ai.dev.rtd.asu.edu
+        - api.dmsp-ai.dev.rtd.asu.edu

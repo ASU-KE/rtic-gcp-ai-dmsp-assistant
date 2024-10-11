@@ -1,0 +1,106 @@
+steps:
+  # Build the Docker image for test-dmsp-ai api
+  - id: docker build api
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-f",
+        "Dockerfile",
+        "-t",
+        "gcr.io/$PROJECT_ID/test-dmsp-ai-api-image:$BUILD_ID",
+        ".",
+      ]
+
+  # Push the image to GCR
+  - id: docker push api
+    name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/test-dmsp-ai-api-image:$BUILD_ID"]
+
+  # Set image tag
+  - id: update Kubernetes test-dmsp-ai api Container Image
+    name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
+    entrypoint: bash
+    args:
+      - "-c"
+      - |
+        cd /workspace/k8s-manifests/${_KUST_BUILD_DIR}
+        kustomize edit set image test-dmsp-ai-api-image=gcr.io/$PROJECT_ID/test-dmsp-ai-api-image:$BUILD_ID
+    env:
+      - "APPLY=true"
+      - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
+      - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
+      - "GCLOUD_PROJECT=$PROJECT_ID"
+
+  # Build the Docker image for test-dmsp-ai react
+  - id: docker build react
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-f",
+        "test-dmsp-ai-app/Dockerfile",
+        "-t",
+        "gcr.io/$PROJECT_ID/test-dmsp-ai-react-image:$BUILD_ID",
+        "./test-dmsp-ai-app",
+      ]
+
+  # Push the image to GCR
+  - id: docker push react
+    name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/test-dmsp-ai-react-image:$BUILD_ID"]
+
+  # Set image tag
+  - id: update Kubernetes test-dmsp-ai react Container Image
+    name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
+    entrypoint: bash
+    args:
+      - "-c"
+      - |
+        cd /workspace/k8s-manifests/${_KUST_BUILD_DIR}
+        kustomize edit set image test-dmsp-ai-react-image=gcr.io/$PROJECT_ID/test-dmsp-ai-react-image:$BUILD_ID
+    env:
+      - "APPLY=true"
+      - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
+      - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
+      - "GCLOUD_PROJECT=$PROJECT_ID"
+
+  # Copy secrets and SSL certificate files from secret manager
+  - id: load kubernetes secrets file
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        [[ -d "/workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets" ]] || mkdir /workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets
+        gcloud secrets versions access latest --secret=${_SSL_CERT_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/tls.crt
+        gcloud secrets versions access latest --secret=${_SSL_KEY_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/tls.key
+        gcloud secrets versions access latest --secret=${_KUST_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets/kustomization.yaml
+
+  # Deploy to the cluster
+  - id: deploy test-dmsp-ai
+    name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
+    dir: "k8s-manifests"
+    args:
+      - "build"
+      - "${_KUST_BUILD_DIR}"
+    env:
+      - "APPLY=true"
+      - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
+      - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
+      - "GCLOUD_PROJECT=$PROJECT_ID"
+
+  # Ensure Workload Identity permissions are in place correctly
+  - id: Setup workload identity permissions
+    name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -c
+      - |
+        gcloud container clusters get-credentials ${_GKE_CLUSTER} --region ${_GKE_LOCATION} --project ${PROJECT_ID} && \
+        ./workload-identity-setup.sh
+    env:
+      - "PROJECT_ID=${PROJECT_ID}"
+      - "_GSA_NAME=${_GSA_NAME}"
+      - "_KSA_NAME=${_KSA_NAME}"
+      - "_GKE_NAMESPACE_NAME=${_GKE_NAMESPACE_NAME}"
