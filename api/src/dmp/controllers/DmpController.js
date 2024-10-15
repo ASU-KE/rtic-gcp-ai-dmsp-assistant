@@ -9,18 +9,18 @@ module.exports = {
     // Process the request
     try {
       const dmpPdfUrl = await DmpService.getDmpResource(dmpId);
-      const pdfDocument = await PdfService.fetchPdfInMemory(dmpPdfUrl);
-      const dmpText = await PdfService.extractText(pdfDocument);
-      const llmResponse = await LlmService.queryLlm(dmpText);
+      // const pdfDocument = await PdfService.fetchPdfInMemory(dmpPdfUrl);
+      // const dmpText = await PdfService.extractText(pdfDocument);
+      // const llmResponse = await LlmService.queryLlm(dmpText);
 
       return await res.status(200).json({
         status: res.status,
         data: {
           id: dmpId,
           document_url: await dmpPdfUrl,
-          documentText: await dmpText,
-          analysis: llmResponse.response,
-          metadata: llmResponse.metadata,
+          // documentText: await dmpText,
+          // analysis: llmResponse.response,
+          // metadata: llmResponse.metadata,
         },
       });
     } catch (error) {

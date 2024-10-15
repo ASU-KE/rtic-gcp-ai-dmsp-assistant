@@ -1,4 +1,20 @@
 module.exports = {
+  database: {
+    host: process.env.DATABASE_HOST || 'localhost',
+    port: process.env.DATABASE_PORT,
+    database: process.env.DATABASE_DB,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+  },
+  port: process.env.PORT || 8080,
+  // if you're not using docker compose for local development, this will default to 8080
+  // to prevent non-root permission problems with 80. Dockerfile is set to make this 80
+  // because containers don't have that issue :)
+  jwtSecret: process.env.JWT_SECRET,
+  jwtExpiration: process.env.JWT_EXPIRATION,
+  dmptoolClientId: process.env.DMPTOOL_CLIENT_ID,
+  dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET,
+  llmAccessSecret: process.env.LLM_ACCESS_SECRET,
   roles: {
     USER: 'user',
     ADMIN: 'admin',
@@ -23,7 +39,7 @@ module.exports = {
       topK: null, // int (Optional): 0-40 Randomness and Diversity parameter. The number of token choices the model uses to generate the next token.
       topP: null, // float (Optional): 0-1 Randomness and Diversity parameter. Use a lower value to ignore less probable options.
     },
-    enableSearch: null, // boolean (default = false): Enable for Retrieval Augmented Search (RAG) to have model search your document collection and generate its response from the search results.
+    enableSearch: null, // boolean (default = false): Enable for Retrieval Augmented Generation (RAG) to have model search your document collection and generate its response from the search results.
     searchParams: {
       dbType: 'opensearch', // string: Open Search is the only engine currently available.
       collection: 'test_collection', // string: Name of the collection in the data store. Managed through an AWS S3 bucket (aiml-llm-platform-poc-us-west-2-data-opensearch-ke)
