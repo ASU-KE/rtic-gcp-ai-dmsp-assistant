@@ -1,0 +1,88 @@
+services:
+  api:
+    build:
+      args:
+      - NODE_ENV=development
+      context: api
+      target: development
+    command: npm run start-watch
+    environment:
+      - DATABASE_DB=example
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=/run/secrets/db-password
+      - DATABASE_HOST=db
+      - NODE_ENV=development
+      - JWT_SECRET=/run/secrets/jwt-secret
+      - JWT_EXPIRATION=3600
+      - DMPTOOL_CLIENT_ID=/run/secrets/dmptool_client_id
+      - DMPTOOL_CLIENT_SECRET=/run/secrets/dmptool_client_secret
+      - LLM_ACCESS_SECRET=/run/secrets/llm_access_secret
+    ports:
+      - 80:80
+      - 9229:9229
+      - 9230:9230
+    secrets:
+      - db-password
+      - jwt-secret
+      - dmptool-client-id
+      - dmptool-client-secret
+      - llm-access-secret
+    volumes:
+      - ./api/src:/code/src:ro
+      - ./api/package.json:/code/package.json
+      - ./api/package-lock.json:/code/package-lock.json
+      - back-notused:/opt/app/node_modules
+    networks:
+      - public
+      - private
+    depends_on:
+      - db
+  db:
+    # We use a mariadb image which supports both amd64 & arm64 architecture
+    image: mariadb:10.6.4-focal
+    # If you really want to use MySQL, uncomment the following line
+    #image: mysql:8.0.27
+    command: '--default-authentication-plugin=mysql_native_password'
+    restart: always
+    secrets:
+      - db-password
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - private
+    environment:
+      - MYSQL_DATABASE=example
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
+  # react:
+  #   build:
+  #     context: react
+  #     target: development
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - ./react/src:/code/src
+  #     - /code/node_modules
+  #   networks:
+  #     - public
+  #   depends_on:
+  #     - api
+networks:
+  public:
+  private:
+volumes:
+  back-notused:
+  db-data:
+secrets:
+  # These secrets coupled with .gitignore ensure they are not committed
+  # into the code repository. These secrets files must be created locally
+  # in order to run this Docker Compose setup.
+  db-password:
+    file: secrets/db_password.txt
+  jwt-secret:
+    file: secrets/jwt_secret.txt
+  dmptool-client-id:
+    file: secrets/dmptool_client_id.txt
+  dmptool-client-secret:
+    file: secrets/dmptool_client_secret.txt
+  llm-access-secret:
+    file: secrets/llm_access_secret.txt
