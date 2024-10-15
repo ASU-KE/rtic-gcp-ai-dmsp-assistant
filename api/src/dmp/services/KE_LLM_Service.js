@@ -2,6 +2,7 @@ module.exports = {
   queryLlm: async (planText) => {
     const {
       endpoints: { queryLlmRestEndpoint },
+      llmAccessSecret,
       llmOptions: {
         modelProvider,
         modelName,
@@ -19,10 +20,7 @@ module.exports = {
 
     try {
       const headers = new Headers();
-      headers.append(
-        'Authorization',
-        `Bearer ${process.env.KE_LLM_ACCESS_TOKEN}`
-      );
+      headers.append('Authorization', `Bearer ${llmAccessSecret}`);
       headers.append('Accept', `application/json`);
       headers.append('Content-Type', `application/json`);
 

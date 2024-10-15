@@ -5,11 +5,13 @@ module.exports = {
   getDmpResource: async (dmpId) => {
     const {
       endpoints: { authEndpoint },
+      dmptoolClientId,
+      dmptoolClientSecret,
     } = require('../../config');
 
     // get Bearer token for authentication
     const bearerToken = Buffer.from(
-      `${process.env.DMPTOOL_CLIENT_ID}:${process.env.DMPTOOL_CLIENT_SECRET}`
+      `${dmptoolClientId}:${dmptoolClientSecret}`
     ).toString('base64');
 
     // cache DMPTool API Oauth2 token
