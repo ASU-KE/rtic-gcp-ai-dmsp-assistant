@@ -16,7 +16,6 @@ export function QueryAiAssistant() {
     handleSubmit,
     reset,
     formState,
-    formState: { isSubmitSuccessful },
   } = useForm();
 
   const { mutate } = useMutation({
