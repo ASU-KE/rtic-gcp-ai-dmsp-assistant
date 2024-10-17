@@ -17,7 +17,6 @@ services:
       - ./api/src:/code/src:ro
       - ./api/package.json:/code/package.json
       - ./api/package-lock.json:/code/package-lock.json
-      - back-notused:/opt/app/node_modules
     networks:
       - public
       - private
@@ -60,7 +59,6 @@ networks:
   public:
   private:
 volumes:
-  back-notused:
   db-data:
 secrets:
   db-password:
