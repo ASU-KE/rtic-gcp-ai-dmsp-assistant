@@ -26,14 +26,12 @@ export function QueryAiAssistant() {
           dmpId: values.dmpId,
         })
         .then(function (response) {
-          // console.log('response:', response.data.data);
           setApiResponse({
             statusCode: 200,
             statusMessage: null,
             ...response.data.data,
           });
           setIsLoading(false);
-          // return response.data.data;
         })
         .catch((error) => {
           if (error.response) {
@@ -64,8 +62,6 @@ export function QueryAiAssistant() {
         });
     },
   });
-
-  console.log('apiResponse:', apiResponse);
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
