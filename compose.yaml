@@ -45,6 +45,8 @@ services:
       target: development
       secrets:
         - npmrc
+    environment:
+      - VITE_BACKEND_URL=http://localhost:3001
     ports:
       - 3000:3000
     volumes:
