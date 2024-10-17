@@ -28,17 +28,42 @@ spec:
             - name: API_PORT
               valueFrom:
                 secretKeyRef:
-                  key: PORT
+                  key: API_PORT
+                  name: test-dmsp-ai-secret
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_HOST
+                  name: test-dmsp-ai-secret
+            - name: DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_PORT
+                  name: test-dmsp-ai-secret
+            - name: DATABASE_DB
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_DB
+                  name: test-dmsp-ai-secret
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_USER
+                  name: test-dmsp-ai-secret
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_PASSWORD
                   name: test-dmsp-ai-secret
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
                   key: JWT_SECRET
                   name: test-dmsp-ai-secret
-            - name: JWT_EXPIRATION_SECS
+            - name: JWT_EXPIRATION
               valueFrom:
                 secretKeyRef:
-                  key: JWT_EXPIRATION_SECS
+                  key: JWT_EXPIRATION
                   name: test-dmsp-ai-secret
             - name: DMPTOOL_CLIENT_ID
               valueFrom:
@@ -50,10 +75,10 @@ spec:
                 secretKeyRef:
                   key: DMPTOOL_CLIENT_SECRET
                   name: test-dmsp-ai-secret
-            - name: KE_LLM_ACCESS_TOKEN
+            - name: LLM_ACCESS_SECRET
               valueFrom:
                 secretKeyRef:
-                  key: KE_LLM_ACCESS_TOKEN
+                  key: LLM_ACCESS_SECRET
                   name: test-dmsp-ai-secret
           resources:
             requests:
@@ -63,11 +88,11 @@ spec:
               memory: "512Mi"
               cpu: "500m"
           ports:
-            - containerPort: 5000
+            - containerPort: 3001
           readinessProbe:
             httpGet:
-              port: 5000
-              path: /health
+              port: 3001
+              path: /healthz
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -97,4 +122,4 @@ spec:
           readinessProbe:
             httpGet:
               port: 3000
-              path: /
+              path: /healthz

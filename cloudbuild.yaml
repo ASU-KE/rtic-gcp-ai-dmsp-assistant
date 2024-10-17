@@ -32,6 +32,16 @@ steps:
       - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
       - "GCLOUD_PROJECT=$PROJECT_ID"
 
+  # Generate .npmrc with NPM token
+  # required when building react image to install private @asu packages
+  - name: bash
+    args:
+      - '-c'
+      - |
+        'echo "@asu:registry=https://npm.pkg.github.com/" > .npmrc'
+        'echo "//npm.pkg.github.com/:_authToken=$$NPM_TOKEN" >> .npmrc'
+    secretEnv: ['NPM_TOKEN']
+
   # Build the Docker image for test-dmsp-ai react
   - id: docker build react
     name: "gcr.io/cloud-builders/docker"
@@ -104,3 +114,8 @@ steps:
       - "_GSA_NAME=${_GSA_NAME}"
       - "_KSA_NAME=${_KSA_NAME}"
       - "_GKE_NAMESPACE_NAME=${_GKE_NAMESPACE_NAME}"
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/NPM_TOKEN/versions/latest
+    env: 'NPM_TOKEN'

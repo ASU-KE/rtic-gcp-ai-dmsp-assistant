@@ -10,7 +10,7 @@ spec:
     app.kubernetes.io/name: test-dmsp-ai-api
   ports:
     - port: 8081
-      targetPort: 5000
+      targetPort: 3001
 ---
 apiVersion: v1
 kind: Service
@@ -23,5 +23,5 @@ spec:
   selector:
     app.kubernetes.io/name: test-dmsp-ai-react
   ports:
-    - port: 8082
+    - port: 8080
       targetPort: 3000
