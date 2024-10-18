@@ -34,7 +34,7 @@ steps:
 
   # Copy .npmrc file from secret manager
   # required to install @asu NPM packages
-  - id: load kubernetes secrets file
+  - id: load npmrc secrets file
     name: gcr.io/cloud-builders/gcloud
     entrypoint: "bash"
     args:
