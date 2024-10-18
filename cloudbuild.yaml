@@ -32,15 +32,16 @@ steps:
       - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
       - "GCLOUD_PROJECT=$PROJECT_ID"
 
-  # Generate .npmrc with NPM token
-  # required when building react image to install private @asu packages
-  - name: bash
+  # Copy .npmrc file from secret manager
+  # required to install @asu NPM packages
+  - id: load kubernetes secrets file
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: "bash"
     args:
-      - '-c'
+      - "-c"
       - |
-        'echo "@asu:registry=https://npm.pkg.github.com/" > .npmrc'
-        'echo "//npm.pkg.github.com/:_authToken=$$NPM_TOKEN" >> .npmrc'
-    secretEnv: ['NPM_TOKEN']
+        [[ -d "/workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets" ]] || mkdir /workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets
+        gcloud secrets versions access latest --secret=${_NPMRC_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/.npmrc
 
   # Build the Docker image for test-dmsp-ai react
   - id: docker build react
@@ -114,8 +115,3 @@ steps:
       - "_GSA_NAME=${_GSA_NAME}"
       - "_KSA_NAME=${_KSA_NAME}"
       - "_GKE_NAMESPACE_NAME=${_GKE_NAMESPACE_NAME}"
-
-availableSecrets:
-  secretManager:
-  - versionName: projects/$PROJECT_ID/secrets/NPM_TOKEN/versions/latest
-    env: 'NPM_TOKEN'
