@@ -30,30 +30,25 @@ spec:
                 secretKeyRef:
                   key: API_PORT
                   name: test-dmsp-ai-secret
-            - name: DATABASE_HOST
+            - name: DB_HOST
               valueFrom:
                 secretKeyRef:
-                  key: DATABASE_HOST
+                  key: DB_HOST
                   name: test-dmsp-ai-secret
-            - name: DATABASE_PORT
+            - name: DB_NAME
               valueFrom:
                 secretKeyRef:
-                  key: DATABASE_PORT
+                  key: DB_NAME
                   name: test-dmsp-ai-secret
-            - name: DATABASE_DB
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  key: DATABASE_DB
+                  key: DB_USER
                   name: test-dmsp-ai-secret
-            - name: DATABASE_USER
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: DATABASE_USER
-                  name: test-dmsp-ai-secret
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: DATABASE_PASSWORD
+                  key: DB_PASSWORD
                   name: test-dmsp-ai-secret
             - name: JWT_SECRET
               valueFrom:
