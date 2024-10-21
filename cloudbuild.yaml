@@ -4,7 +4,7 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args:
       [
-        "buildx build",
+        "build",
         "-f",
         "Dockerfile.api",
         "-t",
@@ -48,7 +48,7 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args:
       [
-        "buildx build",
+        "build",
         "-f",
         "Dockerfile.react",
         "-t",
