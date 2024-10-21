@@ -55,6 +55,7 @@ steps:
         "gcr.io/$PROJECT_ID/test-dmsp-ai-react-image:$BUILD_ID",
         ".",
       ]
+    env: ["DOCKER_BUILDKIT=1"]
 
   # Push the image to GCR
   - id: docker push react
