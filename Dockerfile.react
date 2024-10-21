@@ -12,6 +12,7 @@ WORKDIR ${APP_HOME}
 
 COPY ./react/package.json ${APP_HOME}/
 COPY ./react/package-lock.json ${APP_HOME}/
+COPY ./react/.npmrc ${APP_HOME}/
 
 RUN npm ci
 COPY ./react/ ${APP_HOME}
