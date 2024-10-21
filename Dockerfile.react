@@ -13,7 +13,7 @@ WORKDIR ${APP_HOME}
 COPY ./react/package.json ${APP_HOME}/
 COPY ./react/package-lock.json ${APP_HOME}/
 
-RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
+RUN npm ci
 COPY ./react/ ${APP_HOME}
 
 CMD [ "npm", "start" ]
