@@ -6,7 +6,7 @@ steps:
       [
         "build",
         "-f",
-        "Dockerfile",
+        "Dockerfile.api",
         "-t",
         "gcr.io/$PROJECT_ID/test-dmsp-ai-api-image:$BUILD_ID",
         ".",
@@ -50,10 +50,10 @@ steps:
       [
         "build",
         "-f",
-        "test-dmsp-ai-app/Dockerfile",
+        "Dockerfile.react",
         "-t",
         "gcr.io/$PROJECT_ID/test-dmsp-ai-react-image:$BUILD_ID",
-        "./test-dmsp-ai-app",
+        ".",
       ]
 
   # Push the image to GCR

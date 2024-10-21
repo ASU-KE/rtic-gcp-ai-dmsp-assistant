@@ -10,11 +10,11 @@ ENV APP_HOME="/code"
 
 WORKDIR ${APP_HOME}
 
-COPY package.json ${APP_HOME}/
-COPY package-lock.json ${APP_HOME}/
+COPY ./react/package.json ${APP_HOME}/
+COPY ./react/package-lock.json ${APP_HOME}/
 
 RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
-COPY . ${APP_HOME}
+COPY ./react/ ${APP_HOME}
 
 CMD [ "npm", "start" ]
 
