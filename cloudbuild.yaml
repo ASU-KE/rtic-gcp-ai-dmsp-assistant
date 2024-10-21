@@ -34,14 +34,14 @@ steps:
 
   # Copy .npmrc file from secret manager
   # required to install @asu NPM packages
-  - id: load npmrc secrets file
-    name: gcr.io/cloud-builders/gcloud
-    entrypoint: "bash"
-    args:
-      - "-c"
-      - |
-        [[ -d "/workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets" ]] || mkdir /workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets
-        gcloud secrets versions access latest --secret=${_NPMRC_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/.npmrc
+  # - id: load npmrc secrets file
+  #   name: gcr.io/cloud-builders/gcloud
+  #   entrypoint: "bash"
+  #   args:
+  #     - "-c"
+  #     - |
+  #       [[ -d "/workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets" ]] || mkdir /workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets
+  #       gcloud secrets versions access latest --secret=${_NPMRC_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/.npmrc
 
   # Build the Docker image for test-dmsp-ai react
   - id: docker build react
