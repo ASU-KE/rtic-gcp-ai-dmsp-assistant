@@ -2,9 +2,11 @@ steps:
   # Build the Docker image for test-dmsp-ai react
   - id: docker build react
     name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
     args:
       [
-        'build',
+        '-c',
+        'docker build',
         '-f',
         'Dockerfile.react',
         '-t',
