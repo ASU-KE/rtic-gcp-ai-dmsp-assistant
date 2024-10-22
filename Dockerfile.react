@@ -16,9 +16,8 @@ WORKDIR ${APP_HOME}
 COPY ./react/package.json ${APP_HOME}/
 COPY ./react/package-lock.json ${APP_HOME}/
 
-RUN echo "@asu:registry=https://npm.pkg.github.com/ \n" > ${APP_HOME}/.npmrc && \
-    echo "//npm.pkg.github.com/:_authToken=" >> ${APP_HOME}/.npmrc && \
-    echo ${NPM_TOKEN} >> ${APP_HOME}/.npmrc
+RUN echo "@asu:registry=https://npm.pkg.github.com/" > ${APP_HOME}/.npmrc && \
+    echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}" >> ${APP_HOME}/.npmrc
 
 # Debug: output contents of .npmrc
 RUN cat ${APP_HOME}/.npmrc
