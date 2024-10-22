@@ -3,6 +3,8 @@
 FROM node:22.9-bookworm AS development
 
 ARG NPM_TOKEN
+
+## Debug: Output arg value
 RUN echo ${NPM_TOKEN}
 
 ENV CI=true
@@ -18,6 +20,7 @@ RUN echo "@asu:registry=https://npm.pkg.github.com/ \n" > ${APP_HOME}/.npmrc && 
     echo "//npm.pkg.github.com/:_authToken=" >> ${APP_HOME}/.npmrc && \
     echo ${NPM_TOKEN} >> ${APP_HOME}/.npmrc
 
+# Debug: output contents of .npmrc
 RUN cat ${APP_HOME}/.npmrc
 RUN npm ci
 
