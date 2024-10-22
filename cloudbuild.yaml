@@ -14,7 +14,6 @@ steps:
         '.',
       ]
     secretEnv: ['NPM_TOKEN']
-    env: ['DOCKER_BUILDKIT=1']
 
 availableSecrets:
   secretManager:
