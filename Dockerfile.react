@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1.10
-
 # Multi-stage Image Build
 # Stage 1 - Clean-Install node packages
 FROM node:22.9-bookworm AS development
@@ -16,11 +14,9 @@ WORKDIR ${APP_HOME}
 COPY ./react/package.json ${APP_HOME}/
 COPY ./react/package-lock.json ${APP_HOME}/
 
-RUN  <<EOF
-printf '@asu:registry=https://npm.pkg.github.com/\n' > ${APP_HOME}/.npmrc
-echo "//npm.pkg.github.com/:_authToken=" >> ${APP_HOME}/.npmrc
-echo ${NPM_TOKEN} >> ${APP_HOME}/.npmrc
-EOF
+RUN echo "@asu:registry=https://npm.pkg.github.com/ \n" > ${APP_HOME}/.npmrc && \
+    echo "//npm.pkg.github.com/:_authToken=" >> ${APP_HOME}/.npmrc && \
+    echo ${NPM_TOKEN} >> ${APP_HOME}/.npmrc
 
 RUN cat ${APP_HOME}/.npmrc
 RUN npm ci
