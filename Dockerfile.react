@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.4
+# syntax=docker/dockerfile:1.10
 
 # Multi-stage Image Build
 # Stage 1 - Clean-Install node packages
