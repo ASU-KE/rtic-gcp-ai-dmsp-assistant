@@ -6,7 +6,7 @@ steps:
       [
         "build",
         "-f",
-        "Dockerfile",
+        "Dockerfile.api",
         "-t",
         "gcr.io/$PROJECT_ID/test-dmsp-ai-api-image:$BUILD_ID",
         ".",
