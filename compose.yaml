@@ -4,6 +4,7 @@ services:
       args:
       - NODE_ENV=development
       context: api
+      # dockerfile: ../Dockerfile.api
       target: development
     command: npm run start-watch
     env_file: "./api/.env"
@@ -41,6 +42,7 @@ services:
   react:
     build:
       context: react
+      # dockerfile: ../Dockerfile.react
       target: development
       secrets:
         - npmrc

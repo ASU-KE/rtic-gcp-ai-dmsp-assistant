@@ -1,12 +1,12 @@
 steps:
   # Build the Docker image for ai-dmsp-api
-  - id: docker build api
+  - id: docker build ai-dmsp-api
     name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
         "-f",
-        "Dockerfile.api",
+        "./api/Dockerfile",
         "-t",
         "gcr.io/$PROJECT_ID/ai-dmsp-api-image:$BUILD_ID",
         ".",
@@ -14,7 +14,7 @@ steps:
     env: ['DOCKER_BUILDKIT=1']
 
   # Push the image to GCR
-  - id: docker push api
+  - id: docker push ai-dmsp-api
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/ai-dmsp-api-image:$BUILD_ID"]
 
@@ -34,24 +34,24 @@ steps:
       - "GCLOUD_PROJECT=$PROJECT_ID"
 
   # Build the Docker image for ai-dmsp react
-  - id: docker build react
+  - id: docker build ai-dmsp-react
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       [
         '-c',
-        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN -f Dockerfile.react -t gcr.io/$PROJECT_ID/ai-dmsp-react-image:$BUILD_ID .',
+        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN -f ./react/Dockerfile -t gcr.io/$PROJECT_ID/ai-dmsp-react-image:$BUILD_ID .',
       ]
     env: ['DOCKER_BUILDKIT=1']
     secretEnv: ['NPM_TOKEN']
 
   # Push the image to GCR
-  - id: docker push react
+  - id: docker push ai-dmsp-react
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/ai-dmsp-react-image:$BUILD_ID"]
 
   # Set image tag
-  - id: update Kubernetes ai-dmsp react Container Image
+  - id: update Kubernetes ai-dmsp-react Container Image
     name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
     entrypoint: bash
     args:
