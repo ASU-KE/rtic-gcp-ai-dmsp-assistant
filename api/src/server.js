@@ -41,7 +41,7 @@ sequelize
   .then(() => {
     console.log('Sequelize Initialised!!');
 
-    // Attaching the Authentication and User Routes to the app.
+    // Attaching the routes to the app.
     app.use('/', AuthorizationRoutes);
     app.use('/user', UserRoutes);
     app.use('/dmp', DmpRoutes);
@@ -59,7 +59,7 @@ sequelize
       // do app logic here to determine if app is truly healthy
       // you should return 200 if healthy, and anything else will fail
       // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
-      res.send('I am happy and healthy\n');
+      res.send('Health check passed');
     });
   })
   .catch((err) => {
