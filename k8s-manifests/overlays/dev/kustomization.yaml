@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - dev.deployment.yaml
   # Bases. Base directories must have their own kustomization.yaml file with resources listed.
-  - ../../base/test-dmsp-ai
+  - ../../base/ai-dmsp
   # Overlay resources
   - dev.namespace.yaml
   - dev.ingress.yaml
@@ -16,9 +16,9 @@ resources:
 # The number of replica Pods to create
 replicas:
   - count: 1
-    name: test-dmsp-ai-api-deployment
+    name: ai-dmsp-api-deployment
   - count: 1
-    name: test-dmsp-ai-react-deployment
+    name: ai-dmsp-react-deployment
 
 # The namespace for all resources
 namespace: dev-default
@@ -29,15 +29,15 @@ namePrefix: dev-
 # These labels will be applied to all resources.
 # https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
 commonLabels:
-  app.kubernetes.io/instance: test-dmsp-ai-dev
-  app.kubernetes.io/part-of: test-dmsp-ai-app
+  app.kubernetes.io/instance: ai-dmsp-dev
+  app.kubernetes.io/part-of: ai-dmsp-app
 
 images:
-  - name: test-dmsp-ai-api-image
-    newName: test-dmsp-ai-api
+  - name: ai-dmsp-api-image
+    newName: ai-dmsp-api
     newTag: latest
-  - name: test-dmsp-ai-react-image
-    newName: test-dmsp-ai-react
+  - name: ai-dmsp-react-image
+    newName: ai-dmsp-react
     newTag: latest
 
 # Generates the Kubernetes secret which holds the SSL certificate and key. The files
@@ -46,7 +46,7 @@ secretGenerator:
   - files:
       - tls.crt
       - tls.key
-    name: test-dmsp-ai-tls
+    name: ai-dmsp-tls
     type: kubernetes.io/tls
 
 vars:
@@ -56,11 +56,11 @@ vars:
     objref:
       apiVersion: networking.gke.io/v1beta1
       kind: FrontendConfig
-      name: test-dmsp-ai-frontend-config
+      name: ai-dmsp-frontend-config
   - fieldref: {}
     # The BackendConfig name is referenced in an annotation on the Service resource.
     name: INGRESS_BACKEND_CONFIG_NAME
     objref:
       apiVersion: cloud.google.com/v1
       kind: BackendConfig
-      name: test-dmsp-ai-backend-config
+      name: ai-dmsp-backend-config

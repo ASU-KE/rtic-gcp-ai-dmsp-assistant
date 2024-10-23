@@ -1,20 +1,20 @@
 # Kubernetes Manifests
 
-This directory holds the Kubernetes manifests neccessary to deploy Example HTML application with [Kustomize](https://kubectl.docs.kubernetes.io/references/kustomize/).
+This directory holds the Kubernetes manifests neccessary to deploy the DMSP AI Assistant application with [Kustomize](https://kubectl.docs.kubernetes.io/references/kustomize/).
 
 ## Directory Structure
 
-### [base/example](./base/example)
+### [base/ai-dmsp](./base/ai-dmsp)
 
 Holds environment/deployment-agnostic configurations.
 
-- [deployment.yaml](base/example/deployment.yaml) - The controller for the applicaion server workload. Manages one or more Pods running the Example container image with a Cloud SQL Proxy sidecar.
-- [service.yaml](base/example/service.yaml) - Defines the Example service endpoint for the cluster.
+- [deployment.yaml](base/ai-dmsp/deployment.yaml) - The controller for the applicaion server workload. Manages one or more Pods running the Example container image with a Cloud SQL Proxy sidecar.
+- [service.yaml](base/ai-dmsp/service.yaml) - Defines the Example service endpoint for the cluster.
 - [kustomization.yaml](overlays/dev/kustomization.yaml) - This file tells Kustomize which manifests should be included.
 
 ### [overlays](./overlays)
 
-Contains environment/deployment-specific configurations (e.g. an Ingress resource for the deployment). Each sub-directory represents an overlay. Kustomization files should include ```../../base/example``` in their resources list. It is also common to include some or all of the following Kustomizations to customize the environment.
+Contains environment/deployment-specific configurations (e.g. an Ingress resource for the deployment). Each sub-directory represents an overlay. Kustomization files should include ```../../base/ai-dmsp``` in their resources list. It is also common to include some or all of the following Kustomizations to customize the environment.
 
 ```yaml
 namespace: <namespace-name> # The namespace in which all resources will be created
@@ -30,7 +30,7 @@ commonAnnotations: # A list of annotations that will be applied to all resources
   <annotation2-key>: <annotation2-value>
 
 replicas: # The number of Pods to run for the deployment
-- name: example-deployment
+- name: ai-dmsp-deployment
   count: <#>
 ```
 

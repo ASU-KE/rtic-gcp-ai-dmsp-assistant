@@ -6,7 +6,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: test-dmsp-ai-api
+      app.kubernetes.io/name: ai-dmsp-api
       app.kubernetes.io/component: web-api
   policyTypes:
     - Ingress
@@ -25,7 +25,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: test-dmsp-ai-react
+      app.kubernetes.io/name: ai-dmsp-react
       app.kubernetes.io/component: web-react
   policyTypes:
     - Ingress
