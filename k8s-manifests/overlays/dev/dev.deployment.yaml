@@ -87,7 +87,7 @@ spec:
           readinessProbe:
             httpGet:
               port: 3001
-              path: /healthz
+              path: /health
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -117,4 +117,4 @@ spec:
           readinessProbe:
             httpGet:
               port: 3000
-              path: /healthz
+              path: /health
