@@ -19,7 +19,7 @@ spec:
                 name: ai-dmsp-api-service
                 port:
                   number: 8081
-      host: api.dmsp.ai.dev.rtd.asu.edu
+      host: api.dmsp.ai.dev.rto.asu.edu
     - http:
         paths:
           - path: /*
@@ -29,9 +29,9 @@ spec:
                 name: ai-dmsp-react-service
                 port:
                   number: 8080
-      host: dmsp.ai.dev.rtd.asu.edu
+      host: dmsp.ai.dev.rto.asu.edu
   tls:
     - secretName: ai-dmsp-tls
       hosts:
-        - dmsp.ai.dev.rtd.asu.edu
-        - api.dmsp.ai.dev.rtd.asu.edu
+        - dmsp.ai.dev.rto.asu.edu
+        - api.dmsp.ai.dev.rto.asu.edu
