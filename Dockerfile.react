@@ -3,7 +3,6 @@
 FROM node:22.9-bookworm AS development
 
 ARG NPM_TOKEN
-ENV NPM_TOKEN=$NPM_TOKEN
 
 ## Debug: Output arg value
 RUN echo $NPM_TOKEN
