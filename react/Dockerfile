@@ -50,4 +50,6 @@ CMD [ "npm", "start" ]
 # Stage 4 - Build optimized production deployment
 FROM nginx:1.13-alpine
 
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
 COPY --from=builder /code/dist /usr/share/nginx/html
