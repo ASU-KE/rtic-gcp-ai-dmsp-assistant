@@ -8,6 +8,7 @@ steps:
         '-c',
         'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN -f Dockerfile.react -t gcr.io/$PROJECT_ID/test-dmsp-ai-react-image:$BUILD_ID .',
       ]
+    env: ['DOCKER_BUILDKIT=1']
     secretEnv: ['NPM_TOKEN']
 
 availableSecrets:
