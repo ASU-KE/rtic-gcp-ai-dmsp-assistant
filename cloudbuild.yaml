@@ -107,5 +107,5 @@ steps:
 
 availableSecrets:
   secretManager:
-  - versionName: projects/$PROJECT_ID/secrets/dev-dmsp-ai-secret-npmrc-token/versions/latest
+  - versionName: projects/$PROJECT_ID/secrets/dev-ai-dmsp-secret-npmrc-token/versions/latest
     env: 'NPM_TOKEN'
