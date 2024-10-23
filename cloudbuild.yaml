@@ -76,33 +76,33 @@ steps:
         gcloud secrets versions access latest --secret=${_SSL_KEY_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/tls.key
         gcloud secrets versions access latest --secret=${_KUST_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets/kustomization.yaml
 
-  # Deploy to the cluster
-  - id: deploy test-dmsp-ai
-    name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
-    dir: "k8s-manifests"
-    args:
-      - "build"
-      - "${_KUST_BUILD_DIR}"
-    env:
-      - "APPLY=true"
-      - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
-      - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
-      - "GCLOUD_PROJECT=$PROJECT_ID"
+  # # Deploy to the cluster
+  # - id: deploy test-dmsp-ai
+  #   name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
+  #   dir: "k8s-manifests"
+  #   args:
+  #     - "build"
+  #     - "${_KUST_BUILD_DIR}"
+  #   env:
+  #     - "APPLY=true"
+  #     - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
+  #     - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
+  #     - "GCLOUD_PROJECT=$PROJECT_ID"
 
-  # Ensure Workload Identity permissions are in place correctly
-  - id: Setup workload identity permissions
-    name: "gcr.io/cloud-builders/gcloud"
-    entrypoint: "bash"
-    args:
-      - -c
-      - |
-        gcloud container clusters get-credentials ${_GKE_CLUSTER} --region ${_GKE_LOCATION} --project ${PROJECT_ID} && \
-        ./workload-identity-setup.sh
-    env:
-      - "PROJECT_ID=${PROJECT_ID}"
-      - "_GSA_NAME=${_GSA_NAME}"
-      - "_KSA_NAME=${_KSA_NAME}"
-      - "_GKE_NAMESPACE_NAME=${_GKE_NAMESPACE_NAME}"
+  # # Ensure Workload Identity permissions are in place correctly
+  # - id: Setup workload identity permissions
+  #   name: "gcr.io/cloud-builders/gcloud"
+  #   entrypoint: "bash"
+  #   args:
+  #     - -c
+  #     - |
+  #       gcloud container clusters get-credentials ${_GKE_CLUSTER} --region ${_GKE_LOCATION} --project ${PROJECT_ID} && \
+  #       ./workload-identity-setup.sh
+  #   env:
+  #     - "PROJECT_ID=${PROJECT_ID}"
+  #     - "_GSA_NAME=${_GSA_NAME}"
+  #     - "_KSA_NAME=${_KSA_NAME}"
+  #     - "_GKE_NAMESPACE_NAME=${_GKE_NAMESPACE_NAME}"
 
 availableSecrets:
   secretManager:
