@@ -5,13 +5,12 @@ steps:
     args:
       [
         "build",
-        "-f",
-        "./api/Dockerfile",
         "-t",
         "gcr.io/$PROJECT_ID/ai-dmsp-api-image:$BUILD_ID",
         ".",
       ]
     env: ['DOCKER_BUILDKIT=1']
+    dir: 'api'
 
   # Push the image to GCR
   - id: docker push ai-dmsp-api
@@ -40,10 +39,11 @@ steps:
     args:
       [
         '-c',
-        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN -f ./react/Dockerfile -t gcr.io/$PROJECT_ID/ai-dmsp-react-image:$BUILD_ID .',
+        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN -t gcr.io/$PROJECT_ID/ai-dmsp-react-image:$BUILD_ID .',
       ]
     env: ['DOCKER_BUILDKIT=1']
     secretEnv: ['NPM_TOKEN']
+    dir: 'react'
 
   # Push the image to GCR
   - id: docker push ai-dmsp-react
