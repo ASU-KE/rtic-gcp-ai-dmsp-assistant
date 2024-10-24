@@ -24,4 +24,4 @@ spec:
     app.kubernetes.io/name: ai-dmsp-react
   ports:
     - port: 8080
-      targetPort: 3000
+      targetPort: 80

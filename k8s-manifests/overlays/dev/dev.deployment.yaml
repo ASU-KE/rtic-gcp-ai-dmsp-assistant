@@ -129,8 +129,8 @@ spec:
           image: ai-dmsp-react-image
           imagePullPolicy: Always
           ports:
-            - containerPort: 3000
+            - containerPort: 80
           readinessProbe:
             httpGet:
-              port: 3000
+              port: 80
               path: /
