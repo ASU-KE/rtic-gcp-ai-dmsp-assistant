@@ -87,6 +87,10 @@ spec:
                 secretKeyRef:
                   key: LLM_ACCESS_SECRET
                   name: ai-dmsp-secret
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
           resources:
             requests:
               memory: "64Mi"
