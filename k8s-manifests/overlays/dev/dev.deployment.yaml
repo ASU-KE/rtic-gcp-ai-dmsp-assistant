@@ -44,7 +44,7 @@ spec:
                 name: ai-dmsp-secret
           env:
             - name: API_PORT
-              value: 3001
+              value: "3001"
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
@@ -71,7 +71,7 @@ spec:
                   key: JWT_SECRET
                   name: ai-dmsp-secret
             - name: JWT_EXPIRATION
-              value: 3600
+              value: "3600"
             - name: DMPTOOL_CLIENT_ID
               valueFrom:
                 secretKeyRef:
