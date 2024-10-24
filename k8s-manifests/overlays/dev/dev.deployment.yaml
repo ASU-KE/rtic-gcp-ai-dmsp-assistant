@@ -133,4 +133,4 @@ spec:
           readinessProbe:
             httpGet:
               port: 3000
-              path: /health
+              path: /
