@@ -18,6 +18,24 @@ spec:
     spec:
       serviceAccountName: ai-dmsp
       containers:
+        - name: cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.17
+          env:
+          - name: CLOUDSQL_INSTANCE_NAME
+            valueFrom:
+              secretKeyRef:
+                key: CLOUDSQL_INSTANCE_NAME
+                name: ai-dmsp-secret
+          securityContext:
+            runAsNonRoot: true
+          command:
+          - "/cloud_sql_proxy"
+          - "-ip_address_types=PRIVATE"
+          - "-instances=$(CLOUDSQL_INSTANCE_NAME)=tcp:3306"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
         - name: api-web
           image: ai-dmsp-api-image
           imagePullPolicy: Always
