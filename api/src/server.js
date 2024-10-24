@@ -1,3 +1,7 @@
+// IMPORTANT: Make sure to import `instrument.js` at the top of your file.
+require('./instrument.js');
+
+const Sentry = require('@sentry/node');
 const express = require('express');
 
 const app = express();
@@ -47,20 +51,19 @@ sequelize
     app.use('/dmp', DmpRoutes);
     app.use('/test', TestRoutes);
 
-    // app.get('/', function (req, res, next) {
-    //   database
-    //     .raw('select VERSION() version')
-    //     .then(([rows, columns]) => rows[0])
-    //     .then((row) => res.json({ message: `Hello from MySQL ${row.version}` }))
-    //     .catch(next);
-    // });
+    app.get('/debug-sentry', function mainHandler(req, res) {
+      throw new Error('My first Sentry error!');
+    });
 
-    app.get('/health', function (req, res) {
+    app.get('/healthz', function (req, res) {
       // do app logic here to determine if app is truly healthy
       // you should return 200 if healthy, and anything else will fail
       // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
-      res.send(JSON.stringify({ "status": "Healthy" }));
+      res.send(JSON.stringify({ status: 'Healthy' }));
     });
+
+    // The error handler must be registered before any other error middleware and after all controllers
+    Sentry.setupExpressErrorHandler(app);
   })
   .catch((err) => {
     console.error('Sequelize Initialisation threw an error:', err);
