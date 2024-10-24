@@ -13,13 +13,15 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@sentry/node": "^8.35.0",
+    "@sentry/profiling-node": "^8.35.0",
     "ajv": "8.12.0",
     "cors": "2.8.5",
     "express": "^4.19.2",
     "jsonwebtoken": "9.0.0",
     "morgan": "1.10.0",
-    "node-cache": "^5.1.2",
     "mysql2": "^2.1.0",
+    "node-cache": "^5.1.2",
     "pdf-parse": "^1.1.1",
     "sequelize": "6.31.1",
     "sqlite3": "5.1.6"
