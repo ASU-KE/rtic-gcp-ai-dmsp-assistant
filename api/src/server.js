@@ -1,5 +1,14 @@
 const express = require('express');
 
+const { rollbarToken } = require('./config');
+// include and initialize the rollbar library with your access token
+var Rollbar = require('rollbar');
+var rollbar = new Rollbar({
+  accessToken: rollbarToken,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
+
 const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
@@ -39,7 +48,7 @@ UserModel.initialise(sequelize);
 sequelize
   .sync()
   .then(() => {
-    console.log('Sequelize Initialised!!');
+    rollbar.log('Sequelize Initialised!!');
 
     // Attaching the routes to the app.
     app.use('/', AuthorizationRoutes);
@@ -47,23 +56,17 @@ sequelize
     app.use('/dmp', DmpRoutes);
     app.use('/test', TestRoutes);
 
-    // app.get('/', function (req, res, next) {
-    //   database
-    //     .raw('select VERSION() version')
-    //     .then(([rows, columns]) => rows[0])
-    //     .then((row) => res.json({ message: `Hello from MySQL ${row.version}` }))
-    //     .catch(next);
-    // });
-
     app.get('/healthz', function (req, res) {
       // do app logic here to determine if app is truly healthy
       // you should return 200 if healthy, and anything else will fail
       // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
       res.send(JSON.stringify({ status: 'Healthy' }));
     });
+
+    app.use(rollbar.errorHandler());
   })
   .catch((err) => {
-    console.error('Sequelize Initialisation threw an error:', err);
+    rollbar.error('Sequelize Initialisation threw an error:', err);
   });
 
 module.exports = app;
