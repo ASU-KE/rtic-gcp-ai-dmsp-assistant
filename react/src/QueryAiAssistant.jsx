@@ -73,8 +73,7 @@ export function QueryAiAssistant() {
     <Container>
       <Row>
         <Col md={12}>
-          <h1>DMP AI Assistant</h1>
-          <h3>Proof-of-concept: Please do not share.</h3>
+          <h1 className="mt-4">DMSP AI Assistant: Proof-of-Concept</h1>
         </Col>
       </Row>
       <Row className="mb-4">
@@ -115,20 +114,7 @@ export function QueryAiAssistant() {
         <Row className="mt-2">
           <Col md={12}>
             <div className="border p-2 markdown-body">
-              <Accordion defaultActiveKey="0">
-                <Accordion.Item eventKey="0">
-                  <Accordion.Header>Analysis for: {apiResponse?.id}</Accordion.Header>
-                  <Accordion.Body>
-                    <Markdown>{apiResponse?.analysis}</Markdown>
-                  </Accordion.Body>
-                </Accordion.Item>
-                <Accordion.Item eventKey="1">
-                  <Accordion.Header>DMP Text</Accordion.Header>
-                  <Accordion.Body>
-                    <p>{apiResponse?.documentText}</p>
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
+              <Markdown>{apiResponse?.analysis}</Markdown>
             </div>
           </Col>
         </Row>
