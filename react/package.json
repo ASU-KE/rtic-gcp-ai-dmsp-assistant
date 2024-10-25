@@ -10,18 +10,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@asu/component-header": "^2.3.3",
     "@asu/unity-bootstrap-theme": "^1.14.2",
-    "@tanstack/react-query": "^5.59.0",
-    "@tanstack/react-query-devtools": "^5.59.0",
+    "@tanstack/react-query": "^4.0",
+    "@tanstack/react-query-devtools": "^4.0",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "github-markdown-css": "^5.7.0",
-    "react": "^18.3.1",
+    "react": "^17.0.2",
     "react-bootstrap": "^2.10.5",
-    "react-dom": "^18.3.1",
+    "react-dom": "^17.0.2",
     "react-hook-form": "^7.53.0",
     "react-loading-indicators": "^1.0.0",
-    "react-markdown": "^9.0.1"
+    "react-markdown": "^8.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
