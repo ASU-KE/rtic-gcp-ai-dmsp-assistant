@@ -13,6 +13,8 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@sentry/node": "^8.35.0",
+    "@sentry/profiling-node": "^8.35.0",
     "ajv": "8.12.0",
     "cors": "2.8.5",
     "express": "^4.19.2",
@@ -31,7 +33,7 @@
     "eslint": "^9.11.1",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.9.0",
-    "nodemon": "^2.0.4",
+    "nodemon": "^2.0.22",
     "prettier": "^2.8.8"
   }
 }
