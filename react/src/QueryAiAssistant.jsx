@@ -111,7 +111,7 @@ export function QueryAiAssistant() {
         </Row>
       )}
       {!isLoading && apiResponse && apiResponse.statusCode === 200 && (
-        <Row className="mt-2">
+        <Row className="mt-2 mb-4">
           <Col md={12}>
             <div className="border p-2 markdown-body">
               <Markdown>{apiResponse?.analysis}</Markdown>
