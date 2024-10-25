@@ -22,7 +22,7 @@ export function QueryAiAssistant() {
     mutationFn: (values) => {
       setIsLoading(true);
       axios
-        .post(import.meta.env.VITE_BACKEND_URL + '/dmp', {
+        .post(process.env.API_BACKEND_URL + '/dmp', {
           dmpId: values.dmpId,
         })
         .then(function (response) {
