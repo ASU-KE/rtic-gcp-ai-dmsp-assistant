@@ -5,6 +5,7 @@
 FROM node:22.9-bookworm AS development
 
 ARG NPM_TOKEN
+ARG VITE_BACKEND_URL
 
 ENV CI=true
 ENV PORT=3000
