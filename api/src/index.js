@@ -1,8 +1,17 @@
+const { rollbarToken } = require('./config');
+// include and initialize the rollbar library with your access token
+var Rollbar = require('rollbar');
+var rollbar = new Rollbar({
+  accessToken: rollbarToken,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
+
 const app = require('./server');
 const { port } = require('./config');
 
 const server = app.listen(port, function () {
-  console.log('Server Listening on PORT:', port);
+  rollbar.log('Server Listening on PORT:', port);
 });
 
 //
@@ -17,7 +26,7 @@ const server = app.listen(port, function () {
 
 // quit on ctrl-c when running docker in terminal
 process.on('SIGINT', function onSigint() {
-  console.info(
+  rollbar.info(
     'Got SIGINT (aka ctrl-c in docker). Graceful shutdown ',
     new Date().toISOString()
   );
@@ -26,7 +35,7 @@ process.on('SIGINT', function onSigint() {
 
 // quit properly on docker stop
 process.on('SIGTERM', function onSigterm() {
-  console.info(
+  rollbar.info(
     'Got SIGTERM (docker container stop). Graceful shutdown ',
     new Date().toISOString()
   );
@@ -37,7 +46,7 @@ process.on('SIGTERM', function onSigterm() {
 function shutdown() {
   server.close(function onServerClosed(err) {
     if (err) {
-      console.error(err);
+      rollbar.error(err);
       process.exit(1);
     }
     process.exit(0);
