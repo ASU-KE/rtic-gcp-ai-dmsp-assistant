@@ -128,9 +128,6 @@ spec:
         - name: react-web
           image: ai-dmsp-react-image
           imagePullPolicy: Always
-          env:
-            - name: API_BACKEND_URL
-              value: "https://api.dmsp.ai.dev.rtd.asu.edu"
           ports:
             - containerPort: 80
           readinessProbe:
