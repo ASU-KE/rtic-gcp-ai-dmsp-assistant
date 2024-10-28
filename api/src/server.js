@@ -25,7 +25,11 @@ const TestRoutes = require('./test/routes');
 const UserModel = require('./common/models/User');
 
 app.use(morgan('common'));
-app.use(cors());
+
+const corsOptions = {
+  origin: 'https://dmsp.ai.dev.rtd.asu.edu',
+};
+app.use(cors(corsOptions));
 
 // Middleware that parses the body payloads as JSON to be consumed next set
 // of middlewares and controllers.
