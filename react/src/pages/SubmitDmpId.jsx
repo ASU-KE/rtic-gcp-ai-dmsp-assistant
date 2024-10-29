@@ -124,7 +124,7 @@ export function SubmitDmpId() {
             )}
           >
             <div>
-              <label>Please submit a valid DMP ID:</label>
+              <label>Please submit DMP ID:</label>
             </div>
             <input {...register('dmpId')} />
             <input type="submit" />
