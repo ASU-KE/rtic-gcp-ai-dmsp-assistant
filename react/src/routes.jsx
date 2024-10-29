@@ -1,15 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Home } from './pages/Home';
-// import { DmpId } from './pages/DmpId';
-// import { DmpText } from './pages/DmpText';
+import { SubmitDmpId } from "./pages/SubmitDmpId";
 
 export const routers = createBrowserRouter([
   {
     path: "/",
-    element: <Home/>,
+    element: <SubmitDmpId/>,
   },
-  // {
-  //   path: "/dmp-id",
-  //   element: <DmpId />,
-  // },
 ]);

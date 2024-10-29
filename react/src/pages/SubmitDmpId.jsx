@@ -1,14 +1,19 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Accordion, Container, Col, Row } from 'react-bootstrap';
+import { Container, Col, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
 
-import 'github-markdown-css/github-markdown-light.css';
+import { ASUHeader } from "@asu/component-header";
+import { ASUFooter } from "@asu/component-footer";
 
-export function QueryAiAssistant() {
+
+import 'github-markdown-css/github-markdown-light.css';
+import asuLogo from '../assets/arizona-state-university-logo-vertical.png';
+
+export function SubmitDmpId() {
   const [isLoading, setIsLoading] = useState(false);
   const [apiResponse, setApiResponse] = useState(null);
   const {
@@ -69,8 +74,36 @@ export function QueryAiAssistant() {
     }
   }, [formState, reset]);
 
+  const header = {
+    title: 'DMSP AI Assistant',
+    loggedIn: false,
+    logoutLink: "#",
+    loginLink: "#",
+    userName: "",
+    // navTree: navTree,
+    logo: {
+      alt: 'Arizona State University',
+      title: "Arizona State University",
+      src: asuLogo,
+      // mobileSrc: asuLogo,
+      // brandLink: PropTypes.string,
+    },
+    parentOrg: "KE Research Technology Office",
+    parentOrgUrl: "https://rto.asu.edu",
+    breakpoint: "Lg",
+    searchUrl: "https://search.asu.edu/search",
+    site: "subdomain",
+  }
+
+  const footer = {
+
+  }
+
+
   return (
-    <Container>
+    <>
+    <ASUHeader {...header} />
+    <Container className="mt-16" style={{"min-height": "400px"}}>
       <Row>
         <Col md={12}>
           <h1 className="mt-4">DMSP AI Assistant: Proof-of-Concept</h1>
@@ -85,7 +118,7 @@ export function QueryAiAssistant() {
             )}
           >
             <div>
-              <label>DMP ID:</label>
+              <label>Please submit a valid DMP ID:</label>
             </div>
             <input {...register('dmpId')} />
             <input type="submit" />
@@ -130,5 +163,7 @@ export function QueryAiAssistant() {
         </Row>
       )}
     </Container>
+    <ASUFooter {...footer} />
+    </>
   );
 }
