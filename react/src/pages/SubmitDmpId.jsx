@@ -10,7 +10,8 @@ import { ASUHeader } from "@asu/component-header";
 import { ASUFooter } from "@asu/component-footer";
 
 import 'github-markdown-css/github-markdown-light.css';
-import asuLogo from '../assets/arizona-state-university-logo-vertical.png';
+import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
+import horizAsuLogo from '../assets/arizona-state-university-logo.png';
 
 export function SubmitDmpId() {
   const [isLoading, setIsLoading] = useState(false);
@@ -83,8 +84,8 @@ export function SubmitDmpId() {
     logo: {
       alt: 'Arizona State University',
       title: "Arizona State University",
-      src: asuLogo,
-      // mobileSrc: asuLogo,
+      src: vertAsuLogo,
+      mobileSrc: horizAsuLogo,
       // brandLink: PropTypes.string,
     },
     parentOrg: "KE Research Technology Office",
