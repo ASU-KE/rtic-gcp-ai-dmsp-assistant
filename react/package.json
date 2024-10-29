@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@asu/unity-bootstrap-theme": "^1.14.2",
+    "@asu/component-footer": "^2.2.1",
+    "@asu/component-header": "^2.3.3",
     "@tanstack/react-query": "^4.0.0",
     "@tanstack/react-query-devtools": "^4.0.0",
     "axios": "^1.7.7",
