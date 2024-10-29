@@ -27,7 +27,10 @@ const UserModel = require('./common/models/User');
 app.use(morgan('common'));
 
 const corsOptions = {
-  origin: 'https://dmsp.ai.dev.rtd.asu.edu',
+  origin:
+    process.env.NODE_ENV === 'development'
+      ? '*'
+      : 'https://dmsp.ai.dev.rtd.asu.edu',
 };
 app.use(cors(corsOptions));
 
