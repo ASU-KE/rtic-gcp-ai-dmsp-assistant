@@ -110,11 +110,11 @@ export function SubmitDmpId() {
       </Row>
       <Row className="mb-4">
         <Col md={8}>
-          <div>This form demonstrates a simple implementation of the DMSP AI Assistant backend service. When a valid DMP ID is submitted, the service will fetch that plan, extract its content, and query the AI Assistant to review the plan.</div>
-          <div>Feel free to copy and paste one of the following DMP IDs as examples:</div>
-          <ul>
-            <li>10.48321/D1R316 <a href="https://dmphub.uc3prd.cdlib.net/narratives/8736430c42e1256e.pdf" target="_blank" rel="noopener noreferrer">View plan PDF</a></li>
-            <li>10.48321/D1BK5T <a href="https://dmphub.uc3prd.cdlib.net/narratives/a5ae186a7925051c.pdf" target="_blank" rel="noopener noreferrer">View plan PDF</a></li>
+          <div className="mt-2">This form demonstrates a simple implementation of the DMSP AI Assistant backend service. When a valid DMP ID is submitted, the service will fetch that plan, extract its content, and query the AI Assistant to review the plan.</div>
+          <div className="mt-2">Feel free to copy and paste one of the following DMP IDs as examples:</div>
+          <ul className="mt-2">
+            <li>10.48321/D1R316 (<a href="https://dmphub.uc3prd.cdlib.net/dmps/10.48321/D1R316" target="_blank" rel="noopener noreferrer">View DMP</a>)</li>
+            <li>10.48321/D1BK5T (<a href="https://dmphub.uc3prd.cdlib.net/dmps/10.48321/D1BK5T" target="_blank" rel="noopener noreferrer">View DMP</a>)</li>
           </ul>
           <form
             onSubmit={handleSubmit((values) =>
