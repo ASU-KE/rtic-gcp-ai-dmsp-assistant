@@ -9,7 +9,6 @@ import Markdown from 'react-markdown';
 import { ASUHeader } from "@asu/component-header";
 import { ASUFooter } from "@asu/component-footer";
 
-
 import 'github-markdown-css/github-markdown-light.css';
 import asuLogo from '../assets/arizona-state-university-logo-vertical.png';
 
@@ -103,7 +102,7 @@ export function SubmitDmpId() {
   return (
     <>
     <ASUHeader {...header} />
-    <Container className="mt-16" style={{"min-height": "400px"}}>
+    <Container className="mt-16" style={{"minHeight": "400px"}}>
       <Row>
         <Col md={12}>
           <h1 className="mt-4">DMSP AI Assistant: Proof-of-Concept</h1>
