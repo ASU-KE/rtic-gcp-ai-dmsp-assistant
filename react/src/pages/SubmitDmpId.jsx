@@ -1,17 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Container, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
 
-import { ASUHeader } from "@asu/component-header";
-import { ASUFooter } from "@asu/component-footer";
-
 import 'github-markdown-css/github-markdown-light.css';
-import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
-import horizAsuLogo from '../assets/arizona-state-university-logo.png';
 
 export function SubmitDmpId() {
   const [isLoading, setIsLoading] = useState(false);
@@ -74,41 +69,9 @@ export function SubmitDmpId() {
     }
   }, [formState, reset]);
 
-  const header = {
-    title: 'DMSP AI Assistant',
-    loggedIn: false,
-    logoutLink: "#",
-    loginLink: "#",
-    userName: "",
-    // navTree: navTree,
-    logo: {
-      alt: 'Arizona State University',
-      title: "Arizona State University",
-      src: vertAsuLogo,
-      mobileSrc: horizAsuLogo,
-      // brandLink: PropTypes.string,
-    },
-    parentOrg: "KE Research Technology Office",
-    parentOrgUrl: "https://rto.asu.edu",
-    breakpoint: "Lg",
-    searchUrl: "https://search.asu.edu/search",
-    site: "subdomain",
-  }
-
-  const footer = {
-
-  }
-
 
   return (
     <>
-    <ASUHeader {...header} />
-    <Container className="mt-16" style={{"minHeight": "400px"}}>
-      <Row>
-        <Col md={12}>
-          <h1 className="mt-4">DMSP AI Assistant: Proof-of-Concept</h1>
-        </Col>
-      </Row>
       <Row className="mb-4">
         <Col md={8}>
           <div className="mt-2">This form demonstrates a simple implementation of the DMSP AI Assistant backend service. When a valid DMP ID is submitted, the service will fetch that plan, extract its content, and query the AI Assistant to review the plan.</div>
@@ -168,8 +131,6 @@ export function SubmitDmpId() {
           </Col>
         </Row>
       )}
-    </Container>
-    <ASUFooter {...footer} />
     </>
   );
 }
