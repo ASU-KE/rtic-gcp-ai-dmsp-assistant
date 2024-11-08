@@ -8,7 +8,7 @@ export const routers = createBrowserRouter([
     element: <Layout/>,
     children: [
       {
-        path: "dmp-id",
+        index: true,
         element: <SubmitDmpId />,
       },
     ],
