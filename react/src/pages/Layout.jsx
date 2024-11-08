@@ -12,7 +12,23 @@ const header = {
   logoutLink: "#",
   loginLink: "#",
   userName: "",
-  // navTree: navTree,
+  navTree: [
+    {
+      "href": "/",
+      "text": "Home",
+      "type": "icon-home",
+      "selected": true,
+      "class": "test-class"
+    },
+    {
+      "text": "Submit ID",
+      "href": "/dmp-id"
+    },
+    {
+      "text": "Submit text",
+      "href": "/dmp-text"
+    },
+  ],
   logo: {
     alt: 'Arizona State University',
     title: "Arizona State University",
