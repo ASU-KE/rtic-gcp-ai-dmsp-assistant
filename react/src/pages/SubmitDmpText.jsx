@@ -8,8 +8,9 @@ import Markdown from 'react-markdown';
 
 import 'github-markdown-css/github-markdown-light.css';
 
-export function SubmitDmpId() {
+export function SubmitDmpText() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isDisableSubmit, setDisableSubmit] = useState(false);
   const [apiResponse, setApiResponse] = useState(null);
   const {
     register,
@@ -22,8 +23,8 @@ export function SubmitDmpId() {
     mutationFn: (values) => {
       setIsLoading(true);
       axios
-        .post(import.meta.env.VITE_BACKEND_URL + '/dmp/id', {
-          dmpId: values.dmpId,
+        .post(import.meta.env.VITE_BACKEND_URL + '/dmp/text', {
+          dmpText: values.dmpText,
         })
         .then(function (response) {
           setApiResponse({
@@ -65,7 +66,7 @@ export function SubmitDmpId() {
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
-      reset();
+      setDisableSubmit(true);
     }
   }, [formState, reset]);
 
@@ -74,12 +75,6 @@ export function SubmitDmpId() {
     <>
       <Row className="mb-4">
         <Col md={8}>
-          <div className="mt-2">This form demonstrates a simple implementation of the DMSP AI Assistant backend service. When a valid DMP ID is submitted, the service will fetch that plan, extract its content, and query the AI Assistant to review the plan.</div>
-          <div className="mt-2">Feel free to copy and paste one of the following DMP IDs as examples:</div>
-          <ul className="mt-2">
-            <li>10.48321/D1R316 (<a href="https://dmphub.uc3prd.cdlib.net/dmps/10.48321/D1R316" target="_blank" rel="noopener noreferrer">View DMP</a>)</li>
-            <li>10.48321/D1BK5T (<a href="https://dmphub.uc3prd.cdlib.net/dmps/10.48321/D1BK5T" target="_blank" rel="noopener noreferrer">View DMP</a>)</li>
-          </ul>
           <form
             onSubmit={handleSubmit((values) =>
               // reset client state back to undefined
@@ -87,9 +82,9 @@ export function SubmitDmpId() {
             )}
           >
             <div>
-              <label>Please submit DMP ID:</label>
+              <label>Data Management Plan:</label>
             </div>
-            <input {...register('dmpId')} />
+            <textarea {...register('dmpText')} rows={10} cols={120} />
             <input type="submit" />
           </form>
         </Col>

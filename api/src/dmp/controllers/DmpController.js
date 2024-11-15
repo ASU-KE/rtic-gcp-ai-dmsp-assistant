@@ -6,6 +6,8 @@ module.exports = {
   getDmpReportById: async (req, res) => {
     const dmpId = req.body.dmpId;
 
+    // TODO: validate DMP ID
+
     // Process the request
     try {
       const dmpPdfUrl = await DmpService.getDmpResource(dmpId);
@@ -19,6 +21,40 @@ module.exports = {
           id: dmpId,
           document_url: await dmpPdfUrl,
           documentText: await dmpText,
+          analysis: llmResponse.response,
+          metadata: llmResponse.metadata,
+        },
+      });
+    } catch (error) {
+      if (error.status === 404) {
+        return res.status(404).json({
+          status: error.status,
+          error: {
+            message: error.message,
+          },
+        });
+      }
+
+      return res.status(500).json({
+        status: res.status,
+        error: {
+          message: error.message,
+        },
+      });
+    }
+  },
+  getDmpReportByText: async (req, res) => {
+    const dmpText = req.body.dmpText;
+
+    // TODO: validate and sanitize text
+
+    // Process the request
+    try {
+      const llmResponse = await LlmService.queryLlm(dmpText);
+
+      return await res.status(200).json({
+        status: res.status,
+        data: {
           analysis: llmResponse.response,
           metadata: llmResponse.metadata,
         },
