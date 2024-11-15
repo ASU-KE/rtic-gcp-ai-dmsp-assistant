@@ -13,17 +13,17 @@ const header = {
   loginLink: "#",
   userName: "",
   navTree: [
-    // {
-    //   "href": "/",
-    //   "text": "Home",
-    //   "type": "icon-home",
-    //   "selected": true,
-    //   "class": "test-class"
-    // },
-    // {
-    //   "text": "Submit text",
-    //   "href": "/submit-text"
-    // },
+    {
+      "href": "/",
+      "text": "Home",
+      "type": "icon-home",
+      "selected": true,
+      "class": "test-class"
+    },
+    {
+      "text": "Submit text",
+      "href": "/submit-text"
+    },
   ],
   logo: {
     alt: 'Arizona State University',
