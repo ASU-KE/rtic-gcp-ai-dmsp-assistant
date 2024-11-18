@@ -30,7 +30,7 @@ module.exports = {
     modelProvider: 'gcp-deepmind', // string (Required): "aws", "openai", "gcp", "gcp-deepmind", "azure"
     modelName: 'geminiflash1_5', // string (Required)
     modelParams: {
-      temperature: null, // float (Optional): 0-0.99 (model specific parameter) Randomness and Diversity parameter. Use a lower value to decrease randomness in the response.
+      temperature: 0.1, // float (Optional): 0-0.99 (model specific parameter) Randomness and Diversity parameter. Use a lower value to decrease randomness in the response.
       maxTokens: null, // int (Optional): refer to model specific parameters below. The maximum number of tokens in the generated response.
       // systemPrompt: null, // object (Optional): Object contains the custom system prompt as a string or reference to an external file.
       systemPrompt: {
