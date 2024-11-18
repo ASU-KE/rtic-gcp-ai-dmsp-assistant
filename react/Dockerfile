@@ -52,5 +52,6 @@ CMD [ "npm", "start" ]
 FROM nginx:1.13-alpine
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./htpasswd /etc/nginx/.htpasswd
 
 COPY --from=builder /code/dist /usr/share/nginx/html
