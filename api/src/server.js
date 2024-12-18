@@ -1,5 +1,14 @@
 const express = require('express');
 
+const { rollbarToken } = require('./config');
+// include and initialize the rollbar library with your access token
+var Rollbar = require('rollbar');
+var rollbar = new Rollbar({
+  accessToken: rollbarToken,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
+
 const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
@@ -16,7 +25,14 @@ const TestRoutes = require('./test/routes');
 const UserModel = require('./common/models/User');
 
 app.use(morgan('common'));
-app.use(cors());
+
+const corsOptions = {
+  origin:
+    process.env.NODE_ENV === 'development'
+      ? '*'
+      : 'https://dmsp.ai.dev.rtd.asu.edu',
+};
+app.use(cors(corsOptions));
 
 // Middleware that parses the body payloads as JSON to be consumed next set
 // of middlewares and controllers.
@@ -39,31 +55,25 @@ UserModel.initialise(sequelize);
 sequelize
   .sync()
   .then(() => {
-    console.log('Sequelize Initialised!!');
+    rollbar.log('Sequelize Initialised!!');
 
-    // Attaching the Authentication and User Routes to the app.
+    // Attaching the routes to the app.
     app.use('/', AuthorizationRoutes);
     app.use('/user', UserRoutes);
     app.use('/dmp', DmpRoutes);
     app.use('/test', TestRoutes);
 
-    // app.get('/', function (req, res, next) {
-    //   database
-    //     .raw('select VERSION() version')
-    //     .then(([rows, columns]) => rows[0])
-    //     .then((row) => res.json({ message: `Hello from MySQL ${row.version}` }))
-    //     .catch(next);
-    // });
-
     app.get('/healthz', function (req, res) {
       // do app logic here to determine if app is truly healthy
       // you should return 200 if healthy, and anything else will fail
       // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
-      res.send('I am happy and healthy\n');
+      res.send(JSON.stringify({ status: 'Healthy' }));
     });
+
+    app.use(rollbar.errorHandler());
   })
   .catch((err) => {
-    console.error('Sequelize Initialisation threw an error:', err);
+    rollbar.error('Sequelize Initialisation threw an error:', err);
   });
 
 module.exports = app;

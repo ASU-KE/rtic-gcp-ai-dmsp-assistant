@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Accordion, Container, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
@@ -8,8 +8,9 @@ import Markdown from 'react-markdown';
 
 import 'github-markdown-css/github-markdown-light.css';
 
-export function QueryAiAssistant() {
+export function SubmitDmpText() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isDisableSubmit, setDisableSubmit] = useState(false);
   const [apiResponse, setApiResponse] = useState(null);
   const {
     register,
@@ -22,8 +23,8 @@ export function QueryAiAssistant() {
     mutationFn: (values) => {
       setIsLoading(true);
       axios
-        .post(import.meta.env.VITE_BACKEND_URL + '/dmp', {
-          dmpId: values.dmpId,
+        .post(import.meta.env.VITE_BACKEND_URL + '/dmp/text', {
+          dmpText: values.dmpText,
         })
         .then(function (response) {
           setApiResponse({
@@ -65,18 +66,13 @@ export function QueryAiAssistant() {
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
-      reset();
+      setDisableSubmit(true);
     }
   }, [formState, reset]);
 
+
   return (
-    <Container>
-      <Row>
-        <Col md={12}>
-          <h1>DMP AI Assistant</h1>
-          <h3>Proof-of-concept: Please do not share.</h3>
-        </Col>
-      </Row>
+    <>
       <Row className="mb-4">
         <Col md={8}>
           <form
@@ -86,9 +82,9 @@ export function QueryAiAssistant() {
             )}
           >
             <div>
-              <label>DMP ID:</label>
+              <label>Data Management Plan:</label>
             </div>
-            <input {...register('dmpId')} />
+            <textarea {...register('dmpText')} rows={10} cols={120} />
             <input type="submit" />
           </form>
         </Col>
@@ -112,23 +108,10 @@ export function QueryAiAssistant() {
         </Row>
       )}
       {!isLoading && apiResponse && apiResponse.statusCode === 200 && (
-        <Row className="mt-2">
+        <Row className="mt-2 mb-4">
           <Col md={12}>
             <div className="border p-2 markdown-body">
-              <Accordion defaultActiveKey="0">
-                <Accordion.Item eventKey="0">
-                  <Accordion.Header>Analysis for: {apiResponse?.id}</Accordion.Header>
-                  <Accordion.Body>
-                    <Markdown>{apiResponse?.analysis}</Markdown>
-                  </Accordion.Body>
-                </Accordion.Item>
-                <Accordion.Item eventKey="1">
-                  <Accordion.Header>DMP Text</Accordion.Header>
-                  <Accordion.Body>
-                    <p>{apiResponse?.documentText}</p>
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
+              <Markdown>{apiResponse?.analysis}</Markdown>
             </div>
           </Col>
         </Row>
@@ -143,6 +126,6 @@ export function QueryAiAssistant() {
           </Col>
         </Row>
       )}
-    </Container>
+    </>
   );
 }

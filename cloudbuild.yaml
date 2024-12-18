@@ -1,64 +1,67 @@
 steps:
-  # Build the Docker image for test-dmsp-ai api
-  - id: docker build api
+  # Build the Docker image for ai-dmsp-api
+  - id: docker build ai-dmsp-api
     name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
-        "-f",
-        "Dockerfile.api",
         "-t",
-        "gcr.io/$PROJECT_ID/test-dmsp-ai-api-image:$BUILD_ID",
+        "gcr.io/$PROJECT_ID/ai-dmsp-api-image:$BUILD_ID",
         ".",
       ]
     env: ['DOCKER_BUILDKIT=1']
+    dir: 'api'
 
   # Push the image to GCR
-  - id: docker push api
+  - id: docker push ai-dmsp-api
     name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/test-dmsp-ai-api-image:$BUILD_ID"]
+    args: ["push", "gcr.io/$PROJECT_ID/ai-dmsp-api-image:$BUILD_ID"]
 
   # Set image tag
-  - id: update Kubernetes test-dmsp-ai api Container Image
+  - id: update Kubernetes ai-dmsp-api Container Image
     name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
     entrypoint: bash
     args:
       - "-c"
       - |
         cd /workspace/k8s-manifests/${_KUST_BUILD_DIR}
-        kustomize edit set image test-dmsp-ai-api-image=gcr.io/$PROJECT_ID/test-dmsp-ai-api-image:$BUILD_ID
+        kustomize edit set image ai-dmsp-api-image=gcr.io/$PROJECT_ID/ai-dmsp-api-image:$BUILD_ID
     env:
       - "APPLY=true"
       - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
       - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
       - "GCLOUD_PROJECT=$PROJECT_ID"
 
-  # Build the Docker image for test-dmsp-ai react
-  - id: docker build react
+  # Build the Docker image for ai-dmsp react
+  - id: docker build ai-dmsp-react
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       [
         '-c',
-        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN -f Dockerfile.react -t gcr.io/$PROJECT_ID/test-dmsp-ai-react-image:$BUILD_ID .',
+        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN --build-arg VITE_BACKEND_URL=$$VITE_BACKEND_URL -t gcr.io/$PROJECT_ID/ai-dmsp-react-image:$BUILD_ID .',
       ]
-    env: ['DOCKER_BUILDKIT=1']
+    env: [
+      'DOCKER_BUILDKIT=1',
+      'VITE_BACKEND_URL=https://api.dmsp.ai.dev.rtd.asu.edu'
+    ]
     secretEnv: ['NPM_TOKEN']
+    dir: 'react'
 
   # Push the image to GCR
-  - id: docker push react
+  - id: docker push ai-dmsp-react
     name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/test-dmsp-ai-react-image:$BUILD_ID"]
+    args: ["push", "gcr.io/$PROJECT_ID/ai-dmsp-react-image:$BUILD_ID"]
 
   # Set image tag
-  - id: update Kubernetes test-dmsp-ai react Container Image
+  - id: update Kubernetes ai-dmsp-react Container Image
     name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
     entrypoint: bash
     args:
       - "-c"
       - |
         cd /workspace/k8s-manifests/${_KUST_BUILD_DIR}
-        kustomize edit set image test-dmsp-ai-react-image=gcr.io/$PROJECT_ID/test-dmsp-ai-react-image:$BUILD_ID
+        kustomize edit set image ai-dmsp-react-image=gcr.io/$PROJECT_ID/ai-dmsp-react-image:$BUILD_ID
     env:
       - "APPLY=true"
       - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
@@ -78,7 +81,7 @@ steps:
         gcloud secrets versions access latest --secret=${_KUST_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets/kustomization.yaml
 
   # Deploy to the cluster
-  - id: deploy test-dmsp-ai
+  - id: deploy ai-dmsp
     name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
     dir: "k8s-manifests"
     args:
@@ -107,5 +110,5 @@ steps:
 
 availableSecrets:
   secretManager:
-  - versionName: projects/$PROJECT_ID/secrets/dev-dmsp-ai-secret-npmrc-token/versions/latest
+  - versionName: projects/$PROJECT_ID/secrets/dev-ai-dmsp-secret-npmrc-token/versions/latest
     env: 'NPM_TOKEN'

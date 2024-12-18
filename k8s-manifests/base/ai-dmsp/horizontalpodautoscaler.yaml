@@ -1,23 +1,23 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: test-dmsp-ai-api-hpa
+  name: ai-dmsp-api-hpa
 spec:
   maxReplicas: 10
   scaleTargetRef:
     kind: Deployment
-    name: test-dmsp-ai-api-deployment
+    name: ai-dmsp-api-deployment
     apiVersion: apps/v1
   targetCPUUtilizationPercentage: 50
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: test-dmsp-ai-react-hpa
+  name: ai-dmsp-react-hpa
 spec:
   maxReplicas: 10
   scaleTargetRef:
     kind: Deployment
-    name: test-dmsp-ai-react-deployment
+    name: ai-dmsp-react-deployment
     apiVersion: apps/v1
   targetCPUUtilizationPercentage: 50

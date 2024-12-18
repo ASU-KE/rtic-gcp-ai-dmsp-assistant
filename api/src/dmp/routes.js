@@ -8,7 +8,7 @@ const DmpController = require('./controllers/DmpController');
 // const SchemaValidationMiddleware = require('../common/middlewares/SchemaValidationMiddleware');
 // const CheckPermissionMiddleware = require('../common/middlewares/CheckPermissionMiddleware');
 
-// DMP ids consist of a string containing a slash, we must parse as two params
-router.post('/', DmpController.getDmpReportById);
+router.post('/id', DmpController.getDmpReportById);
+router.post('/text', DmpController.getDmpReportByText);
 
 module.exports = router;
