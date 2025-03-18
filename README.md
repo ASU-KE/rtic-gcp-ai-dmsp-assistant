@@ -23,6 +23,11 @@ This repository contains the necessary resources and configurations to host the 
 - [ASU DMSP AI Assistant in Kubernetes with Cloud Build trigger](#asu-dmsp-ai-assistant-in-kubernetes-with-cloud-build-trigger)
   - [Overview](#overview)
   - [Table of Contents](#table-of-contents)
+  - [Local Development Instructions](#local-development-instructions)
+    - [API server setup](#api-server-setup)
+    - [React application setup](#react-application-setup)
+    - [Creating a GitHub Personal Access Token (Classic)](#creating-a-github-personal-access-token-classic)
+    - [Build and launch application stack](#build-and-launch-application-stack)
   - [Server Hosting Overview](#server-hosting-overview)
   - [Procedure to Update](#procedure-to-update)
   - [Infrastructure Notes](#infrastructure-notes)
@@ -37,6 +42,50 @@ This repository contains the necessary resources and configurations to host the 
 
 <br>
 <br>
+
+
+## Local Development Instructions
+
+This application stack uses Docker Compose ([compose.yml](compose.yml)) to launch the necessary containers on a local workstation. Local development requires:
+
+Prerequisite: Install the latest release version of Docker: [Get Docker](https://docs.docker.com/get-started/get-docker/).
+
+### API server setup
+
+Copy [api/.env.example](api/.env.example) to `api/.env`. Fill in token and access keys with values stored in ASU Stache:
+
+* ROLLBAR_TOKEN
+* DMPTOOL_CLIENT_ID
+* DMPTOOL_CLIENT_SECRET
+* LLM_ACCESS_SECRET
+
+### React application setup
+
+1. Create a GitHub personal access token (classic) with "read:packages" permission (see below).
+2. Copy [secrets/npmrc.example](secrets/npmrc.example) into a new secret file: `secrets/npmrc`.
+3. Insert GitHub personal access token into 'secrets/npmrc'.
+4. Copy [secrets/db_password.example](secrets/db_password.example) into a new secret file: `secrets/db_password`
+5. (Optional) Change the local db password in `secrets/db_password`.
+
+### Creating a GitHub Personal Access Token (Classic)
+
+1. Sign in to your GitHub account and navigate to your account settings.
+2. Select "Developer settings" at the bottom of the settings sidebar.
+3. Expand "Personal access tokens" and select "Tokens (classic)".
+4. Click "Generate new token" button and select "Generate new token (classic)"
+5. Select desired expiration.
+6. Check box "read:packages".
+7. Click "Generate token".
+8. Save the displayed token in `secrets/npmrc`.
+
+
+### Build and launch application stack
+
+Build the application container images: `docker compose build`, and then launch the application: `docker compose up`.
+
+The React frontend application can be accessed at: [http://localhost:3000](http://localhost:3000).
+
+THe API server can be accessed using Postman or other API client at [http://localhost:3001](http://localhost:3001).
 
 ## Server Hosting Overview
 
