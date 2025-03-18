@@ -2,3 +2,4 @@ tls.crt
 tls.key
 secrets/*
 !secrets/.gitkeep
+!secrets/*.example
