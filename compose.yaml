@@ -64,4 +64,4 @@ secrets:
   db-password:
     file: secrets/db_password.txt
   npmrc:
-    file: secrets/.npmrc
+    file: secrets/npmrc
