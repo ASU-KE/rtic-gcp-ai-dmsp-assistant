@@ -1,72 +1,82 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
-
 import 'github-markdown-css/github-markdown-light.css';
 
-export function SubmitDmpText() {
+interface ApiResponse {
+  statusCode: number;
+  statusMessage: string | null;
+  analysis?: string | null;
+  metadata?: unknown | null;
+}
+
+type FormValues = {
+  dmpId: string;
+};
+
+export function SubmitDmpId() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isDisableSubmit, setDisableSubmit] = useState(false);
-  const [apiResponse, setApiResponse] = useState(null);
+  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+
   const {
     register,
     handleSubmit,
     reset,
     formState,
-  } = useForm();
+  } = useForm<FormValues>();
 
-  const { mutate } = useMutation({
+  const { mutate } = useMutation<void, unknown, FormValues>({
     mutationFn: (values) => {
       setIsLoading(true);
-      axios
-        .post(import.meta.env.VITE_BACKEND_URL + '/dmp/text', {
-          dmpText: values.dmpText,
-        })
-        .then(function (response) {
-          setApiResponse({
-            statusCode: 200,
-            statusMessage: null,
-            ...response.data.data,
-          });
-          setIsLoading(false);
-        })
-        .catch((error) => {
+      return axios.post(import.meta.env.VITE_BACKEND_URL + '/dmp/id', {
+        dmpId: values.dmpId,
+      })
+      .then((response) => {
+        setApiResponse({
+          statusCode: 200,
+          statusMessage: null,
+          ...response.data.data,
+        });
+      })
+      .catch((error: unknown) => {
+        if (axios.isAxiosError(error)) {
           if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log('response data:', error.response.data);
-            console.log('response status:', error.response.status);
-            console.log('response headers:', error.response.headers);
-
             setApiResponse({
               statusCode: error.response.status,
-              statusMessage: error.response.data.error.message,
+              statusMessage: error.response.data.error?.message || 'An error occurred',
               analysis: null,
               metadata: null,
             });
           } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the
-            // browser and an instance of
-            // http.ClientRequest in node.js
-            console.log('request:', error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error:', error.message);
+            setApiResponse({
+              statusCode: 0,
+              statusMessage: 'No response received from server',
+              analysis: null,
+              metadata: null,
+            });
           }
-          console.log('error config:', error.config);
-          setIsLoading(false);
-        });
+        } else {
+          setApiResponse({
+            statusCode: 0,
+            statusMessage: 'An unexpected error occurred',
+            analysis: null,
+            metadata: null,
+          });
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
     },
   });
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
-      setDisableSubmit(true);
+      reset();
     }
   }, [formState, reset]);
 
@@ -75,6 +85,12 @@ export function SubmitDmpText() {
     <>
       <Row className="mb-4">
         <Col md={8}>
+          <div className="mt-2">This form demonstrates a simple implementation of the DMSP AI Assistant backend service. When a valid DMP ID is submitted, the service will fetch that plan, extract its content, and query the AI Assistant to review the plan.</div>
+          <div className="mt-2">Feel free to copy and paste one of the following DMP IDs as examples:</div>
+          <ul className="mt-2">
+            <li>10.48321/D1R316 (<a href="https://dmphub.uc3prd.cdlib.net/dmps/10.48321/D1R316" target="_blank" rel="noopener noreferrer">View DMP</a>)</li>
+            <li>10.48321/D1BK5T (<a href="https://dmphub.uc3prd.cdlib.net/dmps/10.48321/D1BK5T" target="_blank" rel="noopener noreferrer">View DMP</a>)</li>
+          </ul>
           <form
             onSubmit={handleSubmit((values) =>
               // reset client state back to undefined
@@ -82,9 +98,9 @@ export function SubmitDmpText() {
             )}
           >
             <div>
-              <label>Data Management Plan:</label>
+              <label>Please submit DMP ID:</label>
             </div>
-            <textarea {...register('dmpText')} rows={10} cols={120} />
+            <input {...register('dmpId')} />
             <input type="submit" />
           </form>
         </Col>
@@ -111,7 +127,7 @@ export function SubmitDmpText() {
         <Row className="mt-2 mb-4">
           <Col md={12}>
             <div className="border p-2 markdown-body">
-              <Markdown>{apiResponse?.analysis}</Markdown>
+              <Markdown>{apiResponse?.analysis || ''}</Markdown>
             </div>
           </Col>
         </Row>
