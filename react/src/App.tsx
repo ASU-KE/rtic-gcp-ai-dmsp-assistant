@@ -7,7 +7,7 @@ import { routers } from './routes'
 
 const queryClient = new QueryClient();
 
-export default function App() {
+const App = (): JSX.Element => {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={routers} />
@@ -15,3 +15,5 @@ export default function App() {
     </QueryClientProvider>
   );
 }
+
+export default App;

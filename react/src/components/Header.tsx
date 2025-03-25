@@ -1,7 +1,11 @@
 // Replace this with image
 import ProfileImage from '../../assets/profileImage.png'
 
-export const Header = () => {
+interface HeaderProps {
+  cycleOpen: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({cycleOpen}) => {
 
 return (
   <div className="shadow-sm border-b-[1px] border-primary  border-opacity-10">
