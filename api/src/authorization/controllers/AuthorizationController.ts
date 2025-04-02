@@ -1,14 +1,18 @@
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import UserModel from '../../common/models/User';
+import { roles } from '../../config';
+import { error } from 'console';
 
-const UserModel = require('../../common/models/User');
-
-const { roles } = require('../../config');
 const jwtSecret = process.env.JWT_SECRET; //eslint-disable-line no-undef
 const jwtExpirationInSeconds = process.env.JWT_EXPIRATION_SECS || 3000; //eslint-disable-line no-undef
 
+if (!jwtSecret){
+  throw error('jwtSecret is undefined!')
+}
+
 // Generates an Access Token using username and userId for the user's authentication
-const generateAccessToken = (username, userId) => {
+const generateAccessToken = (username: any, userId: any) => {
   return jwt.sign(
     {
       userId,
@@ -22,7 +26,7 @@ const generateAccessToken = (username, userId) => {
 };
 
 // Encrypts the password using SHA256 Algorithm, for enhanced security of the password
-const encryptPassword = (password) => {
+const encryptPassword = (password: any) => {
   // We will hash the password using SHA256 Algorithm before storing in the DB
   // Creating SHA-256 hash object
   const hash = crypto.createHash('sha256');
@@ -32,8 +36,8 @@ const encryptPassword = (password) => {
   return hash.digest('hex');
 };
 
-module.exports = {
-  register: (req, res) => {
+export default {
+  register: (req: any, res: any) => {
     const payload = req.body;
 
     let encryptedPassword = encryptPassword(payload.password);
@@ -46,7 +50,7 @@ module.exports = {
     UserModel.createUser(
       Object.assign(payload, { password: encryptedPassword, role })
     )
-      .then((user) => {
+      .then((user: any) => {
         // Generating an AccessToken for the user, which will be
         // required in every subsequent request.
         const accessToken = generateAccessToken(payload.username, user.id);
@@ -59,7 +63,7 @@ module.exports = {
           },
         });
       })
-      .catch((err) => {
+      .catch((err: any) => {
         return res.status(500).json({
           status: false,
           error: err,
@@ -67,11 +71,11 @@ module.exports = {
       });
   },
 
-  login: (req, res) => {
+  login: (req: any, res: any) => {
     const { username, password } = req.body;
 
     UserModel.findUser({ username })
-      .then((user) => {
+      .then((user: any) => {
         // IF user is not found with the given username
         // THEN Return user not found error
         if (!user) {
@@ -108,7 +112,7 @@ module.exports = {
           },
         });
       })
-      .catch((err) => {
+      .catch((err: any) => {
         return res.status(500).json({
           status: false,
           error: err,

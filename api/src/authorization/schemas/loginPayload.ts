@@ -1,15 +1,13 @@
-module.exports = {
+export default {
   type: 'object',
   properties: {
-    age: {
-      type: 'number',
-    },
-    firstName: {
+    username: {
       type: 'string',
     },
-    lastName: {
+    password: {
       type: 'string',
     },
   },
+  required: ['username', 'password'],
   additionalProperties: false,
 };

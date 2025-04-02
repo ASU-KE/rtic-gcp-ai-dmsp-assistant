@@ -1,19 +1,19 @@
-const UserModel = require('./../../common/models/User');
+import UserModel from './../../common/models/User';
 
-module.exports = {
-  getUser: (req, res) => {
+export default {
+  getUser: (req: any, res: any) => {
     const {
       user: { userId },
     } = req;
 
     UserModel.findUser({ id: userId })
-      .then((user) => {
+      .then((user: any) => {
         return res.status(200).json({
           status: true,
           data: user.toJSON(),
         });
       })
-      .catch((err) => {
+      .catch((err: any) => {
         return res.status(500).json({
           status: false,
           error: err,
@@ -21,7 +21,7 @@ module.exports = {
       });
   },
 
-  updateUser: (req, res) => {
+  updateUser: (req: any, res: any) => {
     const {
       user: { userId },
       body: payload,
@@ -42,13 +42,13 @@ module.exports = {
       .then(() => {
         return UserModel.findUser({ id: userId });
       })
-      .then((user) => {
+      .then((user: any) => {
         return res.status(200).json({
           status: true,
           data: user.toJSON(),
         });
       })
-      .catch((err) => {
+      .catch((err: any) => {
         return res.status(500).json({
           status: false,
           error: err,
@@ -56,13 +56,13 @@ module.exports = {
       });
   },
 
-  deleteUser: (req, res) => {
+  deleteUser: (req: any, res: any) => {
     const {
       params: { userId },
     } = req;
 
     UserModel.deleteUser({ id: userId })
-      .then((numberOfEntriesDeleted) => {
+      .then((numberOfEntriesDeleted: any) => {
         return res.status(200).json({
           status: true,
           data: {
@@ -70,7 +70,7 @@ module.exports = {
           },
         });
       })
-      .catch((err) => {
+      .catch((err: any) => {
         return res.status(500).json({
           status: false,
           error: err,
@@ -78,15 +78,15 @@ module.exports = {
       });
   },
 
-  getAllUsers: (req, res) => {
+  getAllUsers: (req: any, res: any) => {
     UserModel.findAllUsers(req.query)
-      .then((users) => {
+      .then((users: any) => {
         return res.status(200).json({
           status: true,
           data: users,
         });
       })
-      .catch((err) => {
+      .catch((err: any) => {
         return res.status(500).json({
           status: false,
           error: err,
@@ -94,7 +94,7 @@ module.exports = {
       });
   },
 
-  changeRole: (req, res) => {
+  changeRole: (req: any, res: any) => {
     const {
       params: { userId },
       body: { role },
@@ -104,13 +104,13 @@ module.exports = {
       .then(() => {
         return UserModel.findUser({ id: userId });
       })
-      .then((user) => {
+      .then((user: any) => {
         return res.status(200).json({
           status: true,
           data: user.toJSON(),
         });
       })
-      .catch((err) => {
+      .catch((err: any) => {
         return res.status(500).json({
           status: false,
           error: err,

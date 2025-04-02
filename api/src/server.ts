@@ -1,28 +1,28 @@
-const express = require('express');
+import express from 'express';
 
-const { rollbarToken } = require('./config');
+import config from './config';
 // include and initialize the rollbar library with your access token
-var Rollbar = require('rollbar');
+import Rollbar from 'rollbar';
 var rollbar = new Rollbar({
-  accessToken: rollbarToken,
+  accessToken: config.rollbarToken,
   captureUncaught: true,
   captureUnhandledRejections: true,
 });
 
 const app = express();
-const cors = require('cors');
-const morgan = require('morgan');
+import cors from 'cors';
+import morgan from 'morgan';
 
-const { Sequelize } = require('sequelize');
+import { Sequelize } from 'sequelize';
 
 // Express Routes Import
-const AuthorizationRoutes = require('./authorization/routes');
-const UserRoutes = require('./users/routes');
-const DmpRoutes = require('./dmp/routes');
-const TestRoutes = require('./test/routes');
+import AuthorizationRoutes from './authorization/routes';
+import UserRoutes from './users/routes';
+import DmpRoutes from './dmp/routes';
+import TestRoutes from './test/routes';
 
 // Sequelize model imports
-const UserModel = require('./common/models/User');
+import UserModel from './common/models/User';
 
 app.use(morgan('common'));
 
@@ -40,9 +40,9 @@ app.use(express.json());
 
 const {
   database: { host, database, user, password },
-} = require('./config');
+} = config;
 
-const sequelize = new Sequelize(database, user, password, {
+const sequelize = new Sequelize(database!, user!, password!, {
   dialect: 'mysql',
   host,
 });
@@ -76,4 +76,4 @@ sequelize
     rollbar.error('Sequelize Initialisation threw an error:', err);
   });
 
-module.exports = app;
+export default app;

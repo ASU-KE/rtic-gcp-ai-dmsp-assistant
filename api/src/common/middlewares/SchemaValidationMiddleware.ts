@@ -1,7 +1,8 @@
-const Ajv = require('ajv').default,
-  AJV_OPTS = { allErrors: true };
+import Ajv, { Options } from 'ajv';
+const AJV_OPTS: Options = { allErrors: true };
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 
-module.exports = {
+export = {
   /**
    * @description Compiles the schema provided in argument and validates the data for the
    * compiled schema, and returns errors if any
@@ -10,27 +11,27 @@ module.exports = {
    *
    * @returns {Function} - Express request handler
    */
-  verify: (schema) => {
+  verify: (schema: any): RequestHandler => {
     if (!schema) {
       throw new Error('Schema not provided');
     }
 
-    return (req, res, next) => {
+    return (req: Request, res: Response, next: NextFunction) => {
       const { body } = req;
       const ajv = new Ajv(AJV_OPTS);
       const validate = ajv.compile(schema);
       const isValid = validate(body);
 
-      if (isValid) {
-        return next();
+      if (!isValid) {
+        res.send({
+          status: false,
+          error: {
+            message: `Invalid Payload: ${ajv.errorsText(validate.errors)}`,
+          },
+        });
       }
 
-      return res.send({
-        status: false,
-        error: {
-          message: `Invalid Payload: ${ajv.errorsText(validate.errors)}`,
-        },
-      });
+      return next();
     };
   },
 };

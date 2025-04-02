@@ -1,18 +1,19 @@
-const router = require('express').Router();
+import { Router } from 'express';
 
 // Middleware Imports
-const isAuthenticatedMiddleware = require('./../common/middlewares/IsAuthenticatedMiddleware');
-const SchemaValidationMiddleware = require('../common/middlewares/SchemaValidationMiddleware');
-const CheckPermissionMiddleware = require('../common/middlewares/CheckPermissionMiddleware');
+import isAuthenticatedMiddleware from './../common/middlewares/IsAuthenticatedMiddleware';
+import SchemaValidationMiddleware from '../common/middlewares/SchemaValidationMiddleware';
+import CheckPermissionMiddleware from '../common/middlewares/CheckPermissionMiddleware';
 
 // Controller Imports
-const UserController = require('./controllers/UserController');
+import UserController from './controllers/UserController';
 
 // JSON Schema Imports for payload verification
-const updateUserPayload = require('./schemas/updateUserPayload');
-const changeRolePayload = require('./schemas/changeRolePayload');
+import updateUserPayload from './schemas/updateUserPayload';
+import changeRolePayload from './schemas/changeRolePayload';
 
-const { roles } = require('../config');
+import { roles } from '../config';
+const router = Router();
 
 router.get('/', [isAuthenticatedMiddleware.check], UserController.getUser);
 
@@ -47,4 +48,4 @@ router.delete(
   UserController.deleteUser
 );
 
-module.exports = router;
+export default router;

@@ -1,17 +1,19 @@
-const { rollbarToken } = require('./config');
+import config from './config';
+import dotenv from 'dotenv';
+dotenv.config();
+const port = config.port
 // include and initialize the rollbar library with your access token
-var Rollbar = require('rollbar');
+import Rollbar from 'rollbar';
 var rollbar = new Rollbar({
-  accessToken: rollbarToken,
+  accessToken: config.rollbarToken,
   captureUncaught: true,
   captureUnhandledRejections: true,
 });
 
-const app = require('./server');
-const { port } = require('./config');
+import app from './server';
 
 const server = app.listen(port, function () {
-  rollbar.log('Server Listening on PORT:', port);
+  console.log('Server Listening on PORT:', config.port);
 });
 
 //
