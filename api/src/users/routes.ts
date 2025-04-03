@@ -12,7 +12,8 @@ import UserController from './controllers/UserController';
 import updateUserPayload from './schemas/updateUserPayload';
 import changeRolePayload from './schemas/changeRolePayload';
 
-import { roles } from '../config';
+import config from '../config';
+const roles = config.roles
 const router = Router();
 
 router.get('/', [isAuthenticatedMiddleware.check], UserController.getUser);

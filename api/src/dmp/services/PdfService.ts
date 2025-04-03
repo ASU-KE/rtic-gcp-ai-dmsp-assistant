@@ -1,9 +1,9 @@
-const pdfParse = require('pdf-parse');
+import pdfParse from 'pdf-parse';
 
 // const PDFExtract = require('pdf.js-extract').PDFExtract;
 
-module.exports = {
-  fetchPdfInMemory: async (url) => {
+export default {
+  fetchPdfInMemory: async (url: any) => {
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -15,7 +15,7 @@ module.exports = {
     return new Uint8Array(buffer);
   },
 
-  extractText: async (buffer) => {
+  extractText: async (buffer: any) => {
     const pdfData = await pdfParse(buffer);
 
     // number of pages

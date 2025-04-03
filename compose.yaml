@@ -15,7 +15,7 @@ services:
       - 9230:9230
     volumes:
       - ./api/src:/code/src
-      - ./api/dist/src:/code/src
+      - ./api/dist/src:/code/dist/src
       - ./api/package.json:/code/package.json
       - ./api/package-lock.json:/code/package-lock.json
     networks:

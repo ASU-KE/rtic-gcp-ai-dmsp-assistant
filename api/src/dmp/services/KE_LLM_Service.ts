@@ -1,5 +1,5 @@
-module.exports = {
-  queryLlm: async (planText) => {
+export default {
+  queryLlm: async (planText: any) => {
     const {
       endpoints: { queryLlmRestEndpoint },
       llmAccessSecret,

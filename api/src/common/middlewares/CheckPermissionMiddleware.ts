@@ -1,13 +1,13 @@
-const UserModel = require('../models/User');
+import UserModel from '../models/User';
 
-module.exports = {
-  has: (role) => {
-    return (req, res, next) => {
+export default {
+  has: (role: any) => {
+    return (req: any, res: any, next: any) => {
       const {
         user: { userId },
       } = req;
 
-      UserModel.findUser({ id: userId }).then((user) => {
+      UserModel.findUser({ id: userId }).then((user: any) => {
         // IF user does not exist in our database, means something is fishy
         // THEN we will return forbidden error and ask user to login again
         if (!user) {

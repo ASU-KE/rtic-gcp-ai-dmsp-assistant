@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import UserModel from '../../common/models/User';
-import { roles } from '../../config';
+import config from '../../config';
 import { error } from 'console';
 
 const jwtSecret = process.env.JWT_SECRET; //eslint-disable-line no-undef
@@ -44,7 +44,7 @@ export default {
     let role = payload.role;
 
     if (!role) {
-      role = roles.USER;
+      role = config.roles.USER;
     }
 
     UserModel.createUser(

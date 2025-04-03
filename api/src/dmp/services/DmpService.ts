@@ -1,8 +1,8 @@
-const NodeCache = require('node-cache');
-const { URLSearchParams } = require('url');
+import NodeCache from 'node-cache';
+import { URLSearchParams } from 'url';
 
-module.exports = {
-  getDmpResource: async (dmpId) => {
+export default {
+  getDmpResource: async (dmpId: any) => {
     const {
       endpoints: { authEndpoint },
       dmptoolClientId,
@@ -19,10 +19,10 @@ module.exports = {
 
     // Request Oauth2 token from DMPTool service
     const token = cache.get('TOKEN') ?? null;
-    const tokenTimestamp = cache.get('TIMESTAMP') ?? Date(2010, 1, 1);
+    const tokenTimestamp: any = cache.get('TIMESTAMP') ?? Date();
     const tokenExpires = cache.get('TTL') ?? 600;
 
-    const tokenAge = (Date.now() - tokenTimestamp) / 1000;
+    const tokenAge: any = (Date.now() - tokenTimestamp) / 1000;
     if (tokenAge > tokenExpires || token === null) {
       // fetch Oauth2 access token
       try {
@@ -44,7 +44,7 @@ module.exports = {
         });
 
         if (!response.ok) {
-          const err = new Error(
+          const err: any = new Error(
             `Network response was not ok: ${response.status}`
           );
           err.status = 500;
@@ -77,7 +77,7 @@ module.exports = {
       });
 
       if (!response.ok) {
-        const err = new Error(
+        const err: any = new Error(
           `Network response was not ok: ${response.status}`
         );
         err.status = 500;
@@ -87,7 +87,7 @@ module.exports = {
       const data = await response.json();
       // check if requested DMP ID returned a record
       if (data.items[0] === null) {
-        const err = new Error('Requested DMP not found.');
+        const err: any = new Error('Requested DMP not found.');
         err.status = 404;
         throw err;
       }

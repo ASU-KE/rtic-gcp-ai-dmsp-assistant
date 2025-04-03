@@ -1,9 +1,9 @@
-const DmpService = require('../services/DmpService');
-const PdfService = require('../services/PdfService');
-const LlmService = require('../services/KE_LLM_Service');
+import DmpService from '../services/DmpService';
+import PdfService from '../services/PdfService';
+import LlmService from '../services/KE_LLM_Service';
 
-module.exports = {
-  getDmpReportById: async (req, res) => {
+export default {
+  getDmpReportById: async (req: any, res: any) => {
     const dmpId = req.body.dmpId;
 
     // TODO: validate DMP ID
@@ -25,7 +25,7 @@ module.exports = {
           metadata: llmResponse.metadata,
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.status === 404) {
         return res.status(404).json({
           status: error.status,
@@ -43,7 +43,7 @@ module.exports = {
       });
     }
   },
-  getDmpReportByText: async (req, res) => {
+  getDmpReportByText: async (req: any, res: any) => {
     const dmpText = req.body.dmpText;
 
     // TODO: validate and sanitize text
@@ -59,7 +59,7 @@ module.exports = {
           metadata: llmResponse.metadata,
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.status === 404) {
         return res.status(404).json({
           status: error.status,

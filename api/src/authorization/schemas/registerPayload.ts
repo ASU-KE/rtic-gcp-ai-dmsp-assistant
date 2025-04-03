@@ -1,4 +1,5 @@
-import { roles } from '../../config';
+import config from '../../config';
+const roles = config.roles
 
 export default {
   type: 'object',

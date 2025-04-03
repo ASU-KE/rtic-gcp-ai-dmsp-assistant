@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const jwtSecret = process.env.JWT_SECRET; //eslint-disable-line no-undef
+import jwt from 'jsonwebtoken';
+const jwtSecret: any = process.env.JWT_SECRET; //eslint-disable-line no-undef
 
-module.exports = {
-  check: (req, res, next) => {
+export default {
+  check: (req: any, res: any, next: any) => {
     const authHeader = req.headers['authorization'];
 
     // IF no auth headers are provided
@@ -40,7 +40,7 @@ module.exports = {
       });
     }
 
-    jwt.verify(token, jwtSecret, (err, user) => {
+    jwt.verify(token, jwtSecret, (err: any, user: any) => {
       if (err) {
         return res.status(403).json({
           status: false,
