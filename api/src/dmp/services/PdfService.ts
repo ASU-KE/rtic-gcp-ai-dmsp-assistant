@@ -1,6 +1,7 @@
 import pdfParse from 'pdf-parse';
 
-// const PDFExtract = require('pdf.js-extract').PDFExtract;
+// import { PDFExtract } from 'pdf.js-extract';
+// const PDFExtract = PDFExtract()
 
 export default {
   fetchPdfInMemory: async (url: any) => {

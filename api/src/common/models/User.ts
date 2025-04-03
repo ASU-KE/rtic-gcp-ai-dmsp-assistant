@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const { roles } = require('../../config');
+import { DataTypes } from 'sequelize';
+import config from '../../config';
 
 const UserModel = {
   id: {
@@ -28,7 +28,7 @@ const UserModel = {
   role: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: roles.USER,
+    defaultValue: config.roles.USER,
   },
   firstName: {
     type: DataTypes.STRING,
@@ -40,36 +40,40 @@ const UserModel = {
   },
 };
 
-module.exports = {
-  initialise: (sequelize) => {
-    this.model = sequelize.define('user', UserModel);
+const UserService = {
+  model: null as any,
+
+  initialise: (sequelize: any) => {
+    UserService.model = sequelize.define('user', UserModel);
   },
 
-  createUser: (user) => {
-    return this.model.create(user);
+  createUser: (user: any) => {
+    return UserService.model.create(user);
   },
 
-  findUser: (query) => {
-    return this.model.findOne({
+  findUser: (query: any) => {
+    return UserService.model.findOne({
       where: query,
     });
   },
 
-  updateUser: (query, updatedValue) => {
-    return this.model.update(updatedValue, {
+  updateUser: (query: any, updatedValue: any) => {
+    return UserService.model.update(updatedValue, {
       where: query,
     });
   },
 
-  findAllUsers: (query) => {
-    return this.model.findAll({
+  findAllUsers: (query: any) => {
+    return UserService.model.findAll({
       where: query,
     });
   },
 
-  deleteUser: (query) => {
-    return this.model.destroy({
+  deleteUser: (query: any) => {
+    return UserService.model.destroy({
       where: query,
     });
   },
 };
+
+export default UserService;

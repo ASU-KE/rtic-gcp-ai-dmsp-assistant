@@ -1,3 +1,6 @@
+import config from '../../config';
+import promptConfig from '../../system_prompt.config';
+
 export default {
   queryLlm: async (planText: any) => {
     const {
@@ -10,12 +13,11 @@ export default {
           systemPrompt: { sourceType, sourceValue },
         },
       },
-    } = require('../../config');
+    } = config
 
     let systemPrompt = sourceValue;
     if (sourceType === 'file') {
-      const { prompt } = require('../../system_prompt.config');
-      systemPrompt = prompt;
+      systemPrompt = promptConfig.prompt;
     }
 
     try {

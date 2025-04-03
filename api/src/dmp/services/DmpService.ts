@@ -1,5 +1,8 @@
 import NodeCache from 'node-cache';
 import { URLSearchParams } from 'url';
+import config from '../../config';
+
+
 
 export default {
   getDmpResource: async (dmpId: any) => {
@@ -7,7 +10,7 @@ export default {
       endpoints: { authEndpoint },
       dmptoolClientId,
       dmptoolClientSecret,
-    } = require('../../config');
+    } = config;
 
     // get Bearer token for authentication
     const bearerToken = Buffer.from(
@@ -64,7 +67,7 @@ export default {
     // fetch the DMP record
     const {
       endpoints: { getDmpEndpoint },
-    } = require('../../config');
+    } = config;
 
     try {
       const headers = new Headers();

@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   database: {
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 3306,
@@ -35,7 +35,7 @@ module.exports = {
       // systemPrompt: null, // object (Optional): Object contains the custom system prompt as a string or reference to an external file.
       systemPrompt: {
         sourceType: 'file', // string: "string" or "file"
-        sourceValue: 'system_prompt.config.js', // string: Provide the system propmt text or the filename for file containing the system prompt.
+        sourceValue: 'system_prompt.config.ts', // string: Provide the system propmt text or the filename for file containing the system prompt.
       },
       topK: null, // int (Optional): 0-40 Randomness and Diversity parameter. The number of token choices the model uses to generate the next token.
       topP: null, // float (Optional): 0-1 Randomness and Diversity parameter. Use a lower value to ignore less probable options.
@@ -76,3 +76,5 @@ module.exports = {
     history: null, // list (default is empty): This lets you pass your own history to the model. The history should be a list of dictionary items with the keys "query" and "response". Keep in mind if you enable this, your conversation history will not be used.
   },
 };
+
+export default config;
