@@ -31,7 +31,8 @@ RUN npm run build
 # using node here is still more graceful stopping then npm with --init afaik
 # I still can't come up with a good production way to run with npm and graceful shutdown
 
-FROM development as dev-envs
+# Stage 2 - Build optimized environment with Docker dev tools
+FROM builder as dev-envs
 RUN  <<EOF
 apt-get update
 apt-get install -y --no-install-recommends git
