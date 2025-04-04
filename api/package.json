@@ -9,8 +9,8 @@
     "start": "ts-node --files -H -T ./src/index.ts",
     "start:watch": "nodemon -w *.ts -e ts -x ts-node --files -H -T ./src/index.ts",
     "start:wait-debug": "nodemon -w *.ts -e ts -x ts-node --files -H -T ./src/index.ts --inspect-brk=0.0.0.0:9229",
-    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
-    "format:write": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "format:write": "prettier --write \"src/**/*.ts\"",
     "lint:check": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "eslint --fix \"{src,test}/**/*.ts\""
   },
