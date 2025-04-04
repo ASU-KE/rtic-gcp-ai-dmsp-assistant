@@ -9,10 +9,10 @@
     "start": "ts-node --files -H -T ./src/index.ts",
     "start-watch": "nodemon -w *.ts -e ts -x ts-node --files -H -T ./src/index.ts",
     "start-wait-debugger": "nodemon -w *.ts -e ts -x ts-node --files -H -T ./src/index.ts --inspect-brk=0.0.0.0:9229",
-    "format:check": "prettier --check .",
-    "format:write": "prettier --write .",
-    "lint:check": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:write": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint:check": "eslint \"{src,test}/**/*.ts\"",
+    "lint:fix": "eslint --fix \"{src,test}/**/*.ts\""
   },
   "dependencies": {
     "ajv": "8.12.0",
