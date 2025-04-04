@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "redhat.vscode-yaml",
+    "oderwat.indent-rainbow",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "christian-kohler.npm-intellisense",
+    "christian-kohler.path-intellisense",
+    "shardulm94.trailing-spaces"
+  ]
+}

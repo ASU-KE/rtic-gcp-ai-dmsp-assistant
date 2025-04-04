@@ -1,0 +1,26 @@
+{
+  "editor.formatOnType": false, // required
+  "editor.formatOnPaste": true, // optional
+  "editor.formatOnSaveMode": "file", // required to format on save
+
+  // Don’t format files on save
+  "editor.formatOnSave": false,
+  // Autosave files on focus change
+  "files.autoSave": "onFocusChange",
+  // Don’t autosave files with syntax errors
+  "files.autoSaveWhenNoErrors": true,
+  "editor.codeActionsOnSave": {
+    // Trigger lint autofixing on explicit save (not on autosave)
+    "source.fixAll": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.rules.customizations": [
+    // Change the severity of all autofixable issues to `off`
+    { "rule": "*", "fixable": true, "severity": "off" }
+  ]
+}
