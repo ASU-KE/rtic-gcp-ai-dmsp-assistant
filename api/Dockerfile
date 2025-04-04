@@ -47,3 +47,10 @@ EOF
 # install Docker tools (cli, buildx, compose)
 COPY --from=gloursdocker/docker / /
 CMD [ "npm", "start" ]
+
+# Stage 3 - Build optimized production deployment
+FROM nginx:1.13-alpine
+
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=builder /code/dist /usr/share/nginx/html
