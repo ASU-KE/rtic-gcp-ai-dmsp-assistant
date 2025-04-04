@@ -46,3 +46,4 @@ EOF
 
 # install Docker tools (cli, buildx, compose)
 COPY --from=gloursdocker/docker / /
+CMD [ "npm", "start" ]
