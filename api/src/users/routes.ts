@@ -13,7 +13,7 @@ import updateUserPayload from './schemas/updateUserPayload';
 import changeRolePayload from './schemas/changeRolePayload';
 
 import config from '../config';
-const roles = config.roles
+const roles = config.roles;
 const router = Router();
 
 router.get('/', [isAuthenticatedMiddleware.check], UserController.getUser);

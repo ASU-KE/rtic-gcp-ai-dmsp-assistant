@@ -1,7 +1,7 @@
 import config from './config';
 import dotenv from 'dotenv';
 dotenv.config();
-const port = config.port
+const port = config.port;
 // include and initialize the rollbar library with your access token
 import Rollbar from 'rollbar';
 var rollbar = new Rollbar({

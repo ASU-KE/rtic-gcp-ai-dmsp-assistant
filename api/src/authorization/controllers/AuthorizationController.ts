@@ -7,8 +7,8 @@ import { error } from 'console';
 const jwtSecret = process.env.JWT_SECRET; //eslint-disable-line no-undef
 const jwtExpirationInSeconds = process.env.JWT_EXPIRATION_SECS || 3000; //eslint-disable-line no-undef
 
-if (!jwtSecret){
-  throw error('jwtSecret is undefined!')
+if (!jwtSecret) {
+  throw error('jwtSecret is undefined!');
 }
 
 // Generates an Access Token using username and userId for the user's authentication

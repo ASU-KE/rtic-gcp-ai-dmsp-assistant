@@ -1,5 +1,5 @@
 import config from '../../config';
-const roles = config.roles
+const roles = config.roles;
 
 export default {
   type: 'object',

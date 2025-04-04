@@ -2,8 +2,6 @@ import NodeCache from 'node-cache';
 import { URLSearchParams } from 'url';
 import config from '../../config';
 
-
-
 export default {
   getDmpResource: async (dmpId: any) => {
     const {

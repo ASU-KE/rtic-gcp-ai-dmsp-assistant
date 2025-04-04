@@ -13,7 +13,7 @@ export default {
           systemPrompt: { sourceType, sourceValue },
         },
       },
-    } = config
+    } = config;
 
     let systemPrompt = sourceValue;
     if (sourceType === 'file') {
