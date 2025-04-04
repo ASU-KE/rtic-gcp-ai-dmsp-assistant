@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1.4
 
-FROM node:22.9-bookworm AS development
+# Multi-stage Image Build
+# Stage 1 - Clean-Install node packages and compile TS code
+FROM node:22.9-bookworm AS builder
 
 # set our node environment, either development or production
 # defaults to production, compose overrides this to development on build and run
@@ -21,12 +23,13 @@ RUN npm ci
 # copy in our source code last, as it changes the most
 COPY . /code
 
+# Build application
+RUN npm run build
+
 # if you want to use npm start instead, then use `docker run --init in production`
 # so that signals are passed properly. Note the code in index.js is needed to catch Docker signals
 # using node here is still more graceful stopping then npm with --init afaik
 # I still can't come up with a good production way to run with npm and graceful shutdown
-# CMD [ "node", "dist/src/index.js" ]
-CMD ["npm", "run", "start-watch"]
 
 FROM development as dev-envs
 RUN  <<EOF
