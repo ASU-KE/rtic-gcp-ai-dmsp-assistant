@@ -1,117 +1,151 @@
-import UserModel from './../../common/models/User';
+import UserModel, { UserInstance } from './../../common/models/User';
+import { Request, Response } from 'express';
+
+interface AuthenticatedRequest extends Request {
+  user?: {
+    userId: number;
+    username: string;
+  };
+}
 
 export default {
-  getUser: (req: any, res: any) => {
-    const {
-      user: { userId },
-    } = req;
+  getUser: (req: AuthenticatedRequest, res: Response) => {
+    const { user } = req;
 
-    UserModel.findUser({ id: userId })
-      .then((user: any) => {
-        return res.status(200).json({
-          status: true,
-          data: user.toJSON(),
-        });
-      })
-      .catch((err: any) => {
-        return res.status(500).json({
-          status: false,
-          error: err,
-        });
-      });
-  },
-
-  updateUser: (req: any, res: any) => {
-    const {
-      user: { userId },
-      body: payload,
-    } = req;
-
-    // IF the payload does not have any keys,
-    // THEN we can return an error, as nothing can be updated
-    if (!Object.keys(payload).length) {
-      return res.status(400).json({
+    if (!user) {
+      res.status(401).json({
         status: false,
-        error: {
-          message: 'Body is empty, hence can not update the user.',
-        },
+        error: { message: 'Unauthorized access.' },
       });
+      return;
     }
 
-    UserModel.updateUser({ id: userId }, payload)
-      .then(() => {
-        return UserModel.findUser({ id: userId });
-      })
-      .then((user: any) => {
-        return res.status(200).json({
+    UserModel.findUser({ id: user.userId })
+      .then((foundUser: UserInstance | null) => {
+        if (!foundUser) {
+          res.status(404).json({
+            status: false,
+            error: { message: 'User not found.' },
+          });
+          return;
+        }
+
+        res.status(200).json({
           status: true,
-          data: user.toJSON(),
+          data: foundUser.toJSON(),
         });
       })
-      .catch((err: any) => {
-        return res.status(500).json({
+      .catch((err: Error) => {
+        res.status(500).json({
           status: false,
           error: err,
         });
       });
   },
 
-  deleteUser: (req: any, res: any) => {
-    const {
-      params: { userId },
-    } = req;
+  updateUser: (req: AuthenticatedRequest, res: Response) => {
+    const { user, body: payload } = req;
 
-    UserModel.deleteUser({ id: userId })
-      .then((numberOfEntriesDeleted: any) => {
-        return res.status(200).json({
+    if (!user) {
+      res.status(401).json({
+        status: false,
+        error: { message: 'Unauthorized access.' },
+      });
+      return;
+    }
+
+    if (!Object.keys(payload).length) {
+      res.status(400).json({
+        status: false,
+        error: {
+          message: 'Body is empty, hence cannot update the user.',
+        },
+      });
+      return;
+    }
+
+    UserModel.updateUser({ id: user.userId }, payload)
+      .then(() => UserModel.findUser({ id: user.userId }))
+      .then((updatedUser: UserInstance | null) => {
+        if (!updatedUser) {
+          res.status(404).json({
+            status: false,
+            error: { message: 'User not found after update.' },
+          });
+          return;
+        }
+
+        res.status(200).json({
+          status: true,
+          data: updatedUser.toJSON(),
+        });
+      })
+      .catch((err: Error) => {
+        res.status(500).json({
+          status: false,
+          error: err,
+        });
+      });
+  },
+
+  deleteUser: (req: Request<{ userId: string }>, res: Response) => {
+    const { userId } = req.params;
+
+    UserModel.deleteUser({ id: Number(userId) })
+      .then((numberOfEntriesDeleted: number) => {
+        res.status(200).json({
           status: true,
           data: {
             numberOfUsersDeleted: numberOfEntriesDeleted,
           },
         });
       })
-      .catch((err: any) => {
-        return res.status(500).json({
+      .catch((err: Error) => {
+        res.status(500).json({
           status: false,
           error: err,
         });
       });
   },
 
-  getAllUsers: (req: any, res: any) => {
+  getAllUsers: (req: Request, res: Response) => {
     UserModel.findAllUsers(req.query)
-      .then((users: any) => {
-        return res.status(200).json({
+      .then((users: UserInstance[]) => {
+        res.status(200).json({
           status: true,
-          data: users,
+          data: users.map((user) => user.toJSON()),
         });
       })
-      .catch((err: any) => {
-        return res.status(500).json({
+      .catch((err: Error) => {
+        res.status(500).json({
           status: false,
           error: err,
         });
       });
   },
 
-  changeRole: (req: any, res: any) => {
-    const {
-      params: { userId },
-      body: { role },
-    } = req;
+  changeRole: (req: Request<{ userId: string }, {}, { role: string }>, res: Response) => {
+    const { userId } = req.params;
+    const { role } = req.body;
 
-    UserModel.updateUser({ id: userId }, { role })
-      .then(() => {
-        return UserModel.findUser({ id: userId });
-      })
-      .then((user: any) => {
-        return res.status(200).json({
+    UserModel.updateUser({ id: Number(userId) }, { role })
+      .then(() => UserModel.findUser({ id: Number(userId) }))
+      .then((user: UserInstance | null) => {
+        if (!user) {
+          res.status(404).json({
+            status: false,
+            error: { message: 'User not found after role change.' },
+          });
+          return;
+        }
+
+        res.status(200).json({
           status: true,
           data: user.toJSON(),
         });
       })
-      .catch((err: any) => {
-        return res.status(500).json({
+      .catch((err: Error) => {
+        res.status(500).json({
           status: false,
           error: err,
         });

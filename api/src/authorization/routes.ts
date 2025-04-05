@@ -1,5 +1,5 @@
 import { Router } from 'express';
-const router = Router();
+const router: Router = Router();
 
 // Controller Imports
 import AuthorizationController from './controllers/AuthorizationController';

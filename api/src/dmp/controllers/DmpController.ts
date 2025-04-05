@@ -1,8 +1,10 @@
 import DmpService from '../services/DmpService';
 import PdfService from '../services/PdfService';
 import LlmService from '../services/KE_LLM_Service';
+import { Request, Response } from 'express';
 
-export default {
+
+const DmpController =  {
   getDmpReportById: async (req: any, res: any) => {
     const dmpId = req.body.dmpId;
 
@@ -59,12 +61,13 @@ export default {
           metadata: llmResponse.metadata,
         },
       });
-    } catch (error: any) {
-      if (error.status === 404) {
+    } catch (error: unknown) {
+      const err = error as HttpError;
+      if (err.status === 404) {
         return res.status(404).json({
-          status: error.status,
+          status: err.status,
           error: {
-            message: error.message,
+            message: err.message,
           },
         });
       }
@@ -72,9 +75,11 @@ export default {
       return res.status(500).json({
         status: res.status,
         error: {
-          message: error.message,
+          message: err.message,
         },
       });
     }
   },
 };
+
+export default DmpController;

@@ -1,8 +1,11 @@
+import { Request, Response } from 'express';
+
 export default {
-  getHello: (req: any, res: any) => {
-    return res.status(200).json({
+  getHello: (req: Request, res: Response): void => {
+    res.status(200).json({
       status: true,
       message: 'Hello!',
     });
+    return;
   },
 };
