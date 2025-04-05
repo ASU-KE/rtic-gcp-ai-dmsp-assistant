@@ -12,7 +12,7 @@ import UserController from './controllers/UserController';
 import updateUserPayload from './schemas/updateUserPayload';
 import changeRolePayload from './schemas/changeRolePayload';
 
-import config from '../config';
+import config, { Role } from '../config';
 const roles = config.roles;
 const router = Router();
 
@@ -29,7 +29,7 @@ router.patch(
 
 router.get(
   '/all',
-  [isAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
+  [isAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN as Role)],
   UserController.getAllUsers
 );
 
@@ -37,7 +37,7 @@ router.patch(
   '/change-role/:userId',
   [
     isAuthenticatedMiddleware.check,
-    CheckPermissionMiddleware.has(roles.ADMIN),
+    CheckPermissionMiddleware.has(roles.ADMIN as Role),
     SchemaValidationMiddleware.verify(changeRolePayload),
   ],
   UserController.changeRole
@@ -45,7 +45,7 @@ router.patch(
 
 router.delete(
   '/:userId',
-  [isAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
+  [isAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN as Role)],
   UserController.deleteUser
 );
 

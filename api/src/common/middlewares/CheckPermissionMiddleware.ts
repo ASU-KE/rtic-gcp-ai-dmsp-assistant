@@ -1,35 +1,47 @@
-import UserModel from '../models/User';
+import { RequestHandler } from 'express';
+import { Request } from 'express';
+import UserModel, { UserInstance } from '../models/User';
+import { Role } from '../../config';
 
-export default {
-  has: (role: any) => {
-    return (req: any, res: any, next: any) => {
-      const {
-        user: { userId },
-      } = req;
+interface AuthenticatedRequest extends Request {
+  user?: {
+    userId: number; // use number if your JWT sets it that way
+    username: string;
+  };
+}
 
-      UserModel.findUser({ id: userId }).then((user: any) => {
-        // IF user does not exist in our database, means something is fishy
-        // THEN we will return forbidden error and ask user to login again
-        if (!user) {
-          return res.status(403).json({
-            status: false,
-            error: 'Invalid access token provided, please login again.',
-          });
-        }
+const has = (role: Role): RequestHandler => {
+  return async (req, res, next) => {
+    const { user } = req as AuthenticatedRequest;
 
-        const userRole = user.role;
-
-        // IF user does not possess the required role
-        // THEN return forbidden error
-        if (userRole !== role) {
-          return res.status(403).json({
-            status: false,
-            error: `You need to be a ${role} to access this endpoint.`,
-          });
-        }
-
-        next();
+    if (!user) {
+      res.status(401).json({
+        status: false,
+        error: 'No user found in request context.',
       });
-    };
-  },
+      return;
+    }
+
+    const foundUser: UserInstance | null = await UserModel.findUser({ id: Number(user.userId) });
+
+    if (!foundUser) {
+      res.status(403).json({
+        status: false,
+        error: 'Invalid access token provided, please login again.',
+      });
+      return;
+    }
+
+    if (foundUser.role !== role) {
+      res.status(403).json({
+        status: false,
+        error: `You need to be a ${role} to access this endpoint.`,
+      });
+      return;
+    }
+
+    next();
+  };
 };
+
+export default { has };

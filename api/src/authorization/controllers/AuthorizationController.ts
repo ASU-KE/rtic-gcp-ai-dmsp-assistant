@@ -1,18 +1,16 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import UserModel from '../../common/models/User';
+import UserModel, { UserInstance } from '../../common/models/User';
+import { RegisterPayload } from '../schemas/registerPayload';
 import config from '../../config';
-import { error } from 'console';
+import { Request, Response } from 'express';
+import { LoginPayload } from '../schemas/loginPayload';
 
-const jwtSecret = process.env.JWT_SECRET; //eslint-disable-line no-undef
-const jwtExpirationInSeconds = process.env.JWT_EXPIRATION_SECS || 3000; //eslint-disable-line no-undef
-
-if (!jwtSecret) {
-  throw error('jwtSecret is undefined!');
-}
+const jwtSecret = process.env.JWT_SECRET!;
+const jwtExpirationInSeconds = process.env.JWT_EXPIRATION_SECS ?? '3000';
 
 // Generates an Access Token using username and userId for the user's authentication
-const generateAccessToken = (username: any, userId: any) => {
+const generateAccessToken = (username: string, userId: number): string => {
   return jwt.sign(
     {
       userId,
@@ -26,7 +24,7 @@ const generateAccessToken = (username: any, userId: any) => {
 };
 
 // Encrypts the password using SHA256 Algorithm, for enhanced security of the password
-const encryptPassword = (password: any) => {
+const encryptPassword = (password: string): string => {
   // We will hash the password using SHA256 Algorithm before storing in the DB
   // Creating SHA-256 hash object
   const hash = crypto.createHash('sha256');
@@ -37,10 +35,10 @@ const encryptPassword = (password: any) => {
 };
 
 export default {
-  register: (req: any, res: any) => {
+  register: (req: Request<{}, {}, RegisterPayload> , res: Response) => {
     const payload = req.body;
 
-    let encryptedPassword = encryptPassword(payload.password);
+    const encryptedPassword: string = encryptPassword(payload.password);
     let role = payload.role;
 
     if (!role) {
@@ -50,7 +48,7 @@ export default {
     UserModel.createUser(
       Object.assign(payload, { password: encryptedPassword, role })
     )
-      .then((user: any) => {
+      .then((user: UserInstance) => {
         // Generating an AccessToken for the user, which will be
         // required in every subsequent request.
         const accessToken = generateAccessToken(payload.username, user.id);
@@ -63,7 +61,7 @@ export default {
           },
         });
       })
-      .catch((err: any) => {
+      .catch((err: Error) => {
         return res.status(500).json({
           status: false,
           error: err,
@@ -71,8 +69,8 @@ export default {
       });
   },
 
-  login: (req: any, res: any) => {
-    const { username, password } = req.body;
+  login: (req: Request<{}, {}, LoginPayload>, res: Response) => {
+    const { username, password } = req.body as { username: string; password: string };
 
     UserModel.findUser({ username })
       .then((user: any) => {
@@ -112,7 +110,7 @@ export default {
           },
         });
       })
-      .catch((err: any) => {
+      .catch((err: Error) => {
         return res.status(500).json({
           status: false,
           error: err,

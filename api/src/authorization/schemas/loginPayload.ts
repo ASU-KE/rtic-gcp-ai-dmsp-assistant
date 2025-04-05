@@ -11,3 +11,8 @@ export default {
   required: ['username', 'password'],
   additionalProperties: false,
 };
+
+export type LoginPayload = {
+  username: string;
+  password: string;
+};

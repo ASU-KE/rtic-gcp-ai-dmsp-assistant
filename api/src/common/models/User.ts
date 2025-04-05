@@ -1,5 +1,27 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 import config from '../../config';
+
+export interface UserAttributes {
+  id?: number;
+  username: string;
+  email: string;
+  password: string;
+  age: number;
+  role: string;
+  firstName: string;
+  lastName: string;
+}
+
+export class UserInstance extends Model<UserAttributes> implements UserAttributes {
+  public id!: number;
+  public username!: string;
+  public email!: string;
+  public password!: string;
+  public age!: number;
+  public role!: string;
+  public firstName!: string;
+  public lastName!: string;
+}
 
 const UserModel = {
   id: {
@@ -41,35 +63,35 @@ const UserModel = {
 };
 
 const UserService = {
-  model: null as any,
+  model: null as unknown as typeof UserInstance,
 
-  initialise: (sequelize: any) => {
-    UserService.model = sequelize.define('user', UserModel);
+  initialise: (sequelize: Sequelize) => {
+    UserService.model = sequelize.define('user', UserModel) as typeof UserInstance;
   },
 
-  createUser: (user: any) => {
+  createUser: (user: UserAttributes) => {
     return UserService.model.create(user);
   },
 
-  findUser: (query: any) => {
+  findUser: (query: Partial<UserAttributes>) => {
     return UserService.model.findOne({
       where: query,
     });
   },
 
-  updateUser: (query: any, updatedValue: any) => {
+  updateUser: (query: Partial<UserAttributes>, updatedValue: Partial<UserAttributes>) => {
     return UserService.model.update(updatedValue, {
       where: query,
     });
   },
 
-  findAllUsers: (query: any) => {
+  findAllUsers: (query: Partial<UserAttributes>) => {
     return UserService.model.findAll({
       where: query,
     });
   },
 
-  deleteUser: (query: any) => {
+  deleteUser: (query: Partial<UserAttributes>) => {
     return UserService.model.destroy({
       where: query,
     });

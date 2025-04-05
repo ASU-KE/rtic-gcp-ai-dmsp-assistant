@@ -1,4 +1,4 @@
-import Ajv, { Options } from 'ajv';
+import Ajv, { Options, AnySchema } from 'ajv';
 const AJV_OPTS: Options = { allErrors: true };
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 
@@ -11,7 +11,7 @@ export = {
    *
    * @returns {Function} - Express request handler
    */
-  verify: (schema: any): RequestHandler => {
+  verify: (schema: AnySchema): RequestHandler => {
     if (!schema) {
       throw new Error('Schema not provided');
     }

@@ -1,21 +1,96 @@
-const config = {
+interface Config {
   database: {
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 3306,
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
+    host: string;
+    port: string;
+    database: string;
+    user: string;
+    password: string;
+  };
+  port: string;
+  rollbarToken: string;
+  jwtSecret: string;
+  jwtExpiration: string;
+  dmptoolClientId: string;
+  dmptoolClientSecret: string;
+  llmAccessSecret: string;
+  roles: {
+    USER: string;
+    ADMIN: string;
+  };
+  endpoints: {
+    authEndpoint: string;
+    getDmpEndpoint: string;
+    queryLlmRestEndpoint: string;
+    queryLlmWebsocketEndpoint: string;
+  };
+  llmOptions: {
+    modelProvider: string;
+    modelName: string;
+    modelParams: {
+      temperature: number | null;
+      maxTokens: number | null;
+      systemPrompt: {
+        sourceType: string;
+        sourceValue: string;
+      };
+      topK: number | null;
+      topP: number | null;
+    };
+    enableSearch: boolean | null;
+    searchParams: {
+      dbType: string;
+      collection: string;
+      tags: string[] | null;
+      sourceName: string[] | null;
+      topK: number | null;
+      outputFields: string[] | null;
+      retrievalType: string | null;
+      promptMode: string | null;
+      searchPrompt: string | null;
+      expr: string | null;
+    };
+    projectId: string | null;
+    sessionId: string | null;
+    enableHistory: boolean | null;
+    enhancePrompt: {
+      timezone: string;
+      time: boolean;
+      date: boolean;
+      verbosity: string;
+    } | null;
+    evalParams: {
+      contextUtilization: boolean;
+      harmfulness: boolean;
+    } | null;
+    responseFormat: {
+      type: string;
+    } | null;
+    semanticCaching: boolean | null;
+    history: {
+      query: string;
+      response: string;
+    }[] | null;
+  };
+}
+
+const config: Config = {
+  database: {
+    host: process.env.DB_HOST ?? 'localhost',
+    port: process.env.DB_PORT ?? '3306',
+    database: process.env.DB_NAME!,
+    user: process.env.DB_USER!,
+    password: process.env.DB_PASSWORD!,
   },
-  port: process.env.API_PORT || 3001,
-  rollbarToken: process.env.ROLLBAR_TOKEN,
+  port: process.env.API_PORT ?? '3001',
+  rollbarToken: process.env.ROLLBAR_TOKEN!,
   // if you're not using docker compose for local development, this will default to 8080
   // to prevent non-root permission problems with 80. Dockerfile is set to make this 80
   // because containers don't have that issue :)
-  jwtSecret: process.env.JWT_SECRET,
-  jwtExpiration: process.env.JWT_EXPIRATION,
-  dmptoolClientId: process.env.DMPTOOL_CLIENT_ID,
-  dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET,
-  llmAccessSecret: process.env.LLM_ACCESS_SECRET,
+  jwtSecret: process.env.JWT_SECRET!,
+  jwtExpiration: process.env.JWT_EXPIRATION!,
+  dmptoolClientId: process.env.DMPTOOL_CLIENT_ID!,
+  dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET!,
+  llmAccessSecret: process.env.LLM_ACCESS_SECRET!,
   roles: {
     USER: 'user',
     ADMIN: 'admin',
@@ -77,4 +152,5 @@ const config = {
   },
 };
 
+export type Role = 'user' | 'admin';
 export default config;

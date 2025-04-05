@@ -1,7 +1,8 @@
 import config from '../../config';
+import { FromSchema } from 'json-schema-to-ts';
 const roles = config.roles;
 
-export default {
+const registerPayloadSchema = {
   type: 'object',
   properties: {
     username: {
@@ -30,4 +31,7 @@ export default {
   },
   required: ['username', 'email', 'password', 'age', 'firstName', 'lastName'],
   additionalProperties: false,
-};
+} as const;
+
+export type RegisterPayload = FromSchema<typeof registerPayloadSchema>;
+export default registerPayloadSchema;
