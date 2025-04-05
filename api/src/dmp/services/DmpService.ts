@@ -2,10 +2,21 @@ import NodeCache from 'node-cache';
 import { URLSearchParams } from 'url';
 import config from '../../config';
 
+interface DmpApiResponse {
+  items: {
+    dmp: {
+      dmproadmap_related_identifiers: { identifier: string }[];
+    };
+  }[];
+}
+
+// cache DMPTool API Oauth2 token
+const cache = new NodeCache({ stdTTL: 600 });
+
 export default {
-  getDmpResource: async (dmpId: any) => {
+  getDmpResource: async (dmpId: string): Promise<string> => {
     const {
-      endpoints: { authEndpoint },
+      endpoints: { authEndpoint, getDmpEndpoint },
       dmptoolClientId,
       dmptoolClientSecret,
     } = config;
@@ -15,15 +26,12 @@ export default {
       `${dmptoolClientId}:${dmptoolClientSecret}`
     ).toString('base64');
 
-    // cache DMPTool API Oauth2 token
-    const cache = new NodeCache({ stdTTL: 600 });
-
     // Request Oauth2 token from DMPTool service
-    const token = cache.get('TOKEN') ?? null;
-    const tokenTimestamp: any = cache.get('TIMESTAMP') ?? Date();
-    const tokenExpires = cache.get('TTL') ?? 600;
+    let token = cache.get<string>('TOKEN') ?? null;
+    let tokenTimestamp = cache.get<number>('TIMESTAMP') ?? Date.now();
+    const tokenExpires = cache.get<number>('TTL') ?? 600;
 
-    const tokenAge: any = (Date.now() - tokenTimestamp) / 1000;
+    const tokenAge = (Date.now() - tokenTimestamp) / 1000;
     if (tokenAge > tokenExpires || token === null) {
       // fetch Oauth2 access token
       try {
@@ -45,27 +53,24 @@ export default {
         });
 
         if (!response.ok) {
-          const err: any = new Error(
+          const err: HttpError = new Error(
             `Network response was not ok: ${response.status}`
           );
           err.status = 500;
           throw err;
         }
 
-        const data = await response.json();
+        const data: { access_token: string; expires_in: number } = await response.json();
 
-        cache.set('TOKEN', data.access_token);
+        token = data.access_token;
+        cache.set('TOKEN', token);
         cache.set('TTL', data.expires_in);
         cache.set('TIMESTAMP', Date.now());
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('There was a problem fetching the data:', error);
+        throw error;
       }
     }
-
-    // fetch the DMP record
-    const {
-      endpoints: { getDmpEndpoint },
-    } = config;
 
     try {
       const headers = new Headers();
@@ -78,17 +83,25 @@ export default {
       });
 
       if (!response.ok) {
-        const err: any = new Error(
-          `Network response was not ok: ${response.status}`
+        const err: HttpError = new Error(
+          `DMP fetch failed: ${response.status}`
         );
         err.status = 500;
         throw err;
       }
 
-      const data = await response.json();
+      const data: DmpApiResponse = await response.json();
       // check if requested DMP ID returned a record
-      if (data.items[0] === null) {
-        const err: any = new Error('Requested DMP not found.');
+      if (!data.items[0]) {
+        const err: HttpError = new Error('Requested DMP not found.');
+        err.status = 404;
+        throw err;
+      }
+
+      const identifiers = data.items[0].dmp.dmproadmap_related_identifiers;
+
+      if (!Array.isArray(identifiers) || identifiers.length === 0) {
+        const err: HttpError = new Error('No related identifiers found.');
         err.status = 404;
         throw err;
       }
@@ -96,11 +109,11 @@ export default {
       // due to bug in api (as of 10/1/2024), the active version of a DMP is the last element
       // in the dmproadmap_related_identifiers array.
       // pop() is the most efficient (fast) method to access the last element of an array
-      const plan = data.items[0]?.dmp.dmproadmap_related_identifiers.pop();
+      const plan = identifiers[identifiers.length - 1];
 
       return plan.identifier;
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      console.error('Error fetching DMP resource:', error);
       throw error;
     }
   },

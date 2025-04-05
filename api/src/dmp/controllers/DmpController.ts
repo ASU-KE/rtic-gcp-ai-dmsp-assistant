@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 
 
 const DmpController =  {
-  getDmpReportById: async (req: any, res: any) => {
+  getDmpReportById: async (req: Request, res: Response): Promise<void> => {
     const dmpId = req.body.dmpId;
 
     // TODO: validate DMP ID
@@ -14,38 +14,48 @@ const DmpController =  {
     try {
       const dmpPdfUrl = await DmpService.getDmpResource(dmpId);
       const pdfDocument = await PdfService.fetchPdfInMemory(dmpPdfUrl);
-      const dmpText = await PdfService.extractText(pdfDocument);
+      const dmpText = await PdfService.extractText(Buffer.from(pdfDocument));
       const llmResponse = await LlmService.queryLlm(dmpText);
 
-      return await res.status(200).json({
-        status: res.status,
+      if (!llmResponse) {
+        res.status(500).json({
+          status: 500,
+          error: { message: 'Failed to fetch LLM response.' },
+        });
+        return;
+      }
+
+      res.status(200).json({
+        status: 200,
         data: {
           id: dmpId,
-          document_url: await dmpPdfUrl,
-          documentText: await dmpText,
+          document_url: dmpPdfUrl,
+          documentText: dmpText,
           analysis: llmResponse.response,
           metadata: llmResponse.metadata,
         },
       });
-    } catch (error: any) {
-      if (error.status === 404) {
-        return res.status(404).json({
-          status: error.status,
+    } catch (error: unknown) {
+      const err = error as HttpError;
+      if (err.status === 404) {
+        res.status(404).json({
+          status: 404,
           error: {
-            message: error.message,
+            message: err.message,
           },
         });
+        return;
       }
 
-      return res.status(500).json({
-        status: res.status,
+      res.status(500).json({
+        status: 500,
         error: {
-          message: error.message,
+          message: err.message,
         },
       });
     }
   },
-  getDmpReportByText: async (req: any, res: any) => {
+  getDmpReportByText: async (req: Request, res: Response): Promise<void> => {
     const dmpText = req.body.dmpText;
 
     // TODO: validate and sanitize text
@@ -54,8 +64,17 @@ const DmpController =  {
     try {
       const llmResponse = await LlmService.queryLlm(dmpText);
 
-      return await res.status(200).json({
-        status: res.status,
+      if (!llmResponse) {
+        res.status(500).json({
+          status: 500,
+          error: { message: 'Failed to fetch LLM response.' },
+        });
+        return;
+      }
+
+
+      res.status(200).json({
+        status: 200,
         data: {
           analysis: llmResponse.response,
           metadata: llmResponse.metadata,
@@ -64,16 +83,17 @@ const DmpController =  {
     } catch (error: unknown) {
       const err = error as HttpError;
       if (err.status === 404) {
-        return res.status(404).json({
-          status: err.status,
+        res.status(404).json({
+          status: 404,
           error: {
             message: err.message,
           },
         });
+        return;
       }
 
-      return res.status(500).json({
-        status: res.status,
+      res.status(500).json({
+        status: 500,
         error: {
           message: err.message,
         },

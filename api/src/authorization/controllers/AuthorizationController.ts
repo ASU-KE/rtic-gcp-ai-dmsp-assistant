@@ -73,7 +73,7 @@ export default {
     const { username, password } = req.body as { username: string; password: string };
 
     UserModel.findUser({ username })
-      .then((user: any) => {
+      .then((user: UserInstance | null) => {
         // IF user is not found with the given username
         // THEN Return user not found error
         if (!user) {

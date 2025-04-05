@@ -4,19 +4,18 @@ import pdfParse from 'pdf-parse';
 // const PDFExtract = PDFExtract()
 
 export default {
-  fetchPdfInMemory: async (url: any) => {
+  fetchPdfInMemory: async (url: string): Promise<Uint8Array> => {
     const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch PDF: ${response.status}`);
     }
 
-    // return PDF as a Uint8Array buffer object
-    const buffer = await response.arrayBuffer();
-    return new Uint8Array(buffer);
+    const arrayBuffer = await response.arrayBuffer();
+    return Buffer.from(arrayBuffer);
   },
 
-  extractText: async (buffer: any) => {
+  extractText: async (buffer: Buffer): Promise<string> => {
     const pdfData = await pdfParse(buffer);
 
     // number of pages

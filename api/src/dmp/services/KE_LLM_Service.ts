@@ -1,8 +1,13 @@
 import config from '../../config';
 import promptConfig from '../../system_prompt.config';
 
+interface LlmResponse {
+  response: string;
+  metadata?: Record<string, any>;
+}
+
 export default {
-  queryLlm: async (planText: any) => {
+  queryLlm: async (planText: string): Promise<LlmResponse | undefined> => {
     const {
       endpoints: { queryLlmRestEndpoint },
       llmAccessSecret,
@@ -42,12 +47,16 @@ export default {
       });
 
       if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.status}`);
+        const err: HttpError = new Error(`Network response was not ok: ${response.status}`);
+        err.status = response.status;
+        throw err;
       }
 
-      return await response.json();
-    } catch (error) {
+      const result: LlmResponse = await response.json();
+      return result;
+    } catch (error: unknown) {
       console.error('There was a problem fetching the data:', error);
+      return undefined;
     }
   },
 };
