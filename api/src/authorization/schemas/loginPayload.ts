@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   type: 'object',
   properties: {
     username: {
@@ -11,3 +11,8 @@ module.exports = {
   required: ['username', 'password'],
   additionalProperties: false,
 };
+
+export interface LoginPayload {
+  username: string;
+  password: string;
+}

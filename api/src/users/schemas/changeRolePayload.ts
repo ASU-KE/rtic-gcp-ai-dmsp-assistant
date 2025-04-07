@@ -1,6 +1,7 @@
-const { roles } = require('../../config');
+import config from '../../config';
+const roles = config.roles;
 
-module.exports = {
+export default {
   type: 'object',
   properties: {
     role: {

@@ -1,5 +1,13 @@
-module.exports = {
-  queryLlm: async (planText) => {
+import config from '../../config';
+import promptConfig from '../../system_prompt.config';
+
+interface LlmResponse {
+  response: string;
+  metadata?: Record<string, unknown>;
+}
+
+export default {
+  queryLlm: async (planText: string): Promise<LlmResponse | undefined> => {
     const {
       endpoints: { queryLlmRestEndpoint },
       llmAccessSecret,
@@ -10,12 +18,11 @@ module.exports = {
           systemPrompt: { sourceType, sourceValue },
         },
       },
-    } = require('../../config');
+    } = config;
 
     let systemPrompt = sourceValue;
     if (sourceType === 'file') {
-      const { prompt } = require('../../system_prompt.config');
-      systemPrompt = prompt;
+      systemPrompt = promptConfig.prompt;
     }
 
     try {
@@ -40,12 +47,18 @@ module.exports = {
       });
 
       if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.status}`);
+        const err: HttpError = new Error(
+          `Network response was not ok: ${response.status}`
+        );
+        err.status = response.status;
+        throw err;
       }
 
-      return await response.json();
-    } catch (error) {
+      const result = (await response.json()) as LlmResponse;
+      return result;
+    } catch (error: unknown) {
       console.error('There was a problem fetching the data:', error);
+      return undefined;
     }
   },
 };

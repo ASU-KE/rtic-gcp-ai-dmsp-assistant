@@ -1,21 +1,98 @@
-module.exports = {
+interface Config {
   database: {
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 3306,
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
+    host: string;
+    port: string;
+    database: string;
+    user: string;
+    password: string;
+  };
+  port: string;
+  rollbarToken: string;
+  jwtSecret: string;
+  jwtExpiration: string;
+  dmptoolClientId: string;
+  dmptoolClientSecret: string;
+  llmAccessSecret: string;
+  roles: {
+    USER: string;
+    ADMIN: string;
+  };
+  endpoints: {
+    authEndpoint: string;
+    getDmpEndpoint: string;
+    queryLlmRestEndpoint: string;
+    queryLlmWebsocketEndpoint: string;
+  };
+  llmOptions: {
+    modelProvider: string;
+    modelName: string;
+    modelParams: {
+      temperature: number | null;
+      maxTokens: number | null;
+      systemPrompt: {
+        sourceType: string;
+        sourceValue: string;
+      };
+      topK: number | null;
+      topP: number | null;
+    };
+    enableSearch: boolean | null;
+    searchParams: {
+      dbType: string;
+      collection: string;
+      tags: string[] | null;
+      sourceName: string[] | null;
+      topK: number | null;
+      outputFields: string[] | null;
+      retrievalType: string | null;
+      promptMode: string | null;
+      searchPrompt: string | null;
+      expr: string | null;
+    };
+    projectId: string | null;
+    sessionId: string | null;
+    enableHistory: boolean | null;
+    enhancePrompt: {
+      timezone: string;
+      time: boolean;
+      date: boolean;
+      verbosity: string;
+    } | null;
+    evalParams: {
+      contextUtilization: boolean;
+      harmfulness: boolean;
+    } | null;
+    responseFormat: {
+      type: string;
+    } | null;
+    semanticCaching: boolean | null;
+    history:
+      | {
+          query: string;
+          response: string;
+        }[]
+      | null;
+  };
+}
+
+const config: Config = {
+  database: {
+    host: process.env.DB_HOST ?? 'localhost',
+    port: process.env.DB_PORT ?? '3306',
+    database: process.env.DB_NAME!,
+    user: process.env.DB_USER!,
+    password: process.env.DB_PASSWORD!,
   },
-  port: process.env.API_PORT || 3001,
-  rollbarToken: process.env.ROLLBAR_TOKEN,
   // if you're not using docker compose for local development, this will default to 8080
   // to prevent non-root permission problems with 80. Dockerfile is set to make this 80
   // because containers don't have that issue :)
-  jwtSecret: process.env.JWT_SECRET,
-  jwtExpiration: process.env.JWT_EXPIRATION,
-  dmptoolClientId: process.env.DMPTOOL_CLIENT_ID,
-  dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET,
-  llmAccessSecret: process.env.LLM_ACCESS_SECRET,
+  port: process.env.API_PORT ?? '3001',
+  rollbarToken: process.env.ROLLBAR_TOKEN!,
+  jwtSecret: process.env.JWT_SECRET!,
+  jwtExpiration: process.env.JWT_EXPIRATION!,
+  dmptoolClientId: process.env.DMPTOOL_CLIENT_ID!,
+  dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET!,
+  llmAccessSecret: process.env.LLM_ACCESS_SECRET!,
   roles: {
     USER: 'user',
     ADMIN: 'admin',
@@ -27,15 +104,15 @@ module.exports = {
     queryLlmWebsocketEndpoint: 'wss://apiws-ke-poc.aiml.asu.edu',
   },
   llmOptions: {
-    modelProvider: 'gcp-deepmind', // string (Required): "aws", "openai", "gcp", "gcp-deepmind", "azure"
-    modelName: 'geminiflash1_5', // string (Required)
+    modelProvider: 'openai', // string (Required): "aws", "openai", "gcp", "gcp-deepmind", "azure"
+    modelName: 'gpt4o', // string (Required)
     modelParams: {
       temperature: 0.1, // float (Optional): 0-0.99 (model specific parameter) Randomness and Diversity parameter. Use a lower value to decrease randomness in the response.
       maxTokens: null, // int (Optional): refer to model specific parameters below. The maximum number of tokens in the generated response.
       // systemPrompt: null, // object (Optional): Object contains the custom system prompt as a string or reference to an external file.
       systemPrompt: {
         sourceType: 'file', // string: "string" or "file"
-        sourceValue: 'system_prompt.config.js', // string: Provide the system propmt text or the filename for file containing the system prompt.
+        sourceValue: 'system_prompt.config.ts', // string: Provide the system propmt text or the filename for file containing the system prompt.
       },
       topK: null, // int (Optional): 0-40 Randomness and Diversity parameter. The number of token choices the model uses to generate the next token.
       topP: null, // float (Optional): 0-1 Randomness and Diversity parameter. Use a lower value to ignore less probable options.
@@ -76,3 +153,6 @@ module.exports = {
     history: null, // list (default is empty): This lets you pass your own history to the model. The history should be a list of dictionary items with the keys "query" and "response". Keep in mind if you enable this, your conversation history will not be used.
   },
 };
+
+export type Role = 'user' | 'admin';
+export default config;

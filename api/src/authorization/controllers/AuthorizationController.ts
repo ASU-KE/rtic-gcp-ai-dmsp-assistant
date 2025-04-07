@@ -1,14 +1,16 @@
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import UserModel, { UserInstance } from '../../common/models/User';
+import { RegisterPayload } from '../schemas/registerPayload';
+import config from '../../config';
+import { Request, Response } from 'express';
+import { LoginPayload } from '../schemas/loginPayload';
 
-const UserModel = require('../../common/models/User');
-
-const { roles } = require('../../config');
-const jwtSecret = process.env.JWT_SECRET; //eslint-disable-line no-undef
-const jwtExpirationInSeconds = process.env.JWT_EXPIRATION_SECS || 3000; //eslint-disable-line no-undef
+const jwtSecret = process.env.JWT_SECRET!;
+const jwtExpirationInSeconds = process.env.JWT_EXPIRATION_SECS ?? '3000';
 
 // Generates an Access Token using username and userId for the user's authentication
-const generateAccessToken = (username, userId) => {
+const generateAccessToken = (username: string, userId: number): string => {
   return jwt.sign(
     {
       userId,
@@ -22,7 +24,7 @@ const generateAccessToken = (username, userId) => {
 };
 
 // Encrypts the password using SHA256 Algorithm, for enhanced security of the password
-const encryptPassword = (password) => {
+const encryptPassword = (password: string): string => {
   // We will hash the password using SHA256 Algorithm before storing in the DB
   // Creating SHA-256 hash object
   const hash = crypto.createHash('sha256');
@@ -32,21 +34,19 @@ const encryptPassword = (password) => {
   return hash.digest('hex');
 };
 
-module.exports = {
-  register: (req, res) => {
+export default {
+  register: (req: Request<object, object, RegisterPayload>, res: Response) => {
     const payload = req.body;
 
-    let encryptedPassword = encryptPassword(payload.password);
+    const encryptedPassword: string = encryptPassword(payload.password);
     let role = payload.role;
 
-    if (!role) {
-      role = roles.USER;
-    }
+    role ??= config.roles.USER;
 
     UserModel.createUser(
       Object.assign(payload, { password: encryptedPassword, role })
     )
-      .then((user) => {
+      .then((user: UserInstance) => {
         // Generating an AccessToken for the user, which will be
         // required in every subsequent request.
         const accessToken = generateAccessToken(payload.username, user.id);
@@ -59,7 +59,7 @@ module.exports = {
           },
         });
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         return res.status(500).json({
           status: false,
           error: err,
@@ -67,11 +67,14 @@ module.exports = {
       });
   },
 
-  login: (req, res) => {
-    const { username, password } = req.body;
+  login: (req: Request<object, object, LoginPayload>, res: Response) => {
+    const { username, password } = req.body as {
+      username: string;
+      password: string;
+    };
 
     UserModel.findUser({ username })
-      .then((user) => {
+      .then((user: UserInstance | null) => {
         // IF user is not found with the given username
         // THEN Return user not found error
         if (!user) {
@@ -108,7 +111,7 @@ module.exports = {
           },
         });
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         return res.status(500).json({
           status: false,
           error: err,

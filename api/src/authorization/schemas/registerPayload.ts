@@ -1,6 +1,8 @@
-const { roles } = require('../../config');
+import config from '../../config';
+import { FromSchema } from 'json-schema-to-ts';
+const roles = config.roles;
 
-module.exports = {
+const registerPayloadSchema = {
   type: 'object',
   properties: {
     username: {
@@ -29,4 +31,7 @@ module.exports = {
   },
   required: ['username', 'email', 'password', 'age', 'firstName', 'lastName'],
   additionalProperties: false,
-};
+} as const;
+
+export type RegisterPayload = FromSchema<typeof registerPayloadSchema>;
+export default registerPayloadSchema;

@@ -1,28 +1,27 @@
-const express = require('express');
+import express, { Request, Response } from 'express';
+import config from './config';
 
-const { rollbarToken } = require('./config');
-// include and initialize the rollbar library with your access token
-var Rollbar = require('rollbar');
-var rollbar = new Rollbar({
-  accessToken: rollbarToken,
+// Include and initialize the rollbar library with your access token
+import Rollbar from 'rollbar';
+import cors from 'cors';
+import morgan from 'morgan';
+import { Sequelize } from 'sequelize';
+
+// Express Routes Import
+import AuthorizationRoutes from './authorization/routes';
+import UserRoutes from './users/routes';
+import DmpRoutes from './dmp/routes';
+import TestRoutes from './test/routes';
+
+// Sequelize model imports
+import UserModel from './common/models/User';
+const rollbar = new Rollbar({
+  accessToken: config.rollbarToken,
   captureUncaught: true,
   captureUnhandledRejections: true,
 });
 
 const app = express();
-const cors = require('cors');
-const morgan = require('morgan');
-
-const { Sequelize } = require('sequelize');
-
-// Express Routes Import
-const AuthorizationRoutes = require('./authorization/routes');
-const UserRoutes = require('./users/routes');
-const DmpRoutes = require('./dmp/routes');
-const TestRoutes = require('./test/routes');
-
-// Sequelize model imports
-const UserModel = require('./common/models/User');
 
 app.use(morgan('common'));
 
@@ -40,7 +39,7 @@ app.use(express.json());
 
 const {
   database: { host, database, user, password },
-} = require('./config');
+} = config;
 
 const sequelize = new Sequelize(database, user, password, {
   dialect: 'mysql',
@@ -63,7 +62,7 @@ sequelize
     app.use('/dmp', DmpRoutes);
     app.use('/test', TestRoutes);
 
-    app.get('/healthz', function (req, res) {
+    app.get('/healthz', function (req: Request, res: Response) {
       // do app logic here to determine if app is truly healthy
       // you should return 200 if healthy, and anything else will fail
       // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
@@ -72,8 +71,8 @@ sequelize
 
     app.use(rollbar.errorHandler());
   })
-  .catch((err) => {
+  .catch((err: Error) => {
     rollbar.error('Sequelize Initialisation threw an error:', err);
   });
 
-module.exports = app;
+export default app;

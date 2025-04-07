@@ -1,26 +1,40 @@
-const NodeCache = require('node-cache');
-const { URLSearchParams } = require('url');
+import NodeCache from 'node-cache';
+import { URLSearchParams } from 'url';
+import config from '../../config';
 
-module.exports = {
-  getDmpResource: async (dmpId) => {
+interface DmpApiResponse {
+  items: {
+    dmp: {
+      dmproadmap_related_identifiers: { identifier: string }[];
+    };
+  }[];
+}
+
+interface OAuthResponse {
+  access_token: string;
+  expires_in: number;
+}
+
+// cache DMPTool API Oauth2 token
+const cache = new NodeCache({ stdTTL: 600 });
+
+export default {
+  getDmpResource: async (dmpId: string): Promise<string> => {
     const {
-      endpoints: { authEndpoint },
+      endpoints: { authEndpoint, getDmpEndpoint },
       dmptoolClientId,
       dmptoolClientSecret,
-    } = require('../../config');
+    } = config;
 
     // get Bearer token for authentication
     const bearerToken = Buffer.from(
       `${dmptoolClientId}:${dmptoolClientSecret}`
     ).toString('base64');
 
-    // cache DMPTool API Oauth2 token
-    const cache = new NodeCache({ stdTTL: 600 });
-
     // Request Oauth2 token from DMPTool service
-    const token = cache.get('TOKEN') ?? null;
-    const tokenTimestamp = cache.get('TIMESTAMP') ?? Date(2010, 1, 1);
-    const tokenExpires = cache.get('TTL') ?? 600;
+    let token = cache.get<string>('TOKEN') ?? null;
+    const tokenTimestamp = cache.get<number>('TIMESTAMP') ?? Date.now();
+    const tokenExpires = cache.get<number>('TTL') ?? 600;
 
     const tokenAge = (Date.now() - tokenTimestamp) / 1000;
     if (tokenAge > tokenExpires || token === null) {
@@ -44,31 +58,29 @@ module.exports = {
         });
 
         if (!response.ok) {
-          const err = new Error(
+          const err: HttpError = new Error(
             `Network response was not ok: ${response.status}`
           );
           err.status = 500;
           throw err;
         }
 
-        const data = await response.json();
+        const data = (await response.json()) as OAuthResponse;
 
-        cache.set('TOKEN', data.access_token);
+        token = data.access_token;
+        cache.set('TOKEN', token);
         cache.set('TTL', data.expires_in);
         cache.set('TIMESTAMP', Date.now());
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('There was a problem fetching the data:', error);
+        throw error;
       }
     }
 
-    // fetch the DMP record
-    const {
-      endpoints: { getDmpEndpoint },
-    } = require('../../config');
-
     try {
       const headers = new Headers();
-      headers.append('Authorization', `Bearer ${cache.get('TOKEN')}`);
+      const cachedToken = cache.get<string>('TOKEN') ?? '';
+      headers.append('Authorization', `Bearer ${cachedToken}`);
       headers.append('Accept', `application/json`);
       headers.append('Content-Type', `application/json`);
 
@@ -77,17 +89,25 @@ module.exports = {
       });
 
       if (!response.ok) {
-        const err = new Error(
-          `Network response was not ok: ${response.status}`
+        const err: HttpError = new Error(
+          `DMP fetch failed: ${response.status}`
         );
         err.status = 500;
         throw err;
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as DmpApiResponse;
       // check if requested DMP ID returned a record
-      if (data.items[0] === null) {
-        const err = new Error('Requested DMP not found.');
+      if (!data.items?.[0]) {
+        const err: HttpError = new Error('Requested DMP not found.');
+        err.status = 404;
+        throw err;
+      }
+
+      const identifiers = data.items[0].dmp.dmproadmap_related_identifiers;
+
+      if (!Array.isArray(identifiers) || identifiers.length === 0) {
+        const err: HttpError = new Error('No related identifiers found.');
         err.status = 404;
         throw err;
       }
@@ -95,11 +115,11 @@ module.exports = {
       // due to bug in api (as of 10/1/2024), the active version of a DMP is the last element
       // in the dmproadmap_related_identifiers array.
       // pop() is the most efficient (fast) method to access the last element of an array
-      const plan = data.items[0]?.dmp.dmproadmap_related_identifiers.pop();
+      const plan = identifiers[identifiers.length - 1];
 
       return plan.identifier;
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      console.error('Error fetching DMP resource:', error);
       throw error;
     }
   },
