@@ -29,7 +29,10 @@ router.patch(
 
 router.get(
   '/all',
-  [isAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN as Role)],
+  [
+    isAuthenticatedMiddleware.check,
+    CheckPermissionMiddleware.has(roles.ADMIN as Role),
+  ],
   UserController.getAllUsers
 );
 
@@ -45,7 +48,10 @@ router.patch(
 
 router.delete(
   '/:userId',
-  [isAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN as Role)],
+  [
+    isAuthenticatedMiddleware.check,
+    CheckPermissionMiddleware.has(roles.ADMIN as Role),
+  ],
   UserController.deleteUser
 );
 

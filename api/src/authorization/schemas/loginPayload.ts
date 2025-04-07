@@ -12,7 +12,7 @@ export default {
   additionalProperties: false,
 };
 
-export type LoginPayload = {
+export interface LoginPayload {
   username: string;
   password: string;
-};
+}

@@ -3,7 +3,7 @@ import promptConfig from '../../system_prompt.config';
 
 interface LlmResponse {
   response: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export default {
@@ -47,12 +47,14 @@ export default {
       });
 
       if (!response.ok) {
-        const err: HttpError = new Error(`Network response was not ok: ${response.status}`);
+        const err: HttpError = new Error(
+          `Network response was not ok: ${response.status}`
+        );
         err.status = response.status;
         throw err;
       }
 
-      const result: LlmResponse = await response.json();
+      const result = (await response.json()) as LlmResponse;
       return result;
     } catch (error: unknown) {
       console.error('There was a problem fetching the data:', error);

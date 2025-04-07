@@ -35,15 +35,13 @@ const encryptPassword = (password: string): string => {
 };
 
 export default {
-  register: (req: Request<{}, {}, RegisterPayload> , res: Response) => {
+  register: (req: Request<object, object, RegisterPayload>, res: Response) => {
     const payload = req.body;
 
     const encryptedPassword: string = encryptPassword(payload.password);
     let role = payload.role;
 
-    if (!role) {
-      role = config.roles.USER;
-    }
+    role ??= config.roles.USER;
 
     UserModel.createUser(
       Object.assign(payload, { password: encryptedPassword, role })
@@ -69,8 +67,11 @@ export default {
       });
   },
 
-  login: (req: Request<{}, {}, LoginPayload>, res: Response) => {
-    const { username, password } = req.body as { username: string; password: string };
+  login: (req: Request<object, object, LoginPayload>, res: Response) => {
+    const { username, password } = req.body as {
+      username: string;
+      password: string;
+    };
 
     UserModel.findUser({ username })
       .then((user: UserInstance | null) => {

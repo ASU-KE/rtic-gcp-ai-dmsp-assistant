@@ -10,6 +10,11 @@ interface DmpApiResponse {
   }[];
 }
 
+interface OAuthResponse {
+  access_token: string;
+  expires_in: number;
+}
+
 // cache DMPTool API Oauth2 token
 const cache = new NodeCache({ stdTTL: 600 });
 
@@ -28,7 +33,7 @@ export default {
 
     // Request Oauth2 token from DMPTool service
     let token = cache.get<string>('TOKEN') ?? null;
-    let tokenTimestamp = cache.get<number>('TIMESTAMP') ?? Date.now();
+    const tokenTimestamp = cache.get<number>('TIMESTAMP') ?? Date.now();
     const tokenExpires = cache.get<number>('TTL') ?? 600;
 
     const tokenAge = (Date.now() - tokenTimestamp) / 1000;
@@ -60,7 +65,7 @@ export default {
           throw err;
         }
 
-        const data: { access_token: string; expires_in: number } = await response.json();
+        const data = (await response.json()) as OAuthResponse;
 
         token = data.access_token;
         cache.set('TOKEN', token);
@@ -74,7 +79,8 @@ export default {
 
     try {
       const headers = new Headers();
-      headers.append('Authorization', `Bearer ${cache.get('TOKEN')}`);
+      const cachedToken = cache.get<string>('TOKEN') ?? '';
+      headers.append('Authorization', `Bearer ${cachedToken}`);
       headers.append('Accept', `application/json`);
       headers.append('Content-Type', `application/json`);
 
@@ -90,9 +96,9 @@ export default {
         throw err;
       }
 
-      const data: DmpApiResponse = await response.json();
+      const data = (await response.json()) as DmpApiResponse;
       // check if requested DMP ID returned a record
-      if (!data.items[0]) {
+      if (!data.items?.[0]) {
         const err: HttpError = new Error('Requested DMP not found.');
         err.status = 404;
         throw err;

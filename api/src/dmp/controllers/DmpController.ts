@@ -3,12 +3,28 @@ import PdfService from '../services/PdfService';
 import LlmService from '../services/KE_LLM_Service';
 import { Request, Response } from 'express';
 
+export interface DmpReportByIdRequestBody {
+  dmpId: string;
+}
 
-const DmpController =  {
-  getDmpReportById: async (req: Request, res: Response): Promise<void> => {
-    const dmpId = req.body.dmpId;
+export interface DmpReportByTextRequestBody {
+  dmpText: string;
+}
 
-    // TODO: validate DMP ID
+const DmpController = {
+  getDmpReportById: async (
+    req: Request<unknown, unknown, DmpReportByIdRequestBody>,
+    res: Response
+  ): Promise<void> => {
+    const { dmpId } = req.body;
+
+    if (!dmpId || typeof dmpId !== 'string') {
+      res.status(400).json({
+        status: 400,
+        error: { message: '`dmpId` must be a non-empty string' },
+      });
+      return;
+    }
 
     // Process the request
     try {
@@ -55,11 +71,19 @@ const DmpController =  {
       });
     }
   },
-  getDmpReportByText: async (req: Request, res: Response): Promise<void> => {
-    const dmpText = req.body.dmpText;
+  getDmpReportByText: async (
+    req: Request<unknown, unknown, DmpReportByTextRequestBody>,
+    res: Response
+  ): Promise<void> => {
+    const { dmpText } = req.body;
 
-    // TODO: validate and sanitize text
-
+    if (!dmpText || typeof dmpText !== 'string') {
+      res.status(400).json({
+        status: 400,
+        error: { message: '`dmpText` must be a non-empty string' },
+      });
+      return;
+    }
     // Process the request
     try {
       const llmResponse = await LlmService.queryLlm(dmpText);
@@ -71,7 +95,6 @@ const DmpController =  {
         });
         return;
       }
-
 
       res.status(200).json({
         status: 200,

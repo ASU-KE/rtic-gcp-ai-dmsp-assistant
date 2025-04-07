@@ -1,4 +1,4 @@
-import express, {Request, Response} from 'express';
+import express, { Request, Response } from 'express';
 import config from './config';
 
 // Include and initialize the rollbar library with your access token

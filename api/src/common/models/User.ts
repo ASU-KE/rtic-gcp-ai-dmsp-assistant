@@ -12,7 +12,10 @@ export interface UserAttributes {
   lastName: string;
 }
 
-export class UserInstance extends Model<UserAttributes> implements UserAttributes {
+export class UserInstance
+  extends Model<UserAttributes>
+  implements UserAttributes
+{
   public id!: number;
   public username!: string;
   public email!: string;
@@ -66,7 +69,10 @@ const UserService = {
   model: null as unknown as typeof UserInstance,
 
   initialise: (sequelize: Sequelize) => {
-    UserService.model = sequelize.define('user', UserModel) as typeof UserInstance;
+    UserService.model = sequelize.define(
+      'user',
+      UserModel
+    ) as typeof UserInstance;
   },
 
   createUser: (user: UserAttributes) => {
@@ -79,7 +85,10 @@ const UserService = {
     });
   },
 
-  updateUser: (query: Partial<UserAttributes>, updatedValue: Partial<UserAttributes>) => {
+  updateUser: (
+    query: Partial<UserAttributes>,
+    updatedValue: Partial<UserAttributes>
+  ) => {
     return UserService.model.update(updatedValue, {
       where: query,
     });

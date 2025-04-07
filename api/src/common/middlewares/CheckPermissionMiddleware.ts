@@ -22,7 +22,9 @@ const has = (role: Role): RequestHandler => {
       return;
     }
 
-    const foundUser: UserInstance | null = await UserModel.findUser({ id: Number(user.userId) });
+    const foundUser: UserInstance | null = await UserModel.findUser({
+      id: Number(user.userId),
+    });
 
     if (!foundUser) {
       res.status(403).json({

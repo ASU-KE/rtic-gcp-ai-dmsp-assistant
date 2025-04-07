@@ -66,10 +66,12 @@ interface Config {
       type: string;
     } | null;
     semanticCaching: boolean | null;
-    history: {
-      query: string;
-      response: string;
-    }[] | null;
+    history:
+      | {
+          query: string;
+          response: string;
+        }[]
+      | null;
   };
 }
 
@@ -102,8 +104,8 @@ const config: Config = {
     queryLlmWebsocketEndpoint: 'wss://apiws-ke-poc.aiml.asu.edu',
   },
   llmOptions: {
-    modelProvider: 'gcp-deepmind', // string (Required): "aws", "openai", "gcp", "gcp-deepmind", "azure"
-    modelName: 'geminiflash1_5', // string (Required)
+    modelProvider: 'openai', // string (Required): "aws", "openai", "gcp", "gcp-deepmind", "azure"
+    modelName: 'gpt4o', // string (Required)
     modelParams: {
       temperature: 0.1, // float (Optional): 0-0.99 (model specific parameter) Randomness and Diversity parameter. Use a lower value to decrease randomness in the response.
       maxTokens: null, // int (Optional): refer to model specific parameters below. The maximum number of tokens in the generated response.

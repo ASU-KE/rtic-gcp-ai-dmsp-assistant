@@ -12,7 +12,6 @@ const rollbar = new Rollbar({
   captureUnhandledRejections: true,
 });
 
-
 const server = app.listen(port, function () {
   console.log('Server Listening on PORT:', config.port);
 });

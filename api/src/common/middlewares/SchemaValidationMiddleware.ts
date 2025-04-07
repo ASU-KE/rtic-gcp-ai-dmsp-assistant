@@ -2,6 +2,8 @@ import Ajv, { Options, AnySchema } from 'ajv';
 const AJV_OPTS: Options = { allErrors: true };
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 
+type GenericPayload = Record<string, unknown>;
+
 export = {
   /**
    * @description Compiles the schema provided in argument and validates the data for the
@@ -16,7 +18,11 @@ export = {
       throw new Error('Schema not provided');
     }
 
-    return (req: Request, res: Response, next: NextFunction) => {
+    return (
+      req: Request<unknown, unknown, GenericPayload>,
+      res: Response,
+      next: NextFunction
+    ) => {
       const { body } = req;
       const ajv = new Ajv(AJV_OPTS);
       const validate = ajv.compile(schema);
@@ -29,6 +35,7 @@ export = {
             message: `Invalid Payload: ${ajv.errorsText(validate.errors)}`,
           },
         });
+        return;
       }
 
       return next();

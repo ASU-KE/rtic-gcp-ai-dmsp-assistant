@@ -9,8 +9,11 @@ interface JwtPayload {
   exp?: number;
 }
 
-
-const check: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+const check: RequestHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const authHeader = req.headers.authorization;
 
   // IF no auth headers are provided
@@ -63,6 +66,6 @@ const check: RequestHandler = (req: Request, res: Response, next: NextFunction) 
     req.user = decoded as JwtPayload; // Save the user object for further use
     next();
   });
-}
+};
 
 export default { check };
