@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 import UserModel from './common/models/User';
 import Rollbar from 'rollbar';
 import { createApp } from './server';
+import http from 'http';
+import { WebSocketServer, WebSocket, RawData } from 'ws';
+
 
 dotenv.config();
 const port = config.port;
@@ -35,8 +38,36 @@ sequelize
     // Create Express app by injecting dependencies
     const app = createApp(rollbar, sequelize);
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    const server = http.createServer(app);
+
+    const wss = new WebSocketServer({ server });
+
+    (app).locals.wss = wss;
+
+
+    wss.on('connection', (ws: WebSocket) => {
+
+      ws.on('message', (data: RawData) => {
+        let message: string;
+
+        if (typeof data === 'string') {
+          message = data;
+        } else if (data instanceof Buffer) {
+          message = data.toString('utf-8');
+        } else if (data instanceof ArrayBuffer) {
+          message = Buffer.from(new Uint8Array(data)).toString('utf-8');
+        } else if (Array.isArray(data)) {
+          message = Buffer.concat(data).toString('utf-8');
+        } else {
+          message = '[Unrecognized message format]';
+        }
+        console.log('Received:', message);
+      });
+    });
+
     // Start listening
-    const server = app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`Server listening on PORT: ${port}`);
     });
 

@@ -1,5 +1,6 @@
 import config from '../../config';
 import promptConfig from '../../system_prompt.config';
+import { WebSocketServer, WebSocket } from 'ws';
 
 interface LlmResponse {
   response: string;
@@ -7,9 +8,14 @@ interface LlmResponse {
 }
 
 export default {
-  queryLlm: async (planText: string): Promise<LlmResponse | undefined> => {
+  queryLlm: async (
+    planText: string,
+    ws?: WebSocket,
+    wss?: WebSocketServer
+  ): Promise<LlmResponse | undefined> => {
     const {
-      endpoints: { queryLlmRestEndpoint },
+      action,
+      endpoints: { queryLlmWebsocketEndpoint },
       llmAccessSecret,
       llmOptions: {
         modelProvider,
@@ -20,45 +26,70 @@ export default {
       },
     } = config;
 
-    let systemPrompt = sourceValue;
-    if (sourceType === 'file') {
-      systemPrompt = promptConfig.prompt;
-    }
+    const system_prompt =
+      sourceType === 'file' ? promptConfig.prompt : sourceValue;
 
-    try {
-      const headers = new Headers();
-      headers.append('Authorization', `Bearer ${llmAccessSecret}`);
-      headers.append('Accept', `application/json`);
-      headers.append('Content-Type', `application/json`);
+    return new Promise<LlmResponse | undefined>((resolve, reject) => {
+      const upstream = new WebSocket(
+        `${queryLlmWebsocketEndpoint}/?access_token=${llmAccessSecret}`
+      );
 
-      const body = JSON.stringify({
-        model_provider: modelProvider,
-        model_name: modelName,
-        query: planText,
-        model_params: {
-          system_prompt: systemPrompt,
-        },
-      });
+      let fullResponse = '';
 
-      const response = await fetch(queryLlmRestEndpoint, {
-        method: 'POST',
-        headers,
-        body,
-      });
+      upstream.on('open', () => {
 
-      if (!response.ok) {
-        const err: HttpError = new Error(
-          `Network response was not ok: ${response.status}`
+        upstream.send(
+           JSON.stringify({
+            action: action,
+            model_provider: modelProvider,
+            model_name: modelName,
+             model_params: { system_prompt },
+            query: planText
+          })
         );
-        err.status = response.status;
-        throw err;
-      }
+      });
 
-      const result = (await response.json()) as LlmResponse;
-      return result;
-    } catch (error: unknown) {
-      console.error('There was a problem fetching the data:', error);
-      return undefined;
-    }
+      upstream.on('message', (data) => {
+        let chunk = '';
+
+        if (typeof data === 'string') {
+          chunk = data;
+        } else if (data instanceof Buffer) {
+          chunk = data.toString('utf-8');
+        } else if (data instanceof ArrayBuffer) {
+          chunk = Buffer.from(data).toString('utf-8');
+        } else if (Array.isArray(data)) {
+          chunk = Buffer.concat(data).toString('utf-8');
+        } else {
+          console.warn('Unknown data format received in WebSocket message');
+        }
+
+        fullResponse += chunk;
+
+        const message = JSON.stringify({ chunk });
+
+        // Send to individual WebSocket
+        if (ws?.readyState === WebSocket.OPEN) {
+          ws.send(message);
+        }
+
+        // Broadcast to all connected clients
+        wss?.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(message);
+          }
+        });
+      });
+
+      upstream.on('close', () => {
+        console.log('WebSocket connection closed');
+        resolve({ response: fullResponse, metadata: {} });
+      });
+
+      upstream.on('error', (err) => {
+        console.error('WebSocket error:', err);
+        reject(err instanceof Error ? err : new Error(String(err)));
+      });
+    });
   },
 };

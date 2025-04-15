@@ -1,0 +1,66 @@
+.btn-custom-yellow {
+  background-color: #8c1d40 !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+}
+
+.btn-custom-yellow:hover,
+.btn-custom-yellow:focus,
+.btn-custom-yellow:active,
+.btn-custom-yellow:focus-visible {
+  background-color: #8c1d40 !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+/* Prevent content from breaking awkwardly across PDF pages */
+.markdown-body.pdf-print,
+.markdown-body.pdf-print * {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  page-break-before: auto;
+  page-break-after: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Ensure longer sections flow naturally */
+.markdown-body.pdf-print p,
+.markdown-body.pdf-print h1,
+.markdown-body.pdf-print h2,
+.markdown-body.pdf-print h3,
+.markdown-body.pdf-print ul,
+.markdown-body.pdf-print ol {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  margin-bottom: 1em;
+}
+
+/* Optional: Add bottom padding for better last-page spacing */
+.markdown-body.pdf-print {
+  padding-bottom: 40px;
+}
+
+.dmp-id-tag {
+  background: #f0f0f0;
+  border-radius: 5px;
+  padding: 2px 8px;
+  font-family: monospace;
+  font-size: 0.95rem;
+  margin-left: 6px;
+}
+
+.dmp-info-box {
+  font-size: 0.85rem;
+  margin-top: 4px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: monospace;
+  color: #555;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}

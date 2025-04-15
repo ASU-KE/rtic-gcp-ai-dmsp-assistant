@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Application } from 'express';
 import Rollbar from 'rollbar';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -11,7 +11,7 @@ import DmpRoutes from './dmp/routes';
 import TestRoutes from './test/routes';
 
 export function createApp(rollbar: Rollbar, sequelize: Sequelize) {
-  const app = express();
+  const app: Application = express();
 
   // Store sequelize so routes/middleware can retrieve it later if needed
   app.locals.sequelize = sequelize;

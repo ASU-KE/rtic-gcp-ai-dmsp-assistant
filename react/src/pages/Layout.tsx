@@ -19,7 +19,6 @@ const header: HeaderProps = {
       "href": "/",
       "text": "Home",
       "type": "icon-home",
-      "selected": true,
       "class": "test-class"
     },
     {

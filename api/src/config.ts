@@ -17,6 +17,7 @@ interface Config {
     USER: string;
     ADMIN: string;
   };
+  action: string;
   endpoints: {
     authEndpoint: string;
     getDmpEndpoint: string;
@@ -97,6 +98,7 @@ const config: Config = {
     USER: 'user',
     ADMIN: 'admin',
   },
+  action: 'queryV2',
   endpoints: {
     authEndpoint: 'https://auth.dmphub.uc3prd.cdlib.net/oauth2/token',
     getDmpEndpoint: 'https://api.dmphub.uc3prd.cdlib.net/dmps',
