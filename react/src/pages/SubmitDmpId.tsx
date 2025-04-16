@@ -22,6 +22,7 @@ export function SubmitDmpId() {
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const [submittedDmpId, setSubmittedDmpId] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const lastChunkRef = useRef('');
   const contentEndRef = useRef<HTMLDivElement>(null);
@@ -83,6 +84,8 @@ export function SubmitDmpId() {
         .catch(() => {
           setSubmissionInProgress(false);
           setShowLoadingIndicator(false);
+          const message = 'No plan found with the provided DMP ID. Please verify and try again.';
+          setApiError(message);
         });
     },
   });
@@ -92,6 +95,7 @@ export function SubmitDmpId() {
     setShowLoadingIndicator(true);
     setStreamedText('');
     setCopied(false);
+    setApiError(null);
     setSubmittedDmpId(values.dmpId);
     lastChunkRef.current = '';
     mutate(values);
@@ -166,15 +170,21 @@ export function SubmitDmpId() {
                 onChange={(e) => {
                   setValue('dmpId', e.target.value);
                   clearErrors('dmpId');
+                  setApiError(null);
                 }}
-                onBlur={() => clearErrors('dmpId')}
+                onBlur={() => {
+                  clearErrors('dmpId');
+                  setApiError(null);
+                }}
               />
               <Button type="submit" disabled={submissionInProgress} className="btn-custom-medium">
                 {showLoadingIndicator ? 'Submitting...' : 'Submit'}
               </Button>
             </div>
-            {errors.dmpId && (
-              <div style={{ color: '#8c1d40', fontSize: '0.875rem', marginTop: '0.20rem' }}>{errors.dmpId.message}</div>
+            {(errors.dmpId || apiError) && (
+              <div style={{ color: '#8c1d40', fontSize: '0.875rem', marginTop: '0.20rem' }}>
+                {errors.dmpId?.message || apiError}
+              </div>
             )}
           </form>
         </Col>
