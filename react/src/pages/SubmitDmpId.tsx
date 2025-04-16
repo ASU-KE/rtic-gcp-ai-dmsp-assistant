@@ -27,7 +27,14 @@ export function SubmitDmpId() {
   const contentEndRef = useRef<HTMLDivElement>(null);
   const markdownRef = useRef<HTMLDivElement>(null);
 
-  const { register, handleSubmit, reset } = useForm<FormValues>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    clearErrors,
+    setValue,
+  } = useForm<FormValues>({ mode: 'onSubmit' });
 
   const { lastMessage } = useWebSocket(import.meta.env.VITE_WS_URL, {
     onOpen: () => console.log('WebSocket connected'),
@@ -152,8 +159,23 @@ export function SubmitDmpId() {
             <div>
               <label>Please submit DMP ID:</label>
             </div>
-            <input {...register('dmpId')} />
-            <input type="submit" disabled={submissionInProgress} />
+            <div className="d-flex gap-1 align-items-start">
+              <input
+                {...register('dmpId', { required: 'DMP ID is required' })}
+                style={{ width: '250px' }}
+                onChange={(e) => {
+                  setValue('dmpId', e.target.value);
+                  clearErrors('dmpId');
+                }}
+                onBlur={() => clearErrors('dmpId')}
+              />
+              <Button type="submit" disabled={submissionInProgress} className="btn-custom-medium">
+                {showLoadingIndicator ? 'Submitting...' : 'Submit'}
+              </Button>
+            </div>
+            {errors.dmpId && (
+              <div style={{ color: '#8c1d40', fontSize: '0.875rem', marginTop: '0.20rem' }}>{errors.dmpId.message}</div>
+            )}
           </form>
         </Col>
       </Row>

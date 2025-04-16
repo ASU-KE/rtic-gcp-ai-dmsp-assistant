@@ -64,3 +64,22 @@
   max-width: 100%;
   overflow-wrap: break-word;
 }
+
+.btn-custom-medium {
+  background-color: #8c1d40 !important;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  /* medium size font */
+  padding: 0.45rem 1.2rem;
+  /* top-bottom, left-right */
+  border: none !important;
+  border-radius: 0.375rem;
+}
+
+.btn-custom-medium:hover,
+.btn-custom-medium:focus {
+  background-color: #731634 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}

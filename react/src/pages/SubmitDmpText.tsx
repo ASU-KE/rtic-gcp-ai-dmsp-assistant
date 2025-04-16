@@ -27,7 +27,13 @@ export function SubmitDmpText() {
   const contentEndRef = useRef<HTMLDivElement>(null);
   const markdownRef = useRef<HTMLDivElement>(null);
 
-  const { register, handleSubmit, reset } = useForm<FormValues>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    clearErrors,
+    formState: { errors },
+  } = useForm<FormValues>();
 
   const { lastMessage } = useWebSocket(import.meta.env.VITE_WS_URL, {
     onOpen: () => console.log('WebSocket connected'),
@@ -129,8 +135,29 @@ export function SubmitDmpText() {
             <div>
               <label>Data Management Plan:</label>
             </div>
-            <textarea {...register('dmpText')} rows={10} cols={120} />
-            <input type="submit" disabled={submissionInProgress} />
+            <textarea
+              {...register('dmpText', { required: 'DMP Text is required' })}
+              rows={10}
+              cols={100}
+              onBlur={() => clearErrors('dmpText')}
+            />
+            <div
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.2rem' }}
+            >
+              <div style={{ flex: 1 }}>
+                {errors.dmpText && (
+                  <div style={{ color: '#8c1d40', fontSize: '0.875rem' }}>{errors.dmpText.message}</div>
+                )}
+              </div>
+              <Button
+                type="submit"
+                disabled={submissionInProgress}
+                className="btn-custom-medium"
+                style={{ marginLeft: '1rem' }}
+              >
+                {showLoadingIndicator ? 'Submitting...' : 'Submit'}
+              </Button>
+            </div>
           </form>
         </Col>
       </Row>
