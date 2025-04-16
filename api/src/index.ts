@@ -7,7 +7,6 @@ import { createApp } from './server';
 import http from 'http';
 import { WebSocketServer, WebSocket, RawData } from 'ws';
 
-
 dotenv.config();
 const port = config.port;
 
@@ -43,11 +42,9 @@ sequelize
 
     const wss = new WebSocketServer({ server });
 
-    (app).locals.wss = wss;
-
+    app.locals.wss = wss;
 
     wss.on('connection', (ws: WebSocket) => {
-
       ws.on('message', (data: RawData) => {
         let message: string;
 
@@ -94,13 +91,19 @@ sequelize
 
     // Quit on Ctrl-C when running docker in terminal
     process.on('SIGINT', () => {
-      rollbar.info('Got SIGINT (Ctrl-C). Graceful shutdown.', new Date().toISOString());
+      rollbar.info(
+        'Got SIGINT (Ctrl-C). Graceful shutdown.',
+        new Date().toISOString()
+      );
       shutdown();
     });
 
     // Quit on Docker stop
     process.on('SIGTERM', () => {
-      rollbar.info('Got SIGTERM (Docker stop). Graceful shutdown.', new Date().toISOString());
+      rollbar.info(
+        'Got SIGTERM (Docker stop). Graceful shutdown.',
+        new Date().toISOString()
+      );
       shutdown();
     });
   })

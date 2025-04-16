@@ -112,7 +112,7 @@ export function SubmitDmpId() {
         filename: `dmp-report-${submittedDmpId}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
       };
 
       html2pdf().set(opt).from(clonedContent).save();
@@ -127,30 +127,22 @@ export function SubmitDmpId() {
       <Row className="mb-4">
         <Col md={8}>
           <div className="mt-2">
-            This form demonstrates a simple implementation of the DMSP AI Assistant backend service. When a valid DMP ID is submitted, the service will fetch that plan, extract its content, and query the AI Assistant to review the plan.
+            This form demonstrates a simple implementation of the DMSP AI Assistant backend service. When a valid DMP ID
+            is submitted, the service will fetch that plan, extract its content, and query the AI Assistant to review
+            the plan.
           </div>
-          <div className="mt-2">
-            Feel free to copy and paste one of the following DMP IDs:
-          </div>
+          <div className="mt-2">Feel free to copy and paste one of the following DMP IDs:</div>
           <ul className="mt-2">
             <li>
               10.48321/D1R316 (
-              <a
-                href="https://dmphub.uc3prd.cdlib.net/dmps/10.48321/D1R316"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://dmphub.uc3prd.cdlib.net/dmps/10.48321/D1R316" target="_blank" rel="noopener noreferrer">
                 View DMP
               </a>
               )
             </li>
             <li>
               10.48321/D1BK5T (
-              <a
-                href="https://dmphub.uc3prd.cdlib.net/dmps/10.48321/D1BK5T"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://dmphub.uc3prd.cdlib.net/dmps/10.48321/D1BK5T" target="_blank" rel="noopener noreferrer">
                 View DMP
               </a>
               )
@@ -171,10 +163,14 @@ export function SubmitDmpId() {
           <Col md={12}>
             <div className="border p-2">
               <div className="d-flex justify-content-center">
-                <Row><h4>Analyzing your DMP... please wait</h4></Row>
+                <Row>
+                  <h4>Analyzing your DMP... please wait</h4>
+                </Row>
               </div>
               <div className="d-flex justify-content-center">
-                <Row><Atom color="#000000" size="medium" /></Row>
+                <Row>
+                  <Atom color="#000000" size="medium" />
+                </Row>
               </div>
             </div>
           </Col>
@@ -188,16 +184,14 @@ export function SubmitDmpId() {
               {/* Heading + buttons */}
               <div className="d-flex justify-content-between align-items-start mb-3">
                 <h5 className="m-0 fw-semibold">
-                  AI Analysis for DMP ID:{' '}
-                  <span className='dmp-id-tag'>
-                    {submittedDmpId}
-                  </span>
+                  AI Analysis for DMP ID: <span className="dmp-id-tag">{submittedDmpId}</span>
                 </h5>
                 <div className="d-flex gap-2">
-                  <Button size="sm" className='btn-custom-yellow' onClick={handleCopy}>
-                    {copied ? <CheckIcon /> : <CopyIcon />}{copied ? 'Copied' : 'Copy'}
+                  <Button size="sm" className="btn-custom-yellow" onClick={handleCopy}>
+                    {copied ? <CheckIcon /> : <CopyIcon />}
+                    {copied ? 'Copied' : 'Copy'}
                   </Button>
-                  <Button size="sm" className='btn-custom-yellow' onClick={handleDownload}>
+                  <Button size="sm" className="btn-custom-yellow" onClick={handleDownload}>
                     {downloaded ? <CheckIcon /> : <DownloadIcon />}
                     {downloaded ? 'Downloaded' : 'Download'}
                   </Button>

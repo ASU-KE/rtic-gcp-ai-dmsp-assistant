@@ -27,11 +27,7 @@ export function SubmitDmpText() {
   const contentEndRef = useRef<HTMLDivElement>(null);
   const markdownRef = useRef<HTMLDivElement>(null);
 
-  const {
-    register,
-    handleSubmit,
-    reset
-  } = useForm<FormValues>();
+  const { register, handleSubmit, reset } = useForm<FormValues>();
 
   const { lastMessage } = useWebSocket(import.meta.env.VITE_WS_URL, {
     onOpen: () => console.log('WebSocket connected'),
@@ -115,7 +111,7 @@ export function SubmitDmpText() {
         filename: 'dmp-ai-analysis-report.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
       };
 
       html2pdf().set(opt).from(clonedContent).save();
@@ -129,9 +125,7 @@ export function SubmitDmpText() {
     <>
       <Row className="mb-4">
         <Col md={8}>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-          >
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label>Data Management Plan:</label>
             </div>
@@ -146,10 +140,14 @@ export function SubmitDmpText() {
           <Col md={12}>
             <div className="border p-2">
               <div className="d-flex justify-content-center">
-                <Row><h4>Analyzing your DMP... please wait</h4></Row>
+                <Row>
+                  <h4>Analyzing your DMP... please wait</h4>
+                </Row>
               </div>
               <div className="d-flex justify-content-center">
-                <Row><Atom color="#000000" size="medium" /></Row>
+                <Row>
+                  <Atom color="#000000" size="medium" />
+                </Row>
               </div>
             </div>
           </Col>
@@ -163,15 +161,17 @@ export function SubmitDmpText() {
               <div className="d-flex justify-content-between align-items-start mb-3">
                 <div>
                   <h5 className="m-0 fw-semibold">AI Analysis for DMP Text:</h5>
-                  <div className='dmp-info-box'>
-                    {submittedDmpText.slice(0, 100)}{submittedDmpText.length > 100 ? '...' : ''}
+                  <div className="dmp-info-box">
+                    {submittedDmpText.slice(0, 100)}
+                    {submittedDmpText.length > 100 ? '...' : ''}
                   </div>
                 </div>
                 <div className="d-flex gap-2">
-                  <Button size="sm" className='btn-custom-yellow' onClick={handleCopy}>
-                    {copied ? <CheckIcon /> : <CopyIcon />}{copied ? 'Copied' : 'Copy'}
+                  <Button size="sm" className="btn-custom-yellow" onClick={handleCopy}>
+                    {copied ? <CheckIcon /> : <CopyIcon />}
+                    {copied ? 'Copied' : 'Copy'}
                   </Button>
-                  <Button size="sm" className='btn-custom-yellow' onClick={handleDownload}>
+                  <Button size="sm" className="btn-custom-yellow" onClick={handleDownload}>
                     {downloaded ? <CheckIcon /> : <DownloadIcon />}
                     {downloaded ? 'Downloaded' : 'Download'}
                   </Button>

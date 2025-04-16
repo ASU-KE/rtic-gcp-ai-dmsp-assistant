@@ -17,11 +17,14 @@ export function createApp(rollbar: Rollbar, sequelize: Sequelize) {
   app.locals.sequelize = sequelize;
 
   app.use(morgan('common'));
-  app.use(cors({
-    origin: process.env.NODE_ENV === 'development'
-      ? '*'
-      : 'https://dmsp.ai.dev.rtd.asu.edu'
-  }));
+  app.use(
+    cors({
+      origin:
+        process.env.NODE_ENV === 'development'
+          ? '*'
+          : 'https://dmsp.ai.dev.rtd.asu.edu',
+    })
+  );
   app.use(express.json());
 
   app.use('/', AuthorizationRoutes);

@@ -18,7 +18,11 @@ export interface DmpDependencies {
     extractText(buffer: Buffer): Promise<string>;
   };
   llmService: {
-    queryLlm(planText: string, ws?: WebSocket, wss?: WebSocketServer): Promise<
+    queryLlm(
+      planText: string,
+      ws?: WebSocket,
+      wss?: WebSocketServer
+    ): Promise<
       { response: string; metadata?: Record<string, unknown> } | undefined
     >;
   };
@@ -44,7 +48,6 @@ export const DmpController = ({
         return;
       }
 
-
       try {
         const wss = req.app.locals.wss as WebSocketServer;
         const dmpPdfUrl = await dmpService.getDmpResource(dmpId);
@@ -65,7 +68,9 @@ export const DmpController = ({
       } catch (error: unknown) {
         const err = error as { message: string; status?: number };
         if (err.status === 404) {
-          res.status(404).json({ status: 404, error: { message: err.message } });
+          res
+            .status(404)
+            .json({ status: 404, error: { message: err.message } });
           return;
         }
 
@@ -101,12 +106,14 @@ export const DmpController = ({
       } catch (error: unknown) {
         const err = error as { message: string; status?: number };
         if (err.status === 404) {
-          res.status(404).json({ status: 404, error: { message: err.message } });
+          res
+            .status(404)
+            .json({ status: 404, error: { message: err.message } });
           return;
         }
 
         res.status(500).json({ status: 500, error: { message: err.message } });
       }
-    }
+    },
   };
 };

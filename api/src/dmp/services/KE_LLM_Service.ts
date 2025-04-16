@@ -37,14 +37,13 @@ export default {
       let fullResponse = '';
 
       upstream.on('open', () => {
-
         upstream.send(
-           JSON.stringify({
+          JSON.stringify({
             action: action,
             model_provider: modelProvider,
             model_name: modelName,
-             model_params: { system_prompt },
-            query: planText
+            model_params: { system_prompt },
+            query: planText,
           })
         );
       });
