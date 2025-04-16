@@ -29,7 +29,7 @@ export function SubmitDmpId() {
 
   const { register, handleSubmit, reset } = useForm<FormValues>();
 
-  const { lastMessage } = useWebSocket('ws://localhost:3001', {
+  const { lastMessage } = useWebSocket(import.meta.env.VITE_WS_URL, {
     onOpen: () => console.log('WebSocket connected'),
     onClose: () => console.log('WebSocket disconnected'),
     shouldReconnect: () => true,
