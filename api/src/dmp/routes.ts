@@ -22,4 +22,3 @@ router.post('/id', dmpController.getDmpReportById);
 router.post('/text', dmpController.getDmpReportByText);
 
 export default router;
-

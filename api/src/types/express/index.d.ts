@@ -1,4 +1,4 @@
-// types/express/index.d.ts
+import { WebSocketServer } from 'ws';
 import 'express';
 
 declare global {
@@ -13,5 +13,15 @@ declare module 'express' {
       userId: number;
       username: string;
     };
+  }
+}
+
+declare global {
+  namespace Express {
+    interface Application {
+      locals: {
+        wss: WebSocketServer;
+      };
+    }
   }
 }

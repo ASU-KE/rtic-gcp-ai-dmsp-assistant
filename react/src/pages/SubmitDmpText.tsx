@@ -1,140 +1,223 @@
-import axios, { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import axios from 'axios';
+import '../App.css';
+import { useEffect, useRef, useState } from 'react';
+import { Col, Row, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
+import useWebSocket from 'react-use-websocket';
 import 'github-markdown-css/github-markdown-light.css';
-
-interface ApiResponse {
-  statusCode: number;
-  statusMessage: string | null;
-  analysis?: string | null;
-  metadata?: unknown | null;
-}
+import html2pdf from 'html2pdf.js';
+import { DownloadIcon, CheckIcon, CopyIcon } from '../components/Icons';
 
 type FormValues = {
   dmpText: string;
 };
 
 export function SubmitDmpText() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isDisableSubmit, setDisableSubmit] = useState(false);
-  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+  const [submissionInProgress, setSubmissionInProgress] = useState(false);
+  const [streamedText, setStreamedText] = useState<string>('');
+  const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [downloaded, setDownloaded] = useState(false);
+  const [submittedDmpText, setSubmittedDmpText] = useState<string | null>(null);
+
+  const lastChunkRef = useRef('');
+  const contentEndRef = useRef<HTMLDivElement>(null);
+  const markdownRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
     handleSubmit,
     reset,
-    formState,
+    clearErrors,
+    formState: { errors },
   } = useForm<FormValues>();
 
-  const { mutate } = useMutation<void, unknown, FormValues>({
-    mutationFn: (values) => {
-      setIsLoading(true);
-      return axios.post(import.meta.env.VITE_BACKEND_URL + '/dmp/text', {
-        dmpText: values.dmpText,
-      })
-      .then((response) => {
-        setApiResponse({
-          statusCode: 200,
-          statusMessage: null,
-          ...response.data.data,
-        });
-      })
-      .catch((error: unknown) => {
-        if (axios.isAxiosError(error)) {
-          if (error.response) {
-            setApiResponse({
-              statusCode: error.response.status,
-              statusMessage: error.response.data.error?.message || 'An error occurred',
-              analysis: null,
-              metadata: null,
-            });
-          } else if (error.request) {
-            setApiResponse({
-              statusCode: 0,
-              statusMessage: 'No response received from server',
-              analysis: null,
-              metadata: null,
-            });
-          }
-        } else {
-          setApiResponse({
-            statusCode: 0,
-            statusMessage: 'An unexpected error occurred',
-            analysis: null,
-            metadata: null,
-          });
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-    },
+  const { lastMessage } = useWebSocket(import.meta.env.VITE_WS_URL, {
+    onOpen: () => console.log('WebSocket connected'),
+    onClose: () => console.log('WebSocket disconnected'),
+    shouldReconnect: () => true,
   });
 
   useEffect(() => {
-    if (formState.isSubmitSuccessful) {
-      setDisableSubmit(true);
+    if (contentEndRef.current) {
+      contentEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
-  }, [formState, reset]);
+  }, [streamedText]);
+
+  useEffect(() => {
+    if (lastMessage?.data) {
+      try {
+        const parsed = JSON.parse(lastMessage.data);
+        if (parsed.chunk) {
+          setShowLoadingIndicator(false);
+          let chunkToAppend = parsed.chunk;
+          if (chunkToAppend.includes('<EOS>')) {
+            chunkToAppend = chunkToAppend.replace('<EOS>', '');
+            setSubmissionInProgress(false);
+          }
+
+          if (chunkToAppend && chunkToAppend !== lastChunkRef.current) {
+            setStreamedText((prev) => prev + chunkToAppend);
+            lastChunkRef.current = chunkToAppend;
+          }
+        }
+      } catch (e) {
+        console.error('Invalid JSON:', lastMessage.data);
+      }
+    }
+  }, [lastMessage]);
+
+  const { mutate } = useMutation<void, unknown, FormValues>({
+    mutationFn: (values) => {
+      return axios
+        .post(import.meta.env.VITE_BACKEND_URL + '/dmp/text', {
+          dmpText: values.dmpText,
+        })
+        .then(() => {
+          setSubmittedDmpText(values.dmpText);
+        })
+        .catch(() => {
+          setSubmissionInProgress(false);
+          setShowLoadingIndicator(false);
+        });
+    },
+  });
+
+  const onSubmit = (values: FormValues) => {
+    setSubmissionInProgress(true);
+    setShowLoadingIndicator(true);
+    setStreamedText('');
+    setCopied(false);
+    setSubmittedDmpText(values.dmpText);
+    lastChunkRef.current = '';
+    mutate(values);
+    reset();
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(streamedText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Copy failed:', err);
+    }
+  };
+
+  const handleDownload = () => {
+    if (markdownRef.current) {
+      const clonedContent = markdownRef.current.cloneNode(true) as HTMLElement;
+      clonedContent.classList.add('pdf-print');
+
+      const opt = {
+        margin: 0.5,
+        filename: 'dmp-ai-analysis-report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      };
+
+      html2pdf().set(opt).from(clonedContent).save();
+
+      setDownloaded(true);
+      setTimeout(() => setDownloaded(false), 2000);
+    }
+  };
 
   return (
     <>
       <Row className="mb-4">
         <Col md={8}>
-          <form
-            onSubmit={handleSubmit((values) =>
-              mutate(values, { onSuccess: () => reset() })
-            )}
-          >
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label>Data Management Plan:</label>
             </div>
-            <textarea {...register('dmpText')} rows={10} cols={120} />
-            <input type="submit" disabled={isDisableSubmit} />
+            <textarea
+              {...register('dmpText', { required: 'DMP Text is required' })}
+              rows={10}
+              cols={100}
+              onBlur={() => clearErrors('dmpText')}
+            />
+            <div
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.2rem' }}
+            >
+              <div style={{ flex: 1 }}>
+                {errors.dmpText && (
+                  <div style={{ color: '#8c1d40', fontSize: '0.875rem' }}>{errors.dmpText.message}</div>
+                )}
+              </div>
+              <Button
+                type="submit"
+                disabled={submissionInProgress}
+                className="btn-custom-medium"
+                style={{ marginLeft: '1rem' }}
+              >
+                {showLoadingIndicator
+                  ? 'Submitting...'
+                  : submissionInProgress
+                    ? 'Submitted'
+                    : 'Submit'}
+              </Button>
+            </div>
           </form>
         </Col>
       </Row>
-      {isLoading && (
+
+      {showLoadingIndicator && (
         <Row className="mt-2">
           <Col md={12}>
             <div className="border p-2">
               <div className="d-flex justify-content-center">
                 <Row>
-                  <h3>Thank you for your patience...</h3>
+                  <h4>Analyzing your DMP... please wait</h4>
                 </Row>
               </div>
               <div className="d-flex justify-content-center">
                 <Row>
-                  <Atom color="#000000" size="medium" text="" textColor="" />
+                  <Atom color="#000000" size="medium" />
                 </Row>
               </div>
             </div>
           </Col>
         </Row>
       )}
-      {!isLoading && apiResponse && apiResponse.statusCode === 200 && (
+
+      {streamedText && submittedDmpText && (
         <Row className="mt-2 mb-4">
           <Col md={12}>
-            <div className="border p-2 markdown-body">
-              <Markdown>{apiResponse?.analysis || ''}</Markdown>
+            <div className="border p-3" style={{ position: 'relative' }}>
+              <div className="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                  <h5 className="m-0 fw-semibold">AI Analysis for DMP Text:</h5>
+                  <div className="dmp-info-box">
+                    {submittedDmpText.slice(0, 100)}
+                    {submittedDmpText.length > 100 ? '...' : ''}
+                  </div>
+                </div>
+                <div className="d-flex gap-2">
+                  <Button size="sm" className="btn-custom-yellow" onClick={handleCopy}>
+                    {copied ? <CheckIcon /> : <CopyIcon />}
+                    {copied ? 'Copied' : 'Copy'}
+                  </Button>
+                  <Button size="sm" className="btn-custom-yellow" onClick={handleDownload}>
+                    {downloaded ? <CheckIcon /> : <DownloadIcon />}
+                    {downloaded ? 'Downloaded' : 'Download'}
+                  </Button>
+                </div>
+              </div>
+
+              <div ref={markdownRef} className="markdown-body">
+                <Markdown>{streamedText}</Markdown>
+              </div>
             </div>
           </Col>
         </Row>
       )}
-      {!isLoading && apiResponse && apiResponse.statusCode !== 200 && (
-        <Row className="mt-2">
-          <Col md={12}>
-            <div className="border p-2">
-              <h2>Error</h2>
-              <p>{apiResponse?.statusMessage}</p>
-            </div>
-          </Col>
-        </Row>
-      )}
+
+      <div ref={contentEndRef} />
     </>
   );
 }

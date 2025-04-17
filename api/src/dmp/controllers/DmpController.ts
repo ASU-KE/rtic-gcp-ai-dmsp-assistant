@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { WebSocket, WebSocketServer } from 'ws';
 
 export interface DmpReportByIdRequestBody {
   dmpId: string;
@@ -17,7 +18,11 @@ export interface DmpDependencies {
     extractText(buffer: Buffer): Promise<string>;
   };
   llmService: {
-    queryLlm(planText: string): Promise<
+    queryLlm(
+      planText: string,
+      ws?: WebSocket,
+      wss?: WebSocketServer
+    ): Promise<
       { response: string; metadata?: Record<string, unknown> } | undefined
     >;
   };
@@ -44,37 +49,46 @@ export const DmpController = ({
       }
 
       try {
+        const wss = req.app.locals.wss as WebSocketServer;
         const dmpPdfUrl = await dmpService.getDmpResource(dmpId);
         const pdfDocument = await pdfService.fetchPdfInMemory(dmpPdfUrl);
         const dmpText = await pdfService.extractText(Buffer.from(pdfDocument));
-        const llmResponse = await llmService.queryLlm(dmpText);
+        llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
+          console.error('Failed to fetch LLM response: ', err);
+        });
 
-        if (!llmResponse) {
-          res.status(500).json({
-            status: 500,
-            error: { message: 'Failed to fetch LLM response.' },
-          });
-          return;
-        }
-
-        res.status(200).json({
-          status: 200,
+        res.status(202).json({
+          status: 202,
           data: {
             id: dmpId,
             document_url: dmpPdfUrl,
             documentText: dmpText,
-            analysis: llmResponse.response,
-            metadata: llmResponse.metadata,
           },
         });
       } catch (error: unknown) {
         const err = error as { message: string; status?: number };
         if (err.status === 404) {
-          res.status(404).json({ status: 404, error: { message: err.message } });
+          res
+            .status(404)
+            .json({
+              status: 404,
+              error: {
+                message:
+                  'No plan found with the provided DMP ID. Please verify and try again.',
+              },
+            });
           return;
         }
 
-        res.status(500).json({ status: 500, error: { message: err.message } });
+        res
+          .status(500)
+          .json({
+            status: 500,
+            error: {
+              message:
+                'Oops! Something went wrong on our end. Please try again in a moment.',
+            },
+          });
       }
     },
 
@@ -92,27 +106,23 @@ export const DmpController = ({
         return;
       }
       try {
-        const llmResponse = await llmService.queryLlm(dmpText);
+        const wss = req.app.locals.wss as WebSocketServer;
+        await llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
+          console.error('Failed to fetch LLM response: ', err);
+        });
 
-        if (!llmResponse) {
-          res.status(500).json({
-            status: 500,
-            error: { message: 'Failed to fetch LLM response.' },
-          });
-          return;
-        }
-
-        res.status(200).json({
-          status: 200,
+        res.status(202).json({
+          status: 202,
           data: {
-            analysis: llmResponse.response,
-            metadata: llmResponse.metadata,
+            documentText: dmpText,
           },
         });
       } catch (error: unknown) {
         const err = error as { message: string; status?: number };
         if (err.status === 404) {
-          res.status(404).json({ status: 404, error: { message: err.message } });
+          res
+            .status(404)
+            .json({ status: 404, error: { message: err.message } });
           return;
         }
 
