@@ -178,7 +178,11 @@ export function SubmitDmpId() {
                 }}
               />
               <Button type="submit" disabled={submissionInProgress} className="btn-custom-medium">
-                {showLoadingIndicator ? 'Submitting...' : 'Submit'}
+                {showLoadingIndicator
+                  ? 'Submitting...'
+                  : submissionInProgress
+                    ? 'Submitted'
+                    : 'Submit'}
               </Button>
             </div>
             {(errors.dmpId || apiError) && (

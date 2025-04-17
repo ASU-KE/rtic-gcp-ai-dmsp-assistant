@@ -155,7 +155,11 @@ export function SubmitDmpText() {
                 className="btn-custom-medium"
                 style={{ marginLeft: '1rem' }}
               >
-                {showLoadingIndicator ? 'Submitting...' : 'Submit'}
+                {showLoadingIndicator
+                  ? 'Submitting...'
+                  : submissionInProgress
+                    ? 'Submitted'
+                    : 'Submit'}
               </Button>
             </div>
           </form>
