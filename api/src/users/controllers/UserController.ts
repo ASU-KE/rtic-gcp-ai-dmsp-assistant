@@ -1,5 +1,7 @@
-import UserModel, { UserInstance } from './../../common/models/User';
+import { UserService as UserModel } from '../../common/services/UserService';
+import { User } from '../../common/models/User';
 import { Request, Response } from 'express';
+import { DeleteResult } from 'typeorm';
 
 interface UpdateUserBody {
   name?: string;
@@ -29,7 +31,7 @@ export default {
     }
 
     UserModel.findUser({ id: user.userId })
-      .then((foundUser: UserInstance | null) => {
+      .then((foundUser: User | null) => {
         if (!foundUser) {
           res.status(404).json({
             status: false,
@@ -40,7 +42,7 @@ export default {
 
         res.status(200).json({
           status: true,
-          data: foundUser.toJSON(),
+          data: foundUser,
         });
       })
       .catch((err: Error) => {
@@ -74,7 +76,7 @@ export default {
 
     UserModel.updateUser({ id: user.userId }, payload)
       .then(() => UserModel.findUser({ id: user.userId }))
-      .then((updatedUser: UserInstance | null) => {
+      .then((updatedUser: User | null) => {
         if (!updatedUser) {
           res.status(404).json({
             status: false,
@@ -85,7 +87,7 @@ export default {
 
         res.status(200).json({
           status: true,
-          data: updatedUser.toJSON(),
+          data: updatedUser,
         });
       })
       .catch((err: Error) => {
@@ -100,11 +102,12 @@ export default {
     const { userId } = req.params;
 
     UserModel.deleteUser({ id: Number(userId) })
-      .then((numberOfEntriesDeleted: number) => {
+      .then((result: DeleteResult) => {
+        const deleted = result.affected ?? 0;
         res.status(200).json({
           status: true,
           data: {
-            numberOfUsersDeleted: numberOfEntriesDeleted,
+            numberOfUsersDeleted: deleted,
           },
         });
       })
@@ -118,10 +121,10 @@ export default {
 
   getAllUsers: (req: Request, res: Response) => {
     UserModel.findAllUsers(req.query)
-      .then((users: UserInstance[]) => {
+      .then((users: User[]) => {
         res.status(200).json({
           status: true,
-          data: users.map((user) => user.toJSON()),
+          data: users,
         });
       })
       .catch((err: Error) => {
@@ -141,7 +144,7 @@ export default {
 
     UserModel.updateUser({ id: Number(userId) }, { role })
       .then(() => UserModel.findUser({ id: Number(userId) }))
-      .then((user: UserInstance | null) => {
+      .then((user: User | null) => {
         if (!user) {
           res.status(404).json({
             status: false,
@@ -152,7 +155,7 @@ export default {
 
         res.status(200).json({
           status: true,
-          data: user.toJSON(),
+          data: user,
         });
       })
       .catch((err: Error) => {

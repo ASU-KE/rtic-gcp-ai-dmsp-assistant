@@ -1,7 +1,7 @@
 # DMP AI Assistant Proof-of-Concept
 
 This is an Express service that provides authorization functionality and includes separate folders for features.
-It also uses Sequelize ORM with SQLite as the database, along with the JSON Web Token (JWT) and AJV libraries.
+It also uses TypeORM with SQLite as the database, along with the JSON Web Token (JWT) and AJV libraries.
 
 ## Project Structure
 
@@ -22,7 +22,7 @@ It also uses Sequelize ORM with SQLite as the database, along with the JSON Web 
   - `routes.js`: Registers all the user CRUD routes.
 - `common`
   - `middlewares`: Various middlewares that can be used in various routes like (isAuthenticated, CheckPermissions etc.)
-  - `models`: Sequelise models for the User Table
+  - `models`: TypeORM models for the User Table
 - `storage`: Local storage, that stores all the SQLite tables.
 
 ## Prerequisites

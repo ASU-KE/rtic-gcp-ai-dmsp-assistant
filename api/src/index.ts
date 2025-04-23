@@ -1,7 +1,8 @@
 import config from './config';
-import { Sequelize } from 'sequelize';
+import { AppDataSource } from './data-source';
+import { UserService } from './common/services/UserService';
 import dotenv from 'dotenv';
-import UserModel from './common/models/User';
+import { User } from './common/models/User';
 import Rollbar from 'rollbar';
 import { createApp } from './server';
 import http from 'http';
@@ -17,25 +18,14 @@ const rollbar = new Rollbar({
   captureUnhandledRejections: true,
 });
 
-const {
-  database: { host, database, user, password },
-} = config;
-
-const sequelize = new Sequelize(database, user, password, {
-  dialect: 'mysql',
-  host,
-});
-
-// Initialising the Model on sequelize
-UserModel.initialise(sequelize);
-
-sequelize
-  .sync()
+AppDataSource.initialize()
   .then(() => {
-    rollbar.info('Sequelize initialized!');
+    rollbar.info('TypeORM DataSource initialized!');
+
+    UserService.initialise(AppDataSource.getRepository(User));
 
     // Create Express app by injecting dependencies
-    const app = createApp(rollbar, sequelize);
+    const app = createApp(rollbar, AppDataSource);
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     const server = http.createServer(app);
@@ -108,6 +98,6 @@ sequelize
     });
   })
   .catch((err: Error) => {
-    rollbar.error('Sequelize init error:', err);
+    rollbar.error('TypeORM init error:', err);
     process.exit(1);
   });
