@@ -1,6 +1,5 @@
-// NB: filename moved from models/User to services/UserService
 import { Repository } from 'typeorm';
-import { User } from '../models/User';
+import { User } from '../entities/User';
 
 export class UserService {
   private static repo: Repository<User>;

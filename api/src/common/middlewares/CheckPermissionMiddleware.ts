@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { Request } from 'express';
-import { UserService as UserModel } from '../../common/services/UserService';
-import { User } from '../../common/models/User';
+import { UserService } from '../../users/services/UserService';
+import { User } from '../../users/entities/User';
 import { Role } from '../../config';
 
 interface AuthenticatedRequest extends Request {
@@ -23,7 +23,7 @@ const has = (role: Role): RequestHandler => {
       return;
     }
 
-    const foundUser: User | null = await UserModel.findUser({
+    const foundUser: User | null = await UserService.findUser({
       id: Number(user.userId),
     });
 

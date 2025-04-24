@@ -1,8 +1,8 @@
 import config from './config';
 import { AppDataSource } from './data-source';
-import { UserService } from './common/services/UserService';
+import { UserService } from './users/services/UserService';
 import dotenv from 'dotenv';
-import { User } from './common/models/User';
+import { User } from './users/entities/User';
 import Rollbar from 'rollbar';
 import { createApp } from './server';
 import http from 'http';

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import { UserService as UserModel } from '../../common/services/UserService';
-import { User } from '../../common/models/User';
+import { UserService } from '../../users/services/UserService';
+import { User } from '../../users/entities/User';
 import { RegisterPayload } from '../schemas/registerPayload';
 import config from '../../config';
 import { Request, Response } from 'express';
@@ -44,7 +44,7 @@ export default {
 
     role ??= config.roles.USER;
 
-    UserModel.createUser(
+    UserService.createUser(
       Object.assign(payload, { password: encryptedPassword, role })
     )
       .then((user: User) => {
@@ -74,7 +74,7 @@ export default {
       password: string;
     };
 
-    UserModel.findUser({ username })
+    UserService.findUser({ username })
       .then((user: User | null) => {
         // IF user is not found with the given username
         // THEN Return user not found error

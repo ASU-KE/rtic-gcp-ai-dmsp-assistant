@@ -1,5 +1,5 @@
-import { UserService as UserModel } from '../../common/services/UserService';
-import { User } from '../../common/models/User';
+import { UserService } from '../services/UserService';
+import { User } from '../entities/User';
 import { Request, Response } from 'express';
 import { DeleteResult } from 'typeorm';
 
@@ -30,7 +30,7 @@ export default {
       return;
     }
 
-    UserModel.findUser({ id: user.userId })
+    UserService.findUser({ id: user.userId })
       .then((foundUser: User | null) => {
         if (!foundUser) {
           res.status(404).json({
@@ -74,8 +74,8 @@ export default {
       return;
     }
 
-    UserModel.updateUser({ id: user.userId }, payload)
-      .then(() => UserModel.findUser({ id: user.userId }))
+    UserService.updateUser({ id: user.userId }, payload)
+      .then(() => UserService.findUser({ id: user.userId }))
       .then((updatedUser: User | null) => {
         if (!updatedUser) {
           res.status(404).json({
@@ -101,7 +101,7 @@ export default {
   deleteUser: (req: Request<{ userId: string }>, res: Response) => {
     const { userId } = req.params;
 
-    UserModel.deleteUser({ id: Number(userId) })
+    UserService.deleteUser({ id: Number(userId) })
       .then((result: DeleteResult) => {
         const deleted = result.affected ?? 0;
         res.status(200).json({
@@ -120,7 +120,7 @@ export default {
   },
 
   getAllUsers: (req: Request, res: Response) => {
-    UserModel.findAllUsers(req.query)
+    UserService.findAllUsers(req.query)
       .then((users: User[]) => {
         res.status(200).json({
           status: true,
@@ -142,8 +142,8 @@ export default {
     const { userId } = req.params;
     const { role } = req.body;
 
-    UserModel.updateUser({ id: Number(userId) }, { role })
-      .then(() => UserModel.findUser({ id: Number(userId) }))
+    UserService.updateUser({ id: Number(userId) }, { role })
+      .then(() => UserService.findUser({ id: Number(userId) }))
       .then((user: User | null) => {
         if (!user) {
           res.status(404).json({
