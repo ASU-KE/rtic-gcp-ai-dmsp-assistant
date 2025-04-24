@@ -68,27 +68,23 @@ export const DmpController = ({
       } catch (error: unknown) {
         const err = error as { message: string; status?: number };
         if (err.status === 404) {
-          res
-            .status(404)
-            .json({
-              status: 404,
-              error: {
-                message:
-                  'No plan found with the provided DMP ID. Please verify and try again.',
-              },
-            });
+          res.status(404).json({
+            status: 404,
+            error: {
+              message:
+                'No plan found with the provided DMP ID. Please verify and try again.',
+            },
+          });
           return;
         }
 
-        res
-          .status(500)
-          .json({
-            status: 500,
-            error: {
-              message:
-                'Oops! Something went wrong on our end. Please try again in a moment.',
-            },
-          });
+        res.status(500).json({
+          status: 500,
+          error: {
+            message:
+              'Oops! Something went wrong on our end. Please try again in a moment.',
+          },
+        });
       }
     },
 

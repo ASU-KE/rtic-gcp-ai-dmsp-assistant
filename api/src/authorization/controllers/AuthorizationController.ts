@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import UserModel, { UserInstance } from '../../common/models/User';
+import { UserService } from '../../users/services/UserService';
+import { User } from '../../users/entities/User';
 import { RegisterPayload } from '../schemas/registerPayload';
 import config from '../../config';
 import { Request, Response } from 'express';
@@ -43,10 +44,10 @@ export default {
 
     role ??= config.roles.USER;
 
-    UserModel.createUser(
+    UserService.createUser(
       Object.assign(payload, { password: encryptedPassword, role })
     )
-      .then((user: UserInstance) => {
+      .then((user: User) => {
         // Generating an AccessToken for the user, which will be
         // required in every subsequent request.
         const accessToken = generateAccessToken(payload.username, user.id);
@@ -54,7 +55,7 @@ export default {
         return res.status(200).json({
           status: true,
           data: {
-            user: user.toJSON(),
+            user: user,
             token: accessToken,
           },
         });
@@ -73,8 +74,8 @@ export default {
       password: string;
     };
 
-    UserModel.findUser({ username })
-      .then((user: UserInstance | null) => {
+    UserService.findUser({ username })
+      .then((user: User | null) => {
         // IF user is not found with the given username
         // THEN Return user not found error
         if (!user) {
@@ -106,7 +107,7 @@ export default {
         return res.status(200).json({
           status: true,
           data: {
-            user: user.toJSON(),
+            user: user,
             token: accessToken,
           },
         });
