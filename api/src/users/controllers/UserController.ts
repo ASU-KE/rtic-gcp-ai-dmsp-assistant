@@ -7,8 +7,6 @@ interface UpdateUserBody {
   name?: string;
   email?: string;
   role?: string;
-  // etc...
-  // Or if fully dynamic, use `[key: string]: unknown;`
 }
 
 interface AuthenticatedRequest extends Request<object, object, UpdateUserBody> {
@@ -18,8 +16,14 @@ interface AuthenticatedRequest extends Request<object, object, UpdateUserBody> {
   };
 }
 
-export default {
-  getUser: (req: AuthenticatedRequest, res: Response) => {
+export default class UserController {
+  private userService: typeof UserService;
+
+  constructor(userService: typeof UserService) {
+    this.userService = userService;
+  }
+
+  getUser = (req: AuthenticatedRequest, res: Response) => {
     const { user } = req;
 
     if (!user) {
@@ -30,7 +34,8 @@ export default {
       return;
     }
 
-    UserService.findUser({ id: user.userId })
+    this.userService
+      .findUser({ id: user.userId })
       .then((foundUser: User | null) => {
         if (!foundUser) {
           res.status(404).json({
@@ -51,9 +56,9 @@ export default {
           error: err,
         });
       });
-  },
+  };
 
-  updateUser: (req: AuthenticatedRequest, res: Response) => {
+  updateUser = (req: AuthenticatedRequest, res: Response) => {
     const { user, body: payload } = req;
 
     if (!user) {
@@ -74,8 +79,9 @@ export default {
       return;
     }
 
-    UserService.updateUser({ id: user.userId }, payload)
-      .then(() => UserService.findUser({ id: user.userId }))
+    this.userService
+      .updateUser({ id: user.userId }, payload)
+      .then(() => this.userService.findUser({ id: user.userId }))
       .then((updatedUser: User | null) => {
         if (!updatedUser) {
           res.status(404).json({
@@ -96,12 +102,13 @@ export default {
           error: err,
         });
       });
-  },
+  };
 
-  deleteUser: (req: Request<{ userId: string }>, res: Response) => {
+  deleteUser = (req: Request<{ userId: string }>, res: Response) => {
     const { userId } = req.params;
 
-    UserService.deleteUser({ id: Number(userId) })
+    this.userService
+      .deleteUser({ id: Number(userId) })
       .then((result: DeleteResult) => {
         const deleted = result.affected ?? 0;
         res.status(200).json({
@@ -117,10 +124,11 @@ export default {
           error: err,
         });
       });
-  },
+  };
 
-  getAllUsers: (req: Request, res: Response) => {
-    UserService.findAllUsers(req.query)
+  getAllUsers = (req: Request, res: Response) => {
+    this.userService
+      .findAllUsers(req.query)
       .then((users: User[]) => {
         res.status(200).json({
           status: true,
@@ -133,17 +141,18 @@ export default {
           error: err,
         });
       });
-  },
+  };
 
-  changeRole: (
+  changeRole = (
     req: Request<{ userId: string }, object, { role: string }>,
     res: Response
   ) => {
     const { userId } = req.params;
     const { role } = req.body;
 
-    UserService.updateUser({ id: Number(userId) }, { role })
-      .then(() => UserService.findUser({ id: Number(userId) }))
+    this.userService
+      .updateUser({ id: Number(userId) }, { role })
+      .then(() => this.userService.findUser({ id: Number(userId) }))
       .then((user: User | null) => {
         if (!user) {
           res.status(404).json({
@@ -164,5 +173,5 @@ export default {
           error: err,
         });
       });
-  },
-};
+  };
+}

@@ -7,6 +7,7 @@ import CheckPermissionMiddleware from '../common/middlewares/CheckPermissionMidd
 
 // Controller Imports
 import UserController from './controllers/UserController';
+import { UserService } from './services/UserService';
 
 // JSON Schema Imports for payload verification
 import updateUserPayload from './schemas/updateUserPayload';
@@ -16,7 +17,10 @@ import config, { Role } from '../config';
 const roles = config.roles;
 const router = Router();
 
-router.get('/', [isAuthenticatedMiddleware.check], UserController.getUser);
+// Instantiate the controller with the service injected
+const userController = new UserController(UserService);
+
+router.get('/', [isAuthenticatedMiddleware.check], userController.getUser);
 
 router.patch(
   '/',
@@ -24,7 +28,7 @@ router.patch(
     isAuthenticatedMiddleware.check,
     SchemaValidationMiddleware.verify(updateUserPayload),
   ],
-  UserController.updateUser
+  userController.updateUser
 );
 
 router.get(
@@ -33,7 +37,7 @@ router.get(
     isAuthenticatedMiddleware.check,
     CheckPermissionMiddleware.has(roles.ADMIN as Role),
   ],
-  UserController.getAllUsers
+  userController.getAllUsers
 );
 
 router.patch(
@@ -43,7 +47,7 @@ router.patch(
     CheckPermissionMiddleware.has(roles.ADMIN as Role),
     SchemaValidationMiddleware.verify(changeRolePayload),
   ],
-  UserController.changeRole
+  userController.changeRole
 );
 
 router.delete(
@@ -52,7 +56,7 @@ router.delete(
     isAuthenticatedMiddleware.check,
     CheckPermissionMiddleware.has(roles.ADMIN as Role),
   ],
-  UserController.deleteUser
+  userController.deleteUser
 );
 
 export default router;
