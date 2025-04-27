@@ -3,7 +3,7 @@ import { Router } from 'express';
 // Middleware Imports
 import isAuthenticatedMiddleware from './../common/middlewares/IsAuthenticatedMiddleware';
 import SchemaValidationMiddleware from '../common/middlewares/SchemaValidationMiddleware';
-import CheckPermissionMiddleware from '../common/middlewares/CheckPermissionMiddleware';
+import { CheckPermissionMiddleware } from '../common/middlewares/CheckPermissionMiddleware';
 
 // Controller Imports
 import UserController from './controllers/UserController';
@@ -15,48 +15,53 @@ import changeRolePayload from './schemas/changeRolePayload';
 
 import config, { Role } from '../config';
 const roles = config.roles;
-const router = Router();
 
-// Instantiate the controller with the service injected
-const userController = new UserController(UserService);
+// Export a function that takes UserService instance
+export default (userService: UserService) => {
+  const router = Router();
 
-router.get('/', [isAuthenticatedMiddleware.check], userController.getUser);
+  // instantiate controller and permission middleware with injected service
+  const userController = new UserController(userService);
+  const checkPermissionMiddleware = CheckPermissionMiddleware(userService);
 
-router.patch(
-  '/',
-  [
-    isAuthenticatedMiddleware.check,
-    SchemaValidationMiddleware.verify(updateUserPayload),
-  ],
-  userController.updateUser
-);
+  router.get('/', [isAuthenticatedMiddleware.check], userController.getUser);
 
-router.get(
-  '/all',
-  [
-    isAuthenticatedMiddleware.check,
-    CheckPermissionMiddleware.has(roles.ADMIN as Role),
-  ],
-  userController.getAllUsers
-);
+  router.patch(
+    '/',
+    [
+      isAuthenticatedMiddleware.check,
+      SchemaValidationMiddleware.verify(updateUserPayload),
+    ],
+    userController.updateUser
+  );
 
-router.patch(
-  '/change-role/:userId',
-  [
-    isAuthenticatedMiddleware.check,
-    CheckPermissionMiddleware.has(roles.ADMIN as Role),
-    SchemaValidationMiddleware.verify(changeRolePayload),
-  ],
-  userController.changeRole
-);
+  router.get(
+    '/all',
+    [
+      isAuthenticatedMiddleware.check,
+      checkPermissionMiddleware.has(roles.ADMIN as Role),
+    ],
+    userController.getAllUsers
+  );
 
-router.delete(
-  '/:userId',
-  [
-    isAuthenticatedMiddleware.check,
-    CheckPermissionMiddleware.has(roles.ADMIN as Role),
-  ],
-  userController.deleteUser
-);
+  router.patch(
+    '/change-role/:userId',
+    [
+      isAuthenticatedMiddleware.check,
+      checkPermissionMiddleware.has(roles.ADMIN as Role),
+      SchemaValidationMiddleware.verify(changeRolePayload),
+    ],
+    userController.changeRole
+  );
 
-export default router;
+  router.delete(
+    '/:userId',
+    [
+      isAuthenticatedMiddleware.check,
+      checkPermissionMiddleware.has(roles.ADMIN as Role),
+    ],
+    userController.deleteUser
+  );
+
+  return router;
+};

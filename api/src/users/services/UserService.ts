@@ -2,29 +2,29 @@ import { Repository } from 'typeorm';
 import { User } from '../entities/User';
 
 export class UserService {
-  private static repo: Repository<User>;
+  private repo: Repository<User>;
 
-  static initialise(repo: Repository<User>) {
-    UserService.repo = repo;
+  constructor(repo: Repository<User>) {
+    this.repo = repo;
   }
 
-  static createUser(user: Partial<User>) {
+  createUser(user: Partial<User>) {
     return this.repo.save(user);
   }
 
-  static findUser(query: Partial<User>) {
+  findUser(query: Partial<User>) {
     return this.repo.findOneBy(query);
   }
 
-  static updateUser(query: Partial<User>, updated: Partial<User>) {
+  updateUser(query: Partial<User>, updated: Partial<User>) {
     return this.repo.update(query, updated);
   }
 
-  static findAllUsers(query: Partial<User>) {
+  findAllUsers(query: Partial<User>) {
     return this.repo.findBy(query);
   }
 
-  static deleteUser(query: Partial<User>) {
+  deleteUser(query: Partial<User>) {
     return this.repo.delete(query);
   }
 }

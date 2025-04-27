@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express';
 import { Request } from 'express';
 import { UserService } from '../../users/services/UserService';
-import { User } from '../../users/entities/User';
 import { Role } from '../../config';
 
 interface AuthenticatedRequest extends Request {
@@ -11,40 +10,40 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
-const has = (role: Role): RequestHandler => {
-  return async (req, res, next) => {
-    const { user } = req as AuthenticatedRequest;
+export function CheckPermissionMiddleware(userService: UserService) {
+  const has = (role: Role): RequestHandler => {
+    return async (req, res, next) => {
+      const { user } = req as AuthenticatedRequest;
 
-    if (!user) {
-      res.status(401).json({
-        status: false,
-        error: 'No user found in request context.',
-      });
-      return;
-    }
+      if (!user) {
+        res.status(401).json({
+          status: false,
+          error: 'No user found in request context.',
+        });
+        return;
+      }
 
-    const foundUser: User | null = await UserService.findUser({
-      id: Number(user.userId),
-    });
+      const foundUser = await userService.findUser({ id: Number(user.userId) });
 
-    if (!foundUser) {
-      res.status(403).json({
-        status: false,
-        error: 'Invalid access token provided, please login again.',
-      });
-      return;
-    }
+      if (!foundUser) {
+        res.status(403).json({
+          status: false,
+          error: 'Invalid access token provided, please login again.',
+        });
+        return;
+      }
 
-    if (foundUser.role !== role) {
-      res.status(403).json({
-        status: false,
-        error: `You need to be a ${role} to access this endpoint.`,
-      });
-      return;
-    }
+      if (foundUser.role !== role) {
+        res.status(403).json({
+          status: false,
+          error: `You need to be a ${role} to access this endpoint.`,
+        });
+        return;
+      }
 
-    next();
+      next();
+    };
   };
-};
 
-export default { has };
+  return { has };
+}

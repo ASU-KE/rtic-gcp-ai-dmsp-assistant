@@ -1,8 +1,8 @@
 import { Router } from 'express';
-const router: Router = Router();
 
 // Controller Imports
 import AuthorizationController from './controllers/AuthorizationController';
+import { UserService } from '../users/services/UserService';
 
 // Middleware Imports
 import SchemaValidationMiddleware from '../common/middlewares/SchemaValidationMiddleware';
@@ -11,16 +11,24 @@ import SchemaValidationMiddleware from '../common/middlewares/SchemaValidationMi
 import registerPayload from './schemas/registerPayload';
 import loginPayload from './schemas/loginPayload';
 
-router.post(
-  '/signup',
-  [SchemaValidationMiddleware.verify(registerPayload)],
-  AuthorizationController.register
-);
+const AuthorizationRoutes = (userService: UserService) => {
+  const router: Router = Router();
 
-router.post(
-  '/login',
-  [SchemaValidationMiddleware.verify(loginPayload)],
-  AuthorizationController.login
-);
+  const authorizationController = new AuthorizationController(userService);
 
-export default router;
+  router.post(
+    '/signup',
+    [SchemaValidationMiddleware.verify(registerPayload)],
+    authorizationController.register
+  );
+
+  router.post(
+    '/login',
+    [SchemaValidationMiddleware.verify(loginPayload)],
+    authorizationController.login
+  );
+
+  return router;
+};
+
+export default AuthorizationRoutes;

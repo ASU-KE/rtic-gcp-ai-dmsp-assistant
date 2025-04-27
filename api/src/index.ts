@@ -22,10 +22,12 @@ AppDataSource.initialize()
   .then(() => {
     rollbar.info('TypeORM DataSource initialized!');
 
-    UserService.initialise(AppDataSource.getRepository(User));
+    // Create a UserService instance
+    const userRepo = AppDataSource.getRepository(User);
+    const userService = new UserService(userRepo);
 
     // Create Express app by injecting dependencies
-    const app = createApp(rollbar, AppDataSource);
+    const app = createApp(rollbar, AppDataSource, userService);
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     const server = http.createServer(app);
