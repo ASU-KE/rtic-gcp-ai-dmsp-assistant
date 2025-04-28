@@ -35,8 +35,14 @@ const encryptPassword = (password: string): string => {
   return hash.digest('hex');
 };
 
-export default {
-  register: (req: Request<object, object, RegisterPayload>, res: Response) => {
+export default class AuthorizationController {
+  private userService: UserService;
+
+  constructor(userService: UserService) {
+    this.userService = userService;
+  }
+
+  register = (req: Request<object, object, RegisterPayload>, res: Response) => {
     const payload = req.body;
 
     const encryptedPassword: string = encryptPassword(payload.password);
@@ -44,9 +50,8 @@ export default {
 
     role ??= config.roles.USER;
 
-    UserService.createUser(
-      Object.assign(payload, { password: encryptedPassword, role })
-    )
+    this.userService
+      .createUser(Object.assign(payload, { password: encryptedPassword, role }))
       .then((user: User) => {
         // Generating an AccessToken for the user, which will be
         // required in every subsequent request.
@@ -66,15 +71,16 @@ export default {
           error: err,
         });
       });
-  },
+  };
 
-  login: (req: Request<object, object, LoginPayload>, res: Response) => {
+  login = (req: Request<object, object, LoginPayload>, res: Response) => {
     const { username, password } = req.body as {
       username: string;
       password: string;
     };
 
-    UserService.findUser({ username })
+    this.userService
+      .findUser({ username })
       .then((user: User | null) => {
         // IF user is not found with the given username
         // THEN Return user not found error
@@ -118,5 +124,5 @@ export default {
           error: err,
         });
       });
-  },
-};
+  };
+}

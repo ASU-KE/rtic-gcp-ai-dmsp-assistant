@@ -9,11 +9,17 @@ import AuthorizationRoutes from './authorization/routes';
 import UserRoutes from './users/routes';
 import DmpRoutes from './dmp/routes';
 import TestRoutes from './test/routes';
+import { UserService } from './users/services/UserService';
 
-export function createApp(rollbar: Rollbar, dataSource: DataSource) {
+export function createApp(
+  rollbar: Rollbar,
+  dataSource: DataSource,
+  userService: UserService
+) {
   const app: Application = express();
 
   app.locals.dataSource = dataSource;
+  app.locals.userService = userService;
 
   app.use(morgan('common'));
   app.use(
@@ -26,8 +32,8 @@ export function createApp(rollbar: Rollbar, dataSource: DataSource) {
   );
   app.use(express.json());
 
-  app.use('/', AuthorizationRoutes);
-  app.use('/user', UserRoutes);
+  app.use('/', AuthorizationRoutes(userService));
+  app.use('/user', UserRoutes(userService));
   app.use('/dmp', DmpRoutes);
   app.use('/test', TestRoutes);
 

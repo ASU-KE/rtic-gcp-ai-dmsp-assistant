@@ -17,9 +17,9 @@ interface AuthenticatedRequest extends Request<object, object, UpdateUserBody> {
 }
 
 export default class UserController {
-  private userService: typeof UserService;
+  private userService: UserService;
 
-  constructor(userService: typeof UserService) {
+  constructor(userService: UserService) {
     this.userService = userService;
   }
 
