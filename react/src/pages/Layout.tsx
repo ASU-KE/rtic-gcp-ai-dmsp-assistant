@@ -1,8 +1,5 @@
 import { Container, Col, Row } from 'react-bootstrap';
-import { ASUHeader } from '@asu/component-header';
-import { ASUFooter } from '@asu/component-footer';
-
-import { HeaderProps } from '@asu/component-header';
+import { ASUHeader, ASUFooter, HeaderProps, Button, Logo } from '@asu/component-header-footer';
 
 import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
