@@ -41,7 +41,7 @@ services:
   react:
     build:
       context: react
-      target: development
+      target: builder
       secrets:
         - npmrc
     environment:

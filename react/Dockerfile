@@ -2,7 +2,7 @@
 
 # Multi-stage Image Build
 # Stage 1 - Clean-Install node packages
-FROM node:22.9-bookworm AS development
+FROM node:22-bookworm AS development
 
 ARG VITE_BACKEND_URL
 
@@ -29,7 +29,7 @@ FROM development AS builder
 RUN npm run build
 
 # Stage 3 - Build optimized environment with Docker dev tools
-FROM development as dev-envs
+FROM development AS dev-envs
 RUN  <<EOF
 apt-get update
 apt-get install -y --no-install-recommends git
@@ -46,7 +46,7 @@ COPY --from=gloursdocker/docker / /
 CMD [ "npm", "start" ]
 
 # Stage 4 - Build optimized production deployment
-FROM nginx:1.13-alpine
+FROM nginx:1.28-alpine
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./htpasswd /usr/share/nginx/.htpasswd
