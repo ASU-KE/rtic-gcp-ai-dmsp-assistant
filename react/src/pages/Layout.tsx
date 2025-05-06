@@ -5,7 +5,13 @@ import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
 import { Outlet } from 'react-router-dom';
 
-const header: HeaderProps = {
+// Override HeaderProps to fix Typescript typing requirements
+export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLogo'> {
+  buttons: Button[] | null;
+  partnerLogo?: Logo | null;
+}
+
+const header: TsHeaderProps = {
   title: 'DMSP AI Assistant',
   loggedIn: false,
   logoutLink: '#',
@@ -13,29 +19,48 @@ const header: HeaderProps = {
   userName: '',
   navTree: [
     {
+      id: 1,
       href: '/',
       text: 'Home',
       type: 'icon-home',
       class: 'test-class',
     },
     {
-      text: 'Submit text',
+      id: 2,
       href: '/submit-text',
+      text: 'Submit text',
+    },
+  ],
+  mobileNavTree: [
+    {
+      id: 1,
+      href: '/',
+      text: 'Home',
+      type: 'icon-home',
+      class: 'test-class',
+    },
+    {
+      id: 2,
+      href: '/submit-text',
+      text: 'Submit text',
     },
   ],
   logo: {
     alt: 'Arizona State University',
-    title: 'Arizona State University',
     src: vertAsuLogo,
     mobileSrc: horizAsuLogo,
-    // brandLink: PropTypes.string,
   },
   parentOrg: 'KE Research Technology Office',
   parentOrgUrl: 'https://rto.asu.edu',
   breakpoint: 'Lg',
   searchUrl: 'https://search.asu.edu/search',
   site: 'subdomain',
-};
+  isPartner: false,
+  partnerLogo: null,
+  buttons: null,
+  animateTitle: true,
+  expandOnHover: true,
+}
 
 const footer = {};
 
