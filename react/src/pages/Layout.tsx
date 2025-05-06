@@ -7,8 +7,8 @@ import { Outlet } from 'react-router-dom';
 
 // Override HeaderProps to fix Typescript typing requirements
 export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLogo'> {
-  buttons: Button[] | null;
-  partnerLogo?: Logo | null;
+  buttons?: Button[];
+  partnerLogo?: Logo;
 }
 
 const header: TsHeaderProps = {
@@ -56,8 +56,6 @@ const header: TsHeaderProps = {
   searchUrl: 'https://search.asu.edu/search',
   site: 'subdomain',
   isPartner: false,
-  partnerLogo: null,
-  buttons: null,
   animateTitle: true,
   expandOnHover: true,
 }
