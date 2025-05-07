@@ -2,7 +2,7 @@
 
 # Multi-stage Image Build
 # Stage 1 - Clean-Install node packages
-FROM node:22-bookworm AS development
+FROM node:22.15-bookworm AS development
 
 ARG VITE_BACKEND_URL
 
