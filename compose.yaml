@@ -41,13 +41,10 @@ services:
   react:
     build:
       context: react
-      target: builder
-      secrets:
-        - npmrc
+      target: development
     environment:
       - VITE_BACKEND_URL=http://localhost:3001
       - VITE_WS_URL=ws://localhost:3001
-
     ports:
       - 3000:3000
     volumes:
@@ -65,5 +62,3 @@ volumes:
 secrets:
   db-password:
     file: secrets/db_password
-  npmrc:
-    file: secrets/npmrc
