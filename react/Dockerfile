@@ -4,7 +4,7 @@
 # Stage 1 - Clean-Install node packages
 FROM node:22.15-bookworm AS development
 
-ARG VITE_BACKEND_URL
+ARG NPM_TOKEN
 
 ENV CI=true
 ENV PORT=3000
@@ -15,9 +15,9 @@ WORKDIR ${APP_HOME}
 COPY ./package.json ${APP_HOME}/
 COPY ./package-lock.json ${APP_HOME}/
 
-RUN --mount=type=secret,id=npmrc,target=${APP_HOME}/.npmrc \
-    npm ci \
-    rm ${APP_HOME}/.npmrc
+RUN npm config set @asu:registry https://npm.pkg.github.com/ && \
+  npm config set -- '//npm.pkg.github.com/:_authToken' ${NPM_TOKEN} && \
+  npm ci
 
 COPY . ${APP_HOME}
 
