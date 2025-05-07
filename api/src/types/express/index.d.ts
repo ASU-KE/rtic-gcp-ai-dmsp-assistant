@@ -7,12 +7,15 @@ declare global {
   }
 }
 
-declare module 'express' {
-  interface Request {
-    user?: {
+declare global {
+  namespace Express {
+    interface User {
       userId: number;
       username: string;
-    };
+    }
+    interface Request {
+      user?: User;
+    }
   }
 }
 

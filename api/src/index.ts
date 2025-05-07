@@ -4,6 +4,8 @@ import { UserService } from './users/services/UserService';
 import dotenv from 'dotenv';
 import { User } from './users/entities/User';
 import Rollbar from 'rollbar';
+import passport from 'passport';
+import { configurePassport } from './common/middlewares/passport.config';
 import { createApp } from './server';
 import http from 'http';
 import { WebSocketServer, WebSocket, RawData } from 'ws';
@@ -26,8 +28,14 @@ AppDataSource.initialize()
     const userRepo = AppDataSource.getRepository(User);
     const userService = new UserService(userRepo);
 
+    // Configure Passport
+    configurePassport(userService);
+
     // Create Express app by injecting dependencies
     const app = createApp(rollbar, AppDataSource, userService);
+
+    // Add Passport middleware
+    app.use(passport.initialize());
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     const server = http.createServer(app);

@@ -8,14 +8,20 @@ import { Request, Response } from 'express';
 import { LoginPayload } from '../schemas/loginPayload';
 
 const jwtSecret = process.env.JWT_SECRET!;
-const jwtExpirationInSeconds = process.env.JWT_EXPIRATION_SECS ?? '3000';
+const jwtExpirationInSeconds = parseInt(
+  process.env.JWT_EXPIRATION_SECS ?? '3600',
+  10
+);
 
 // Generates an Access Token using username and userId for the user's authentication
-const generateAccessToken = (username: string, userId: number): string => {
+const generateAccessToken = (user: {
+  id: number;
+  username: string;
+}): string => {
   return jwt.sign(
     {
-      userId,
-      username,
+      userId: user.id,
+      username: user.username,
     },
     jwtSecret,
     {
@@ -55,7 +61,10 @@ export default class AuthorizationController {
       .then((user: User) => {
         // Generating an AccessToken for the user, which will be
         // required in every subsequent request.
-        const accessToken = generateAccessToken(payload.username, user.id);
+        const accessToken = generateAccessToken({
+          id: user.id,
+          username: user.username,
+        });
 
         return res.status(200).json({
           status: true,
@@ -74,10 +83,7 @@ export default class AuthorizationController {
   };
 
   login = (req: Request<object, object, LoginPayload>, res: Response) => {
-    const { username, password } = req.body as {
-      username: string;
-      password: string;
-    };
+    const { username, password } = req.body;
 
     this.userService
       .findUser({ username })
@@ -108,7 +114,10 @@ export default class AuthorizationController {
 
         // Generating an AccessToken for the user, which will be
         // required in every subsequent request.
-        const accessToken = generateAccessToken(user.username, user.id);
+        const accessToken = generateAccessToken({
+          id: user.id,
+          username: user.username,
+        });
 
         return res.status(200).json({
           status: true,
