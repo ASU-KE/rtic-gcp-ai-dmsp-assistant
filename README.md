@@ -61,11 +61,9 @@ Copy [api/.env.example](api/.env.example) to `api/.env`. Fill in token and acces
 
 ### React application setup
 
-1. Create a GitHub personal access token (classic) with "read:packages" permission (see below).
-2. Copy [secrets/npmrc.example](secrets/npmrc.example) into a new secret file: `secrets/npmrc`.
-3. Insert GitHub personal access token into 'secrets/npmrc'.
-4. Copy [secrets/db_password.example](secrets/db_password.example) into a new secret file: `secrets/db_password`
-5. (Optional) Change the local db password in `secrets/db_password`.
+1. Create a GitHub personal access token (classic) with "read:packages" permission (see below). Save token value for use later.
+2. Copy [secrets/db_password.example](secrets/db_password.example) into a new secret file: `secrets/db_password`
+3. (Optional) Change the local db password in `secrets/db_password`.
 
 ### Creating a GitHub Personal Access Token (Classic)
 
@@ -76,12 +74,12 @@ Copy [api/.env.example](api/.env.example) to `api/.env`. Fill in token and acces
 5. Select desired expiration.
 6. Check box "read:packages".
 7. Click "Generate token".
-8. Save the displayed token in `secrets/npmrc`.
+8. Save the displayed token in your password manager to use next.
 
 
 ### Build and launch application stack
 
-Build the application container images: `docker compose build`, and then launch the application: `docker compose up`.
+Build the application container images and insert the GH token into the command line: `docker compose build --build-arg NPM_TOKEN=TOKEN_VALUE`, and then launch the application: `docker compose up`.
 
 The React frontend application can be accessed at: [http://localhost:3000](http://localhost:3000).
 

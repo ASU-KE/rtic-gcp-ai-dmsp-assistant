@@ -39,11 +39,12 @@ steps:
     args:
       [
         '-c',
-        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN --build-arg VITE_BACKEND_URL=$$VITE_BACKEND_URL -t gcr.io/$PROJECT_ID/ai-dmsp-react-image:$BUILD_ID .',
+        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN -t gcr.io/$PROJECT_ID/ai-dmsp-react-image:$BUILD_ID .',
       ]
     env: [
       'DOCKER_BUILDKIT=1',
-      'VITE_BACKEND_URL=https://api.dmsp.ai.dev.rtd.asu.edu'
+      'VITE_BACKEND_URL=https://api.dmsp.ai.dev.rtd.asu.edu',
+      'VITE_WS_URL=wss://api.dmsp.ai.dev.rtd.asu.edu'
     ]
     secretEnv: ['NPM_TOKEN']
     dir: 'react'
