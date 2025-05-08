@@ -102,8 +102,8 @@ const config: Config = {
   endpoints: {
     authEndpoint: 'https://auth.dmphub.uc3prd.cdlib.net/oauth2/token',
     getDmpEndpoint: 'https://api.dmphub.uc3prd.cdlib.net/dmps',
-    queryLlmRestEndpoint: 'https://api-ke-poc.aiml.asu.edu/queryV2',
-    queryLlmWebsocketEndpoint: 'wss://apiws-ke-poc.aiml.asu.edu',
+    queryLlmRestEndpoint: 'https://api-main-beta.aiml.asu.edu/queryV2',
+    queryLlmWebsocketEndpoint: 'wss://apiws-main-beta.aiml.asu.edu',
   },
   llmOptions: {
     modelProvider: 'openai', // string (Required): "aws", "openai", "gcp", "gcp-deepmind", "azure"

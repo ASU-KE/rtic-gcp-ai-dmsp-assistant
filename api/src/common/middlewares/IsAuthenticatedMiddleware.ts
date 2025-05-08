@@ -1,6 +1,5 @@
-import jwt from 'jsonwebtoken';
+import passport from 'passport';
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-const jwtSecret: string = process.env.JWT_SECRET!;
 
 interface JwtPayload {
   userId: number;
@@ -14,58 +13,32 @@ const check: RequestHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers.authorization;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  passport.authenticate(
+    'jwt',
+    { session: false },
+    (
+      err: Error | null,
+      user: JwtPayload | false,
+      info?: { message?: string }
+    ) => {
+      if (err) {
+        return next(err);
+      }
 
-  // IF no auth headers are provided
-  // THEN return 401 Unauthorized error
-  if (!authHeader) {
-    res.status(401).json({
-      status: false,
-      error: {
-        message: 'Auth headers not provided in the request.',
-      },
-    });
-    return;
-  }
+      if (!user) {
+        return res.status(401).json({
+          status: false,
+          error: {
+            message: info?.message ?? 'Invalid or missing authentication token',
+          },
+        });
+      }
 
-  // IF bearer auth header is not provided
-  // THEN return 401 Unauthorized error
-  if (!authHeader.startsWith('Bearer')) {
-    res.status(401).json({
-      status: false,
-      error: {
-        message: 'Invalid auth mechanism.',
-      },
-    });
-    return;
-  }
-
-  const token = authHeader.split(' ')[1];
-
-  // IF bearer auth header is provided, but token is not provided
-  // THEN return 401 Unauthorized error
-  if (!token) {
-    res.status(401).json({
-      status: false,
-      error: {
-        message: 'Bearer token missing in the authorization headers.',
-      },
-    });
-    return;
-  }
-
-  jwt.verify(token, jwtSecret, (err, decoded) => {
-    if (err) {
-      res.status(403).json({
-        status: false,
-        error: 'Invalid access token provided, please login again.',
-      });
-      return;
+      req.user = user;
+      next();
     }
-
-    req.user = decoded as JwtPayload; // Save the user object for further use
-    next();
-  });
+  )(req, res, next);
 };
 
 export default { check };
