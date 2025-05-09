@@ -43,8 +43,8 @@ steps:
       ]
     env: [
       'DOCKER_BUILDKIT=1',
-      'VITE_BACKEND_URL=https://api.dmsp.ai.dev.rtd.asu.edu',
-      'VITE_WS_URL=wss://api.dmsp.ai.dev.rtd.asu.edu'
+      'VITE_BACKEND_DOMAIN=api.dmsp.ai.dev.rtd.asu.edu',
+      'VITE_BACKEND_PORT=443'
     ]
     secretEnv: ['NPM_TOKEN']
     dir: 'react'
