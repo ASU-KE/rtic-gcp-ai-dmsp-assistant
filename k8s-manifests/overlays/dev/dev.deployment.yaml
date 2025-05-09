@@ -128,6 +128,17 @@ spec:
         - name: react-web
           image: ai-dmsp-react-image
           imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: ai-dmsp-secret
+          env:
+            - name: VITE_BACKEND_DOMAIN
+              value: "dmsp.ai.dev.rtd.asu.edu"
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: DB_HOST
+                  name: ai-dmsp-secret
           ports:
             - containerPort: 80
           readinessProbe:
