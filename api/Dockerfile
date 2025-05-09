@@ -2,7 +2,7 @@
 
 # Multi-stage Image Build
 # Stage 1 - Clean-Install node packages and compile TS code
-FROM node:22.9-bookworm AS builder
+FROM node:22.15-bookworm AS builder
 
 # set our node environment, either development or production
 # defaults to production, compose overrides this to development on build and run
@@ -49,7 +49,7 @@ COPY --from=gloursdocker/docker / /
 CMD [ "npm", "start" ]
 
 # Stage 3 - Build optimized production deployment
-FROM nginx:1.13-alpine
+FROM nginx:1.28-alpine
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
