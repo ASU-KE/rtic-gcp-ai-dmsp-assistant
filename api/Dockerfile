@@ -4,11 +4,6 @@
 # Stage 1 - Clean-Install node packages and compile TS code
 FROM node:22.15-bookworm AS builder
 
-# set our node environment, either development or production
-# defaults to production, compose overrides this to development on build and run
-ARG NODE_ENV=production
-ENV NODE_ENV=$NODE_ENV
-
 WORKDIR /code
 
 # default to port 3001 for node, and 9229 and 9230 (tests) for debug
