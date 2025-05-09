@@ -24,12 +24,8 @@ RUN npm ci
 COPY . /code
 
 # Build application
-RUN npm run build
-
-# if you want to use npm start instead, then use `docker run --init in production`
-# so that signals are passed properly. Note the code in index.js is needed to catch Docker signals
-# using node here is still more graceful stopping then npm with --init afaik
-# I still can't come up with a good production way to run with npm and graceful shutdown
+RUN npm run clean
+RUN npm run compile
 
 # Stage 2 - Build optimized environment with Docker dev tools
 FROM builder AS dev-envs
