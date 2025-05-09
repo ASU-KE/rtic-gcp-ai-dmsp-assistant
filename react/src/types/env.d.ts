@@ -1,8 +1,9 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_BACKEND_URL: string;
-  readonly VITE_WS_URL: string;
+  readonly PROD: boolean;
+  readonly VITE_BACKEND_DOMAIN: string;
+  readonly VITE_BACKEND_PORT: number;
   // Add other environment variables here as needed
 }
 
