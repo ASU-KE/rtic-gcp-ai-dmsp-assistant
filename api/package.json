@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "rimraf dist",
     "build": "npm run clean && tsc",
     "start": "ts-node --files -H -T ./src/index.ts",
     "start:watch": "nodemon -w *.ts -e ts -x ts-node --files -H -T ./src/index.ts",
@@ -28,6 +28,7 @@
     "passport-jwt": "^4.0.1",
     "pdf-parse": "^1.1.1",
     "reflect-metadata": "^0.2.2",
+    "rimraf": "^6.0.1",
     "rollbar": "^2.26.4",
     "sqlite3": "5.1.6",
     "typeorm": "^0.3.22",
