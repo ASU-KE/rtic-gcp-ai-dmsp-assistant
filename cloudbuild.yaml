@@ -12,7 +12,7 @@ steps:
     env: ['DOCKER_BUILDKIT=1']
     dir: 'api'
 
-  # Push the image to GCR
+  # Push the image to Artifact Registry
   - id: docker push ai-dmsp-api
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID"]
@@ -49,7 +49,7 @@ steps:
     secretEnv: ['NPM_TOKEN']
     dir: 'react'
 
-  # Push the image to GCR
+  # Push the image to Artifact Registry
   - id: docker push ai-dmsp-react
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:$BUILD_ID"]
@@ -68,6 +68,110 @@ steps:
       - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
       - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
       - "GCLOUD_PROJECT=$PROJECT_ID"
+
+
+  # Trivy - AI-DMSP API
+  - id: scan api image
+    name: "aquasec/trivy:latest"
+    args:
+      - image
+      - --severity=CRITICAL
+      - --format=json
+      - --output=/workspace/trivy-api-results.json
+      - us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID
+
+
+  # Trivy - AI_DMSP React
+  - id: scan react image
+    name: "aquasec/trivy:latest"
+    args:
+      - image
+      - --severity=CRITICAL
+      - --format=json
+      - --output=/workspace/trivy-react-results.json
+      - us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:$BUILD_ID
+
+
+  # Slack - Trivy results
+  - id: scan images
+    name: "ubuntu"
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        apt-get update && apt-get install -y jq curl
+
+        # Define array for image names
+        IMAGES=("api" "react")
+
+        for IMAGE in "${IMAGES[@]}"; do
+
+          # Check for CRITICAL vulnerabilities
+          if jq '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[] | select(.Severity == "CRITICAL")' /workspace/trivy-$$IMAGE-results.json | grep -q '.';
+          then
+            # Header for critical vulnerabilities
+            header=":warning: *CRITICAL vulnerabilities found in image:* AI-DMSP - $$IMAGE - ${_ENVIRONMENT}"
+            blocks='[
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "'"${header}"'"
+                }
+              },
+              {
+                "type": "divider"
+              }
+            ]'
+
+            # Extract vulnerabilities and format each entry
+            vulns=$(jq -r '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[] | select(.Severity == "CRITICAL") |
+                    [ .VulnerabilityID, .PkgName, .InstalledVersion, .Severity ] | @tsv' /workspace/trivy-$$IMAGE-results.json)
+
+            while IFS=$'\t' read -r vuln_id pkg_name installed_version severity; do
+              # Combine vulnerability ID and severity
+              vuln_info="${vuln_id} (${severity})"
+              
+              # Combine package name and version
+              package_info="${pkg_name}:${installed_version}"
+              
+              # Add block for each vulnerability
+              block_content=$(cat <<EOF
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Vulnerability & Severity:*\n\`$vuln_info\`"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Package & Version:*\n\`$package_info\`"
+                  }
+                ]
+              },
+              {
+                "type": "divider"
+              }
+        EOF
+              )
+              blocks=$(echo "${blocks}" | jq ". += [$block_content]")
+            done <<< "$vulns"
+
+            # Send the detailed message to Slack
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{\"blocks\": ${blocks}}" \
+              ${_SLACK_WEBHOOK};
+          else
+            # Message when no CRITICAL vulnerabilities are found
+            message=":white_check_mark: *No CRITICAL vulnerabilities found in image:* AI-DMSP - $$IMAGE - ${_ENVIRONMENT}"
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{\"text\": \"$message\"}" \
+              ${_SLACK_WEBHOOK};
+          fi
+        done
+
+
 
   # Copy secrets and SSL certificate files from secret manager
   - id: load kubernetes secrets file
