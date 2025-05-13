@@ -38,9 +38,9 @@ export function createApp(
   app.use('/test', TestRoutes);
 
   // Health-check endpoint
-  app.get('/healthz', (req: Request, res: Response) => {
-    res.json({ status: 'Healthy' });
-  });
+  // app.get('/healthz', (req: Request, res: Response) => {
+  //   res.json({ status: 'Healthy' });
+  // });
 
   // Rollbar error handler
   app.use(rollbar.errorHandler());
