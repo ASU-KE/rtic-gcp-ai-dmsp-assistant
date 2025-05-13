@@ -43,7 +43,7 @@ steps:
       ]
     env: [
       'DOCKER_BUILDKIT=1',
-      'VITE_BACKEND_DOMAIN=api.dmsp.ai.dev.rtd.asu.edu',
+      'VITE_BACKEND_DOMAIN=dmsp.dev.api.rtd.asu.edu',
       'VITE_BACKEND_PORT=443'
     ]
     secretEnv: ['NPM_TOKEN']

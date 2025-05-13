@@ -27,7 +27,7 @@ export function createApp(
       origin:
         process.env.NODE_ENV === 'development'
           ? '*'
-          : 'https://dmsp.ai.dev.rtd.asu.edu',
+          : 'https://dmsp.dev.rtd.asu.edu',
     })
   );
   app.use(express.json());

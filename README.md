@@ -92,8 +92,8 @@ This application is in Google Cloud, running on a Kubernetes cluster. This is wh
 To access this applicaiton:
 
 <strong>Development URLs</strong><br>
-https://dmsp.ai.dev.rtd.asu.edu (requires ASU VPN)<br>
-https://api.dmsp.ai.dev.rtd.asu.edu (requires ASU VPN and authentication with the API service)
+https://dmsp.dev.rtd.asu.edu (requires ASU VPN)<br>
+https://dmsp.dev.api.rtd.asu.edu (requires ASU VPN and authentication with the API service)
 
 <br>
 <br>
