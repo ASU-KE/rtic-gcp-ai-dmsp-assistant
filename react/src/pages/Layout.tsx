@@ -4,20 +4,30 @@ import { ASUHeader, ASUFooter, HeaderProps, Button, Logo } from '@asu/component-
 import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
 import { Outlet } from 'react-router-dom';
+import { Modal } from 'react-bootstrap';
+import { useState } from 'react';
+import { getUserInfo } from '../utils/auth';
 
 // Override HeaderProps to fix Typescript typing requirements
-export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLogo'> {
-  buttons?: Button[];
+export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLogo' | 'navTree'> {
+  buttons?: any[];
   partnerLogo?: Logo;
+  navTree?: any[];
 }
+const userInfo = getUserInfo() ?? { role: '', username: '' };
+const { role, username } = userInfo;
 
-const header: TsHeaderProps = {
-  title: 'DMSP AI Assistant',
-  loggedIn: false,
-  logoutLink: '#',
-  loginLink: '#',
-  userName: '',
-  navTree: [
+
+const manageUserItems = [
+  { href: "/signup", text: "Create User" },
+  { href: "/user/all", text: "View Users" },
+  { href: "/user/update", text: "Update User" },
+  { href: "/user/delete", text: "Delete User" },
+  { href: "/user/change-role", text: "Change User Role" },
+];
+
+const navTree = role === 'admin'
+  ? [
     {
       id: 1,
       href: '/',
@@ -30,7 +40,45 @@ const header: TsHeaderProps = {
       href: '/submit-text',
       text: 'Submit text',
     },
-  ],
+    {
+      text: "Manage Users",
+      href: "#",
+      items: [manageUserItems],
+    },
+  ]
+  : [
+    {
+      id: 1,
+      href: '/',
+      text: 'Home',
+      type: 'icon-home',
+      class: 'test-class',
+    },
+    {
+      id: 2,
+      href: '/submit-text',
+      text: 'Submit text',
+    },
+  ];
+
+const buttons = role !== 'admin'
+  ? [
+    {
+      href: '/user/update',
+      text: 'Update Profile',
+      color: 'gold',
+    },
+  ]
+  : [];
+
+const header: TsHeaderProps = {
+  title: 'DMSP AI Assistant',
+  loggedIn: true,
+  logoutLink: '/logout',
+  loginLink: '#',
+  userName: username,
+  navTree,
+  buttons,
   mobileNavTree: [
     {
       id: 1,

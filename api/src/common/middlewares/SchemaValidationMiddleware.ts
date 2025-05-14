@@ -27,12 +27,13 @@ export = {
       const ajv = new Ajv(AJV_OPTS);
       const validate = ajv.compile(schema);
       const isValid = validate(body);
+      console.log('isValid:', isValid);
 
       if (!isValid) {
-        res.send({
+        res.status(400).json({
           status: false,
           error: {
-            message: `Invalid Payload: ${ajv.errorsText(validate.errors)}`,
+            message: `Email must be a valid ASU email (e.g., abc@asu.edu).`,
           },
         });
         return;

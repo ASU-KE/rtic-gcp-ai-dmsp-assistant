@@ -10,13 +10,10 @@ const registerPayloadSchema = {
     },
     email: {
       type: 'string',
-      pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
+      pattern: '^[^\\s@]+@asu\\.edu$'
     },
     password: {
       type: 'string',
-    },
-    age: {
-      type: 'number',
     },
     firstName: {
       type: 'string',
@@ -29,7 +26,7 @@ const registerPayloadSchema = {
       enum: Object.values(roles),
     },
   },
-  required: ['username', 'email', 'password', 'age', 'firstName', 'lastName'],
+  required: ['username', 'email', 'password', 'firstName', 'lastName'],
   additionalProperties: false,
 } as const;
 

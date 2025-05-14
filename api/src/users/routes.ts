@@ -27,7 +27,7 @@ export default (userService: UserService) => {
   router.get('/', [isAuthenticatedMiddleware.check], userController.getUser);
 
   router.patch(
-    '/',
+    '/update',
     [
       isAuthenticatedMiddleware.check,
       SchemaValidationMiddleware.verify(updateUserPayload),
@@ -55,7 +55,7 @@ export default (userService: UserService) => {
   );
 
   router.delete(
-    '/:userId',
+    '/delete/:userId',
     [
       isAuthenticatedMiddleware.check,
       checkPermissionMiddleware.has(roles.ADMIN as Role),
