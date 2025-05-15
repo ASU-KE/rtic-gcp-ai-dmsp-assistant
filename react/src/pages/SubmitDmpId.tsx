@@ -11,7 +11,6 @@ import { DeleteUserModalContent } from '../pages/DeleteUserModalContent';
 import useWebSocket from 'react-use-websocket';
 import 'github-markdown-css/github-markdown-light.css';
 import html2pdf from 'html2pdf.js';
-import { SignUp } from './SignUp';
 import { DownloadIcon, CheckIcon, CopyIcon } from '../components/Icons';
 
 type FormValues = {

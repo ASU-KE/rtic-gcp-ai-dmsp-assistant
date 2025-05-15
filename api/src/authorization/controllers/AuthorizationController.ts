@@ -143,7 +143,7 @@ export default class AuthorizationController {
       .catch((err: Error) => {
         return res.status(500).json({
           status: false,
-          error: err,
+          error: err.message,
         });
       });
   };

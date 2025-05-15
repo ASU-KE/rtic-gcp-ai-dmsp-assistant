@@ -27,7 +27,6 @@ export = {
       const ajv = new Ajv(AJV_OPTS);
       const validate = ajv.compile(schema);
       const isValid = validate(body);
-      console.log('isValid:', isValid);
 
       if (!isValid) {
         res.status(400).json({

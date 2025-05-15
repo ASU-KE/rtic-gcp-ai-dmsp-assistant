@@ -45,6 +45,7 @@ services:
     environment:
       - VITE_BACKEND_DOMAIN=localhost
       - VITE_BACKEND_PORT=3001
+      - VITE_AUTH=local
     ports:
       - 3000:3000
     volumes:

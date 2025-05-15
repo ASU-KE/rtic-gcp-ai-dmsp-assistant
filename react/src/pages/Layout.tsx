@@ -17,6 +17,20 @@ export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLog
 const userInfo = getUserInfo() ?? { role: '', username: '' };
 const { role, username } = userInfo;
 
+const head = [
+  {
+  id: 1,
+    href: '/',
+      text: 'Home',
+        type: 'icon-home',
+          class: 'test-class',
+  },
+{
+  id: 2,
+    href: '/submit-text',
+      text: 'Submit text',
+  },
+]
 
 const manageUserItems = [
   { href: "/signup", text: "Create User" },
@@ -26,57 +40,24 @@ const manageUserItems = [
   { href: "/user/change-role", text: "Change User Role" },
 ];
 
-const navTree = role === 'admin'
-  ? [
-    {
-      id: 1,
-      href: '/',
-      text: 'Home',
-      type: 'icon-home',
-      class: 'test-class',
-    },
-    {
-      id: 2,
-      href: '/submit-text',
-      text: 'Submit text',
-    },
-    {
-      text: "Manage Users",
-      href: "#",
-      items: [manageUserItems],
-    },
-  ]
-  : [
-    {
-      id: 1,
-      href: '/',
-      text: 'Home',
-      type: 'icon-home',
-      class: 'test-class',
-    },
-    {
-      id: 2,
-      href: '/submit-text',
-      text: 'Submit text',
-    },
-  ];
+const isAuthEnabled = `${import.meta.env.VITE_AUTH}` === 'local';
 
-const buttons = role !== 'admin'
-  ? [
-    {
-      href: '/user/update',
-      text: 'Update Profile',
-      color: 'gold',
-    },
-  ]
+const navTree = isAuthEnabled
+  ? (role === 'admin'
+    ? [...head, { text: "Manage Users", href: "#", items: [manageUserItems] }]
+    : head)
+  : head;
+
+const buttons = isAuthEnabled && role !== 'admin'
+  ? [{ href: '/user/update', text: 'Update Profile', color: 'gold' }]
   : [];
 
 const header: TsHeaderProps = {
   title: 'DMSP AI Assistant',
-  loggedIn: true,
+  loggedIn: isAuthEnabled ? true : false,
   logoutLink: '/logout',
   loginLink: '#',
-  userName: username,
+  userName: isAuthEnabled ? username : '',
   navTree,
   buttons,
   mobileNavTree: [

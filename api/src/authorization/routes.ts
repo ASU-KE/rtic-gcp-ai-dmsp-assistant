@@ -6,6 +6,7 @@ import { UserService } from '../users/services/UserService';
 
 // Middleware Imports
 import SchemaValidationMiddleware from '../common/middlewares/SchemaValidationMiddleware';
+import isAuthenticatedMiddleware from './../common/middlewares/IsAuthenticatedMiddleware';
 
 // JSON Schema Imports for payload verification
 import registerPayload from './schemas/registerPayload';
@@ -18,7 +19,7 @@ const AuthorizationRoutes = (userService: UserService) => {
 
   router.post(
     '/signup',
-    [SchemaValidationMiddleware.verify(registerPayload)],
+    [isAuthenticatedMiddleware.check, SchemaValidationMiddleware.verify(registerPayload)],
     authorizationController.register
   );
 
