@@ -10,7 +10,7 @@ const registerPayloadSchema = {
     },
     email: {
       type: 'string',
-      pattern: '^[^\\s@]+@asu\\.edu$'
+      pattern: '^[^\\s@]+@asu\\.edu$',
     },
     password: {
       type: 'string',

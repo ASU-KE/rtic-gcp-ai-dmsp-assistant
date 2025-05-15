@@ -5,5 +5,5 @@ import { SignUp } from './SignUp';
 export const SignUpModalPage = () => {
   const navigate = useNavigate();
 
-  return <SignUp show={true} onClose={() => navigate(-1)} />
+  return <SignUp show={true} onClose={() => navigate(-1)} />;
 };

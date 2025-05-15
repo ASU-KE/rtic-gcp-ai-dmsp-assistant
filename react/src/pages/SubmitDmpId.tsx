@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
-import { Modal } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap';
 import { DeleteUserModalContent } from '../pages/DeleteUserModalContent';
 import useWebSocket from 'react-use-websocket';
 import 'github-markdown-css/github-markdown-light.css';
@@ -41,11 +41,16 @@ export function SubmitDmpId() {
     setValue,
   } = useForm<FormValues>({ mode: 'onSubmit' });
 
-  const { lastMessage } = useWebSocket(import.meta.env.PROD ? `wss://${import.meta.env.VITE_BACKEND_DOMAIN}` : `ws://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}`, {
-    onOpen: () => console.log('WebSocket connected'),
-    onClose: () => console.log('WebSocket disconnected'),
-    shouldReconnect: () => true,
-  });
+  const { lastMessage } = useWebSocket(
+    import.meta.env.PROD
+      ? `wss://${import.meta.env.VITE_BACKEND_DOMAIN}`
+      : `ws://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}`,
+    {
+      onOpen: () => console.log('WebSocket connected'),
+      onClose: () => console.log('WebSocket disconnected'),
+      shouldReconnect: () => true,
+    }
+  );
 
   useEffect(() => {
     if (contentEndRef.current) {
@@ -79,9 +84,14 @@ export function SubmitDmpId() {
   const { mutate } = useMutation<void, unknown, FormValues>({
     mutationFn: (values) => {
       return axios
-        .post(import.meta.env.PROD ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/dmp/id` : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/dmp/id`, {
-          dmpId: values.dmpId,
-        })
+        .post(
+          import.meta.env.PROD
+            ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/dmp/id`
+            : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/dmp/id`,
+          {
+            dmpId: values.dmpId,
+          }
+        )
         .then(() => {
           setSubmittedDmpId(values.dmpId);
         })
@@ -182,11 +192,7 @@ export function SubmitDmpId() {
                 }}
               />
               <Button type="submit" disabled={submissionInProgress} className="btn-custom-medium">
-                {showLoadingIndicator
-                  ? 'Submitting...'
-                  : submissionInProgress
-                    ? 'Submitted'
-                    : 'Submit'}
+                {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
               </Button>
             </div>
             {(errors.dmpId || apiError) && (
@@ -231,7 +237,12 @@ export function SubmitDmpId() {
                     {copied ? <CheckIcon /> : <CopyIcon />}
                     {copied ? 'Copied' : 'Copy'}
                   </Button>
-                  <Button size="sm" className="btn-custom-yellow" disabled={submissionInProgress} onClick={handleDownload}>
+                  <Button
+                    size="sm"
+                    className="btn-custom-yellow"
+                    disabled={submissionInProgress}
+                    onClick={handleDownload}
+                  >
                     {downloaded ? <CheckIcon /> : <DownloadIcon />}
                     {downloaded ? 'Downloaded' : 'Download'}
                   </Button>

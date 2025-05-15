@@ -59,12 +59,10 @@ export const ChangeUserRole = ({ onSuccess }: Props) => {
 
       <Form.Group className="mb-3">
         <Form.Label>Role</Form.Label>
-        <Form.Select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          required
-        >
-          <option value="" disabled>Select a role</option>
+        <Form.Select value={role} onChange={(e) => setRole(e.target.value)} required>
+          <option value="" disabled>
+            Select a role
+          </option>
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </Form.Select>

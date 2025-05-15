@@ -27,17 +27,13 @@ export default (userService: UserService) => {
 
   router.patch(
     '/update',
-    [
-      SchemaValidationMiddleware.verify(updateUserPayload),
-    ],
+    [SchemaValidationMiddleware.verify(updateUserPayload)],
     userController.updateUser
   );
 
   router.get(
     '/all',
-    [
-      checkPermissionMiddleware.has(roles.ADMIN as Role),
-    ],
+    [checkPermissionMiddleware.has(roles.ADMIN as Role)],
     userController.getAllUsers
   );
 
@@ -52,9 +48,7 @@ export default (userService: UserService) => {
 
   router.delete(
     '/delete/:userId',
-    [
-      checkPermissionMiddleware.has(roles.ADMIN as Role),
-    ],
+    [checkPermissionMiddleware.has(roles.ADMIN as Role)],
     userController.deleteUser
   );
 

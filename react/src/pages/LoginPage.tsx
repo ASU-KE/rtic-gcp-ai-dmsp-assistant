@@ -91,11 +91,7 @@ export const LoginPage = () => {
           </div>
 
           {errorMsg && (
-            <Alert
-              variant="danger"
-              onClose={() => setErrorMsg('')}
-              dismissible
-            >
+            <Alert variant="danger" onClose={() => setErrorMsg('')} dismissible>
               {errorMsg}
             </Alert>
           )}

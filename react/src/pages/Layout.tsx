@@ -19,38 +19,37 @@ const { role, username } = userInfo;
 
 const head = [
   {
-  id: 1,
+    id: 1,
     href: '/',
-      text: 'Home',
-        type: 'icon-home',
-          class: 'test-class',
+    text: 'Home',
+    type: 'icon-home',
+    class: 'test-class',
   },
-{
-  id: 2,
+  {
+    id: 2,
     href: '/submit-text',
-      text: 'Submit text',
+    text: 'Submit text',
   },
-]
+];
 
 const manageUserItems = [
-  { href: "/signup", text: "Create User" },
-  { href: "/user/all", text: "View Users" },
-  { href: "/user/update", text: "Update User" },
-  { href: "/user/delete", text: "Delete User" },
-  { href: "/user/change-role", text: "Change User Role" },
+  { href: '/signup', text: 'Create User' },
+  { href: '/user/all', text: 'View Users' },
+  { href: '/user/update', text: 'Update User' },
+  { href: '/user/delete', text: 'Delete User' },
+  { href: '/user/change-role', text: 'Change User Role' },
 ];
 
 const isAuthEnabled = `${import.meta.env.VITE_AUTH}` === 'local';
 
 const navTree = isAuthEnabled
-  ? (role === 'admin'
-    ? [...head, { text: "Manage Users", href: "#", items: [manageUserItems] }]
-    : head)
+  ? role === 'admin'
+    ? [...head, { text: 'Manage Users', href: '#', items: [manageUserItems] }]
+    : head
   : head;
 
-const buttons = isAuthEnabled && role !== 'admin'
-  ? [{ href: '/user/update', text: 'Update Profile', color: 'gold' }]
-  : [];
+const buttons =
+  isAuthEnabled && role !== 'admin' ? [{ href: '/user/update', text: 'Update Profile', color: 'gold' }] : [];
 
 const header: TsHeaderProps = {
   title: 'DMSP AI Assistant',
@@ -87,7 +86,7 @@ const header: TsHeaderProps = {
   isPartner: false,
   animateTitle: true,
   expandOnHover: true,
-}
+};
 
 const footer = {};
 

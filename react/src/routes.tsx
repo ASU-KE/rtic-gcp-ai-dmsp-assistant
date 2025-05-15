@@ -16,36 +16,36 @@ const isAuthEnabled = `${import.meta.env.VITE_AUTH}` === 'local';
 export const routers = createBrowserRouter(
   !isAuthEnabled
     ? [
-      {
-        path: '/',
-        element: <Layout />,
-        children: [
-          { index: true, element: <SubmitDmpId /> },
-          { path: 'submit-text', element: <SubmitDmpText /> },
-        ],
-      },
-      { path: '*', element: <Navigate to="/" replace /> },
-    ]
+        {
+          path: '/',
+          element: <Layout />,
+          children: [
+            { index: true, element: <SubmitDmpId /> },
+            { path: 'submit-text', element: <SubmitDmpText /> },
+          ],
+        },
+        { path: '*', element: <Navigate to="/" replace /> },
+      ]
     : [
-      { path: '/login', element: <LoginPage /> },
-      { path: '/logout', element: <LogoutPage /> },
-      {
-        element: <RequireAuth />,
-        children: [
-          {
-            path: '/',
-            element: <Layout />,
-            children: [
-              { index: true, element: <SubmitDmpId /> },
-              { path: 'submit-text', element: <SubmitDmpText /> },
-              { path: '/signup', element: <SignUpModalPage /> },
-              { path: '/user/delete', element: <DeleteUserModalPage /> },
-              { path: '/user/update', element: <UpdateUserModalPage /> },
-              { path: '/user/all', element: <ViewUsersModalPage /> },
-              { path: '/user/change-role', element: <ChangeUserRoleModalPage /> },
-            ],
-          },
-        ],
-      },
-    ]
+        { path: '/login', element: <LoginPage /> },
+        { path: '/logout', element: <LogoutPage /> },
+        {
+          element: <RequireAuth />,
+          children: [
+            {
+              path: '/',
+              element: <Layout />,
+              children: [
+                { index: true, element: <SubmitDmpId /> },
+                { path: 'submit-text', element: <SubmitDmpText /> },
+                { path: '/signup', element: <SignUpModalPage /> },
+                { path: '/user/delete', element: <DeleteUserModalPage /> },
+                { path: '/user/update', element: <UpdateUserModalPage /> },
+                { path: '/user/all', element: <ViewUsersModalPage /> },
+                { path: '/user/change-role', element: <ChangeUserRoleModalPage /> },
+              ],
+            },
+          ],
+        },
+      ]
 );

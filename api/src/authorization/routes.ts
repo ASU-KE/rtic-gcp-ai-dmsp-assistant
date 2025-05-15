@@ -19,7 +19,10 @@ const AuthorizationRoutes = (userService: UserService) => {
 
   router.post(
     '/signup',
-    [isAuthenticatedMiddleware.check, SchemaValidationMiddleware.verify(registerPayload)],
+    [
+      isAuthenticatedMiddleware.check,
+      SchemaValidationMiddleware.verify(registerPayload),
+    ],
     authorizationController.register
   );
 

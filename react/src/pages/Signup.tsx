@@ -65,7 +65,7 @@ export const SignUp = ({ show, onClose }: SignUpProps) => {
       <Modal.Header closeButton className="custom-modal-header">
         <Modal.Title className="custom-modal-title">Create a New User Account</Modal.Title>
       </Modal.Header>
-      <Modal.Body >
+      <Modal.Body>
         <Card className="p-4 shadow rounded border-0">
           <div className="text-center mb-3">
             <img src={horizAsuLogo} alt="ASU Logo" height="60" />
@@ -74,13 +74,27 @@ export const SignUp = ({ show, onClose }: SignUpProps) => {
           <Form onSubmit={handleSignup}>
             <Form.Group className="mb-3">
               <Form.Label>Username</Form.Label>
-              <Form.Control name="username" value={form.username} placeholder="Enter username" onChange={handleChange} required />
+              <Form.Control
+                name="username"
+                value={form.username}
+                placeholder="Enter username"
+                onChange={handleChange}
+                required
+              />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" value={form.email} name="email" placeholder="Enter email" onChange={handleChange} required pattern="^[a-zA-Z0-9._%+-]+@asu\.edu$"
-                title="Please enter a valid ASU email (e.g., user@asu.edu)" />
+              <Form.Control
+                type="email"
+                value={form.email}
+                name="email"
+                placeholder="Enter email"
+                onChange={handleChange}
+                required
+                pattern="^[a-zA-Z0-9._%+-]+@asu\.edu$"
+                title="Please enter a valid ASU email (e.g., user@asu.edu)"
+              />
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -115,12 +129,24 @@ export const SignUp = ({ show, onClose }: SignUpProps) => {
 
             <Form.Group className="mb-3">
               <Form.Label>First Name</Form.Label>
-              <Form.Control value={form.firstName} placeholder="Enter first name" name="firstName" onChange={handleChange} required />
+              <Form.Control
+                value={form.firstName}
+                placeholder="Enter first name"
+                name="firstName"
+                onChange={handleChange}
+                required
+              />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control value={form.lastName} placeholder="Enter last name" name="lastName" onChange={handleChange} required />
+              <Form.Control
+                value={form.lastName}
+                placeholder="Enter last name"
+                name="lastName"
+                onChange={handleChange}
+                required
+              />
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -135,7 +161,8 @@ export const SignUp = ({ show, onClose }: SignUpProps) => {
             {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}
 
             <div className="d-flex justify-content-between mt-3">
-              <Button className="btn-custom-medium"
+              <Button
+                className="btn-custom-medium"
                 type="reset"
                 onClick={() =>
                   setForm({

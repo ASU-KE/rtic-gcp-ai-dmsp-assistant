@@ -27,11 +27,15 @@ export const configurePassport = (userService: UserService) => {
       (payload: JwtPayload, done: VerifiedCallback) => {
         userService
           .findUser({ id: payload.userId })
-          .then((user) => (user ? done(null, {
-            userId: user.id,
-            username: user.username,
-            role: user.role,
-          }) : done(null, false)))
+          .then((user) =>
+            user
+              ? done(null, {
+                  userId: user.id,
+                  username: user.username,
+                  role: user.role,
+                })
+              : done(null, false)
+          )
           .catch((err) => done(err, false));
       }
     )

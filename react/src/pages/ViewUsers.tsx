@@ -36,38 +36,38 @@ export const ViewUsers = () => {
     <>
       {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}
       <div style={{ maxHeight: '390px', overflowY: 'auto' }}>
-      <Table striped bordered hover responsive>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.length === 0 ? (
+        <Table striped bordered hover responsive>
+          <thead>
             <tr>
-              <td colSpan={5} className="text-center">
-                No users found.
-              </td>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Role</th>
             </tr>
-          ) : (
-            users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
-                <td>{user.firstName ?? '-'}</td>
-                <td>{user.lastName ?? '-'}</td>
-                <td>{user.role}</td>
+          </thead>
+          <tbody>
+            {users.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="text-center">
+                  No users found.
+                </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </Table>
+            ) : (
+              users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.id}</td>
+                  <td>{user.username}</td>
+                  <td>{user.email}</td>
+                  <td>{user.firstName ?? '-'}</td>
+                  <td>{user.lastName ?? '-'}</td>
+                  <td>{user.role}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </Table>
       </div>
     </>
   );

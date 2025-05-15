@@ -78,7 +78,11 @@ export default class AuthorizationController {
         });
       })
       .catch((err: HttpError) => {
-        if (err.code === '23505' || err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
+        if (
+          err.code === '23505' ||
+          err.code === 'ER_DUP_ENTRY' ||
+          err.errno === 1062
+        ) {
           return res.status(400).json({
             status: false,
             error: {

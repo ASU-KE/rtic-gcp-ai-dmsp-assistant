@@ -76,7 +76,7 @@ export const DeleteUserModalContent = ({ onSuccess }: Props) => {
         <Modal.Header closeButton>
           <Modal.Title className="custom-modal-title">Confirm Deletion</Modal.Title>
         </Modal.Header>
-        <Modal.Body className='custom-modal-body'>
+        <Modal.Body className="custom-modal-body">
           Are you sure you want to delete user ID <strong>{userId}</strong>?
         </Modal.Body>
         <Modal.Footer>
