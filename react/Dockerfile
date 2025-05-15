@@ -56,4 +56,7 @@ FROM nginx:1.28-alpine
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
+COPY env.sh /docker-entrypoint.d/env.sh
+RUN chmod +x /docker-entrypoint.d/env.sh
+
 COPY --from=builder /code/dist /usr/share/nginx/html
