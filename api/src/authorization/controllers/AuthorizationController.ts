@@ -17,11 +17,13 @@ const jwtExpirationInSeconds = parseInt(
 const generateAccessToken = (user: {
   id: number;
   username: string;
+  role?: string;
 }): string => {
   return jwt.sign(
     {
       userId: user.id,
       username: user.username,
+      role: user.role,
     },
     jwtSecret,
     {
@@ -64,6 +66,7 @@ export default class AuthorizationController {
         const accessToken = generateAccessToken({
           id: user.id,
           username: user.username,
+          role: user.role,
         });
 
         return res.status(200).json({
@@ -74,7 +77,20 @@ export default class AuthorizationController {
           },
         });
       })
-      .catch((err: Error) => {
+      .catch((err: HttpError) => {
+        if (
+          err.code === '23505' ||
+          err.code === 'ER_DUP_ENTRY' ||
+          err.errno === 1062
+        ) {
+          return res.status(400).json({
+            status: false,
+            error: {
+              message: 'A user with that email or username already exists.',
+            },
+          });
+        }
+
         return res.status(500).json({
           status: false,
           error: err,
@@ -117,6 +133,7 @@ export default class AuthorizationController {
         const accessToken = generateAccessToken({
           id: user.id,
           username: user.username,
+          role: user.role,
         });
 
         return res.status(200).json({
@@ -130,7 +147,7 @@ export default class AuthorizationController {
       .catch((err: Error) => {
         return res.status(500).json({
           status: false,
-          error: err,
+          error: err.message,
         });
       });
   };

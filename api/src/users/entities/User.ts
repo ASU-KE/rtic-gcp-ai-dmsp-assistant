@@ -15,9 +15,6 @@ export class User {
   @Column()
   password!: string;
 
-  @Column('int')
-  age!: number;
-
   @Column({ default: config.roles.USER })
   role!: string;
 

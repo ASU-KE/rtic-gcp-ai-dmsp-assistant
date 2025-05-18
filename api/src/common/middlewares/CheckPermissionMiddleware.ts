@@ -7,6 +7,7 @@ interface AuthenticatedRequest extends Request {
   user?: {
     userId: number; // use number if your JWT sets it that way
     username: string;
+    role?: string;
   };
 }
 
@@ -36,7 +37,7 @@ export function CheckPermissionMiddleware(userService: UserService) {
       if (foundUser.role !== role) {
         res.status(403).json({
           status: false,
-          error: `You need to be a ${role} to access this endpoint.`,
+          error: `Unauthorized: This endpoint is restricted to users with the '${role}' role.`,
         });
         return;
       }

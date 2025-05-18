@@ -1,7 +1,6 @@
 import { Router } from 'express';
 
 // Middleware Imports
-import isAuthenticatedMiddleware from './../common/middlewares/IsAuthenticatedMiddleware';
 import SchemaValidationMiddleware from '../common/middlewares/SchemaValidationMiddleware';
 import { CheckPermissionMiddleware } from '../common/middlewares/CheckPermissionMiddleware';
 
@@ -24,30 +23,23 @@ export default (userService: UserService) => {
   const userController = new UserController(userService);
   const checkPermissionMiddleware = CheckPermissionMiddleware(userService);
 
-  router.get('/', [isAuthenticatedMiddleware.check], userController.getUser);
+  router.get('/', userController.getUser);
 
   router.patch(
-    '/',
-    [
-      isAuthenticatedMiddleware.check,
-      SchemaValidationMiddleware.verify(updateUserPayload),
-    ],
+    '/update',
+    [SchemaValidationMiddleware.verify(updateUserPayload)],
     userController.updateUser
   );
 
   router.get(
     '/all',
-    [
-      isAuthenticatedMiddleware.check,
-      checkPermissionMiddleware.has(roles.ADMIN as Role),
-    ],
+    [checkPermissionMiddleware.has(roles.ADMIN as Role)],
     userController.getAllUsers
   );
 
   router.patch(
     '/change-role/:userId',
     [
-      isAuthenticatedMiddleware.check,
       checkPermissionMiddleware.has(roles.ADMIN as Role),
       SchemaValidationMiddleware.verify(changeRolePayload),
     ],
@@ -55,11 +47,8 @@ export default (userService: UserService) => {
   );
 
   router.delete(
-    '/:userId',
-    [
-      isAuthenticatedMiddleware.check,
-      checkPermissionMiddleware.has(roles.ADMIN as Role),
-    ],
+    '/delete/:userId',
+    [checkPermissionMiddleware.has(roles.ADMIN as Role)],
     userController.deleteUser
   );
 

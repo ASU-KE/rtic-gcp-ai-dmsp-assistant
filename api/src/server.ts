@@ -1,4 +1,4 @@
-import express, { Request, Response, Application } from 'express';
+import express, { Application } from 'express';
 import Rollbar from 'rollbar';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -9,6 +9,7 @@ import AuthorizationRoutes from './authorization/routes';
 import UserRoutes from './users/routes';
 import DmpRoutes from './dmp/routes';
 import TestRoutes from './test/routes';
+import isAuthenticatedMiddleware from './common/middlewares/IsAuthenticatedMiddleware';
 import { UserService } from './users/services/UserService';
 
 export function createApp(
@@ -33,9 +34,9 @@ export function createApp(
   app.use(express.json());
 
   app.use('/', AuthorizationRoutes(userService));
-  app.use('/user', UserRoutes(userService));
+  app.use('/user', [isAuthenticatedMiddleware.check], UserRoutes(userService));
   app.use('/dmp', DmpRoutes);
-  app.use('/test', TestRoutes);
+  app.use('/test', [isAuthenticatedMiddleware.check], TestRoutes);
 
   // Health-check endpoint
   // app.get('/healthz', (req: Request, res: Response) => {

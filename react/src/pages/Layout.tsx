@@ -4,33 +4,61 @@ import { ASUHeader, ASUFooter, HeaderProps, Button, Logo } from '@asu/component-
 import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
 import { Outlet } from 'react-router-dom';
+import { Modal } from 'react-bootstrap';
+import { useState } from 'react';
+import { getUserInfo } from '../utils/auth';
 
 // Override HeaderProps to fix Typescript typing requirements
-export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLogo'> {
-  buttons?: Button[];
+export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLogo' | 'navTree'> {
+  buttons?: any[];
   partnerLogo?: Logo;
+  navTree?: any[];
 }
+const userInfo = getUserInfo() ?? { role: '', username: '' };
+const { role, username } = userInfo;
+
+const head = [
+  {
+    id: 1,
+    href: '/',
+    text: 'Home',
+    type: 'icon-home',
+    class: 'test-class',
+  },
+  {
+    id: 2,
+    href: '/submit-text',
+    text: 'Submit text',
+  },
+];
+
+const manageUserItems = [
+  { href: '/signup', text: 'Create User' },
+  { href: '/user/all', text: 'View Users' },
+  { href: '/user/update', text: 'Update User' },
+  { href: '/user/delete', text: 'Delete User' },
+  { href: '/user/change-role', text: 'Change User Role' },
+];
+
+const isAuthEnabled = `${import.meta.env.VITE_AUTH}` === 'local';
+
+const navTree = isAuthEnabled
+  ? role === 'admin'
+    ? [...head, { text: 'Manage Users', href: '#', items: [manageUserItems] }]
+    : head
+  : head;
+
+const buttons =
+  isAuthEnabled && role !== 'admin' ? [{ href: '/user/update', text: 'Update Profile', color: 'gold' }] : [];
 
 const header: TsHeaderProps = {
   title: 'DMSP AI Assistant',
-  loggedIn: false,
-  logoutLink: '#',
+  loggedIn: isAuthEnabled ? true : false,
+  logoutLink: '/logout',
   loginLink: '#',
-  userName: '',
-  navTree: [
-    {
-      id: 1,
-      href: '/',
-      text: 'Home',
-      type: 'icon-home',
-      class: 'test-class',
-    },
-    {
-      id: 2,
-      href: '/submit-text',
-      text: 'Submit text',
-    },
-  ],
+  userName: isAuthEnabled ? username : '',
+  navTree,
+  buttons,
   mobileNavTree: [
     {
       id: 1,
@@ -58,7 +86,7 @@ const header: TsHeaderProps = {
   isPartner: false,
   animateTitle: true,
   expandOnHover: true,
-}
+};
 
 const footer = {};
 
