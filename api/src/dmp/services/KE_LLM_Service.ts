@@ -35,6 +35,8 @@ export default {
       );
 
       let fullResponse = '';
+      let timeoutChunk: string | null = null;
+      let receivedValidChunk = false;
 
       upstream.on('open', () => {
         upstream.send(
@@ -63,6 +65,17 @@ export default {
           console.warn('Unknown data format received in WebSocket message');
         }
 
+        try {
+          const parsedInner = JSON.parse(chunk) as { message?: string };
+          if (parsedInner.message === 'Endpoint request timed out') {
+            timeoutChunk = JSON.stringify({ chunk });
+            return;
+          }
+        } catch {
+          // Ignore JSON parsing error
+        }
+        receivedValidChunk = true
+
         fullResponse += chunk;
 
         const message = JSON.stringify({ chunk });
@@ -82,6 +95,9 @@ export default {
 
       upstream.on('close', () => {
         console.log('WebSocket connection closed');
+        if (!receivedValidChunk && timeoutChunk && ws?.readyState === WebSocket.OPEN) {
+          ws.send(timeoutChunk);
+        }
         resolve({ response: fullResponse, metadata: {} });
       });
 
