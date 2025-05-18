@@ -11,7 +11,7 @@ import { ChangeUserRoleModalPage } from './pages/ChangeUserRoleModalPage';
 import { UpdateUserModalPage } from './pages/UpdateUserModalPage';
 import { ViewUsersModalPage } from './pages/ViewUsersModalPage';
 
-const isAuthEnabled = `${import.meta.env.VITE_AUTH}` === 'local';
+const isAuthEnabled = `${import.meta.env.VITE_BACKEND_AUTH}` === 'local';
 
 export const routers = createBrowserRouter(
   !isAuthEnabled

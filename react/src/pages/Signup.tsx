@@ -34,10 +34,16 @@ export const SignUp = ({ show, onClose }: SignUpProps) => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/signup', {
-        ...form,
-      });
-      const { token } = response.data;
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        'http://localhost:3001/signup',
+        {
+          ...form,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setSuccessMsg('User created successfully!');
       setErrorMsg('');
       setForm({

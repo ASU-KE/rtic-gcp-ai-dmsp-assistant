@@ -45,7 +45,7 @@ steps:
       'DOCKER_BUILDKIT=1',
       'VITE_BACKEND_DOMAIN=dmsp.dev.api.rtd.asu.edu',
       'VITE_BACKEND_PORT=443',
-      'VITE_AUTH=local',
+      'VITE_BACKEND_AUTH=local',
     ]
     secretEnv: ['NPM_TOKEN']
     dir: 'react'

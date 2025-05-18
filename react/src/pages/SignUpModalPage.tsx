@@ -1,6 +1,6 @@
 import { Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { SignUp } from './SignUp';
+import { SignUp } from './Signup';
 
 export const SignUpModalPage = () => {
   const navigate = useNavigate();
