@@ -42,10 +42,10 @@ services:
     build:
       context: react
       target: development
-    environment:
-      - VITE_BACKEND_DOMAIN=localhost
-      - VITE_BACKEND_PORT=3001
-      - VITE_AUTH=local
+      args:
+        - APP_BACKEND_DOMAIN=localhost
+        - APP_BACKEND_PORT=3001
+        - APP_FRONTEND_AUTH=local
     ports:
       - 3000:3000
     volumes:

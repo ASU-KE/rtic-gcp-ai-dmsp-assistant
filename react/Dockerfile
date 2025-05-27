@@ -5,16 +5,17 @@
 FROM node:22.15-bookworm AS development
 
 ARG NPM_TOKEN
+ARG APP_BACKEND_DOMAIN
+ARG APP_BACKEND_PORT
+ARG APP_FRONTEND_AUTH
 
 ENV CI=true
 ENV PORT=3000
 ENV APP_HOME="/code"
 
-ARG VITE_BACKEND_DOMAIN
-ARG VITE_BACKEND_PORT
-
-ENV VITE_BACKEND_DOMAIN=${VITE_BACKEND_DOMAIN}
-ENV VITE_BACKEND_PORT=${VITE_BACKEND_PORT}
+ENV VITE_BACKEND_DOMAIN=${APP_BACKEND_DOMAIN}
+ENV VITE_BACKEND_PORT=${APP_BACKEND_PORT}
+ENV VITE_FRONTEND_AUTH=${APP_FRONTEND_AUTH}
 
 WORKDIR ${APP_HOME}
 
@@ -55,8 +56,5 @@ CMD [ "npm", "start" ]
 FROM nginx:1.28-alpine
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-
-COPY env.sh /docker-entrypoint.d/env.sh
-RUN chmod +x /docker-entrypoint.d/env.sh
 
 COPY --from=builder /code/dist /usr/share/nginx/html
