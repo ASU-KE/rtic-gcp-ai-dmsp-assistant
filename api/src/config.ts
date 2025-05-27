@@ -106,8 +106,8 @@ const config: Config = {
     queryLlmWebsocketEndpoint: 'wss://apiws-main-beta.aiml.asu.edu',
   },
   llmOptions: {
-    modelProvider: 'openai', // string (Required): "aws", "openai", "gcp", "gcp-deepmind", "azure"
-    modelName: 'gpt4o', // string (Required)
+    modelProvider: 'gcp-deepmind', // string (Required): "aws", "openai", "gcp", "gcp-deepmind", "azure"
+    modelName: 'gemini2flash', // string (Required)
     modelParams: {
       temperature: 0.1, // float (Optional): 0-0.99 (model specific parameter) Randomness and Diversity parameter. Use a lower value to decrease randomness in the response.
       maxTokens: null, // int (Optional): refer to model specific parameters below. The maximum number of tokens in the generated response.
