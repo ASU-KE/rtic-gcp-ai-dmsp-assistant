@@ -40,8 +40,12 @@ COPY --from=gloursdocker/docker / /
 CMD [ "npm", "start" ]
 
 # Stage 3 - Build optimized production deployment
-FROM nginx:1.28-alpine
+FROM node:22-alpine
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-COPY --from=builder /code/dist /usr/share/nginx/html
+COPY --from=builder /code/dist ./dist
+
+ENV NODE_ENV=production
+
+CMD ["node", "dist/index.js"]
