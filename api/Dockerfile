@@ -19,8 +19,7 @@ RUN npm ci
 COPY . /code
 
 # Build application
-RUN npm run clean
-RUN npm run compile
+RUN npm run build
 
 # Stage 2 - Build optimized environment with Docker dev tools
 FROM builder AS dev-envs
