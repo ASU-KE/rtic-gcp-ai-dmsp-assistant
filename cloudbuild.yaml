@@ -2,11 +2,12 @@ steps:
   # Build the Docker image for ai-dmsp-api
   - id: docker build ai-dmsp-api
     name: "gcr.io/cloud-builders/docker"
-    entrypoint: 'bash'
     args:
       [
-        '-c',
-        'docker build --build-arg DB_HOST=$$DB_HOST --build-arg DB_PASSWORD=$$DB_PASSWORD --build-arg DB_NAME=$$DB_NAME --build-arg DB_USER=$$DB_USER --build-arg ROLLBAR_TOKEN=$$ROLLBAR_TOKEN --build-arg JWT_SECRET=$$JWT_SECRET --build-arg JWT_EXPIRATION=$$JWT_EXPIRATION --build-arg DMPTOOL_CLIENT_ID=$$DMPTOOL_CLIENT_ID --build-arg DMPTOOL_CLIENT_SECRET=$$DMPTOOL_CLIENT_SECRET --build-arg LLM_ACCESS_SECRET=$$LLM_ACCESS_SECRET -t us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID .',
+        "build",
+        "-t",
+        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID",
+        ".",
       ]
     env: [
       'DOCKER_BUILDKIT=1',
