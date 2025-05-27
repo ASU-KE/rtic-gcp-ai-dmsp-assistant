@@ -1,9 +1,9 @@
 import { Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { SignUp } from './SignUp';
+import { Signup } from './Signup';
 
-export const SignUpModalPage = () => {
+export const SignupModalPage = () => {
   const navigate = useNavigate();
 
-  return <SignUp show={true} onClose={() => navigate(-1)} />;
+  return <Signup show={true} onClose={() => navigate(-1)} />;
 };

@@ -6,7 +6,7 @@ import { LoginPage } from './pages/LoginPage';
 import { LogoutPage } from './pages/LogoutPage';
 import { RequireAuth } from './components/RequireAuth';
 import { DeleteUserModalPage } from './pages/DeleteUserModalPage';
-import { SignUpModalPage } from './pages/SignUpModalPage';
+import { SignupModalPage } from './pages/SignupModalPage';
 import { ChangeUserRoleModalPage } from './pages/ChangeUserRoleModalPage';
 import { UpdateUserModalPage } from './pages/UpdateUserModalPage';
 import { ViewUsersModalPage } from './pages/ViewUsersModalPage';
@@ -38,7 +38,7 @@ export const routers = createBrowserRouter(
               children: [
                 { index: true, element: <SubmitDmpId /> },
                 { path: 'submit-text', element: <SubmitDmpText /> },
-                { path: '/signup', element: <SignUpModalPage /> },
+                { path: '/signup', element: <SignupModalPage /> },
                 { path: '/user/delete', element: <DeleteUserModalPage /> },
                 { path: '/user/update', element: <UpdateUserModalPage /> },
                 { path: '/user/all', element: <ViewUsersModalPage /> },

@@ -7,12 +7,12 @@ import '../App.css';
 import eyeIcon from '../assets/hide.png';
 import eyeOffIcon from '../assets/unhide.png';
 
-interface SignUpProps {
+interface SignupProps {
   show: boolean;
   onClose: () => void;
 }
 
-export const SignUp = ({ show, onClose }: SignUpProps) => {
+export const Signup = ({ show, onClose }: SignupProps) => {
   const [form, setForm] = useState({
     username: '',
     email: '',

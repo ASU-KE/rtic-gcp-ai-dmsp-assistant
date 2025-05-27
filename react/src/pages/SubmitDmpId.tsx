@@ -25,7 +25,7 @@ export function SubmitDmpId() {
   const [downloaded, setDownloaded] = useState(false);
   const [submittedDmpId, setSubmittedDmpId] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [showSignUp, setShowSignUp] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const lastChunkRef = useRef('');
