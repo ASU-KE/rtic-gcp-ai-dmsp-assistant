@@ -41,7 +41,7 @@ export function SubmitDmpId() {
     setValue,
   } = useForm<FormValues>({ mode: 'onSubmit' });
 
-  console.log("VITE_BACKEND_DOMAIN:", import.meta.env.VITE_BACKEND_DOMAIN);
+  console.log('VITE_BACKEND_DOMAIN:', import.meta.env.VITE_BACKEND_DOMAIN);
 
   const { lastMessage } = useWebSocket(
     import.meta.env.PROD
