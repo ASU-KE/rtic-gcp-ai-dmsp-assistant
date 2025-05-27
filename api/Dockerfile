@@ -39,13 +39,25 @@ EOF
 COPY --from=gloursdocker/docker / /
 CMD [ "npm", "start" ]
 
-# Stage 3 - Build optimized production deployment
-FROM node:22-alpine
+# Stage 3 - Production-optimized final image
+FROM node:22.16-bookworm-slim AS production
 
-WORKDIR /app
+WORKDIR /code
 
-COPY --from=builder /code/dist ./dist
+# Only copy production dependencies
+COPY --from=builder /code/package.json /code/package.json
+COPY --from=builder /code/package-lock.json /code/package-lock.json
+RUN npm ci --omit=dev
+
+# Copy built application
+COPY --from=builder /code/dist /code/dist
+
+# Copy any other necessary files (e.g., static assets, config)
+# COPY --from=builder /code/public /code/public
 
 ENV NODE_ENV=production
+ARG PORT=3001
+ENV PORT=$PORT
+EXPOSE $PORT
 
-CMD ["node", "dist/index.js"]
+CMD [ "node", "dist/index.js" ]
