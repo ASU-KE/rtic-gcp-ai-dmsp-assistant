@@ -9,7 +9,21 @@ steps:
         "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID",
         ".",
       ]
-    env: ['DOCKER_BUILDKIT=1']
+    env: [
+      'DOCKER_BUILDKIT=1',
+      'DB_HOST=127.0.0.1',
+      'DB_NAME=rtic-dev-ai-dmsp-db',
+      'DB_USER=rtic-dev-ai-dmsp-user',
+      'JWT_EXPIRATION=3600',
+    ]
+    secretEnv: [
+      'DB_PASSWORD',
+      'ROLLBAR_TOKEN',
+      'JWT_SECRET',
+      'DMPTOOL_CLIENT_ID',
+      'DMPTOOL_CLIENT_SECRET',
+      'LLM_ACCESS_SECRET',
+    ]
     dir: 'api'
 
   # Push the image to GCR
@@ -114,3 +128,15 @@ availableSecrets:
   secretManager:
   - versionName: projects/$PROJECT_ID/secrets/dev-ai-dmsp-secret-npmrc-token/versions/latest
     env: 'NPM_TOKEN'
+  - versionName: projects/$PROJECT_ID/secrets/dev-ai-dmsp-secret-db-password/versions/latest
+    env: 'DB_PASSWORD'
+  - versionName: projects/$PROJECT_ID/secrets/dev-ai-dmsp-secret-rollbar-token/versions/latest
+    env: 'ROLLBAR_TOKEN'
+  - versionName: projects/$PROJECT_ID/secrets/dev-ai-dmsp-secret-jwt-secret/versions/latest
+    env: 'JWT_SECRET'
+  - versionName: projects/$PROJECT_ID/secrets/dev-ai-dmsp-secret-dmptool-client-id/versions/latest
+    env: 'DMPTOOL_CLIENT_ID'
+  - versionName: projects/$PROJECT_ID/secrets/dev-ai-dmsp-secret-dmptool-client-secret/versions/latest
+    env: 'DMPTOOL_CLIENT_SECRET'
+  - versionName: projects/$PROJECT_ID/secrets/dev-ai-dmsp-secret-llm-access-secret/versions/latest
+    env: 'LLM_ACCESS_SECRET'
