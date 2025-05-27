@@ -6,7 +6,7 @@ import { LoginPage } from './pages/LoginPage';
 import { LogoutPage } from './pages/LogoutPage';
 import { RequireAuth } from './components/RequireAuth';
 import { DeleteUserModalPage } from './pages/DeleteUserModalPage';
-import { SignupModalPage } from './pages/SignupModalPage';
+import { SignupModalPage } from './pages/SignupModal';
 import { ChangeUserRoleModalPage } from './pages/ChangeUserRoleModalPage';
 import { UpdateUserModalPage } from './pages/UpdateUserModalPage';
 import { ViewUsersModalPage } from './pages/ViewUsersModalPage';
