@@ -2,7 +2,7 @@
 
 # Multi-stage Image Build
 # Stage 1 - Clean-Install node packages and compile TS code
-FROM node:22.15-bookworm AS builder
+FROM node:22.16-bookworm AS builder
 
 WORKDIR /code
 
