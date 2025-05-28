@@ -2,11 +2,11 @@ services:
   api:
     build:
       args:
-      - NODE_ENV=development
+        - NODE_ENV=development
       context: api
       target: dev-envs
     command: npm run start:watch
-    env_file: "./api/.env"
+    env_file: "./secrets/.env.backend"
     environment:
       - NODE_ENV=development
     ports:
@@ -42,7 +42,10 @@ services:
     build:
       context: react
       target: development
-    env_file: "./react/.env"
+      args:
+        - APP_BACKEND_DOMAIN=localhost
+        - APP_BACKEND_PORT=3001
+        - APP_FRONTEND_AUTH=local
     ports:
       - 3000:3000
     volumes:

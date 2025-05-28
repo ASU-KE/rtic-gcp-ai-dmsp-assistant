@@ -40,7 +40,7 @@ const manageUserItems = [
   { href: '/user/change-role', text: 'Change User Role' },
 ];
 
-const isAuthEnabled = `${import.meta.env.VITE_BACKEND_AUTH}` === 'local';
+const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
 
 const navTree = isAuthEnabled
   ? role === 'admin'

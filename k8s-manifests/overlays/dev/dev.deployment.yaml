@@ -45,6 +45,11 @@ spec:
           env:
             - name: API_PORT
               value: "3001"
+            - name: ROLLBAR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: ROLLBAR_TOKEN
+                  name: ai-dmsp-secret
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:

@@ -25,7 +25,7 @@ export function SubmitDmpId() {
   const [downloaded, setDownloaded] = useState(false);
   const [submittedDmpId, setSubmittedDmpId] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [showSignUp, setShowSignUp] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const lastChunkRef = useRef('');
@@ -40,6 +40,8 @@ export function SubmitDmpId() {
     clearErrors,
     setValue,
   } = useForm<FormValues>({ mode: 'onSubmit' });
+
+  console.log('VITE_BACKEND_DOMAIN:', import.meta.env.VITE_BACKEND_DOMAIN);
 
   const { lastMessage } = useWebSocket(
     import.meta.env.PROD

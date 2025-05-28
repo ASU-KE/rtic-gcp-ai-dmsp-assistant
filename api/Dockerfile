@@ -2,7 +2,7 @@
 
 # Multi-stage Image Build
 # Stage 1 - Clean-Install node packages and compile TS code
-FROM node:22.15-bookworm AS builder
+FROM node:22.16-bookworm AS builder
 
 WORKDIR /code
 
@@ -19,8 +19,7 @@ RUN npm ci
 COPY . /code
 
 # Build application
-RUN npm run clean
-RUN npm run compile
+RUN npm run build
 
 # Stage 2 - Build optimized environment with Docker dev tools
 FROM builder AS dev-envs
@@ -39,9 +38,25 @@ EOF
 COPY --from=gloursdocker/docker / /
 CMD [ "npm", "start" ]
 
-# Stage 3 - Build optimized production deployment
-FROM nginx:1.28-alpine
+# Stage 3 - Production-optimized final image
+FROM node:22.16-bookworm-slim AS production
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /code
 
-COPY --from=builder /code/dist /usr/share/nginx/html
+# Only copy production dependencies
+COPY --from=builder /code/package.json /code/package.json
+COPY --from=builder /code/package-lock.json /code/package-lock.json
+RUN npm ci --omit=dev
+
+# Copy built application
+COPY --from=builder /code/dist /code/dist
+
+# Copy any other necessary files (e.g., static assets, config)
+# COPY --from=builder /code/public /code/public
+
+ENV NODE_ENV=production
+ARG PORT=3001
+ENV PORT=$PORT
+EXPOSE $PORT
+
+CMD [ "node", "dist/index.js" ]
