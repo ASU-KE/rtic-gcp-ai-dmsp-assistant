@@ -19,9 +19,6 @@ const { role, username } = userInfo;
 const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
 const enableDmpIdMenu = `${import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID}` === 'true';
 
-// If auth isn't enabled and neither is the DMP ID menu, ASU web standards allows us to hide the nav menu
-const enableNavMenu = (isAuthEnabled && role !== 'admin') || enableDmpIdMenu;
-
 let primaryNavTree: NavTreeProps[] = [
   {
     id: 1,
@@ -62,8 +59,8 @@ const header: TsHeaderProps = {
   logoutLink: '/logout',
   loginLink: '#',
   userName: isAuthEnabled ? username : '',
-  navTree: enableNavMenu ? primaryNavTree : [],
-  mobileNavTree: enableNavMenu ? primaryNavTree : [],
+  navTree,
+  mobileNavTree: navTree,
   logo: {
     alt: 'Arizona State University',
     src: vertAsuLogo,
