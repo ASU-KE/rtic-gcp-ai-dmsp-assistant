@@ -1,11 +1,9 @@
-import { Container, Col, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { ASUHeader, ASUFooter, HeaderProps, Button, Logo, NavTreeProps } from '@asu/component-header-footer';
 
 import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
 import { Outlet } from 'react-router-dom';
-import { Modal } from 'react-bootstrap';
-import { useState } from 'react';
 import { getUserInfo } from '../utils/auth';
 
 // Override HeaderProps to fix Typescript typing requirements
