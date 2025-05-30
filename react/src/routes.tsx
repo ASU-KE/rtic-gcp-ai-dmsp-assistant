@@ -20,8 +20,10 @@ export const routers = createBrowserRouter(
           path: '/',
           element: <Layout />,
           children: [
-            { index: true, element: <SubmitDmpId /> },
-            { path: 'submit-text', element: <SubmitDmpText /> },
+            { index: true, element: <SubmitDmpText /> },
+            import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID === 'true'
+              ? { path: 'submit-id', element: <SubmitDmpId /> }
+              : {},
           ],
         },
         { path: '*', element: <Navigate to="/" replace /> },

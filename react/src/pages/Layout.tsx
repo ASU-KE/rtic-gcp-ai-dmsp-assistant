@@ -1,5 +1,5 @@
 import { Container, Col, Row } from 'react-bootstrap';
-import { ASUHeader, ASUFooter, HeaderProps, Button, Logo } from '@asu/component-header-footer';
+import { ASUHeader, ASUFooter, HeaderProps, Button, Logo, NavTreeProps } from '@asu/component-header-footer';
 
 import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
@@ -17,7 +17,9 @@ export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLog
 const userInfo = getUserInfo() ?? { role: '', username: '' };
 const { role, username } = userInfo;
 
-const head = [
+const enableDmpIdMenu = `${import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID}` === 'true';
+
+let primaryNavTree: NavTreeProps[] = [
   {
     id: 1,
     href: '/',
@@ -25,12 +27,15 @@ const head = [
     type: 'icon-home',
     class: 'test-class',
   },
-  {
-    id: 2,
-    href: '/submit-text',
-    text: 'Submit text',
-  },
 ];
+
+if (enableDmpIdMenu) {
+  primaryNavTree.push({
+    id: 2,
+    href: '/submit-id',
+    text: 'Submit DMP ID',
+  });
+}
 
 const manageUserItems = [
   { href: '/signup', text: 'Create User' },
@@ -59,20 +64,7 @@ const header: TsHeaderProps = {
   userName: isAuthEnabled ? username : '',
   navTree,
   buttons,
-  mobileNavTree: [
-    {
-      id: 1,
-      href: '/',
-      text: 'Home',
-      type: 'icon-home',
-      class: 'test-class',
-    },
-    {
-      id: 2,
-      href: '/submit-text',
-      text: 'Submit text',
-    },
-  ],
+  mobileNavTree: primaryNavTree,
   logo: {
     alt: 'Arizona State University',
     src: vertAsuLogo,
