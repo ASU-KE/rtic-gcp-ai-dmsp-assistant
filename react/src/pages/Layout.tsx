@@ -17,7 +17,11 @@ export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLog
 const userInfo = getUserInfo() ?? { role: '', username: '' };
 const { role, username } = userInfo;
 
+const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
 const enableDmpIdMenu = `${import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID}` === 'true';
+
+// If auth isn't enabled and neither is the DMP ID menu, ASU web standards allows us to hide the nav menu
+const enableNavMenu = (isAuthEnabled && role !== 'admin') || enableDmpIdMenu;
 
 let primaryNavTree: NavTreeProps[] = [
   {
@@ -45,8 +49,6 @@ const manageUserItems = [
   { href: '/user/change-role', text: 'Change User Role' },
 ];
 
-const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
-
 const navTree =
   isAuthEnabled && role === 'admin'
     ? [...primaryNavTree, { text: 'Manage Users', href: '#', items: [manageUserItems] }]
@@ -61,9 +63,8 @@ const header: TsHeaderProps = {
   logoutLink: '/logout',
   loginLink: '#',
   userName: isAuthEnabled ? username : '',
-  navTree,
-  buttons,
-  mobileNavTree: primaryNavTree,
+  navTree: enableNavMenu ? primaryNavTree : [],
+  mobileNavTree: enableNavMenu ? primaryNavTree : [],
   logo: {
     alt: 'Arizona State University',
     src: vertAsuLogo,
@@ -77,6 +78,7 @@ const header: TsHeaderProps = {
   isPartner: false,
   animateTitle: true,
   expandOnHover: true,
+  buttons,
 };
 
 const footer = {};
