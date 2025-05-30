@@ -36,7 +36,9 @@ export const Signup = ({ show, onClose }: SignupProps) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/signup`,
+        import.meta.env.PROD
+          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/signup`
+          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/signup`,
         {
           ...form,
         },

@@ -17,10 +17,15 @@ export const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/login`, {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        import.meta.env.PROD
+          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/login`
+          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/login`,
+        {
+          username,
+          password,
+        }
+      );
       const { token } = response.data.data;
       localStorage.setItem('token', token);
       navigate('/');

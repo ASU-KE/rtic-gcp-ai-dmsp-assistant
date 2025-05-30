@@ -15,9 +15,14 @@ export const DeleteUserModalContent = ({ onSuccess }: Props) => {
   const submitDelete = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/delete/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.delete(
+        import.meta.env.PROD
+          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/user/delete/${userId}`
+          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/delete/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       const deletedCount = response.data?.data?.numberOfUsersDeleted ?? 0;
 
