@@ -1,5 +1,6 @@
 import '../App.css';
 import { Col, Row, Button } from 'react-bootstrap';
+// import { NavLink } from "react-router";
 import 'github-markdown-css/github-markdown-light.css';
 
 export const HomePage = () => (
@@ -34,7 +35,13 @@ export const HomePage = () => (
       </p>
 
       <div className="mt-4">
-        <Button variant="primary" href="http://localhost:3000/submit-text/">
+        {/* <NavLink to="/submit-text" end>
+        Submit your DMSP for Analysis
+        </NavLink> */}
+
+        <Button variant="primary" href={import.meta.env.PROD
+            ? `https://dmsp.dev.rtd.asu.edu/submit-text`
+            : `http://localhost:3000/submit-text`}>
           Submit your DMSP for Analysis
         </Button>
       </div>
