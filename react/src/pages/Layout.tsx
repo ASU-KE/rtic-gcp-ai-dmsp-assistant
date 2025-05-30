@@ -37,7 +37,7 @@ if (enableDmpIdMenu) {
   });
 }
 
-const manageUserItems = [
+const manageUserItems: NavTreeProps[] = [
   { href: '/signup', text: 'Create User' },
   { href: '/user/all', text: 'View Users' },
   { href: '/user/update', text: 'Update User' },
