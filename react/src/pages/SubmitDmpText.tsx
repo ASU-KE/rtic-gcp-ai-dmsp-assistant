@@ -141,6 +141,10 @@ export function SubmitDmpText() {
     <>
       <Row className="mb-4">
         <Col md={8}>
+          <div className="mt-2">
+            <h2 className="mt-2">Welcome to the ASU Data Management and Sharing Plan Response Agent!</h2>
+          </div>
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label>Data Management Plan:</label>

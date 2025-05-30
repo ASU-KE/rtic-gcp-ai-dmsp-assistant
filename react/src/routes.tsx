@@ -10,6 +10,7 @@ import { SignupModalPage } from './pages/SignupModalPage';
 import { ChangeUserRoleModalPage } from './pages/ChangeUserRoleModalPage';
 import { UpdateUserModalPage } from './pages/UpdateUserModalPage';
 import { ViewUsersModalPage } from './pages/ViewUsersModalPage';
+import { HomePage } from './pages/HomePage';
 
 const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
 
@@ -20,7 +21,8 @@ export const routers = createBrowserRouter(
           path: '/',
           element: <Layout />,
           children: [
-            { index: true, element: <SubmitDmpText /> },
+            { index: true, element: <HomePage /> },
+            { path: 'submit-text', element: <SubmitDmpText /> },
             import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID === 'true'
               ? { path: 'submit-id', element: <SubmitDmpId /> }
               : {},
@@ -38,7 +40,7 @@ export const routers = createBrowserRouter(
               path: '/',
               element: <Layout />,
               children: [
-                { index: true, element: <SubmitDmpId /> },
+                { index: true, element: <HomePage /> },
                 { path: 'submit-text', element: <SubmitDmpText /> },
                 { path: '/signup', element: <SignupModalPage /> },
                 { path: '/user/delete', element: <DeleteUserModalPage /> },

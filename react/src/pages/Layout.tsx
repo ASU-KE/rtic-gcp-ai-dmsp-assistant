@@ -58,7 +58,7 @@ const buttons =
   isAuthEnabled && role !== 'admin' ? [{ href: '/user/update', text: 'Update Profile', color: 'gold' }] : [];
 
 const header: TsHeaderProps = {
-  title: 'DMSP AI Assistant',
+  title: 'DMSP AI Assistant Beta',
   loggedIn: isAuthEnabled ? true : false,
   logoutLink: '/logout',
   loginLink: '#',
@@ -87,14 +87,14 @@ export const Layout = () => {
   return (
     <>
       <ASUHeader {...header} />
-      <Container className="mt-16">
+      {/* <Container className="mt-16">
         <Row>
           <Col md={12}>
-            <h1 className="mt-4">DMSP AI Assistant: Proof-of-Concept</h1>
+            <h1 className="mt-4">DMSP AI Assistant Beta</h1>
           </Col>
         </Row>
-      </Container>
-      <Container className="mt-2" style={{ minHeight: '400px' }}>
+      </Container> */}
+      <Container className="mt-16" style={{ minHeight: '400px' }}>
         <Outlet />
       </Container>
       <ASUFooter {...footer} />
