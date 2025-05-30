@@ -18,7 +18,7 @@ export const UpdateUser = ({ onSuccess }: Props) => {
       const token = localStorage.getItem('token');
 
       const response = await axios.patch(
-        `http://localhost:3001/user/update`,
+        `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/update`,
         { firstName, lastName },
         {
           headers: { Authorization: `Bearer ${token}` },

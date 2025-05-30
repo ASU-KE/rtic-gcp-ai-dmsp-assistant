@@ -19,7 +19,7 @@ export const ViewUsers = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3001/user/all', {
+        const response = await axios.get(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(response.data.data);

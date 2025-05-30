@@ -17,7 +17,7 @@ export const ChangeUserRole = ({ onSuccess }: Props) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.patch(
-        `http://localhost:3001/user/change-role/${userId}`,
+        `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/change-role/${userId}`,
         { role },
         {
           headers: { Authorization: `Bearer ${token}` },

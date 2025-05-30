@@ -15,7 +15,7 @@ export const DeleteUserModalContent = ({ onSuccess }: Props) => {
   const submitDelete = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(`http://localhost:3001/user/delete/${userId}`, {
+      const response = await axios.delete(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/delete/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
