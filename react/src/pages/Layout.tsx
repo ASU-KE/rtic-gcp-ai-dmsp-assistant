@@ -9,10 +9,9 @@ import { useState } from 'react';
 import { getUserInfo } from '../utils/auth';
 
 // Override HeaderProps to fix Typescript typing requirements
-export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLogo' | 'navTree'> {
+export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLogo'> {
   buttons?: any[];
   partnerLogo?: Logo;
-  navTree?: any[];
 }
 const userInfo = getUserInfo() ?? { role: '', username: '' };
 const { role, username } = userInfo;
