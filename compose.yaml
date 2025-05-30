@@ -46,6 +46,7 @@ services:
         - APP_BACKEND_DOMAIN=localhost
         - APP_BACKEND_PORT=3001
         - APP_FRONTEND_AUTH=local
+        - APP_FRONTEND_ENABLE_DMP_ID=true
     ports:
       - 3000:3000
     volumes:

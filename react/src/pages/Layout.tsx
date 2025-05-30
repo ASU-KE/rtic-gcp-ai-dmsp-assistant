@@ -1,5 +1,5 @@
 import { Container, Col, Row } from 'react-bootstrap';
-import { ASUHeader, ASUFooter, HeaderProps, Button, Logo } from '@asu/component-header-footer';
+import { ASUHeader, ASUFooter, HeaderProps, Button, Logo, NavTreeProps } from '@asu/component-header-footer';
 
 import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
@@ -17,7 +17,13 @@ export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLog
 const userInfo = getUserInfo() ?? { role: '', username: '' };
 const { role, username } = userInfo;
 
-const head = [
+const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
+const enableDmpIdMenu = `${import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID}` === 'true';
+
+// If auth isn't enabled and neither is the DMP ID menu, ASU web standards allows us to hide the nav menu
+const enableNavMenu = (isAuthEnabled && role !== 'admin') || enableDmpIdMenu;
+
+let primaryNavTree: NavTreeProps[] = [
   {
     id: 1,
     href: '/',
@@ -25,12 +31,15 @@ const head = [
     type: 'icon-home',
     class: 'test-class',
   },
-  {
-    id: 2,
-    href: '/submit-text',
-    text: 'Submit text',
-  },
 ];
+
+if (enableDmpIdMenu) {
+  primaryNavTree.push({
+    id: 2,
+    href: '/submit-id',
+    text: 'Submit DMP ID',
+  });
+}
 
 const manageUserItems = [
   { href: '/signup', text: 'Create User' },
@@ -40,39 +49,22 @@ const manageUserItems = [
   { href: '/user/change-role', text: 'Change User Role' },
 ];
 
-const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
-
-const navTree = isAuthEnabled
-  ? role === 'admin'
-    ? [...head, { text: 'Manage Users', href: '#', items: [manageUserItems] }]
-    : head
-  : head;
+const navTree =
+  isAuthEnabled && role === 'admin'
+    ? [...primaryNavTree, { text: 'Manage Users', href: '#', items: [manageUserItems] }]
+    : primaryNavTree;
 
 const buttons =
   isAuthEnabled && role !== 'admin' ? [{ href: '/user/update', text: 'Update Profile', color: 'gold' }] : [];
 
 const header: TsHeaderProps = {
-  title: 'DMSP AI Assistant',
+  title: 'DMSP AI Assistant Beta',
   loggedIn: isAuthEnabled ? true : false,
   logoutLink: '/logout',
   loginLink: '#',
   userName: isAuthEnabled ? username : '',
-  navTree,
-  buttons,
-  mobileNavTree: [
-    {
-      id: 1,
-      href: '/',
-      text: 'Home',
-      type: 'icon-home',
-      class: 'test-class',
-    },
-    {
-      id: 2,
-      href: '/submit-text',
-      text: 'Submit text',
-    },
-  ],
+  navTree: enableNavMenu ? primaryNavTree : [],
+  mobileNavTree: enableNavMenu ? primaryNavTree : [],
   logo: {
     alt: 'Arizona State University',
     src: vertAsuLogo,
@@ -86,6 +78,7 @@ const header: TsHeaderProps = {
   isPartner: false,
   animateTitle: true,
   expandOnHover: true,
+  buttons,
 };
 
 const footer = {};
@@ -94,14 +87,14 @@ export const Layout = () => {
   return (
     <>
       <ASUHeader {...header} />
-      <Container className="mt-16">
+      {/* <Container className="mt-16">
         <Row>
           <Col md={12}>
-            <h1 className="mt-4">DMSP AI Assistant: Proof-of-Concept</h1>
+            <h1 className="mt-4">DMSP AI Assistant Beta</h1>
           </Col>
         </Row>
-      </Container>
-      <Container className="mt-2" style={{ minHeight: '400px' }}>
+      </Container> */}
+      <Container className="mt-16" style={{ minHeight: '400px' }}>
         <Outlet />
       </Container>
       <ASUFooter {...footer} />
