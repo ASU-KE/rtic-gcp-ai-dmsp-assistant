@@ -47,11 +47,10 @@ const manageUserItems = [
 
 const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
 
-const navTree = isAuthEnabled
-  ? role === 'admin'
-    ? [...head, { text: 'Manage Users', href: '#', items: [manageUserItems] }]
-    : head
-  : head;
+const navTree =
+  isAuthEnabled && role === 'admin'
+    ? [...primaryNavTree, { text: 'Manage Users', href: '#', items: [manageUserItems] }]
+    : primaryNavTree;
 
 const buttons =
   isAuthEnabled && role !== 'admin' ? [{ href: '/user/update', text: 'Update Profile', color: 'gold' }] : [];
