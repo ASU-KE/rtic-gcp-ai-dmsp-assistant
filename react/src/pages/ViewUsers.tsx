@@ -19,9 +19,14 @@ export const ViewUsers = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3001/user/all', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          import.meta.env.PROD
+            ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/user/all`
+            : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/all`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setUsers(response.data.data);
       } catch (err: any) {
         setErrorMsg(err.response?.data?.error || 'Failed to load users');

@@ -34,10 +34,18 @@ export const Signup = ({ show, onClose }: SignupProps) => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/signup', {
-        ...form,
-      });
-      const { token } = response.data;
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        import.meta.env.PROD
+          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/signup`
+          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/signup`,
+        {
+          ...form,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setSuccessMsg('User created successfully!');
       setErrorMsg('');
       setForm({
