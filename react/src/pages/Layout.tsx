@@ -58,7 +58,7 @@ const buttons =
   isAuthEnabled && role !== 'admin' ? [{ href: '/user/update', text: 'Update Profile', color: 'gold' }] : [];
 
 const header: TsHeaderProps = {
-  title: 'DMSP AI Assistant Beta',
+  title: 'DMSP AI Tool Beta',
   loggedIn: isAuthEnabled ? true : false,
   logoutLink: '/logout',
   loginLink: '#',
@@ -90,7 +90,7 @@ export const Layout = () => {
       {/* <Container className="mt-16">
         <Row>
           <Col md={12}>
-            <h1 className="mt-4">DMSP AI Assistant Beta</h1>
+            <h1 className="mt-4">DMSP AI Tool Beta</h1>
           </Col>
         </Row>
       </Container> */}

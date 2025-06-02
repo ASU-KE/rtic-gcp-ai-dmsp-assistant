@@ -154,8 +154,8 @@ export function SubmitDmpId() {
       <Row className="mb-4">
         <Col md={8}>
           <div className="mt-2">
-            This form demonstrates a simple implementation of the DMSP AI Assistant backend service. When a valid DMP ID
-            is submitted, the service will fetch that plan, extract its content, and query the AI Assistant to review
+            This form demonstrates a simple implementation of the DMSP AI Tool backend service. When a valid DMP ID
+            is submitted, the service will fetch that plan, extract its content, and query the AI Tool to review
             the plan.
           </div>
           <div className="mt-2">Feel free to copy and paste one of the following DMP IDs:</div>
