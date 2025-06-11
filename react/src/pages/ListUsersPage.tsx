@@ -11,7 +11,7 @@ interface User {
   lastName?: string;
 }
 
-export const ViewUsers = () => {
+export const ListUsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -29,7 +29,9 @@ export const ViewUsers = () => {
         );
         setUsers(response.data.data);
       } catch (err: any) {
-        setErrorMsg(err.response?.data?.error || 'Failed to load users');
+        setErrorMsg(typeof err.response?.data?.error === 'string'
+          ? err.response.data.error
+          : err.response?.data?.error?.message || 'Failed to load users');
         setTimeout(() => setErrorMsg(''), 3000);
       }
     };

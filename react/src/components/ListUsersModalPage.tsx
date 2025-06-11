@@ -1,17 +1,17 @@
 import { Modal } from 'react-bootstrap';
-import { UpdateUser } from './UpdateUser';
 import { useNavigate } from 'react-router-dom';
+import { ListUsersPage } from '../pages/ListUsersPage';
 
-export const UpdateUserModalPage = () => {
+export const ListUsersModalPage = () => {
   const navigate = useNavigate();
 
   return (
-    <Modal show onHide={() => navigate(-1)} centered>
+    <Modal show onHide={() => navigate(-1)} size="lg" centered>
       <Modal.Header closeButton className="custom-modal-header">
-        <Modal.Title className="custom-modal-title">Update User</Modal.Title>
+        <Modal.Title className="custom-modal-title">All Users</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <UpdateUser onSuccess={() => navigate(-1)} />
+        <ListUsersPage />
       </Modal.Body>
     </Modal>
   );
