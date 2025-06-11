@@ -7,8 +7,7 @@ import { Outlet } from 'react-router-dom';
 import { getUserInfo } from '../utils/auth';
 
 // Override HeaderProps to fix Typescript typing requirements
-export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLogo'> {
-  buttons?: any[];
+export interface TsHeaderProps extends Omit<HeaderProps, 'partnerLogo'> {
   partnerLogo?: Logo;
 }
 const userInfo = getUserInfo() ?? { role: '', username: '' };
@@ -35,21 +34,17 @@ if (enableDmpIdMenu) {
   });
 }
 
-const manageUserItems: NavTreeProps[] = [
-  { href: '/signup', text: 'Create User' },
-  { href: '/user/all', text: 'View Users' },
-  { href: '/user/update', text: 'Update User' },
-  { href: '/user/delete', text: 'Delete User' },
-  { href: '/user/change-role', text: 'Change User Role' },
+const manageUserItems = [
+  { id: 1, href: '/create-user', text: 'Create User' },
+  { id: 2, href: '/user/all', text: 'List Users' },
+  { id: 3, href: '/user/update', text: 'Update User' },
+  { id: 4, href: '/user/delete', text: 'Delete User' }
 ];
 
 const navTree =
   isAuthEnabled && role === 'admin'
-    ? [...primaryNavTree, { text: 'Manage Users', href: '#', items: [manageUserItems] }]
+    ? [...primaryNavTree, { id: 3, text: 'Manage Users', href: '#', items: [manageUserItems]}]
     : primaryNavTree;
-
-const buttons =
-  isAuthEnabled && role !== 'admin' ? [{ href: '/user/update', text: 'Update Profile', color: 'gold' }] : [];
 
 const header: TsHeaderProps = {
   title: 'DMSP AI Tool Beta',
@@ -71,8 +66,7 @@ const header: TsHeaderProps = {
   site: 'subdomain',
   isPartner: false,
   animateTitle: true,
-  expandOnHover: true,
-  buttons,
+  expandOnHover: true
 };
 
 const footer = {};
