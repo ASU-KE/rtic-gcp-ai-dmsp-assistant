@@ -34,10 +34,18 @@ services:
     volumes:
       - db-data:/var/lib/mysql
     networks:
-      - private
+      - public
     environment:
       - MYSQL_DATABASE=test
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - public
   react:
     build:
       context: react
