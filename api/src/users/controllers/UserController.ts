@@ -58,8 +58,14 @@ export default class UserController {
       });
   };
 
-  updateUser = (req: AuthenticatedRequest, res: Response) => {
-    const { user, body: payload } = req;
+  updateUser = (
+    req: Request<{ userId: string }, object, { firstName: string, lastName: string, role: string }>,
+    res: Response) => {
+
+    const { user } = req;
+    const { userId } = req.params;
+    const { firstName, lastName, role } = req.body;
+
 
     if (!user) {
       res.status(401).json({
@@ -69,7 +75,7 @@ export default class UserController {
       return;
     }
 
-    if (!Object.keys(payload).length) {
+    if (!Object.keys(req.body).length) {
       res.status(400).json({
         status: false,
         error: {
@@ -80,8 +86,8 @@ export default class UserController {
     }
 
     this.userService
-      .updateUser({ id: user.userId }, payload)
-      .then(() => this.userService.findUser({ id: user.userId }))
+      .updateUser({ id: Number(userId) }, { firstName, lastName, role })
+      .then(() => this.userService.findUser({ id: Number(userId) }))
       .then((updatedUser: User | null) => {
         if (!updatedUser) {
           res.status(404).json({

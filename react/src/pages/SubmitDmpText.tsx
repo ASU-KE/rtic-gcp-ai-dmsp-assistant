@@ -1,8 +1,10 @@
 import axios from 'axios';
 import '../App.css';
 import { useEffect, useRef, useState } from 'react';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Col, Row, Button, Form, Card, Stack } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/legacy/build/pdf';
+import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
@@ -10,6 +12,9 @@ import useWebSocket from 'react-use-websocket';
 import 'github-markdown-css/github-markdown-light.css';
 import html2pdf from 'html2pdf.js';
 import { DownloadIcon, CheckIcon, CopyIcon } from '../components/Icons';
+import mammoth from 'mammoth';
+
+GlobalWorkerOptions.workerSrc = workerSrc
 
 type FormValues = {
   dmpText: string;
@@ -22,6 +27,9 @@ export function SubmitDmpText() {
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const [submittedDmpText, setSubmittedDmpText] = useState<string | null>(null);
+  const [useTextMode, setUseTextMode] = useState(false);
+  const [fileError, setFileError] = useState('');
+  const [fileUploaded, setFileUploaded] = useState(false);
 
   const lastChunkRef = useRef('');
   const contentEndRef = useRef<HTMLDivElement>(null);
@@ -32,6 +40,7 @@ export function SubmitDmpText() {
     handleSubmit,
     reset,
     clearErrors,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>();
 
@@ -97,6 +106,12 @@ export function SubmitDmpText() {
   });
 
   const onSubmit = (values: FormValues) => {
+    if (!values.dmpText || values.dmpText.trim() === '') {
+      setFileError('Please upload a valid file or enter text manually.');
+      return;
+    }
+
+    setFileError('');
     setSubmissionInProgress(true);
     setShowLoadingIndicator(true);
     setStreamedText('');
@@ -137,44 +152,125 @@ export function SubmitDmpText() {
     }
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size === 0) {
+      setFileError('File is empty. Please upload a valid file.');
+      setFileUploaded(false);
+      return;
+    }
+
+    setFileUploaded(true);
+
+    setFileError('');
+    const fileType = file.type;
+
+    try {
+      let text = '';
+
+      if (fileType === 'application/pdf') {
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await getDocument({ data: arrayBuffer }).promise;
+
+          let content = '';
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map((item: any) => item.str).join(' ');
+            content += pageText + '\n';
+          }
+
+          setValue('dmpText', content);
+        } catch (error) {
+          console.error('Error reading PDF:', error);
+          setFileError('Failed to extract text from PDF. Please try another file.');
+        }
+      } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        text = result.value;
+        setValue('dmpText', text);
+      } else if (fileType === 'text/plain') {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const content = reader.result as string;
+          setValue('dmpText', content);
+        };
+        reader.readAsText(file);
+      } else {
+        setFileError('Unsupported file type. Please upload PDF, DOCX, or TXT.');
+      }
+    } catch (err) {
+      console.error(err);
+      setFileError('Error reading file');
+    }
+  };
+
   return (
     <>
-      <Row className="mb-4">
-        <Col md={8}>
+      <Card className="mb-3 shadow-sm" style={{ marginTop: '10rem' }}>
+        <Card.Body>
           <div className="mt-2">
             <h2 className="mt-2">Welcome to the ASU Data Management and Sharing Plan Response Agent!</h2>
           </div>
+          {!useTextMode ? (
+            <Stack gap={2}>
+              <Form.Group controlId="formFile">
+                <Form.Label className="fw-semibold">Upload Your DMP File</Form.Label>
+                <Form.Control type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} />
+                <Form.Text className="text-muted">
+                  Accepted formats: <strong>PDF</strong>, <strong>DOCX</strong>, or <strong>TXT</strong>
+                </Form.Text>
+                {fileError && <div className="text-danger mt-1 fw-semibold">{fileError}</div>}
+              </Form.Group>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <label>Data Management Plan:</label>
-            </div>
-            <textarea
-              {...register('dmpText', { required: 'DMP Text is required' })}
-              rows={10}
-              cols={100}
-              onBlur={() => clearErrors('dmpText')}
-            />
-            <div
-              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.2rem' }}
-            >
-              <div style={{ flex: 1 }}>
-                {errors.dmpText && (
-                  <div style={{ color: '#8c1d40', fontSize: '0.875rem' }}>{errors.dmpText.message}</div>
-                )}
-              </div>
               <Button
-                type="submit"
-                disabled={submissionInProgress}
-                className="btn-custom-medium"
-                style={{ marginLeft: '1rem' }}
+                variant="link"
+                onClick={() => { setUseTextMode(true); setValue('dmpText', ''); setFileUploaded(false); }}
+                className="p-0"
+                style={{ textDecoration: 'underline', color: '#8c1d40' }}
               >
-                {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
+                Or paste DMP text instead
               </Button>
-            </div>
-          </form>
-        </Col>
-      </Row>
+            </Stack>
+          ) : (
+            <Stack gap={2}>
+              <Form.Label className="fw-semibold">Paste Your Data Management Plan</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={10}
+                {...register('dmpText', { required: 'DMP Text is required' })}
+                onBlur={() => clearErrors('dmpText')}
+              />
+              {errors.dmpText && (
+                <div className="text-danger fw-semibold">{errors.dmpText.message}</div>
+              )}
+              <Button
+                variant="link"
+                onClick={() => setUseTextMode(false)}
+                className="p-0"
+                style={{ textDecoration: 'underline', color: '#8c1d40' }}
+              >
+                Or upload a file instead
+              </Button>
+            </Stack>
+          )}
+
+          <div className="d-flex justify-content-end mt-3">
+            <Button
+              type="submit"
+              onClick={handleSubmit(onSubmit)}
+              disabled={submissionInProgress}
+              className="btn-custom-medium"
+            >
+              {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
+            </Button>
+          </div>
+        </Card.Body>
+      </Card>
 
       {showLoadingIndicator && (
         <Row className="mt-2">
@@ -208,11 +304,11 @@ export function SubmitDmpText() {
                   </div>
                 </div>
                 <div className="d-flex gap-2">
-                  <Button size="sm" className="btn-custom-yellow" onClick={handleCopy}>
+                  <Button disabled={submissionInProgress} size="sm" className="btn-custom-yellow" onClick={handleCopy}>
                     {copied ? <CheckIcon /> : <CopyIcon />}
                     {copied ? 'Copied' : 'Copy'}
                   </Button>
-                  <Button size="sm" className="btn-custom-yellow" onClick={handleDownload}>
+                  <Button disabled={submissionInProgress} size="sm" className="btn-custom-yellow" onClick={handleDownload}>
                     {downloaded ? <CheckIcon /> : <DownloadIcon />}
                     {downloaded ? 'Downloaded' : 'Download'}
                   </Button>

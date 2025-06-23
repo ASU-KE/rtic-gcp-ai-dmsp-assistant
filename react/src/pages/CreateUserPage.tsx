@@ -7,12 +7,12 @@ import '../App.css';
 import eyeIcon from '../assets/hide.png';
 import eyeOffIcon from '../assets/unhide.png';
 
-interface SignupProps {
+interface CreateUserProps {
   show: boolean;
   onClose: () => void;
 }
 
-export const Signup = ({ show, onClose }: SignupProps) => {
+export const CreateUserPage = ({ show, onClose }: CreateUserProps) => {
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -37,8 +37,8 @@ export const Signup = ({ show, onClose }: SignupProps) => {
       const token = localStorage.getItem('token');
       const response = await axios.post(
         import.meta.env.PROD
-          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/signup`
-          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/signup`,
+          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/create-user`
+          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/create-user`,
         {
           ...form,
         },
@@ -60,7 +60,7 @@ export const Signup = ({ show, onClose }: SignupProps) => {
         setSuccessMsg('');
       }, 3000);
     } catch (err: any) {
-      setErrorMsg(err.response?.data?.error?.message || 'Signup failed');
+      setErrorMsg(err.response?.data?.error?.message || 'User not created. Please try again.');
       setSuccessMsg('');
       setTimeout(() => {
         setErrorMsg('');

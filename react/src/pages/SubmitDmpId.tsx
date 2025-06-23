@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
 import { Modal } from 'react-bootstrap';
-import { DeleteUserModalContent } from '../pages/DeleteUserModalContent';
+import { DeleteUserPage } from './DeleteUserPage';
 import useWebSocket from 'react-use-websocket';
 import 'github-markdown-css/github-markdown-light.css';
 import html2pdf from 'html2pdf.js';

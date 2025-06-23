@@ -1,27 +1,20 @@
-import { Container, Col, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { ASUHeader, ASUFooter, HeaderProps, Button, Logo, NavTreeProps } from '@asu/component-header-footer';
 
 import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
 import { Outlet } from 'react-router-dom';
-import { Modal } from 'react-bootstrap';
-import { useState } from 'react';
 import { getUserInfo } from '../utils/auth';
 
 // Override HeaderProps to fix Typescript typing requirements
-export interface TsHeaderProps extends Omit<HeaderProps, 'buttons' | 'partnerLogo' | 'navTree'> {
-  buttons?: any[];
+export interface TsHeaderProps extends Omit<HeaderProps, 'partnerLogo'> {
   partnerLogo?: Logo;
-  navTree?: any[];
 }
 const userInfo = getUserInfo() ?? { role: '', username: '' };
 const { role, username } = userInfo;
 
 const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
 const enableDmpIdMenu = `${import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID}` === 'true';
-
-// If auth isn't enabled and neither is the DMP ID menu, ASU web standards allows us to hide the nav menu
-const enableNavMenu = (isAuthEnabled && role !== 'admin') || enableDmpIdMenu;
 
 let primaryNavTree: NavTreeProps[] = [
   {
@@ -42,20 +35,16 @@ if (enableDmpIdMenu) {
 }
 
 const manageUserItems = [
-  { href: '/signup', text: 'Create User' },
-  { href: '/user/all', text: 'View Users' },
-  { href: '/user/update', text: 'Update User' },
-  { href: '/user/delete', text: 'Delete User' },
-  { href: '/user/change-role', text: 'Change User Role' },
+  { id: 1, href: '/create-user', text: 'Create User' },
+  { id: 2, href: '/user/all', text: 'List Users' },
+  { id: 3, href: '/user/update', text: 'Update User' },
+  { id: 4, href: '/user/delete', text: 'Delete User' }
 ];
 
 const navTree =
   isAuthEnabled && role === 'admin'
-    ? [...primaryNavTree, { text: 'Manage Users', href: '#', items: [manageUserItems] }]
+    ? [...primaryNavTree, { id: 3, text: 'Manage Users', href: '#', items: [manageUserItems]}]
     : primaryNavTree;
-
-const buttons =
-  isAuthEnabled && role !== 'admin' ? [{ href: '/user/update', text: 'Update Profile', color: 'gold' }] : [];
 
 const header: TsHeaderProps = {
   title: 'DMSP AI Tool Beta',
@@ -63,8 +52,8 @@ const header: TsHeaderProps = {
   logoutLink: '/logout',
   loginLink: '#',
   userName: isAuthEnabled ? username : '',
-  navTree: enableNavMenu ? primaryNavTree : [],
-  mobileNavTree: enableNavMenu ? primaryNavTree : [],
+  navTree,
+  mobileNavTree: navTree,
   logo: {
     alt: 'Arizona State University',
     src: vertAsuLogo,
@@ -77,8 +66,7 @@ const header: TsHeaderProps = {
   site: 'subdomain',
   isPartner: false,
   animateTitle: true,
-  expandOnHover: true,
-  buttons,
+  expandOnHover: true
 };
 
 const footer = {};

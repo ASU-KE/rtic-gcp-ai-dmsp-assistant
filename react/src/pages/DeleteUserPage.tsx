@@ -6,7 +6,7 @@ interface Props {
   onSuccess: () => void;
 }
 
-export const DeleteUserModalContent = ({ onSuccess }: Props) => {
+export const DeleteUserPage = ({ onSuccess }: Props) => {
   const [userId, setUserId] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');

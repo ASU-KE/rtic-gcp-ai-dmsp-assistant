@@ -18,7 +18,7 @@ const AuthorizationRoutes = (userService: UserService) => {
   const authorizationController = new AuthorizationController(userService);
 
   router.post(
-    '/signup',
+    '/create-user',
     [
       isAuthenticatedMiddleware.check,
       SchemaValidationMiddleware.verify(registerPayload),
