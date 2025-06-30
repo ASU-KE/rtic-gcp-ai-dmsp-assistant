@@ -39,9 +39,13 @@ export const HomePage = () => (
         Submit your DMSP for Analysis
         </NavLink> */}
 
-        <Button variant="primary" href={import.meta.env.PROD
-            ? `https://dmsp.dev.rtd.asu.edu/submit-text`
-            : `http://localhost:3000/submit-text`}>
+        <Button
+          variant="primary"
+          href={
+            import.meta.env.PROD
+              ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/submit-text`
+              : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/submit-text`
+          }>
           Submit your DMSP for Analysis
         </Button>
       </div>
