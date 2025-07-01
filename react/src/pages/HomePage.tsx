@@ -1,6 +1,5 @@
 import '../App.css';
 import { Col, Row, Button } from 'react-bootstrap';
-// import { NavLink } from "react-router";
 import 'github-markdown-css/github-markdown-light.css';
 
 export const HomePage = () => (
@@ -41,11 +40,7 @@ export const HomePage = () => (
 
         <Button
           variant="primary"
-          href={
-            import.meta.env.PROD
-              ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/submit-text`
-              : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/submit-text`
-          }>
+          href={"/submit-text"}>
           Submit your DMSP for Analysis
         </Button>
       </div>
