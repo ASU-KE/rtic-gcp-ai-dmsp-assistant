@@ -2,13 +2,19 @@ services:
   api:
     build:
       args:
-        - NODE_ENV=development
+        - NODE_ENV=${NODE_ENV:-development}
       context: api
       target: dev-envs
-    command: sh -c "npm run migration:watch & npm run start:watch"
+    command: >
+      sh -c "
+      if [ \"$$NODE_ENV\" = \"development\" ]; then
+        npm run migration:watch & npm run start:watch;
+      else
+        npm run start:watch;
+      fi"
     env_file: "./secrets/.env.backend"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=${NODE_ENV:-development}
     ports:
       - 3001:3001
       - 9229:9229

@@ -13,7 +13,6 @@
     "migration:run": "npm run typeorm migration:run -- --dataSource ./src/data-source.ts > /dev/null 2>&1",
     "migration:watch": "nodemon --watch src/users/entities -e ts --delay 2 --exec \"npm run db:sync\"",
     "db:sync": "npm run migration:generate-base-if-none && npm run migration:generate-if-changed && npm run migration:run",
-    "prestart": "npm run db:sync",
     "prestart:watch": "npm run db:sync",
     "clean": "rimraf dist",
     "build": "npm run clean && tsc",
