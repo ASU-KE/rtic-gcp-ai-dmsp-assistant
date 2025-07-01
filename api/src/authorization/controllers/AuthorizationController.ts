@@ -136,6 +136,19 @@ export default class AuthorizationController {
           role: user.role,
         });
 
+        const refreshToken = jwt.sign(
+          { userId: user.id, username: user.username },
+          process.env.REFRESH_TOKEN_SECRET!,
+          { expiresIn: '7d' }
+        );
+
+        res.cookie('refreshToken', refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        });
+
         return res.status(200).json({
           status: true,
           data: {
@@ -150,5 +163,37 @@ export default class AuthorizationController {
           error: err.message,
         });
       });
+  };
+
+  refreshToken = (
+    req: Request<object, object>, res: Response
+  ) => {
+    const token = req.cookies?.refreshToken;
+    if (!token) {
+      return res
+        .status(401)
+        .json({ status: false, error: { message: 'Refresh token missing' } });
+    }
+
+    try {
+      const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!) as {
+        userId: number;
+        username: string;
+      };
+
+      const newAccessToken = jwt.sign(
+        { userId: payload.userId, username: payload.username },
+        process.env.JWT_SECRET!,
+        { expiresIn: '15m' }
+      );
+
+      return res
+        .status(200)
+        .json({ status: true, data: { accessToken: newAccessToken } });
+    } catch {
+      return res
+        .status(403)
+        .json({ status: false, error: { message: 'Invalid or expired refresh token' } });
+    }
   };
 }

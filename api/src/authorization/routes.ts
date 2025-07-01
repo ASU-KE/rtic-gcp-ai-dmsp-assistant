@@ -32,6 +32,8 @@ const AuthorizationRoutes = (userService: UserService) => {
     authorizationController.login
   );
 
+  router.post('/refresh-token', authorizationController.refreshToken);
+
   return router;
 };
 
