@@ -213,15 +213,15 @@ export function SubmitDmpText() {
     <>
       <Container className="mt-4 mb-4">
         <Row className="mb-3">
-          <h2 className="mt-2">Welcome to the ASU Data Management and Sharing Plan Response Agent!</h2>
+          <h2 className="mt-2">Upload your DMP file</h2>
           <Col md={6}>
             <Card className="mb-3 shadow-sm">
               <Card.Body>
                 {!useTextMode ? (
                   <Stack gap={2}>
                     <Form.Group controlId="formFile">
-                      <Form.Label className="fw-semibold">Upload Your DMP File</Form.Label>
-                      <Form.Control type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} />
+                      {/* <Form.Label className="fw-semibold">Upload a PDF, MS Word, or plain text file.</Form.Label> */}
+                      <Form.Control className="mt-2" type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} />
                       <Form.Text className="text-muted">
                         Accepted formats: <strong>PDF</strong>, <strong>DOCX</strong>, or <strong>TXT</strong>
                       </Form.Text>
@@ -238,7 +238,7 @@ export function SubmitDmpText() {
                       className="p-0"
                       style={{ textDecoration: 'underline', color: '#8c1d40' }}
                     >
-                      Or paste DMP text instead
+                      Or paste your DMP text
                     </Button>
                   </Stack>
                 ) : (
