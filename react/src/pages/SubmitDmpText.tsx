@@ -370,28 +370,30 @@ export function SubmitDmpText() {
                     <Markdown>{streamedText}</Markdown>
                   </div>
 
-                  <div className="d-flex justify-content-between align-items-start mt-3">
-                    <div className="d-flex gap-2">
-                      <Button
-                        disabled={submissionInProgress}
-                        size="sm"
-                        className="btn-custom-yellow"
-                        onClick={handleCopy}
-                      >
-                        {copied ? <CheckIcon /> : <CopyIcon />}
-                        {copied ? 'Copied' : 'Copy'}
-                      </Button>
-                      <Button
-                        disabled={submissionInProgress}
-                        size="sm"
-                        className="btn-custom-yellow"
-                        onClick={handleDownload}
-                      >
-                        {downloaded ? <CheckIcon /> : <DownloadIcon />}
-                        {downloaded ? 'Downloaded' : 'Download'}
-                      </Button>
+                  {!submissionInProgress && (
+                    <div className="d-flex justify-content-between align-items-start mt-3">
+                      <div className="d-flex gap-2">
+                        <Button
+                          disabled={submissionInProgress}
+                          size="sm"
+                          className="btn-custom-yellow"
+                          onClick={handleCopy}
+                        >
+                          {copied ? <CheckIcon /> : <CopyIcon />}
+                          {copied ? 'Copied' : 'Copy'}
+                        </Button>
+                        <Button
+                          disabled={submissionInProgress}
+                          size="sm"
+                          className="btn-custom-yellow"
+                          onClick={handleDownload}
+                        >
+                          {downloaded ? <CheckIcon /> : <DownloadIcon />}
+                          {downloaded ? 'Downloaded' : 'Download'}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </Col>
             </Row>
