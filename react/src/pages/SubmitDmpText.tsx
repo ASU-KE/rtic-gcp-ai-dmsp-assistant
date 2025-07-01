@@ -1,7 +1,7 @@
 import axios from 'axios';
 import '../App.css';
 import { useEffect, useRef, useState } from 'react';
-import { Col, Row, Button, Form, Card, Stack } from 'react-bootstrap';
+import { Col, Row, Button, Form, Card, Stack, Container } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/legacy/build/pdf';
 import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
@@ -14,7 +14,7 @@ import html2pdf from 'html2pdf.js';
 import { DownloadIcon, CheckIcon, CopyIcon } from '../components/Icons';
 import mammoth from 'mammoth';
 
-GlobalWorkerOptions.workerSrc = workerSrc
+GlobalWorkerOptions.workerSrc = workerSrc;
 
 type FormValues = {
   dmpText: string;
@@ -211,66 +211,70 @@ export function SubmitDmpText() {
 
   return (
     <>
-      <Card className="mb-3 shadow-sm" style={{ marginTop: '10rem' }}>
-        <Card.Body>
-          <div className="mt-2">
-            <h2 className="mt-2">Welcome to the ASU Data Management and Sharing Plan Response Agent!</h2>
-          </div>
-          {!useTextMode ? (
-            <Stack gap={2}>
-              <Form.Group controlId="formFile">
-                <Form.Label className="fw-semibold">Upload Your DMP File</Form.Label>
-                <Form.Control type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} />
-                <Form.Text className="text-muted">
-                  Accepted formats: <strong>PDF</strong>, <strong>DOCX</strong>, or <strong>TXT</strong>
-                </Form.Text>
-                {fileError && <div className="text-danger mt-1 fw-semibold">{fileError}</div>}
-              </Form.Group>
+      <Container className="mt-4 mb-4">
+      <Row className="mb-3">
+      <h2 className="mt-2">Welcome to the ASU Data Management and Sharing Plan Response Agent!</h2>
+      <Col md={6}>
+          <Card className="mb-3 shadow-sm">
+            <Card.Body>
+              {!useTextMode ? (
+                <Stack gap={2}>
+                  <Form.Group controlId="formFile">
+                    <Form.Label className="fw-semibold">Upload Your DMP File</Form.Label>
+                    <Form.Control type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} />
+                    <Form.Text className="text-muted">
+                      Accepted formats: <strong>PDF</strong>, <strong>DOCX</strong>, or <strong>TXT</strong>
+                    </Form.Text>
+                    {fileError && <div className="text-danger mt-1 fw-semibold">{fileError}</div>}
+                  </Form.Group>
 
-              <Button
-                variant="link"
-                onClick={() => { setUseTextMode(true); setValue('dmpText', ''); setFileUploaded(false); }}
-                className="p-0"
-                style={{ textDecoration: 'underline', color: '#8c1d40' }}
-              >
-                Or paste DMP text instead
-              </Button>
-            </Stack>
-          ) : (
-            <Stack gap={2}>
-              <Form.Label className="fw-semibold">Paste Your Data Management Plan</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={10}
-                {...register('dmpText', { required: 'DMP Text is required' })}
-                onBlur={() => clearErrors('dmpText')}
-              />
-              {errors.dmpText && (
-                <div className="text-danger fw-semibold">{errors.dmpText.message}</div>
+                  <Button
+                    variant="link"
+                    onClick={() => {
+                      setUseTextMode(true);
+                      setValue('dmpText', '');
+                      setFileUploaded(false);
+                    }}
+                    className="p-0"
+                    style={{ textDecoration: 'underline', color: '#8c1d40' }}
+                  >
+                    Or paste DMP text instead
+                  </Button>
+                </Stack>
+              ) : (
+                <Stack gap={2}>
+                  <Form.Label className="fw-semibold">Paste Your Data Management Plan</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={10}
+                    {...register('dmpText', { required: 'DMP Text is required' })}
+                    onBlur={() => clearErrors('dmpText')}
+                  />
+                  {errors.dmpText && <div className="text-danger fw-semibold">{errors.dmpText.message}</div>}
+                  <Button
+                    variant="link"
+                    onClick={() => setUseTextMode(false)}
+                    className="p-0"
+                    style={{ textDecoration: 'underline', color: '#8c1d40' }}
+                  >
+                    Or upload a file instead
+                  </Button>
+                </Stack>
               )}
-              <Button
-                variant="link"
-                onClick={() => setUseTextMode(false)}
-                className="p-0"
-                style={{ textDecoration: 'underline', color: '#8c1d40' }}
-              >
-                Or upload a file instead
-              </Button>
-            </Stack>
-          )}
-
-          <div className="d-flex justify-content-end mt-3">
-            <Button
-              type="submit"
-              onClick={handleSubmit(onSubmit)}
-              disabled={submissionInProgress}
-              className="btn-custom-medium"
-            >
-              {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
-            </Button>
-          </div>
-        </Card.Body>
-      </Card>
+              <div className="d-flex justify-content-end mt-3">
+                <Button
+                  type="submit"
+                  onClick={handleSubmit(onSubmit)}
+                  disabled={submissionInProgress}
+                  className="btn-custom-medium"
+                >
+                  {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
+                </Button>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={6}></Col>
 
       {showLoadingIndicator && (
         <Row className="mt-2">
@@ -296,19 +300,52 @@ export function SubmitDmpText() {
           <Col md={12}>
             <div className="border p-3" style={{ position: 'relative' }}>
               <div className="d-flex justify-content-between align-items-start mb-3">
-                <div>
+                {/* <div>
                   <h5 className="m-0 fw-semibold">AI Analysis for DMP Text:</h5>
                   <div className="dmp-info-box">
                     {submittedDmpText.slice(0, 100)}
                     {submittedDmpText.length > 100 ? '...' : ''}
                   </div>
+                </div> */}
+                <div>
+                  {/* <h5 className="m-0 fw-semibold">AI Analysis for DMP Text:</h5> */}
+                  <p>
+                    Thank you for using the ASU DMSP AI Feedback Tool! This AI-generated response is based on the <a href="https://osf.io/mgjpp">DART
+                    Data Management Plan Rubric</a> to gauge your plan’s effectiveness. <strong>Your feedback will be displayed
+                    below with an option to download your feedback as a PDF</strong>.
+                  </p>
+                  <p>
+                  <strong>Consider this response as guidance only.</strong> As the author and investigator of your project, you are
+                    ultimately responsible for the project's outcomes and adhering to your data management plan. The
+                    DMPTool generated this feedback to give you a quick response so that you can adapt your plan
+                    immediately.
+                  </p>
+                  <p>
+                  <strong>If you have any questions</strong> or would like the review of your plan to be done by a human, request a
+                    consultation with the <a href="https://asu.service-now.com/sp?sysparm_stack=no&sys_id=fcadee6d1b1c20d09a9cca2b234bcbf3&id=sc_category">Research Data Management Office</a>. Please allow three business days for someone
+                    to respond to your request.
+                  </p>
+                  <p>
+                    <strong>Staff may contact you</strong> to ensure your plan is connected with the most appropriate available
+                    resources. Contact the <a href="https://asu.service-now.com/sp?sysparm_stack=no">Research Technology Office</a> to ensure those services are available and
+                    determine if your proposal should include any costs.
+                  </p>
+                  <p>
+                    <strong>Don’t wait for feedback on your plan before submitting your proposal.</strong> After submission, you may also
+                    receive a Just in Time (JIT) request from your funder if they have questions about your plan.
+                  </p>
                 </div>
                 <div className="d-flex gap-2">
                   <Button disabled={submissionInProgress} size="sm" className="btn-custom-yellow" onClick={handleCopy}>
                     {copied ? <CheckIcon /> : <CopyIcon />}
                     {copied ? 'Copied' : 'Copy'}
                   </Button>
-                  <Button disabled={submissionInProgress} size="sm" className="btn-custom-yellow" onClick={handleDownload}>
+                  <Button
+                    disabled={submissionInProgress}
+                    size="sm"
+                    className="btn-custom-yellow"
+                    onClick={handleDownload}
+                  >
                     {downloaded ? <CheckIcon /> : <DownloadIcon />}
                     {downloaded ? 'Downloaded' : 'Download'}
                   </Button>
@@ -324,6 +361,8 @@ export function SubmitDmpText() {
       )}
 
       <div ref={contentEndRef} />
+      </Row>
+      </Container>
     </>
   );
 }
