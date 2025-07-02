@@ -18,7 +18,7 @@ services:
       - ./api/package.json:/code/package.json
       - ./api/package-lock.json:/code/package-lock.json
     networks:
-      - public
+      - proxy
       - private
     depends_on:
       - db
@@ -65,8 +65,9 @@ services:
     depends_on:
       - api
 networks:
-  public:
   private:
+  proxy:
+    name: proxy
 volumes:
   db-data:
 secrets:
