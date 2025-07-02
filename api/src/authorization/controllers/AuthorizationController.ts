@@ -8,10 +8,12 @@ import { Request, Response } from 'express';
 import { LoginPayload } from '../schemas/loginPayload';
 
 const jwtSecret = process.env.JWT_SECRET!;
+const refreshSecret = 'JWT_REFRESH_SECRET'; //Unable to use env variable from .env file
 const jwtExpirationInSeconds = parseInt(
   process.env.JWT_EXPIRATION_SECS ?? '3600',
   10
 );
+const refreshExpirationInDays = '7'; // 7 days for refresh token
 
 // Generates an Access Token using username and userId for the user's authentication
 const generateAccessToken = (user: {
@@ -69,11 +71,18 @@ export default class AuthorizationController {
           role: user.role,
         });
 
+        const refreshToken = jwt.sign(
+          { userId: user.id, username: user.username },
+          refreshSecret,
+          { expiresIn: refreshExpirationInDays }
+        );
+
         return res.status(200).json({
           status: true,
           data: {
             user: user,
             token: accessToken,
+            refreshToken: refreshToken,
           },
         });
       })
@@ -138,22 +147,16 @@ export default class AuthorizationController {
 
         const refreshToken = jwt.sign(
           { userId: user.id, username: user.username },
-          process.env.REFRESH_TOKEN_SECRET!,
-          { expiresIn: '7d' }
+          refreshSecret,
+          { expiresIn: refreshExpirationInDays }
         );
-
-        res.cookie('refreshToken', refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
-          maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        });
 
         return res.status(200).json({
           status: true,
           data: {
             user: user,
             token: accessToken,
+            refreshToken: refreshToken,
           },
         });
       })
@@ -165,35 +168,43 @@ export default class AuthorizationController {
       });
   };
 
-  refreshToken = (
-    req: Request<object, object>, res: Response
-  ) => {
-    const token = req.cookies?.refreshToken;
+  refreshToken = async (
+    req: Request<object, object, { refreshToken?: string }>,
+    res: Response
+  ): Promise<any> => {
+    const token = req.body.refreshToken;
     if (!token) {
       return res
         .status(401)
         .json({ status: false, error: { message: 'Refresh token missing' } });
     }
-
     try {
-      const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!) as {
+      const payload = jwt.verify(token, refreshSecret) as {
         userId: number;
         username: string;
       };
+      const user = await this.userService.findUser({ id: payload.userId });
 
-      const newAccessToken = jwt.sign(
-        { userId: payload.userId, username: payload.username },
-        process.env.JWT_SECRET!,
-        { expiresIn: '15m' }
-      );
-
+      if (!user) {
+        return res
+          .status(403)
+          .json({ status: false, error: { message: 'User not found' } });
+      }
+      const newAccessToken = generateAccessToken({
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      });
       return res
         .status(200)
         .json({ status: true, data: { accessToken: newAccessToken } });
     } catch {
       return res
         .status(403)
-        .json({ status: false, error: { message: 'Invalid or expired refresh token' } });
+        .json({
+          status: false,
+          error: { message: 'Invalid or expired refresh token' },
+        });
     }
   };
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { authorizedDelete } from '../utils/authAxios';
 import { Form, Button, Alert, Modal } from 'react-bootstrap';
 
 interface Props {
@@ -14,16 +14,7 @@ export const DeleteUserPage = ({ onSuccess }: Props) => {
 
   const submitDelete = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.delete(
-        import.meta.env.PROD
-          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/user/delete/${userId}`
-          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/delete/${userId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
+      const response = await authorizedDelete(`/user/delete/${userId}`);
       const deletedCount = response.data?.data?.numberOfUsersDeleted ?? 0;
 
       if (deletedCount === 0) {

@@ -14,7 +14,7 @@ import html2pdf from 'html2pdf.js';
 import { DownloadIcon, CheckIcon, CopyIcon } from '../components/Icons';
 import mammoth from 'mammoth';
 
-GlobalWorkerOptions.workerSrc = workerSrc
+GlobalWorkerOptions.workerSrc = workerSrc;
 
 type FormValues = {
   dmpText: string;
@@ -229,7 +229,11 @@ export function SubmitDmpText() {
 
               <Button
                 variant="link"
-                onClick={() => { setUseTextMode(true); setValue('dmpText', ''); setFileUploaded(false); }}
+                onClick={() => {
+                  setUseTextMode(true);
+                  setValue('dmpText', '');
+                  setFileUploaded(false);
+                }}
                 className="p-0"
                 style={{ textDecoration: 'underline', color: '#8c1d40' }}
               >
@@ -245,9 +249,7 @@ export function SubmitDmpText() {
                 {...register('dmpText', { required: 'DMP Text is required' })}
                 onBlur={() => clearErrors('dmpText')}
               />
-              {errors.dmpText && (
-                <div className="text-danger fw-semibold">{errors.dmpText.message}</div>
-              )}
+              {errors.dmpText && <div className="text-danger fw-semibold">{errors.dmpText.message}</div>}
               <Button
                 variant="link"
                 onClick={() => setUseTextMode(false)}
@@ -308,7 +310,12 @@ export function SubmitDmpText() {
                     {copied ? <CheckIcon /> : <CopyIcon />}
                     {copied ? 'Copied' : 'Copy'}
                   </Button>
-                  <Button disabled={submissionInProgress} size="sm" className="btn-custom-yellow" onClick={handleDownload}>
+                  <Button
+                    disabled={submissionInProgress}
+                    size="sm"
+                    className="btn-custom-yellow"
+                    onClick={handleDownload}
+                  >
                     {downloaded ? <CheckIcon /> : <DownloadIcon />}
                     {downloaded ? 'Downloaded' : 'Download'}
                   </Button>

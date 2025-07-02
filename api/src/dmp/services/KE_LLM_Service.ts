@@ -74,7 +74,7 @@ export default {
         } catch {
           // Ignore JSON parsing error
         }
-        receivedValidChunk = true
+        receivedValidChunk = true;
 
         fullResponse += chunk;
 
@@ -95,7 +95,11 @@ export default {
 
       upstream.on('close', () => {
         console.log('WebSocket connection closed');
-        if (!receivedValidChunk && timeoutChunk && ws?.readyState === WebSocket.OPEN) {
+        if (
+          !receivedValidChunk &&
+          timeoutChunk &&
+          ws?.readyState === WebSocket.OPEN
+        ) {
           ws.send(timeoutChunk);
         }
         resolve({ response: fullResponse, metadata: {} });

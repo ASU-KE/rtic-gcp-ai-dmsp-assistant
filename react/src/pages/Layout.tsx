@@ -38,12 +38,12 @@ const manageUserItems = [
   { id: 1, href: '/create-user', text: 'Create User' },
   { id: 2, href: '/user/all', text: 'List Users' },
   { id: 3, href: '/user/update', text: 'Update User' },
-  { id: 4, href: '/user/delete', text: 'Delete User' }
+  { id: 4, href: '/user/delete', text: 'Delete User' },
 ];
 
 const navTree =
   isAuthEnabled && role === 'admin'
-    ? [...primaryNavTree, { id: 3, text: 'Manage Users', href: '#', items: [manageUserItems]}]
+    ? [...primaryNavTree, { id: 3, text: 'Manage Users', href: '#', items: [manageUserItems] }]
     : primaryNavTree;
 
 const header: TsHeaderProps = {
@@ -66,7 +66,7 @@ const header: TsHeaderProps = {
   site: 'subdomain',
   isPartner: false,
   animateTitle: true,
-  expandOnHover: true
+  expandOnHover: true,
 };
 
 const footer = {};

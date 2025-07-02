@@ -27,7 +27,7 @@ export function createApp(
     cors({
       origin:
         process.env.NODE_ENV === 'development'
-          ? '*'
+          ? 'http://localhost:3000'
           : 'https://dmsp.dev.rtd.asu.edu',
     })
   );
