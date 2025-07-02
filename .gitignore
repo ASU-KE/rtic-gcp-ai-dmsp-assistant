@@ -1,6 +1,8 @@
-tls.crt
-tls.key
+*.crt
+*.key
+*.pem
 secrets/*
 !secrets/.gitkeep
+!secrets/certs
 !secrets/*.example
 dist
