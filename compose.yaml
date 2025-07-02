@@ -62,10 +62,16 @@ services:
     volumes:
       - ./react/src:/code/src
       - /code/node_modules
+    labels:
+      - "traefik.enable=true" # Enable Traefik
+      - "traefik.http.routers.react.rule=Host(`dmsp.local.asu.edu`)" # Determine what URL to use
+      - "traefik.http.routers.react.entrypoints=websecure" # Determine what entrypoint and port to use
+      - "traefik.http.routers.react.tls=true"
     networks:
-      - public
+      - proxy
     depends_on:
       - api
+      - traefik
 
   traefik:
     image: traefik:v3.4
