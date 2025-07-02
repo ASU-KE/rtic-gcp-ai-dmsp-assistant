@@ -1,6 +1,5 @@
 import '../App.css';
 import { Col, Row, Button } from 'react-bootstrap';
-// import { NavLink } from "react-router";
 import 'github-markdown-css/github-markdown-light.css';
 
 export const HomePage = () => (
@@ -56,6 +55,51 @@ export const HomePage = () => (
         <br />
         No. This application doesn’t use or save your plan to train the model. The AI-generated response is based on the
         National Science Foundation’s DART Data Management Plan Rubric to gauge your plan’s effectiveness.
+      </p>
+
+      <p className="mt-2">
+        <strong>Can I use this AI feedback tool for my study if my funding doesn’t come from NSF?</strong>
+        <br />
+        Although this DMSP AI Feedback Tool is currently configured to review plans using the NSF guidelines, there are
+        plans to add support for additional funding agencies in the near future. As those agencies are added to this
+        tool, this page will be updated to reflect the available agencies’ guidelines. In the meantime, if you use this
+        tool for an unsupported agency, your plan will be evaluated against the NSF criteria, and the evaluation may not
+        be accurate for your funding agency’s criteria.
+      </p>
+
+      <p className="mt-2">
+        <strong>Which model is used in the ASU DMSP AI Tool?</strong>
+        <br />
+        The ASU DMSP AI Feedback Tool uses the Gemini 2 Flash hosted in{' '}
+        <a href="https://ai.asu.edu">ASU’s CreateAI platform</a>.
+      </p>
+
+      <p className="mt-2">
+        <strong>How do I get my DMSP into the Response Agent?</strong>
+        <br />
+        There are two ways to get your plan into the ASU DMSP AI Feedback Tool. From the landing page, you can paste in
+        the entire text from the plan OR if the DMSP in the DMPTool has been made public, the assigned DMP ID can be
+        entered and the AI Feedback Tool will retrieve your DMP from the DMPTool.
+      </p>
+
+      <p className="mt-2">
+        <strong>Who can see my plan?</strong>
+        <br />
+        Staff in the Research Technology Office and ASU Library Researcher Support.
+      </p>
+
+      <p className="mt-2">
+        <strong>What happens to my plan after I get my feedback?</strong>
+        <br />
+        Any suggestions made by the AI Feedback Tool would need to be manually incorporated into your data management
+        and sharing plan by the authors before submitting to your funding agency. After providing feedback, the ASU AI
+        Feedback Tool will retain your DMSP for administrative support purposes only.
+      </p>
+
+      <p className="mt-2">
+        <strong>Can I trust the AI Response Agent to give me correct feedback?</strong>
+        <br />
+        This AI Feedback Tool is trained to give correct feedback based on the <a href="https://osf.io/mgjpp">NSF DART Data Management Plan Rubric</a>. It cannot provide other feedback at this time.
       </p>
     </Col>
   </Row>
