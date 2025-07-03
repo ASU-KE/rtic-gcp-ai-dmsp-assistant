@@ -10,10 +10,10 @@ import { LoginPayload } from '../schemas/loginPayload';
 const jwtSecret = process.env.JWT_SECRET!;
 const refreshSecret = 'JWT_REFRESH_SECRET'; //Unable to use env variable from .env file
 const jwtExpirationInSeconds = parseInt(
-  process.env.JWT_EXPIRATION_SECS ?? '5',
+  process.env.JWT_EXPIRATION_SECS ?? '3600',
   10
 );
-const refreshExpiration = '7'; // 7 days for refresh token
+const refreshExpiration = '7d'; // 7 days for refresh token
 
 // Generates an Access Token using username and userId for the user's authentication
 const generateAccessToken = (user: {
