@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { logout } from './auth';
 
 const BASE_URL = import.meta.env.PROD
   ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}`
@@ -42,6 +43,7 @@ const makeRequestWithToken = async (
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (refreshErr) {
+        logout();
         throw refreshErr;
       }
     }

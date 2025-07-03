@@ -10,10 +10,10 @@ import { LoginPayload } from '../schemas/loginPayload';
 const jwtSecret = process.env.JWT_SECRET!;
 const refreshSecret = 'JWT_REFRESH_SECRET'; //Unable to use env variable from .env file
 const jwtExpirationInSeconds = parseInt(
-  process.env.JWT_EXPIRATION_SECS ?? '3600',
+  process.env.JWT_EXPIRATION_SECS ?? '5',
   10
 );
-const refreshExpirationInDays = '7'; // 7 days for refresh token
+const refreshExpiration = '7'; // 7 days for refresh token
 
 // Generates an Access Token using username and userId for the user's authentication
 const generateAccessToken = (user: {
@@ -74,7 +74,7 @@ export default class AuthorizationController {
         const refreshToken = jwt.sign(
           { userId: user.id, username: user.username },
           refreshSecret,
-          { expiresIn: refreshExpirationInDays }
+          { expiresIn: refreshExpiration }
         );
 
         return res.status(200).json({
@@ -148,7 +148,7 @@ export default class AuthorizationController {
         const refreshToken = jwt.sign(
           { userId: user.id, username: user.username },
           refreshSecret,
-          { expiresIn: refreshExpirationInDays }
+          { expiresIn: refreshExpiration }
         );
 
         return res.status(200).json({
