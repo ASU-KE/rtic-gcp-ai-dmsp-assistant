@@ -27,6 +27,7 @@ This repository contains the necessary resources and configurations to host the 
     - [API server setup](#api-server-setup)
     - [React application setup](#react-application-setup)
     - [Creating a GitHub Personal Access Token (Classic)](#creating-a-github-personal-access-token-classic)
+    - [Generate local SSL cert for testing](#generate-local-ssl-cert-for-testing)
     - [Build and launch application stack](#build-and-launch-application-stack)
   - [Server Hosting Overview](#server-hosting-overview)
   - [Procedure to Update](#procedure-to-update)
@@ -76,14 +77,36 @@ Copy [api/.env.example](api/.env.example) to `api/.env`. Fill in token and acces
 7. Click "Generate token".
 8. Save the displayed token in your password manager to use next.
 
+### Generate local SSL cert for testing
+
+In order for ASU SSO authentication to work, the React web app must be accessible through a secured HTTPS connection and using a `*.asu.edu` domain. For the purposes of local development, the React app will be hosted at `dmsp.local.asu.edu`. We will be using a free CLI tool, `mkcert`, to generate our testing SSL certificate and registering it in our local workstation so it will be automatically trusted by our browser.
+
+MacOS instructions follow:
+
+From the project root folder, install `mkcert` and `nss` (for Firefox users) and generate the SSL certificate in `secrets/certs`:
+
+```
+brew install mkcert
+brew install nss # if you use Firefox
+
+mkcert -key-file secrets/certs/key.pem -cert-file secrets/certs/cert.pem "*.local.asu.edu"
+mkcert -install # to make certificate be trusted automatically
+```
+
+You must also add the dev domain, `dmsp.local.asu.edu` to your machine's `/etc/hosts` file:
+
+```
+sudo echo "\n127.0.0.1 dmsp.local.asu.edu\n" >> /etc/hosts
+```
+
 
 ### Build and launch application stack
 
 Build the application container images and insert the GH token into the command line: `docker compose build --build-arg NPM_TOKEN=TOKEN_VALUE`, and then launch the application: `docker compose up`.
 
-The React frontend application can be accessed at: [http://localhost:3000](http://localhost:3000).
+The React frontend application can be accessed at: [https://dmsp.local.asu.edu](https://dmsp.local.asu.edu).
 
-THe API server can be accessed using Postman or other API client at [http://localhost:3001](http://localhost:3001).
+THe API server can be accessed using Postman or other API clients at [http://localhost:3001](http://localhost:3001).
 
 ## Server Hosting Overview
 
