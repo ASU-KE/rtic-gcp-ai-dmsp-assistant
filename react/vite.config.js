@@ -8,5 +8,6 @@ export default defineConfig({
     host: true,
     port: 3000,
     strictPort: true,
+    allowedHosts: ['dmsp.local.asu.edu', 'dmsp.dev.rtd.asu.edu', 'dmsp.ai.rto.asu.edu'],
   },
 });
