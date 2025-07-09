@@ -7,13 +7,10 @@ import config from '../../config';
 import { Request, Response } from 'express';
 import { LoginPayload } from '../schemas/loginPayload';
 
-const jwtSecret = process.env.JWT_SECRET!;
-const refreshSecret = 'JWT_REFRESH_SECRET'; //Unable to use env variable from .env file
-const jwtExpirationInSeconds = parseInt(
-  process.env.JWT_EXPIRATION_SECS ?? '86400',
-  10
-);
-const refreshExpiration = '7d'; // 7 days for refresh token
+const jwtSecret: string = config.jwtSecret;
+const refreshSecret: string = process.env.JWT_REFRESH_SECRET!;
+const jwtExpirationInSeconds = parseInt(config.jwtExpiration ?? '86400', 10);
+const refreshExpiration = parseInt(config.jwtRefreshExpiration ?? '604800', 10);
 
 // Generates an Access Token using username and userId for the user's authentication
 const generateAccessToken = (user: {
@@ -199,12 +196,10 @@ export default class AuthorizationController {
         .status(200)
         .json({ status: true, data: { accessToken: newAccessToken } });
     } catch {
-      return res
-        .status(403)
-        .json({
-          status: false,
-          error: { message: 'Invalid or expired refresh token' },
-        });
+      return res.status(403).json({
+        status: false,
+        error: { message: 'Invalid or expired refresh token' },
+      });
     }
   };
 }

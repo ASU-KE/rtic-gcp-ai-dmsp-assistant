@@ -38,10 +38,7 @@ export const HomePage = () => (
         Submit your DMSP for Analysis
         </NavLink> */}
 
-        <Button
-          variant="primary"
-          href={'/submit-text'}
-        >
+        <Button variant="primary" href={'/submit-text'}>
           Submit your DMSP for Analysis
         </Button>
       </div>
@@ -99,7 +96,9 @@ export const HomePage = () => (
       <p className="mt-2">
         <strong>Can I trust the AI Response Agent to give me correct feedback?</strong>
         <br />
-        This AI Feedback Tool is trained to give correct feedback based on the <a href="https://osf.io/mgjpp">NSF DART Data Management Plan Rubric</a>. It cannot provide other feedback at this time.
+        This AI Feedback Tool is trained to give correct feedback based on the{' '}
+        <a href="https://osf.io/mgjpp">NSF DART Data Management Plan Rubric</a>. It cannot provide other feedback at
+        this time.
       </p>
     </Col>
   </Row>

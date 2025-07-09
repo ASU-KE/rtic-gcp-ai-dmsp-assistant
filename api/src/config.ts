@@ -10,6 +10,8 @@ interface Config {
   rollbarToken: string;
   jwtSecret: string;
   jwtExpiration: string;
+  jwtRefreshSecret: string;
+  jwtRefreshExpiration: string;
   dmptoolClientId: string;
   dmptoolClientSecret: string;
   llmAccessSecret: string;
@@ -91,6 +93,8 @@ const config: Config = {
   rollbarToken: process.env.ROLLBAR_TOKEN!,
   jwtSecret: process.env.JWT_SECRET!,
   jwtExpiration: process.env.JWT_EXPIRATION!,
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,
+  jwtRefreshExpiration: process.env.JWT_REFRESH_EXPIRATION_SECS!,
   dmptoolClientId: process.env.DMPTOOL_CLIENT_ID!,
   dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET!,
   llmAccessSecret: process.env.LLM_ACCESS_SECRET!,
