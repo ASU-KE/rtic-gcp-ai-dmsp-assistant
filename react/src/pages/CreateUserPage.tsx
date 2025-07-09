@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { authorizedPost } from '../utils/authAxios';
+import { authorizedRequest } from '../utils/authAxios';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Alert, Card, Modal } from 'react-bootstrap';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
@@ -34,7 +34,7 @@ export const CreateUserPage = ({ show, onClose }: CreateUserProps) => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await authorizedPost('/create-user', form);
+      const response = await authorizedRequest('POST', '/create-user', form);
       setSuccessMsg('User created successfully!');
       setErrorMsg('');
       setForm({

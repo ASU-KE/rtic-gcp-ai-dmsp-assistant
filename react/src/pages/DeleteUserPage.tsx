@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { authorizedDelete } from '../utils/authAxios';
+import { authorizedRequest } from '../utils/authAxios';
 import { Form, Button, Alert, Modal } from 'react-bootstrap';
 
 interface Props {
@@ -14,7 +14,7 @@ export const DeleteUserPage = ({ onSuccess }: Props) => {
 
   const submitDelete = async () => {
     try {
-      const response = await authorizedDelete(`/user/delete/${userId}`);
+      const response = await authorizedRequest('DELETE', `/user/delete/${userId}`);
       const deletedCount = response.data?.data?.numberOfUsersDeleted ?? 0;
 
       if (deletedCount === 0) {

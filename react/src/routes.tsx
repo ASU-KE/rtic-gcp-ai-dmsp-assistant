@@ -10,7 +10,6 @@ import { CreateUserModalPage } from './components/CreateUserModalPage';
 import { UpdateUserModalPage } from './components/UpdateUserModalPage';
 import { ListUsersModalPage } from './components/ListUsersModalPage';
 import { HomePage } from './pages/HomePage';
-import SessionExpiredPage from './pages/SessionExpiredPage';
 
 const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
 
@@ -33,7 +32,6 @@ export const routers = createBrowserRouter(
     : [
         { path: '/login', element: <LoginPage /> },
         { path: '/logout', element: <LogoutPage /> },
-        { path: '/session-expired', element: <SessionExpiredPage /> },
         {
           element: <RequireAuth />,
           children: [

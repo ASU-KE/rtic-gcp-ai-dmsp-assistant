@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { authorizedPatch } from '../utils/authAxios';
+import { authorizedRequest } from '../utils/authAxios';
 
 interface Props {
   onSuccess: () => void;
@@ -18,7 +18,7 @@ export const UpdateUserPage = ({ onSuccess }: Props) => {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await authorizedPatch(`/user/update/${userId}`, {
+      const response = await authorizedRequest('PATCH', `/user/update/${userId}`, {
         firstName,
         lastName,
         role,

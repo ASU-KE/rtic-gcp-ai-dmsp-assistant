@@ -26,5 +26,5 @@ export function getUserInfo(): { role: string; username: string } | 'new' | null
 export function logout() {
   localStorage.removeItem('token');
   localStorage.removeItem('refreshToken');
-  window.location.href = '/session-expired';
+  window.location.href = '/login';
 }

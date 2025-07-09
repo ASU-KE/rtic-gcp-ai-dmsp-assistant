@@ -18,8 +18,8 @@ const refreshAccessToken = async () => {
   return newAccessToken;
 };
 
-const makeRequestWithToken = async (
-  method: 'get' | 'post' | 'delete' | 'patch',
+export const authorizedRequest = async (
+  method: 'GET' | 'POST' | 'DELETE' | 'PATCH',
   path: string,
   data?: any
 ) => {
@@ -50,15 +50,3 @@ const makeRequestWithToken = async (
     throw err;
   }
 };
-
-export const authorizedPost = (path: string, data: any) =>
-  makeRequestWithToken('post', path, data);
-
-export const authorizedDelete = (path: string) =>
-  makeRequestWithToken('delete', path);
-
-export const authorizedGet = (path: string) =>
-  makeRequestWithToken('get', path);
-
-export const authorizedPatch = (path: string, data: any) =>
-  makeRequestWithToken('patch', path, data);

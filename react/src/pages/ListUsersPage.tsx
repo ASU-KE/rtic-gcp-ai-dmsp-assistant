@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Alert } from 'react-bootstrap';
-import { authorizedGet } from '../utils/authAxios';
+import { authorizedRequest } from '../utils/authAxios';
 
 interface User {
   id: number;
@@ -19,7 +19,7 @@ export const ListUsersPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await authorizedGet('/user/all');
+        const response = await authorizedRequest('GET', '/user/all');
         setUsers(response.data.data);
       } catch (err: any) {
         setErrorMsg(

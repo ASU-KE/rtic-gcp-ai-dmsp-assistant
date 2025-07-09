@@ -15,7 +15,6 @@ import { DownloadIcon, CheckIcon, CopyIcon } from '../components/Icons';
 import mammoth from 'mammoth';
 
 GlobalWorkerOptions.workerSrc = workerSrc;
-GlobalWorkerOptions.workerSrc = workerSrc;
 
 type FormValues = {
   dmpText: string;
