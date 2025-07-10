@@ -4,7 +4,7 @@ interface JwtPayload {
   role: string;
   id: string;
   username: string;
-  exp: number;
+  expiration: number;
 }
 
 export function getUserInfo(): { role: string; username: string } | 'new' | null {
@@ -12,9 +12,9 @@ export function getUserInfo(): { role: string; username: string } | 'new' | null
   if (!token) return 'new';
 
   try {
-    const { role, username, exp } = jwtDecode<JwtPayload>(token);
+    const { role, username, expiration } = jwtDecode<JwtPayload>(token);
     const now = Math.floor(Date.now() / 1000);
-    if (exp < now) {
+    if (expiration < now) {
       return null;
     }
     return { role, username };

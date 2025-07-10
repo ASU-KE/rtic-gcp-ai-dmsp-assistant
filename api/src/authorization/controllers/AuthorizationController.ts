@@ -8,9 +8,9 @@ import { Request, Response } from 'express';
 import { LoginPayload } from '../schemas/loginPayload';
 
 const jwtSecret: string = config.jwtSecret;
-const refreshSecret: string = process.env.JWT_REFRESH_SECRET!;
-const jwtExpirationInSeconds = parseInt(config.jwtExpiration ?? '86400', 10);
-const refreshExpiration = parseInt(config.jwtRefreshExpiration ?? '604800', 10);
+const jwtRefreshSecret: string = config.jwtRefreshSecret;
+const jwtExpirationInSeconds: number = config.jwtExpiration;
+const jwtRefreshExpirationInSeconds: number = config.jwtRefreshExpiration;
 
 // Generates an Access Token using username and userId for the user's authentication
 const generateAccessToken = (user: {
@@ -70,8 +70,8 @@ export default class AuthorizationController {
 
         const refreshToken = jwt.sign(
           { userId: user.id, username: user.username },
-          refreshSecret,
-          { expiresIn: refreshExpiration }
+          jwtRefreshSecret,
+          { expiresIn: jwtRefreshExpirationInSeconds }
         );
 
         return res.status(200).json({
@@ -144,8 +144,8 @@ export default class AuthorizationController {
 
         const refreshToken = jwt.sign(
           { userId: user.id, username: user.username },
-          refreshSecret,
-          { expiresIn: refreshExpiration }
+          jwtRefreshSecret,
+          { expiresIn: jwtRefreshExpirationInSeconds }
         );
 
         return res.status(200).json({
@@ -176,7 +176,7 @@ export default class AuthorizationController {
         .json({ status: false, error: { message: 'Refresh token missing' } });
     }
     try {
-      const payload = jwt.verify(token, refreshSecret) as {
+      const payload = jwt.verify(token, jwtRefreshSecret) as {
         userId: number;
         username: string;
       };
