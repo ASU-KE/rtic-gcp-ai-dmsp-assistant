@@ -26,8 +26,9 @@ export const LoginPage = () => {
           password,
         }
       );
-      const { token } = response.data.data;
+      const { token, refreshToken } = response.data.data;
       localStorage.setItem('token', token);
+      localStorage.setItem('refreshToken', refreshToken);
       navigate('/');
       window.location.reload();
     } catch (err: any) {

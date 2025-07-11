@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { authorizedRequest } from '../utils/authAxios';
 
 interface Props {
   onSuccess: () => void;
@@ -17,17 +18,11 @@ export const UpdateUserPage = ({ onSuccess }: Props) => {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-
-      const response = await axios.patch(
-        import.meta.env.PROD
-          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/user/update/${userId}`
-          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/update/${userId}`,
-        { firstName, lastName, role },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await authorizedRequest('PATCH', `/user/update/${userId}`, {
+        firstName,
+        lastName,
+        role,
+      });
 
       const updatedUser = response.data?.data;
 
@@ -95,7 +90,6 @@ export const UpdateUserPage = ({ onSuccess }: Props) => {
           <option value="admin">Admin</option>
         </Form.Select>
       </Form.Group>
-
 
       {successMsg && <Alert variant="success">{successMsg}</Alert>}
       {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}

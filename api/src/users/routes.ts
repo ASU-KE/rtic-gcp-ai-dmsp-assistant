@@ -27,8 +27,10 @@ export default (userService: UserService) => {
 
   router.patch(
     '/update/:userId',
-    [checkPermissionMiddleware.has(roles.ADMIN as Role),
-    SchemaValidationMiddleware.verify(updateUserPayload)],
+    [
+      checkPermissionMiddleware.has(roles.ADMIN as Role),
+      SchemaValidationMiddleware.verify(updateUserPayload),
+    ],
     userController.updateUser
   );
 

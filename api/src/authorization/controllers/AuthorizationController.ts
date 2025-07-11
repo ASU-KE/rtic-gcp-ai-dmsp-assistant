@@ -7,11 +7,10 @@ import config from '../../config';
 import { Request, Response } from 'express';
 import { LoginPayload } from '../schemas/loginPayload';
 
-const jwtSecret = process.env.JWT_SECRET!;
-const jwtExpirationInSeconds = parseInt(
-  process.env.JWT_EXPIRATION_SECS ?? '3600',
-  10
-);
+const jwtSecret: string = config.jwtSecret;
+const jwtRefreshSecret: string = config.jwtRefreshSecret;
+const jwtExpirationInSeconds: number = config.jwtExpiration;
+const jwtRefreshExpirationInSeconds: number = config.jwtRefreshExpiration;
 
 // Generates an Access Token using username and userId for the user's authentication
 const generateAccessToken = (user: {
@@ -69,11 +68,18 @@ export default class AuthorizationController {
           role: user.role,
         });
 
+        const refreshToken = jwt.sign(
+          { userId: user.id, username: user.username },
+          jwtRefreshSecret,
+          { expiresIn: jwtRefreshExpirationInSeconds }
+        );
+
         return res.status(200).json({
           status: true,
           data: {
             user: user,
             token: accessToken,
+            refreshToken: refreshToken,
           },
         });
       })
@@ -136,11 +142,18 @@ export default class AuthorizationController {
           role: user.role,
         });
 
+        const refreshToken = jwt.sign(
+          { userId: user.id, username: user.username },
+          jwtRefreshSecret,
+          { expiresIn: jwtRefreshExpirationInSeconds }
+        );
+
         return res.status(200).json({
           status: true,
           data: {
             user: user,
             token: accessToken,
+            refreshToken: refreshToken,
           },
         });
       })
@@ -150,5 +163,43 @@ export default class AuthorizationController {
           error: err.message,
         });
       });
+  };
+
+  refreshToken = async (
+    req: Request<object, object, { refreshToken?: string }>,
+    res: Response
+  ): Promise<any> => {
+    const token = req.body.refreshToken;
+    if (!token) {
+      return res
+        .status(401)
+        .json({ status: false, error: { message: 'Refresh token missing' } });
+    }
+    try {
+      const payload = jwt.verify(token, jwtRefreshSecret) as {
+        userId: number;
+        username: string;
+      };
+      const user = await this.userService.findUser({ id: payload.userId });
+
+      if (!user) {
+        return res
+          .status(403)
+          .json({ status: false, error: { message: 'User not found' } });
+      }
+      const newAccessToken = generateAccessToken({
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      });
+      return res
+        .status(200)
+        .json({ status: true, data: { accessToken: newAccessToken } });
+    } catch {
+      return res.status(403).json({
+        status: false,
+        error: { message: 'Invalid or expired refresh token' },
+      });
+    }
   };
 }

@@ -9,7 +9,9 @@ interface Config {
   port: string;
   rollbarToken: string;
   jwtSecret: string;
-  jwtExpiration: string;
+  jwtExpiration: number;
+  jwtRefreshSecret: string;
+  jwtRefreshExpiration: number;
   dmptoolClientId: string;
   dmptoolClientSecret: string;
   llmAccessSecret: string;
@@ -90,7 +92,9 @@ const config: Config = {
   port: process.env.API_PORT ?? '3001',
   rollbarToken: process.env.ROLLBAR_TOKEN!,
   jwtSecret: process.env.JWT_SECRET!,
-  jwtExpiration: process.env.JWT_EXPIRATION!,
+  jwtExpiration: parseInt(process.env.JWT_EXPIRATION ?? '86400', 10),
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,
+  jwtRefreshExpiration: parseInt(process.env.JWT_REFRESH_EXPIRATION_SECS ?? '604800', 10),
   dmptoolClientId: process.env.DMPTOOL_CLIENT_ID!,
   dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET!,
   llmAccessSecret: process.env.LLM_ACCESS_SECRET!,

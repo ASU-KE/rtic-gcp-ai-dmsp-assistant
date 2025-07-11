@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Alert } from 'react-bootstrap';
+import { authorizedRequest } from '../utils/authAxios';
 
 interface User {
   id: number;
@@ -18,20 +19,14 @@ export const ListUsersPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(
-          import.meta.env.PROD
-            ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/user/all`
-            : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/all`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await authorizedRequest('GET', '/user/all');
         setUsers(response.data.data);
       } catch (err: any) {
-        setErrorMsg(typeof err.response?.data?.error === 'string'
-          ? err.response.data.error
-          : err.response?.data?.error?.message || 'Failed to load users');
+        setErrorMsg(
+          typeof err.response?.data?.error === 'string'
+            ? err.response.data.error
+            : err.response?.data?.error?.message || 'Failed to load users'
+        );
         setTimeout(() => setErrorMsg(''), 3000);
       }
     };

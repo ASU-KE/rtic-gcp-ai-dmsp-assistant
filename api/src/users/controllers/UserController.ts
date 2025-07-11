@@ -59,13 +59,16 @@ export default class UserController {
   };
 
   updateUser = (
-    req: Request<{ userId: string }, object, { firstName: string, lastName: string, role: string }>,
-    res: Response) => {
-
+    req: Request<
+      { userId: string },
+      object,
+      { firstName: string; lastName: string; role: string }
+    >,
+    res: Response
+  ) => {
     const { user } = req;
     const { userId } = req.params;
     const { firstName, lastName, role } = req.body;
-
 
     if (!user) {
       res.status(401).json({

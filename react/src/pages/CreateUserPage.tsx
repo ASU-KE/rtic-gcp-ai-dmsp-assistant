@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { authorizedRequest } from '../utils/authAxios';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Alert, Card, Modal } from 'react-bootstrap';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
@@ -34,18 +34,7 @@ export const CreateUserPage = ({ show, onClose }: CreateUserProps) => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        import.meta.env.PROD
-          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/create-user`
-          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/create-user`,
-        {
-          ...form,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await authorizedRequest('POST', '/create-user', form);
       setSuccessMsg('User created successfully!');
       setErrorMsg('');
       setForm({
