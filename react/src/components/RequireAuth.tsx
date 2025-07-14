@@ -1,13 +1,44 @@
+import { useEffect, useState } from 'react';
 import { Outlet, Navigate, useLocation } from 'react-router-dom';
-import { getUserInfo } from '../utils/auth';
 
-export const RequireAuth = ({ children }: { children?: JSX.Element }) => {
-  const user = getUserInfo();
+export const RequireAuth = () => {
   const location = useLocation();
+  const [authChecked, setAuthChecked] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  if (user === 'new') {
-    return <Navigate to="/login" replace state={{ from: location }} />;
-  }
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/user', {
+          credentials: 'include',
+        });
 
-  return user ? <Outlet /> : <Navigate to="/login" replace state={{ from: location }} />;
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.user) {
+            localStorage.setItem('user', JSON.stringify(data.user)); // Optional
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+          }
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch {
+        setIsAuthenticated(false);
+      } finally {
+        setAuthChecked(true);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  if (!authChecked) return null;
+
+  return isAuthenticated ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/login" replace state={{ from: location }} />
+  );
 };
