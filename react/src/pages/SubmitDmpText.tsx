@@ -214,13 +214,14 @@ export function SubmitDmpText() {
       <Container className="mt-4 mb-4">
         <Row className="mb-3">
           <h2 className="mt-2">AI Feedback Tool Beta Upload Page</h2>
+          <Col md={8}>
           <p className="mt-2">
             This AI Feedback Tool has been trained to review Data Management and Sharing Plans (DMSP) according to the
             NSF's guidelines. Support for additional funding agencies will be added in the future. This tool can be
             tested by uploading a DMSP file, such as a PDF, OR by pasting the text of the plan.
           </p>
           <p className="mt-2">Click the "Browse" button below to select and upload a DMSP file.</p>
-
+          </Col>
           <Col md={6} className="mb-3">
             <Accordion defaultActiveKey="0">
               <Accordion.Item eventKey="0">
