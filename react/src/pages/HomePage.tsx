@@ -18,8 +18,8 @@ export const HomePage = () => (
 
       <p className="mt-2">
         This beta test is a standalone tool for which ASU researchers may submit a draft or final copy of their DMSP and
-        receive an analysis report of the plan's strengths and weaknesses. This AI toolwill review the plan using the
-        NSF Dart rubric and provide feedback for each criteria in the NSF guidelines.
+        receive an analysis report of the plan's strengths and weaknesses. This AI tool will review the plan using the
+        <a href="https://osf.io/mgjpp">NSF DART Data Management Plan Rubric</a> and provide feedback for each criteria in the NSF guidelines.
       </p>
 
       <p className="mt-2">
