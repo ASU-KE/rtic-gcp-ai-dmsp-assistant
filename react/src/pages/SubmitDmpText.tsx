@@ -225,7 +225,7 @@ export function SubmitDmpText() {
           <Col md={6} className="mb-3">
             <Accordion defaultActiveKey="0">
               <Accordion.Item eventKey="0">
-                <Accordion.Header>Upload DMSP PDF</Accordion.Header>
+                <Accordion.Header>Upload a DMSP File</Accordion.Header>
                 <Accordion.Body>
                   <Form.Group controlId="formFile">
                     {/* <Form.Label className="fw-semibold">Upload a PDF, MS Word, or plain text file.</Form.Label> */}
