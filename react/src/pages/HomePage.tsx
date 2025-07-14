@@ -9,7 +9,7 @@ export const HomePage = () => (
 
       <p className="mt-2">
         The ASU DMSP AI Tool was developed in partnership with the Association of Research Libraries and the California
-        Digital Library, which is responsible for the development of the&nbsp;
+        Digital Library, which is responsible for the development of the{' '}
         <a href="https://dmptool.org/" target="_blank" rel="noopener noreferrer">
           DMP Tool
         </a>
