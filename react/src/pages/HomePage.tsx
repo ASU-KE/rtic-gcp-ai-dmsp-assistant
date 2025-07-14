@@ -1,5 +1,5 @@
 import '../App.css';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Accordion, Col, Row, Button } from 'react-bootstrap';
 import 'github-markdown-css/github-markdown-light.css';
 
 export const HomePage = () => (
@@ -18,8 +18,8 @@ export const HomePage = () => (
 
       <p className="mt-2">
         This beta test is a standalone tool for which ASU researchers may submit a draft or final copy of their DMSP and
-        receive an analysis report of the plan's strengths and weaknesses. This AI toolwill review the plan using the
-        NSF Dart rubric and provide feedback for each criteria in the NSF guidelines.
+        receive an analysis report of the plan's strengths and weaknesses. This AI tool will review the plan using the
+        <a href="https://osf.io/mgjpp">NSF DART Data Management Plan Rubric</a> and provide feedback for each criteria in the NSF guidelines.
       </p>
 
       <p className="mt-2">
@@ -47,59 +47,76 @@ export const HomePage = () => (
 
       <h3 className="mt-2">Frequently Asked Questions</h3>
 
-      <p className="mt-2">
-        <strong>Will this DMSP AI Tool use my data to train the AI model further?</strong>
-        <br />
-        No. This application doesn’t use or save your plan to train the model. The AI-generated response is based on the
-        National Science Foundation’s DART Data Management Plan Rubric to gauge your plan’s effectiveness.
-      </p>
+      <Accordion>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>Will this DMSP AI Tool use my data to train the AI model further?</Accordion.Header>
+          <Accordion.Body>
+          No. This application doesn’t use or save your plan to train the model. The AI-generated response is based
+          on the National Science Foundation’s DART Data Management Plan Rubric to gauge your plan’s effectiveness.
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>Can I use this AI feedback tool for my study if my funding doesn’t come from NSF?</Accordion.Header>
+          <Accordion.Body>
+          Although this DMSP AI Feedback Tool is currently configured to review plans using the NSF guidelines,
+              there are plans to add support for additional funding agencies in the near future. As those agencies are
+              added to this tool, this page will be updated to reflect the available agencies’ guidelines. In the
+              meantime, if you use this tool for an unsupported agency, your plan will be evaluated against the NSF
+              criteria, and the evaluation may not be accurate for your funding agency’s criteria.
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="2">
+          <Accordion.Header>Which model is used in the ASU DMSP AI Tool?</Accordion.Header>
+          <Accordion.Body>
+          The ASU DMSP AI Feedback Tool uses the Gemini 2 Flash hosted in{' '}
+              <a href="https://ai.asu.edu">ASU’s CreateAI platform</a>.
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="3">
+          <Accordion.Header>How do I get my DMSP into the Response Agent?</Accordion.Header>
+          <Accordion.Body>
+          There are two ways to get your plan into the ASU DMSP AI Feedback Tool. From the landing page, you can
+              paste in the entire text from the plan OR if the DMSP in the DMPTool has been made public, the assigned
+              DMP ID can be entered and the AI Feedback Tool will retrieve your DMP from the DMPTool.
+          </Accordion.Body>
+        </Accordion.Item>
 
-      <p className="mt-2">
-        <strong>Can I use this AI feedback tool for my study if my funding doesn’t come from NSF?</strong>
-        <br />
-        Although this DMSP AI Feedback Tool is currently configured to review plans using the NSF guidelines, there are
-        plans to add support for additional funding agencies in the near future. As those agencies are added to this
-        tool, this page will be updated to reflect the available agencies’ guidelines. In the meantime, if you use this
-        tool for an unsupported agency, your plan will be evaluated against the NSF criteria, and the evaluation may not
-        be accurate for your funding agency’s criteria.
-      </p>
+        <Accordion.Item eventKey="4">
+          <Accordion.Header>Who can see my plan?</Accordion.Header>
+          <Accordion.Body>
+          Staff in the Research Technology Office and ASU Library Researcher Support.
+          </Accordion.Body>
+        </Accordion.Item>
 
-      <p className="mt-2">
-        <strong>Which model is used in the ASU DMSP AI Tool?</strong>
-        <br />
-        The ASU DMSP AI Feedback Tool uses the Gemini 2 Flash hosted in{' '}
-        <a href="https://ai.asu.edu">ASU’s CreateAI platform</a>.
-      </p>
+        <Accordion.Item eventKey="5">
+          <Accordion.Header>What happens to my plan after I get my feedback?</Accordion.Header>
+          <Accordion.Body>
+          Any suggestions made by the AI Feedback Tool would need to be manually incorporated into your data
+              management and sharing plan by the authors before submitting to your funding agency. After providing
+              feedback, the ASU AI Feedback Tool will retain your DMSP for administrative support purposes only.
+          </Accordion.Body>
+        </Accordion.Item>
 
-      <p className="mt-2">
-        <strong>How do I get my DMSP into the Response Agent?</strong>
-        <br />
-        There are two ways to get your plan into the ASU DMSP AI Feedback Tool. From the landing page, you can paste in
-        the entire text from the plan OR if the DMSP in the DMPTool has been made public, the assigned DMP ID can be
-        entered and the AI Feedback Tool will retrieve your DMP from the DMPTool.
-      </p>
+        <Accordion.Item eventKey="6">
+          <Accordion.Header>Can I trust the AI Response Agent to give me correct feedback?</Accordion.Header>
+          <Accordion.Body>
+          This AI Feedback Tool is trained to give correct feedback based on the{' '}
+              <a href="https://osf.io/mgjpp">NSF DART Data Management Plan Rubric</a>. It cannot provide other feedback
+              at this time.
+          </Accordion.Body>
+        </Accordion.Item>
 
-      <p className="mt-2">
-        <strong>Who can see my plan?</strong>
-        <br />
-        Staff in the Research Technology Office and ASU Library Researcher Support.
-      </p>
-
-      <p className="mt-2">
-        <strong>What happens to my plan after I get my feedback?</strong>
-        <br />
-        Any suggestions made by the AI Feedback Tool would need to be manually incorporated into your data management
-        and sharing plan by the authors before submitting to your funding agency. After providing feedback, the ASU AI
-        Feedback Tool will retain your DMSP for administrative support purposes only.
-      </p>
-
-      <p className="mt-2">
-        <strong>Can I trust the AI Response Agent to give me correct feedback?</strong>
-        <br />
-        This AI Feedback Tool is trained to give correct feedback based on the{' '}
-        <a href="https://osf.io/mgjpp">NSF DART Data Management Plan Rubric</a>. It cannot provide other feedback at
-        this time.
-      </p>
+        <Accordion.Item eventKey="7">
+          <Accordion.Header>Can I use this AI feedback tool for my study if my funding doesn’t come from NSF?</Accordion.Header>
+          <Accordion.Body>
+          Although this DMSP AI Feedback Tool is currently configured to review plans using the NSF guidelines,
+              there are plans to add support for additional funding agencies in the near future. As those agencies are
+              added to this tool, this page will be updated to reflect the available agencies’ guidelines. In the
+              meantime, if you use this tool for an unsupported agency, your plan will be evaluated against the NSF
+              criteria, and the evaluation may not be accurate for your funding agency’s criteria.
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
     </Col>
   </Row>
 );
