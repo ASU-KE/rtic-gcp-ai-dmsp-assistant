@@ -1,5 +1,6 @@
 import '../App.css';
 import asuLogo from '../assets/arizona-state-university-logo.png';
+import { LoginCard } from '../components/LoginCard';
 
 export const CasLoginPage = () => {
 
@@ -10,7 +11,9 @@ export const CasLoginPage = () => {
           <img src={asuLogo} alt="ASU Logo" className="img-fluid" style={{ maxHeight: '60px' }} />
           <h2 className="mt-3 text-center">Sign In</h2>
         </div>
-        Test page for ASU CAS Login
+        <h3>Test page for ASU CAS Login</h3>
+
+        <LoginCard />
       </div>
     </div>
   );
