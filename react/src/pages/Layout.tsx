@@ -67,14 +67,14 @@ const header: TsHeaderProps = {
   isPartner: false,
   animateTitle: true,
   expandOnHover: true,
-  buttons:
-    [
-      {
-        "href": "/",
-        "text": "Request Help",
-        "color": "gold",
-      },
-    ]
+  // buttons:
+  //   [
+  //     {
+  //       "href": "/",
+  //       "text": "Request Help",
+  //       "color": "gold",
+  //     },
+  //   ]
 };
 
 const footer = {};
