@@ -1,7 +1,7 @@
 import axios from 'axios';
 import '../App.css';
 import { useEffect, useRef, useState } from 'react';
-import { Col, Row, Button, Form, Card, Stack, Container } from 'react-bootstrap';
+import { Col, Row, Button, Form, Card, Stack, Container, Accordion } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/legacy/build/pdf';
 import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
@@ -213,68 +213,56 @@ export function SubmitDmpText() {
     <>
       <Container className="mt-4 mb-4">
         <Row className="mb-3">
-          <h2 className="mt-2">Upload your DMP file</h2>
-          <Col md={6}>
-            <Card className="mb-3 shadow-sm">
-              <Card.Body>
-                {!useTextMode ? (
-                  <Stack gap={2}>
-                    <Form.Group controlId="formFile">
-                      {/* <Form.Label className="fw-semibold">Upload a PDF, MS Word, or plain text file.</Form.Label> */}
-                      <Form.Control className="mt-2" type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} />
-                      <Form.Text className="text-muted">
-                        Accepted formats: <strong>PDF</strong>, <strong>DOCX</strong>, or <strong>TXT</strong>
-                      </Form.Text>
-                      {fileError && <div className="text-danger mt-1 fw-semibold">{fileError}</div>}
-                    </Form.Group>
-
-                    <Button
-                      variant="link"
-                      onClick={() => {
-                        setUseTextMode(true);
-                        setValue('dmpText', '');
-                        setFileUploaded(false);
-                      }}
-                      className="p-0"
-                      style={{ textDecoration: 'underline', color: '#8c1d40' }}
-                    >
-                      Or paste your DMP text
-                    </Button>
-                  </Stack>
-                ) : (
-                  <Stack gap={2}>
-                    <Form.Label className="fw-semibold">Paste Your Data Management Plan</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={10}
-                      {...register('dmpText', { required: 'DMP Text is required' })}
-                      onBlur={() => clearErrors('dmpText')}
-                    />
-                    {errors.dmpText && <div className="text-danger fw-semibold">{errors.dmpText.message}</div>}
-                    <Button
-                      variant="link"
-                      onClick={() => setUseTextMode(false)}
-                      className="p-0"
-                      style={{ textDecoration: 'underline', color: '#8c1d40' }}
-                    >
-                      Or upload a file instead
-                    </Button>
-                  </Stack>
-                )}
-                <div className="d-flex justify-content-end mt-3">
-                  <Button
-                    type="submit"
-                    onClick={handleSubmit(onSubmit)}
-                    disabled={submissionInProgress}
-                    className="btn-custom-medium"
-                  >
-                    {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
-                  </Button>
-                </div>
-              </Card.Body>
-            </Card>
+          <h2 className="mt-2">AI Feedback Tool Beta Upload Page</h2>
+          <Col md={8}>
+          <p className="mt-2">
+            This AI Feedback Tool has been trained to review Data Management and Sharing Plans (DMSP) according to the
+            NSF's guidelines. Support for additional funding agencies will be added in the future. This tool can be
+            tested by uploading a DMSP file, such as a PDF, OR by pasting the text of the plan.
+          </p>
+          <p className="mt-2">Click the "Browse" button below to select and upload a DMSP file.</p>
           </Col>
-          <Col md={6}></Col>
+          <Col md={6} className="mb-3">
+            <Accordion defaultActiveKey="0">
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>Upload DMSP PDF</Accordion.Header>
+                <Accordion.Body>
+                  <Form.Group controlId="formFile">
+                    {/* <Form.Label className="fw-semibold">Upload a PDF, MS Word, or plain text file.</Form.Label> */}
+                    <Form.Control className="mt-2" type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} />
+                    <Form.Text className="text-muted">
+                      Accepted formats: <strong>PDF</strong>, <strong>DOCX</strong>, or <strong>TXT</strong>
+                    </Form.Text>
+                    {fileError && <div className="text-danger mt-1 fw-semibold">{fileError}</div>}
+                  </Form.Group>
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="1">
+                <Accordion.Header>Paste DMSP text</Accordion.Header>
+                <Accordion.Body>
+                  <Form.Label className="fw-semibold">Paste Your Data Management Plan</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={10}
+                    {...register('dmpText', { required: 'DMP Text is required' })}
+                    onBlur={() => clearErrors('dmpText')}
+                  />
+                  {errors.dmpText && <div className="text-danger fw-semibold">{errors.dmpText.message}</div>}
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+
+            <div className="d-flex justify-content-end mt-3">
+              <Button
+                type="submit"
+                onClick={handleSubmit(onSubmit)}
+                disabled={submissionInProgress}
+                className="btn-custom-medium"
+              >
+                {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
+              </Button>
+            </div>
+          </Col>
 
           {showLoadingIndicator && (
             <Row className="mt-2">
