@@ -3,6 +3,8 @@ import Rollbar from 'rollbar';
 import cors from 'cors';
 import morgan from 'morgan';
 import { DataSource } from 'typeorm';
+import session from 'express-session';
+import passport from 'passport';
 
 // Express Routes Import
 import AuthorizationRoutes from './authorization/routes';
@@ -29,11 +31,27 @@ export function createApp(
         process.env.NODE_ENV === 'development'
           ? 'https://dmsp.local.asu.edu'
           : 'https://dmsp.dev.rtd.asu.edu',
+      credentials: true,
     })
   );
   app.use(express.json());
 
-  app.use('/', AuthorizationRoutes(userService));
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET ?? 'secret-key',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: false, // true if using HTTPS
+        sameSite: 'lax',
+      },
+    })
+  );
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  // app.use('/', AuthorizationRoutes(userService));
   app.use('/user', [isAuthenticatedMiddleware.check], UserRoutes(userService));
   app.use('/dmp', DmpRoutes);
   app.use('/test', [isAuthenticatedMiddleware.check], TestRoutes);

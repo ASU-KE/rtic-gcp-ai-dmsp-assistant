@@ -35,7 +35,7 @@ AppDataSource.initialize()
     const app = createApp(rollbar, AppDataSource, userService);
 
     // Add Passport middleware
-    app.use(passport.initialize());
+    // app.use(passport.initialize());
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     const server = http.createServer(app);

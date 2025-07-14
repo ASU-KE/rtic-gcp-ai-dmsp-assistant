@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 
 // Controller Imports
 import AuthorizationController from './controllers/AuthorizationController';
@@ -11,6 +11,8 @@ import isAuthenticatedMiddleware from './../common/middlewares/IsAuthenticatedMi
 // JSON Schema Imports for payload verification
 import registerPayload from './schemas/registerPayload';
 import loginPayload from './schemas/loginPayload';
+
+import passport from 'passport';
 
 const AuthorizationRoutes = (userService: UserService) => {
   const router: Router = Router();
@@ -33,6 +35,28 @@ const AuthorizationRoutes = (userService: UserService) => {
   );
 
   router.post('/refresh-token', authorizationController.refreshToken);
+
+  router.get('/login/cas', passport.authenticate('cas'));
+
+  router.get(
+    '/login/cas/callback',
+    passport.authenticate('cas', {
+      failureRedirect: '/login',
+    }),
+    (req, res) => {
+      console.log('✅ CAS Callback success, user:', req.user);
+      res.redirect('/dmp');
+    }
+  );
+
+  // User info route for frontend
+  // router.get('/api/user', (req: Request, res: Response) => {
+  //   if (req.isAuthenticated()) {
+  //     res.json({ user: req.user });
+  //   } else {
+  //     res.status(401).json({ message: 'Unauthorized' });
+  //   }
+  // });
 
   return router;
 };
