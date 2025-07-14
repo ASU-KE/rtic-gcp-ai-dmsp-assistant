@@ -6,6 +6,13 @@ interface Config {
     user: string;
     password: string;
   };
+  mailer: {
+    host: string;
+    port: string;
+    user: string;
+    password: string;
+    from: string;
+  };
   port: string;
   rollbarToken: string;
   jwtSecret: string;
@@ -85,6 +92,13 @@ const config: Config = {
     database: process.env.DB_NAME!,
     user: process.env.DB_USER!,
     password: process.env.DB_PASSWORD!,
+  },
+  mailer: {
+    host: process.env.MAIL_HOST ?? 'smtp.asu.edu',
+    port: process.env.MAIL_PORT ?? '587',
+    user: process.env.MAIL_USERNAME!,
+    password: process.env.MAIL_PASSWORD!,
+    from: process.env.MAIL_FROM ?? 'ASU DMSP AI Tool <no-reply@rto.asu.edu>',
   },
   // if you're not using docker compose for local development, this will default to 8080
   // to prevent non-root permission problems with 80. Dockerfile is set to make this 80
