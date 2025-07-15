@@ -1,18 +1,22 @@
 import cors from 'cors';
 import express, { Application } from 'express';
+import bodyParser from 'body-parser';
 import session from 'express-session';
 import morgan from 'morgan';
 import passport from 'passport';
 import Rollbar from 'rollbar';
 import { DataSource } from 'typeorm';
 
-// Express Routes Imports
-import AuthorizationRoutes from './routes/auth.routes';
-import UserRoutes from './users/routes';
-import DmpRoutes from './routes/dmp.routes';
-import TestRoutes from './routes/example.routes';
 import isAuthenticatedMiddleware from './middlewares/IsAuthenticatedMiddleware';
 import { UserService } from './modules/users/services/UserService';
+
+// Express Routes Imports
+import AuthorizationRoutes from './routes/auth.routes';
+import { GitHubOAuthStrategy } from './routes/GitHubOAuthStrategy';
+import { GoogleOAuthStrategy } from './routes/GoogleOAuthStrategy';
+import DmpRoutes from './routes/dmp.routes';
+// import UserRoutes from './routes/user.routes';
+import ExampleRoutes from './routes/example.routes';
 
 export function createApp(
   rollbar: Rollbar,
