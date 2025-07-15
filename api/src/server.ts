@@ -10,7 +10,7 @@ import { DataSource } from 'typeorm';
 import AuthorizationRoutes from './routes/auth.routes';
 import UserRoutes from './users/routes';
 import DmpRoutes from './routes/dmp.routes';
-import TestRoutes from './routes/test.routes';
+import TestRoutes from './routes/example.routes';
 import isAuthenticatedMiddleware from './middlewares/IsAuthenticatedMiddleware';
 import { UserService } from './modules/users/services/UserService';
 

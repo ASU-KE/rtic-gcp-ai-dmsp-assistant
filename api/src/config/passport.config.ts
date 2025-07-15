@@ -5,8 +5,8 @@ import {
   VerifiedCallback,
 } from 'passport-jwt';
 import { Strategy as CasStrategy } from 'passport-cas2';
-import { UserService } from '../../users/services/UserService';
-import { User } from '../../users/entities/User';
+import { UserService } from '../modules/users/services/UserService';
+import { User } from '../entities/User';
 
 interface JwtPayload {
   userId: number;
