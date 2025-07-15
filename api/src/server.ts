@@ -49,7 +49,7 @@ export function createApp(
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: false, // true if using HTTPS
+        secure: true, // Set to false if not using HTTPS
         sameSite: 'lax',
       },
     })
