@@ -60,12 +60,23 @@ export function createApp(
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // app.use('/', AuthorizationRoutes(userService));
-  app.use('/user', [isAuthenticatedMiddleware.check], UserRoutes(userService));
-  app.use('/dmp', DmpRoutes);
-  app.use('/test', [isAuthenticatedMiddleware.check], TestRoutes);
+  // Register routes
+  app.get("/", (req, res) => {
+    res.json({
+      success: true,
+      isAuthenticated: req.isAuthenticated(),
+      message: "DMSP AI Tool API",
+    });
+  });
+  // Unprotected routes
+  app.use('/auth', AuthorizationRoutes(userService));
+  app.use('/api', GitHubOAuthStrategy(), GoogleOAuthStrategy());
 
-  // Health-check endpoint
+  // Protected routes
+  // app.use('/user', [isAuthenticatedMiddleware.check], UserRoutes(userService));
+  app.use('/dmp', [isAuthenticatedMiddleware.check], DmpRoutes);
+  app.use('/example', [isAuthenticatedMiddleware.check], ExampleRoutes);
+
   app.get('/healthz', (req, res) => {
     res.status(200).json({ status: 'ok' });
   });
