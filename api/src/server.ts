@@ -1,10 +1,10 @@
-import express, { Application } from 'express';
-import Rollbar from 'rollbar';
 import cors from 'cors';
-import morgan from 'morgan';
-import { DataSource } from 'typeorm';
+import express, { Application } from 'express';
 import session from 'express-session';
+import morgan from 'morgan';
 import passport from 'passport';
+import Rollbar from 'rollbar';
+import { DataSource } from 'typeorm';
 
 // Express Routes Import
 import AuthorizationRoutes from './authorization/routes';
