@@ -1,6 +1,6 @@
 import NodeCache from 'node-cache';
 import { URLSearchParams } from 'url';
-import config from '../../config/app.config';
+import config from '../../../config/app.config';
 
 interface DmpApiResponse {
   items: {

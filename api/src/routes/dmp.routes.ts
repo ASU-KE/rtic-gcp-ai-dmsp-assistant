@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { DmpController } from './controllers/DmpController';
+import { DmpController } from '../modules/dmp/controllers/DmpController';
 
-import DmpService from './services/DmpService';
-import PdfService from './services/PdfService';
-import LlmService from './services/KE_LLM_Service';
+import DmpService from '../modules/dmp/services/DmpService';
+import PdfService from '../modules/dmp/services/PdfService';
+import LlmService from '../modules/dmp/services/KE_LLM_Service';
 
 const router = Router();
 

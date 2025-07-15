@@ -7,8 +7,8 @@ import { AppDataSource } from './config/orm.config';
 import { configurePassport } from './config/passport.config';
 import { createApp } from './server';
 
-import { User } from './users/entities/User';
-import { UserService } from './users/services/UserService';
+import { User } from './entities/User';
+import { UserService } from './modules/users/services/UserService';
 
 const port = config.port;
 

@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { Request } from 'express';
-import { UserService } from '../../users/services/UserService';
-import { Role } from '../../config/app.config';
+import { UserService } from '../modules/users/services/UserService';
+import { Role } from '../config/app.config';
 
 interface AuthenticatedRequest extends Request {
   user?: {

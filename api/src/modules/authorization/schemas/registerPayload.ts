@@ -1,4 +1,4 @@
-import config from '../../config/app.config';
+import config from '../../../config/app.config';
 import { FromSchema } from 'json-schema-to-ts';
 const roles = config.roles;
 

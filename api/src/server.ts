@@ -6,13 +6,13 @@ import passport from 'passport';
 import Rollbar from 'rollbar';
 import { DataSource } from 'typeorm';
 
-// Express Routes Import
-import AuthorizationRoutes from './authorization/routes';
+// Express Routes Imports
+import AuthorizationRoutes from './routes/auth.routes';
 import UserRoutes from './users/routes';
-import DmpRoutes from './dmp/routes';
-import TestRoutes from './test/routes';
-import isAuthenticatedMiddleware from './common/middlewares/IsAuthenticatedMiddleware';
-import { UserService } from './users/services/UserService';
+import DmpRoutes from './routes/dmp.routes';
+import TestRoutes from './routes/test.routes';
+import isAuthenticatedMiddleware from './middlewares/IsAuthenticatedMiddleware';
+import { UserService } from './modules/users/services/UserService';
 
 export function createApp(
   rollbar: Rollbar,

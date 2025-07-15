@@ -1,16 +1,16 @@
 import { Router } from 'express';
 
 // Middleware Imports
-import SchemaValidationMiddleware from '../common/middlewares/SchemaValidationMiddleware';
-import { CheckPermissionMiddleware } from '../common/middlewares/CheckPermissionMiddleware';
+import SchemaValidationMiddleware from '../middlewares/SchemaValidationMiddleware';
+import { CheckPermissionMiddleware } from '../middlewares/CheckPermissionMiddleware';
 
 // Controller Imports
-import UserController from './controllers/UserController';
-import { UserService } from './services/UserService';
+import UserController from '../modules/users/controllers/UserController';
+import { UserService } from '../modules/users/services/UserService';
 
 // JSON Schema Imports for payload verification
-import updateUserPayload from './schemas/updateUserPayload';
-import changeRolePayload from './schemas/changeRolePayload';
+import updateUserPayload from '../modules/users/schemas/updateUserPayload';
+import changeRolePayload from '../modules/users/schemas/changeRolePayload';
 
 import config, { Role } from '../config/app.config';
 const roles = config.roles;

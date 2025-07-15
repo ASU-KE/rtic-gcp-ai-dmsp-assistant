@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { User } from '../entities/User';
+import { User } from '../../../entities/User';
 
 export class UserService {
   private repo: Repository<User>;
