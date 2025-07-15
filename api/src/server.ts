@@ -28,7 +28,11 @@ export function createApp(
   app.locals.dataSource = dataSource;
   app.locals.userService = userService;
 
+  // Register middlewares
+  app.use(bodyParser.json());
+  // Log common HTTP requests and methods
   app.use(morgan('common'));
+
   app.use(
     cors({
       origin:
@@ -38,7 +42,6 @@ export function createApp(
       credentials: true,
     })
   );
-  app.use(express.json());
 
   app.use(
     session({
@@ -52,6 +55,7 @@ export function createApp(
     })
   );
 
+  //init passport middlewares
   app.use(passport.initialize());
   app.use(passport.session());
 
