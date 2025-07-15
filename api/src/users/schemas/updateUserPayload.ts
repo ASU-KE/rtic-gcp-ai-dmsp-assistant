@@ -1,4 +1,4 @@
-import config from '../../config';
+import config from '../../config/app.config';
 const roles = config.roles;
 
 export default {

@@ -1,16 +1,15 @@
-import config from './config';
-import { AppDataSource } from './data-source';
-import { UserService } from './users/services/UserService';
-import dotenv from 'dotenv';
-import { User } from './users/entities/User';
 import Rollbar from 'rollbar';
-import passport from 'passport';
-import { configurePassport } from './common/middlewares/passport.config';
-import { createApp } from './server';
 import http from 'http';
 import { WebSocketServer, WebSocket, RawData } from 'ws';
 
-dotenv.config();
+import config from './config/app.config';
+import { AppDataSource } from './config/orm.config';
+import { configurePassport } from './config/passport.config';
+import { createApp } from './server';
+
+import { User } from './users/entities/User';
+import { UserService } from './users/services/UserService';
+
 const port = config.port;
 
 // Initialise Rollbar

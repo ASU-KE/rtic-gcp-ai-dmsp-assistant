@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { UserService } from '../../users/services/UserService';
 import { User } from '../../users/entities/User';
 import { RegisterPayload } from '../schemas/registerPayload';
-import config from '../../config';
+import config from '../../config/app.config';
 import { Request, Response } from 'express';
 import { LoginPayload } from '../schemas/loginPayload';
 

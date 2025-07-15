@@ -12,7 +12,7 @@ import { UserService } from './services/UserService';
 import updateUserPayload from './schemas/updateUserPayload';
 import changeRolePayload from './schemas/changeRolePayload';
 
-import config, { Role } from '../config';
+import config, { Role } from '../config/app.config';
 const roles = config.roles;
 
 // Export a function that takes UserService instance

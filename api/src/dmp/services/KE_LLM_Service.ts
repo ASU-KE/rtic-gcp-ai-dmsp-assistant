@@ -1,5 +1,5 @@
-import config from '../../config';
-import promptConfig from '../../system_prompt.config';
+import config from '../../config/app.config';
+import promptConfig from '../../config/llmPrompt.config';
 import { WebSocketServer, WebSocket } from 'ws';
 
 interface LlmResponse {
