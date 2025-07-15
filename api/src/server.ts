@@ -12,9 +12,9 @@ import { UserService } from './modules/users/services/UserService';
 
 // Express Routes Imports
 import AuthorizationRoutes from './routes/auth.routes';
-import { GitHubOAuthStrategy } from './routes/GitHubOAuthStrategy';
-import { GoogleOAuthStrategy } from './routes/GoogleOAuthStrategy';
-import DmpRoutes from './routes/dmp.routes';
+// import { GitHubOAuthStrategy } from './routes/GitHubOAuthStrategy.ts.DISABLE';
+// import { GoogleOAuthStrategy } from './routes/GoogleOAuthStrategy';
+// import DmpRoutes from './routes/dmp.routes';
 // import UserRoutes from './routes/user.routes';
 import ExampleRoutes from './routes/example.routes';
 
@@ -70,11 +70,11 @@ export function createApp(
   });
   // Unprotected routes
   app.use('/auth', AuthorizationRoutes(userService));
-  app.use('/api', GitHubOAuthStrategy(), GoogleOAuthStrategy());
+  // app.use('/api', GitHubOAuthStrategy(), GoogleOAuthStrategy());
 
   // Protected routes
   // app.use('/user', [isAuthenticatedMiddleware.check], UserRoutes(userService));
-  app.use('/dmp', [isAuthenticatedMiddleware.check], DmpRoutes);
+  // app.use('/dmp', [isAuthenticatedMiddleware.check], DmpRoutes);
   app.use('/example', [isAuthenticatedMiddleware.check], ExampleRoutes);
 
   // Health-check endpoint for Kubernetes
