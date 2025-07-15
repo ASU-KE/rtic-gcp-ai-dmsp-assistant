@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 
 // Controller Imports
 import AuthorizationController from '../modules/authorization/controllers/AuthorizationController';
@@ -12,32 +12,29 @@ import isAuthenticatedMiddleware from '../middlewares/IsAuthenticatedMiddleware'
 import registerPayload from '../modules/authorization/schemas/registerPayload';
 import loginPayload from '../modules/authorization/schemas/loginPayload';
 
-import passport from 'passport';
-import { Strategy as GitHubStrategy } from "passport-github2";
-import { PassportGitHubUserEntity } from "../entities/PassportGitHubUserEntity";
-
+// import passport from 'passport';
 
 const AuthorizationRoutes = (userService: UserService) => {
   const router: Router = Router();
 
   const authorizationController = new AuthorizationController(userService);
 
-  // router.post(
-  //   '/create-user',
-  //   [
-  //     isAuthenticatedMiddleware.check,
-  //     SchemaValidationMiddleware.verify(registerPayload),
-  //   ],
-  //   authorizationController.register
-  // );
+  router.post(
+    '/create-user',
+    [
+      isAuthenticatedMiddleware.check,
+      SchemaValidationMiddleware.verify(registerPayload),
+    ],
+    authorizationController.register
+  );
 
-  // router.post(
-  //   '/login',
-  //   [SchemaValidationMiddleware.verify(loginPayload)],
-  //   authorizationController.login
-  // );
+  router.post(
+    '/login',
+    [SchemaValidationMiddleware.verify(loginPayload)],
+    authorizationController.login
+  );
 
-  // router.post('/refresh-token', authorizationController.refreshToken);
+  router.post('/refresh-token', authorizationController.refreshToken);
 
   // router.get('/login/cas', passport.authenticate('cas'));
 
