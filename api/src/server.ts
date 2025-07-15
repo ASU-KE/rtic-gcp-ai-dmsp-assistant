@@ -77,6 +77,7 @@ export function createApp(
   app.use('/dmp', [isAuthenticatedMiddleware.check], DmpRoutes);
   app.use('/example', [isAuthenticatedMiddleware.check], ExampleRoutes);
 
+  // Health-check endpoint for Kubernetes
   app.get('/healthz', (req, res) => {
     res.status(200).json({ status: 'ok' });
   });
