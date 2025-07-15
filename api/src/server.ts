@@ -50,6 +50,7 @@ export function createApp(
       saveUninitialized: false,
       cookie: {
         secure: true, // Set to false if not using HTTPS
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
         sameSite: 'lax',
       },
     })
