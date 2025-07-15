@@ -220,7 +220,7 @@ export function SubmitDmpText() {
             NSF's guidelines. Support for additional funding agencies will be added in the future. This tool can be
             tested by uploading a DMSP file, such as a PDF, OR by pasting the text of the plan.
           </p>
-          <p className="mt-2">Click the "Browse" button below to select and upload a DMSP file.</p>
+          <p className="mt-2">Click the "Choose File" button below to select and upload a DMSP file.</p>
           </Col>
           <Col md={6} className="mb-3">
             <Accordion defaultActiveKey="0">
@@ -240,7 +240,6 @@ export function SubmitDmpText() {
               <Accordion.Item eventKey="1">
                 <Accordion.Header>Paste DMSP text</Accordion.Header>
                 <Accordion.Body>
-                  <Form.Label className="fw-semibold">Paste Your Data Management Plan</Form.Label>
                   <Form.Control
                     as="textarea"
                     rows={10}
