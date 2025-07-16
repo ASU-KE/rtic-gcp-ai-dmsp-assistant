@@ -50,21 +50,38 @@ app.use(
   })
 );
 
+// Init passport middlewares
+// app.use(passport.initialize());
+// app.use(passport.session());
+
 // Express Routes Import
-import AuthRoutes from './routes/auth.routes';
-import UserRoutes from './routes/user.routes';
+// import AuthRoutes from './routes/auth.routes';
+// import UserRoutes from './routes/user.routes';
 import DmpRoutes from './routes/dmp.routes';
 
-// Attaching the routes to the app.
-app.use('/', AuthRoutes);
-app.use('/user', UserRoutes);
-app.use('/dmp', DmpRoutes);
+// Register routes
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    isAuthenticated: req.isAuthenticated(),
+    message: 'DMSP AI Tool API',
+  });
+});
+
+// Unprotected routes
+// app.use('/auth', AuthRoutes);
+// app.use('/api', GitHubOAuthStrategy(), GoogleOAuthStrategy());
 
 // Health-check endpoint for Kubernetes
 app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'Healthy' });
 });
 
+// Protected routes
+// app.use('/user', UserRoutes);
+app.use('/dmp', DmpRoutes);
+
+// Rollbar error handler
 app.use(rollbar.errorHandler());
 
 export default app;
