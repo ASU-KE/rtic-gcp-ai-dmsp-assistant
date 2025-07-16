@@ -8,6 +8,7 @@ interface Config {
   };
   port: string;
   rollbarToken: string;
+  sessionSecret: string;
   jwtSecret: string;
   jwtExpiration: number;
   jwtRefreshSecret: string;
@@ -91,6 +92,7 @@ const config: Config = {
   // because containers don't have that issue :)
   port: process.env.API_PORT ?? '3001',
   rollbarToken: process.env.ROLLBAR_TOKEN!,
+  sessionSecret: process.env.SESSION_SECRET!,
   jwtSecret: process.env.JWT_SECRET!,
   jwtExpiration: parseInt(process.env.JWT_EXPIRATION ?? '86400', 10),
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,

@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import session from 'express-session';
 
 import config from './config/app.config';
 
@@ -33,6 +34,19 @@ app.use(
         ? 'https://dmsp.local.asu.edu'
         : 'https://dmsp.dev.rtd.asu.edu',
     credentials: true,
+  })
+);
+
+app.use(
+  session({
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: true, // Set to false if not using HTTPS
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      sameSite: 'lax',
+    },
   })
 );
 
