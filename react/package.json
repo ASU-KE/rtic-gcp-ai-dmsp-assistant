@@ -12,8 +12,8 @@
     "format:write": "prettier --write \"src/**/*.tsx\""
   },
   "dependencies": {
-    "@asu/component-header-footer": "1.0.8",
-    "@asu/unity-bootstrap-theme": "^1.14.2",
+    "@asu/component-header-footer": "^1.0.8",
+    "@asu/unity-bootstrap-theme": "^1.26.0",
     "@tanstack/react-query": "^4.0.0",
     "@tanstack/react-query-devtools": "^4.0.0",
     "axios": "^1.7.7",
