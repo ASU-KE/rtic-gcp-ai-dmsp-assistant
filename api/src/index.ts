@@ -1,3 +1,5 @@
+import { WebSocket, RawData } from 'ws';
+
 import config from './config/app.config';
 
 // include and initialize the rollbar library with your access token
@@ -15,6 +17,31 @@ const port = config.port;
 const server = app.listen(port, function () {
   console.log('Server Listening on PORT:', port);
 });
+
+// Create WebSocket server
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws: WebSocket) => {
+  ws.on('message', (data: RawData) => {
+    let message: string;
+
+    if (typeof data === 'string') {
+      message = data;
+    } else if (data instanceof Buffer) {
+      message = data.toString('utf-8');
+    } else if (data instanceof ArrayBuffer) {
+      message = Buffer.from(new Uint8Array(data)).toString('utf-8');
+    } else if (Array.isArray(data)) {
+      message = Buffer.concat(data).toString('utf-8');
+    } else {
+      message = '[Unrecognized message format]';
+    }
+    console.log('Received:', message);
+  });
+});
+
+// Store WebSocket server in the Express app for later use
+app.locals.wss = wss;
 
 //
 // need this in docker container to properly exit since node doesn't handle SIGINT/SIGTERM
