@@ -49,7 +49,7 @@ export function AuthContextProvider({
   const login = async (provider: ProviderEntity) => {
     try {
       window.location.assign(
-        `${process.env.REACT_APP_API_URL}/auth/${provider}`
+        `${import.meta.env.VITE_BACKEND_DOMAIN}/auth/${provider}`
       );
     } catch (error) {
       setError(error);
@@ -60,7 +60,7 @@ export function AuthContextProvider({
     localStorage.removeItem("isAuthenticated");
 
     try {
-      window.location.assign(`${process.env.REACT_APP_API_URL}/user/logout`);
+      window.location.assign(`${import.meta.env.VITE_BACKEND_DOMAIN}/user/logout`);
 
       setUser(undefined);
     } catch (error) {

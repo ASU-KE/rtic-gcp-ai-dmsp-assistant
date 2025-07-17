@@ -1,7 +1,7 @@
-// TEST FILE for the AuthContext
+// TEST FILE for the Auth
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: import.meta.env.VITE_BACKEND_DOMAIN,
   timeout: 2000,
 });
