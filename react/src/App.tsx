@@ -30,7 +30,7 @@ const App = (): JSX.Element => {
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/submit-text" element={<SubmitDmpText />} />
-        {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID === 'true' && (
+        {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && (
           <Route path="/submit-id" element={<SubmitDmpId />} />
         )}
 
