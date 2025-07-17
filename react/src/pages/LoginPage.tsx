@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
-import '../App.css';
-import asuLogo from '../assets/arizona-state-university-logo.png';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
+
+import '../App.css';
 import eyeIcon from '../assets/hide.png';
 import eyeOffIcon from '../assets/unhide.png';
 

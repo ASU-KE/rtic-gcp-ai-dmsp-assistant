@@ -1,8 +1,7 @@
 import { useState } from 'react';
+import { Form, Button, Alert, Card, Container, Row, Col } from 'react-bootstrap';
 import { authorizedRequest } from '../utils/authAxios';
-import { useNavigate } from 'react-router-dom';
-import { Form, Button, Alert, Card, Modal, Container, Row, Col } from 'react-bootstrap';
-import horizAsuLogo from '../assets/arizona-state-university-logo.png';
+
 import '../App.css';
 import eyeIcon from '../assets/hide.png';
 import eyeOffIcon from '../assets/unhide.png';
