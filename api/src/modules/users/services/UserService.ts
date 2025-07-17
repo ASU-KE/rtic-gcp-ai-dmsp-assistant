@@ -1,11 +1,12 @@
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+
 import { User } from '../../../entities/User';
 
 export class UserService {
   private repo: Repository<User>;
 
-  constructor(repo: Repository<User>) {
-    this.repo = repo;
+  constructor(appDataSource: DataSource) {
+    this.repo = appDataSource.getRepository(User);
   }
 
   createUser(user: Partial<User>) {

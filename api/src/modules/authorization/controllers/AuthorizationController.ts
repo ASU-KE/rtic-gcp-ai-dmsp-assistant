@@ -1,11 +1,13 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import { Request, Response } from 'express';
+import { DataSource } from 'typeorm';
+
 import { UserService } from '../../users/services/UserService';
 import { User } from '../../../entities/User';
 import { RegisterPayload } from '../schemas/registerPayload';
-import config from '../../../config/app.config';
-import { Request, Response } from 'express';
 import { LoginPayload } from '../schemas/loginPayload';
+import config from '../../../config/app.config';
 
 const jwtSecret: string = config.jwtSecret;
 const jwtRefreshSecret: string = config.jwtRefreshSecret;

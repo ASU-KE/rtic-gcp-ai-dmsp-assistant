@@ -55,9 +55,10 @@ app.use(
 // app.use(passport.session());
 
 // Express Routes Import
-// import AuthRoutes from './routes/auth.routes';
-// import UserRoutes from './routes/user.routes';
+import AuthRoutes from './routes/auth.routes';
+import UserRoutes from './routes/user.routes';
 import DmpRoutes from './routes/dmp.routes';
+import { UserService } from './modules/users/services/UserService';
 
 // Register routes
 // app.get('/', (req, res) => {
@@ -69,7 +70,7 @@ import DmpRoutes from './routes/dmp.routes';
 // });
 
 // Unprotected routes
-// app.use('/auth', AuthRoutes);
+app.use('/', AuthRoutes(new UserService(AppDataSource)));
 // app.use('/api', GitHubOAuthStrategy(), GoogleOAuthStrategy());
 
 // Health-check endpoint for Kubernetes
