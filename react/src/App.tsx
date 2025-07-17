@@ -5,6 +5,7 @@ import { Layout } from './pages/Layout';
 import { HomePage } from './pages/HomePage';
 import { CasLoginPage } from './pages/CasLoginPage';
 import { SubmitDmpText } from './pages/SubmitDmpText';
+import { SubmitDmpId } from './pages/SubmitDmpId';
 
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
@@ -24,6 +25,7 @@ const App = (): JSX.Element => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={user ? <Navigate to="/" /> : <CasLoginPage />} />
         <Route path="/submit-text" element={<SubmitDmpText />} />
+        <Route path="/submit-id" element={<SubmitDmpId />} />
         {/* <Route
           path="/protected"
           element={
