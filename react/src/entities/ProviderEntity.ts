@@ -1,1 +1,1 @@
-export type ProviderEntity = "github" | "google";
+export type ProviderEntity = "cas" | "github" | "google";
