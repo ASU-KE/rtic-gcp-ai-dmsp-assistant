@@ -61,13 +61,13 @@ app.use(passport.session());
 
 // Register routes
 
-// app.get('/', (req, res) => {
-//   res.json({
-//     success: true,
-//     isAuthenticated: req.isAuthenticated(),
-//     message: 'DMSP AI Tool API',
-//   });
-// });
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    isAuthenticated: req.isAuthenticated(),
+    message: 'DMSP AI Tool API',
+  });
+});
 
 // Health-check for Kubernetes
 app.get('/healthz', (req, res) => {
