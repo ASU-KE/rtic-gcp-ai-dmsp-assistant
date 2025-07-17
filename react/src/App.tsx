@@ -23,15 +23,16 @@ const App = (): JSX.Element => {
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={user ? <Navigate to="/" /> : <CasLoginPage />} />
-        <Route
-          path="/submit-text"
+        <Route path="/submit-text" element={<SubmitDmpText />} />
+        {/* <Route
+          path="/protected"
           element={
             <ProtectedRoute>
-              {/* For testing auth: Protect just the Submit DMP page */}
-              <SubmitDmpText />
+              For testing auth: Protect a test page or Submit DMP Text
+              <TestPage />
             </ProtectedRoute>
           }
-        />
+        /> */}
       </Route>
     </Routes>
   );
