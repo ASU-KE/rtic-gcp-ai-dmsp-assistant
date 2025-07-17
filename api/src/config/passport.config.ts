@@ -4,9 +4,9 @@ import {
   ExtractJwt,
   VerifiedCallback,
 } from 'passport-jwt';
-import { Strategy as CasStrategy } from 'passport-cas2';
+// import { Strategy as CasStrategy } from 'passport-cas2';
 import { UserService } from '../modules/users/services/UserService';
-import { User } from '../entities/User';
+// import { User } from '../entity/User';
 
 interface JwtPayload {
   userId: number;
@@ -19,39 +19,39 @@ const jwtOptions = {
 };
 
 export const configurePassport = (userService: UserService) => {
-  // if (!jwtOptions.secretOrKey) {
-  //   throw new Error('JWT_SECRET is not defined in environment variables');
-  // }
+  if (!jwtOptions.secretOrKey) {
+    throw new Error('JWT_SECRET is not defined in environment variables');
+  }
 
-  // passport.use(
-  //   new JwtStrategy(
-  //     jwtOptions,
-  //     (payload: JwtPayload, done: VerifiedCallback) => {
-  //       userService
-  //         .findUser({ id: payload.userId })
-  //         .then((user) =>
-  //           user
-  //             ? done(null, {
-  //                 userId: user.id,
-  //                 username: user.username,
-  //                 role: user.role,
-  //               })
-  //             : done(null, false)
-  //         )
-  //         .catch((err) => done(err, false));
-  //     }
-  //   )
-  // );
-  passport.serializeUser((user: any, done) => {
+  passport.use(
+    new JwtStrategy(
+      jwtOptions,
+      (payload: JwtPayload, done: VerifiedCallback) => {
+        userService
+          .findUser({ id: payload.userId })
+          .then((user) =>
+            user
+              ? done(null, {
+                  userId: user.id,
+                  username: user.username,
+                  role: user.role,
+                })
+              : done(null, false)
+          )
+          .catch((err) => done(err, false));
+      }
+    )
+  );
+  passport.serializeUser((user: Express.User, done) => {
     done(null, user);
   });
 
-  passport.deserializeUser((user: any, done) => {
+  passport.deserializeUser((user: Express.User, done) => {
     done(null, user);
   });
 
   // --- 🟡 CAS Strategy (for VITE_FRONTEND_AUTH === 'cas') ---
-  if (process.env.VITE_FRONTEND_AUTH === 'cas') {
+  // if (process.env.VITE_FRONTEND_AUTH === 'cas') {
     // passport.use(
     //   new CasStrategy(
     //     {
@@ -81,10 +81,10 @@ export const configurePassport = (userService: UserService) => {
     //     }
     //   )
     // );
-    passport.use(new CasStrategy({
-      casURL: 'https://weblogin.asu.edu/cas/login?'  // use correct URL for ASU CAS
-    }, (login: any, done: any) => {
-      return done(null, { login });
-    }));
-  }
+    // passport.use(new CasStrategy({
+    //   casURL: 'https://weblogin.asu.edu/cas/login?'  // use correct URL for ASU CAS
+    // }, (login: any, done: any) => {
+    //   return done(null, { login });
+    // }));
+  // }
 };
