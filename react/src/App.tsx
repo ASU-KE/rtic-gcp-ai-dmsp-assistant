@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthContext } from './contexts/AuthContext';
 import { Layout } from './pages/Layout';
 import { HomePage } from './pages/HomePage';
-import { CasLoginPage } from './pages/CasLoginPage';
+// import { CasLoginPage } from './pages/CasLoginPage';
 import { SubmitDmpText } from './pages/SubmitDmpText';
 import { SubmitDmpId } from './pages/SubmitDmpId';
 import { ListUsersPage } from './pages/ListUsersPage';
@@ -15,16 +15,16 @@ import { CreateUserPage } from './pages/CreateUserPage';
 import { DeleteUserPage } from './pages/DeleteUserPage';
 import { UpdateUserPage } from './pages/UpdateUserPage';
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const { user } = useAuthContext();
-  // Check if the user is authenticated
-  // If authenticated, render the children (protected content)
-  // If not authenticated, redirect to the login page
-  return user ? children : <Navigate to="/login" />;
-};
+// const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+//   const { user } = useAuthContext();
+//   // Check if the user is authenticated
+//   // If authenticated, render the children (protected content)
+//   // If not authenticated, redirect to the login page
+//   return user ? children : <Navigate to="/login" />;
+// };
 
 const App = (): JSX.Element => {
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
