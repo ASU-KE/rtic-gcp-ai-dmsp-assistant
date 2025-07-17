@@ -2,19 +2,24 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import passport from 'passport';
 import session from 'express-session';
+import Rollbar from 'rollbar';
 
 import config from './config/app.config';
+import { AppDataSource } from './config/data-source.config';
+
+import { UserService } from './modules/users/services/UserService';
+import AuthRoutes from './routes/auth.routes';
+import UserRoutes from './routes/user.routes';
+import DmpRoutes from './routes/dmp.routes';
 
 // Initialize Rollbar error logging and notifications
-import Rollbar from 'rollbar';
 const rollbar = new Rollbar({
   accessToken: config.rollbarToken,
   captureUncaught: true,
   captureUnhandledRejections: true,
 });
-
-import { AppDataSource } from './config/data-source.config';
 
 AppDataSource.initialize()
   .then(() => {
@@ -50,15 +55,9 @@ app.use(
   })
 );
 
-// Init passport middlewares
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// Express Routes Import
-import AuthRoutes from './routes/auth.routes';
-import UserRoutes from './routes/user.routes';
-import DmpRoutes from './routes/dmp.routes';
-import { UserService } from './modules/users/services/UserService';
+// Init Passport middlewares
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Register routes
 
@@ -80,9 +79,8 @@ const userService = new UserService(AppDataSource);
 
 // Unprotected routes
 app.use('/auth', AuthRoutes(userService));
-// app.use('/api', GitHubOAuthStrategy(), GoogleOAuthStrategy());
 
-
+// Protected routes
 app.use('/user', UserRoutes(userService));
 app.use('/dmp', DmpRoutes);
 
