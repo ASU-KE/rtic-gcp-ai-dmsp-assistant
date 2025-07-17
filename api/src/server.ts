@@ -60,13 +60,13 @@ app.use(
 import DmpRoutes from './routes/dmp.routes';
 
 // Register routes
-app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    isAuthenticated: req.isAuthenticated(),
-    message: 'DMSP AI Tool API',
-  });
-});
+// app.get('/', (req, res) => {
+//   res.json({
+//     success: true,
+//     isAuthenticated: req.isAuthenticated(),
+//     message: 'DMSP AI Tool API',
+//   });
+// });
 
 // Unprotected routes
 // app.use('/auth', AuthRoutes);
