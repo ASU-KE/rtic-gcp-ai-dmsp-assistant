@@ -28,7 +28,7 @@ export const CreateUserPage = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await authorizedRequest('POST', '/create-user', form);
+      const response = await authorizedRequest('POST', '/auth/create-user', form);
       setSuccessMsg('User created successfully!');
       setErrorMsg('');
       setForm({

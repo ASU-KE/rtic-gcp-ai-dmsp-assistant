@@ -19,8 +19,8 @@ export const LoginPage = () => {
     try {
       const response = await axios.post(
         import.meta.env.PROD
-          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/login`
-          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/login`,
+          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/auth/login`
+          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/auth/login`,
         {
           username,
           password,

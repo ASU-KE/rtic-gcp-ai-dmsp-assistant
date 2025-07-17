@@ -6,7 +6,7 @@ export const LogoutPage = () => {
 
   useEffect(() => {
     localStorage.removeItem('token');
-    navigate('/login');
+    navigate('/');
   }, [navigate]);
   return <p>Logging out...</p>;
 };

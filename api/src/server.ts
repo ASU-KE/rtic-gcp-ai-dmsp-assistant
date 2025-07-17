@@ -61,6 +61,7 @@ import DmpRoutes from './routes/dmp.routes';
 import { UserService } from './modules/users/services/UserService';
 
 // Register routes
+
 // app.get('/', (req, res) => {
 //   res.json({
 //     success: true,
@@ -78,7 +79,7 @@ app.get('/healthz', (req, res) => {
 const userService = new UserService(AppDataSource);
 
 // Unprotected routes
-app.use('/', AuthRoutes(userService));
+app.use('/auth', AuthRoutes(userService));
 // app.use('/api', GitHubOAuthStrategy(), GoogleOAuthStrategy());
 
 
