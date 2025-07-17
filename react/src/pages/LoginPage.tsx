@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../App.css';
 import asuLogo from '../assets/arizona-state-university-logo.png';
 import { useNavigate } from 'react-router-dom';
-import { Alert } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import eyeIcon from '../assets/hide.png';
 import eyeOffIcon from '../assets/unhide.png';
 
@@ -40,73 +40,72 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="asu-login-wrapper d-flex justify-content-center align-items-center min-vh-100 bg-light">
-      <div className="card p-4 shadow" style={{ maxWidth: '400px', width: '100%' }}>
-        <div className="text-center mb-4">
-          <img src={asuLogo} alt="ASU Logo" className="img-fluid" style={{ maxHeight: '60px' }} />
-          <h2 className="mt-3 text-center">Sign In</h2>
-        </div>
-        <form onSubmit={handleLogin}>
-          <div className="mb-3">
-            <label htmlFor="username" className="form-label">
-              User Name
-            </label>
-            <input
-              type="text"
-              id="username"
-              className="form-control"
-              placeholder="User Name"
-              autoComplete="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <div className="position-relative">
+    <Container className="mt-4 mb-4">
+      <Row className="mb-3">
+        <h2 className="mt-2">Login</h2>
+        <Col md={8}>
+          <form onSubmit={handleLogin}>
+            <div className="mb-3">
+              <label htmlFor="username" className="form-label">
+                User Name
+              </label>
               <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                className="form-control pe-5"
-                placeholder="Password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                type="text"
+                id="username"
+                className="form-control"
+                placeholder="User Name"
+                autoComplete="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
-              <img
-                src={showPassword ? eyeIcon : eyeOffIcon}
-                alt="Toggle visibility"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  right: '10px',
-                  transform: 'translateY(-50%)',
-                  width: '20px',
-                  height: '20px',
-                  cursor: 'pointer',
-                  opacity: 0.6,
-                }}
-              />
             </div>
-          </div>
 
-          {errorMsg && (
-            <Alert variant="danger" onClose={() => setErrorMsg('')} dismissible>
-              {errorMsg}
-            </Alert>
-          )}
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <div className="position-relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  className="form-control pe-5"
+                  placeholder="Password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <img
+                  src={showPassword ? eyeIcon : eyeOffIcon}
+                  alt="Toggle visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    right: '10px',
+                    transform: 'translateY(-50%)',
+                    width: '20px',
+                    height: '20px',
+                    cursor: 'pointer',
+                    opacity: 0.6,
+                  }}
+                />
+              </div>
+            </div>
 
-          <button type="submit" className="btn-custom-medium w-100 text-center">
-            Sign In
-          </button>
-        </form>
-      </div>
-    </div>
+            {errorMsg && (
+              <Alert variant="danger" onClose={() => setErrorMsg('')} dismissible>
+                {errorMsg}
+              </Alert>
+            )}
+
+            <button type="submit" className="btn-custom-medium w-100 text-center">
+              Sign In
+            </button>
+          </form>
+        </Col>
+      </Row>
+    </Container>
   );
 };
