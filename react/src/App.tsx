@@ -9,9 +9,6 @@ import { SubmitDmpId } from './pages/SubmitDmpId';
 import { ListUsersPage } from './pages/ListUsersPage';
 import { LoginPage } from './pages/LoginPage';
 import { LogoutPage } from './pages/LogoutPage';
-import { CreateUserModalPage } from './components/CreateUserModalPage';
-import { DeleteUserModalPage } from './components/DeleteUserModalPage';
-import { UpdateUserModalPage } from './components/UpdateUserModalPage';
 
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 import { CreateUserPage } from './pages/CreateUserPage';
