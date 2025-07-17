@@ -2,11 +2,7 @@ import { useState } from 'react';
 import { authorizedRequest } from '../utils/authAxios';
 import { Form, Button, Alert, Modal } from 'react-bootstrap';
 
-interface Props {
-  onSuccess: () => void;
-}
-
-export const DeleteUserPage = ({ onSuccess }: Props) => {
+export const DeleteUserPage = () => {
   const [userId, setUserId] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');

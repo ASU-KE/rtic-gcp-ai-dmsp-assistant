@@ -14,6 +14,9 @@ import { DeleteUserModalPage } from './components/DeleteUserModalPage';
 import { UpdateUserModalPage } from './components/UpdateUserModalPage';
 
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
+import { CreateUserPage } from './pages/CreateUserPage';
+import { DeleteUserPage } from './pages/DeleteUserPage';
+import { UpdateUserPage } from './pages/UpdateUserPage';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { user } = useAuthContext();
@@ -38,9 +41,9 @@ const App = (): JSX.Element => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/logout" element={<LogoutPage />} />
 
-        <Route path="/user/create" element={<CreateUserModalPage />} />
-        <Route path="/user/delete" element={<DeleteUserModalPage />} />
-        <Route path="/user/update" element={<UpdateUserModalPage />} />
+        <Route path="/user/create" element={<CreateUserPage />} />
+        <Route path="/user/delete" element={<DeleteUserPage />} />
+        <Route path="/user/update" element={<UpdateUserPage />} />
         <Route path="/user/all" element={<ListUsersPage />} />
 
         {/* <Route
