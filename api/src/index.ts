@@ -12,10 +12,8 @@ const rollbar = new Rollbar({
 
 import app from './server';
 
-const port = config.port;
-
-const server = app.listen(port, function () {
-  console.log('Server Listening on PORT:', port);
+const server = app.listen(config.port, function () {
+  console.log('Server Listening on PORT:', config.port);
 });
 
 // Create WebSocket server
