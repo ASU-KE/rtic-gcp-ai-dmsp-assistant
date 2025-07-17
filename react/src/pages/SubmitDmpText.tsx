@@ -210,7 +210,6 @@ export function SubmitDmpText() {
   };
 
   return (
-    <>
       <Container className="mt-4 mb-4">
         <Row className="mb-3">
           <h2 className="mt-2">AI Feedback Tool Beta Upload Page</h2>
@@ -390,6 +389,5 @@ export function SubmitDmpText() {
           <div ref={contentEndRef} />
         </Row>
       </Container>
-    </>
   );
 }
