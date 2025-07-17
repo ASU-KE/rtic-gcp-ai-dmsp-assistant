@@ -69,8 +69,11 @@ import { UserService } from './modules/users/services/UserService';
 //   });
 // });
 
+// Initialize new userService with TypeORM data source and inject into route providers
+const userService = new UserService(AppDataSource);
+
 // Unprotected routes
-app.use('/', AuthRoutes(new UserService(AppDataSource)));
+app.use('/', AuthRoutes(userService));
 // app.use('/api', GitHubOAuthStrategy(), GoogleOAuthStrategy());
 
 // Health-check endpoint for Kubernetes
@@ -78,9 +81,9 @@ app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'Healthy' });
 });
 
-// Protected routes
-app.use('/user', UserRoutes);
+app.use('/user', UserRoutes(userService));
 app.use('/dmp', DmpRoutes);
+
 
 // Rollbar error handler
 app.use(rollbar.errorHandler());
