@@ -29,7 +29,6 @@ const App = (): JSX.Element => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={user ? <Navigate to="/" /> : <CasLoginPage />} />
         <Route path="/submit-text" element={<SubmitDmpText />} />
         {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID === 'true' && (
           <Route path="/submit-id" element={<SubmitDmpId />} />
@@ -37,6 +36,7 @@ const App = (): JSX.Element => {
 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/logout" element={<LogoutPage />} />
+        {/* <Route path="/login" element={user ? <Navigate to="/" /> : <CasLoginPage />} /> */}
 
         <Route path="/user/create" element={<CreateUserPage />} />
         <Route path="/user/delete" element={<DeleteUserPage />} />
