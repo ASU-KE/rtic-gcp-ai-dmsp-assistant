@@ -6,6 +6,12 @@ import { HomePage } from './pages/HomePage';
 import { CasLoginPage } from './pages/CasLoginPage';
 import { SubmitDmpText } from './pages/SubmitDmpText';
 import { SubmitDmpId } from './pages/SubmitDmpId';
+import { ListUsersPage } from './pages/ListUsersPage';
+import { LoginPage } from './pages/LoginPage';
+import { LogoutPage } from './pages/LogoutPage';
+import { CreateUserModalPage } from './components/CreateUserModalPage';
+import { DeleteUserModalPage } from './components/DeleteUserModalPage';
+import { UpdateUserModalPage } from './components/UpdateUserModalPage';
 
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
@@ -25,7 +31,18 @@ const App = (): JSX.Element => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={user ? <Navigate to="/" /> : <CasLoginPage />} />
         <Route path="/submit-text" element={<SubmitDmpText />} />
-        <Route path="/submit-id" element={<SubmitDmpId />} />
+        {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID === 'true' && (
+          <Route path="/submit-id" element={<SubmitDmpId />} />
+        )}
+
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/logout" element={<LogoutPage />} />
+
+        <Route path="/user/create" element={<CreateUserModalPage />} />
+        <Route path="/user/delete" element={<DeleteUserModalPage />} />
+        <Route path="/user/update" element={<UpdateUserModalPage />} />
+        <Route path="/user/all" element={<ListUsersPage />} />
+
         {/* <Route
           path="/protected"
           element={
