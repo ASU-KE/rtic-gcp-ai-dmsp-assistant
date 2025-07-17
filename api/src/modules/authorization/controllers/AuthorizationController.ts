@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { Request, Response } from 'express';
-import { DataSource } from 'typeorm';
 
 import { UserService } from '../../users/services/UserService';
 import { User } from '../../../entities/User';
