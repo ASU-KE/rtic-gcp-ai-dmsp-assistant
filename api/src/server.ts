@@ -78,7 +78,7 @@ app.get('/healthz', (req, res) => {
 });
 
 // Protected routes
-// app.use('/user', UserRoutes);
+app.use('/user', UserRoutes);
 app.use('/dmp', DmpRoutes);
 
 // Rollbar error handler
