@@ -3,8 +3,11 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
-import session from 'express-session';
 import Rollbar from 'rollbar';
+
+import { TypeormStore } from 'connect-typeorm';
+import ExpressSession from 'express-session';
+import { Session } from './entities/Session';
 
 import config from './config/app.config';
 import { AppDataSource } from './config/data-source.config';
@@ -42,11 +45,20 @@ app.use(
   })
 );
 
+// Initialize session store with TypeORM
+const sessionStore = new TypeormStore({
+  cleanupLimit: 2,
+  limitSubquery: false, // If using MariaDB.
+  ttl: 86400,
+});
+
+const sessionRepository = AppDataSource.getRepository(Session);
 app.use(
-  session({
+  ExpressSession({
     secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false,
+    store: sessionStore.connect(sessionRepository),
     cookie: {
       secure: true, // Set to false if not using HTTPS
       maxAge: 24 * 60 * 60 * 1000, // 1 day
@@ -83,7 +95,6 @@ app.use('/auth', AuthRoutes(userService));
 // Protected routes
 app.use('/user', UserRoutes(userService));
 app.use('/dmp', DmpRoutes);
-
 
 // Rollbar error handler
 app.use(rollbar.errorHandler());
