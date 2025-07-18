@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Alert } from 'react-bootstrap';
+import { Table, Alert, Container, Row, Col } from 'react-bootstrap';
 import { authorizedRequest } from '../utils/authAxios';
 
 interface User {
@@ -36,41 +36,48 @@ export const ListUsersPage = () => {
 
   return (
     <>
-      {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}
-      <div style={{ maxHeight: '390px', overflowY: 'auto' }}>
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="text-center">
-                  No users found.
-                </td>
-              </tr>
-            ) : (
-              users.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.id}</td>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
-                  <td>{user.firstName ?? '-'}</td>
-                  <td>{user.lastName ?? '-'}</td>
-                  <td>{user.role}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
-      </div>
+      <Container className="mt-4 mb-4">
+        <Row className="mb-3">
+          <h2 className="mt-2">All User Accounts</h2>
+          <Col md={8}>
+            {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}
+            <div style={{ maxHeight: '390px', overflowY: 'auto' }}>
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="text-center">
+                        No users found.
+                      </td>
+                    </tr>
+                  ) : (
+                    users.map((user) => (
+                      <tr key={user.id}>
+                        <td>{user.id}</td>
+                        <td>{user.username}</td>
+                        <td>{user.email}</td>
+                        <td>{user.firstName ?? '-'}</td>
+                        <td>{user.lastName ?? '-'}</td>
+                        <td>{user.role}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </Table>
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

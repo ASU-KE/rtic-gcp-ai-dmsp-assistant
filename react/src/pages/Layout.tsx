@@ -35,7 +35,7 @@ if (enableDmpIdMenu) {
 }
 
 const manageUserItems = [
-  { id: 1, href: '/create-user', text: 'Create User' },
+  { id: 1, href: '/auth/create-user', text: 'Create User' },
   { id: 2, href: '/user/all', text: 'List Users' },
   { id: 3, href: '/user/update', text: 'Update User' },
   { id: 4, href: '/user/delete', text: 'Delete User' },

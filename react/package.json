@@ -12,8 +12,8 @@
     "format:write": "prettier --write \"src/**/*.tsx\""
   },
   "dependencies": {
-    "@asu/component-header-footer": "1.0.8",
-    "@asu/unity-bootstrap-theme": "^1.14.2",
+    "@asu/component-header-footer": "^1.0.8",
+    "@asu/unity-bootstrap-theme": "^1.26.0",
     "@tanstack/react-query": "^4.0.0",
     "@tanstack/react-query-devtools": "^4.0.0",
     "axios": "^1.7.7",
@@ -32,14 +32,14 @@
     "react-use-websocket": "^3.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.0",
-    "@tanstack/eslint-plugin-query": "^5.58.1",
+    "@eslint/js": "^8.0.0",
+    "@tanstack/eslint-plugin-query": "^4.0.0",
     "@types/jest": "^29.5.14",
     "@types/pdfjs-dist": "^2.10.377",
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.1",
-    "eslint": "^9.11.1",
+    "eslint": "^8.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "^6.10.0",

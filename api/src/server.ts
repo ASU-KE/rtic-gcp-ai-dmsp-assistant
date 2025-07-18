@@ -1,50 +1,91 @@
-import express, { Application } from 'express';
-import Rollbar from 'rollbar';
+import 'reflect-metadata';
+import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { DataSource } from 'typeorm';
+import passport from 'passport';
+import session from 'express-session';
+import Rollbar from 'rollbar';
 
-// Express Routes Import
-import AuthorizationRoutes from './authorization/routes';
-import UserRoutes from './users/routes';
-import DmpRoutes from './dmp/routes';
-import TestRoutes from './test/routes';
-import isAuthenticatedMiddleware from './common/middlewares/IsAuthenticatedMiddleware';
-import { UserService } from './users/services/UserService';
+import config from './config/app.config';
+import { AppDataSource } from './config/data-source.config';
 
-export function createApp(
-  rollbar: Rollbar,
-  dataSource: DataSource,
-  userService: UserService
-) {
-  const app: Application = express();
+import { UserService } from './modules/users/services/UserService';
+import AuthRoutes from './routes/auth.routes';
+import UserRoutes from './routes/user.routes';
+import DmpRoutes from './routes/dmp.routes';
 
-  app.locals.dataSource = dataSource;
-  app.locals.userService = userService;
+// Initialize Rollbar error logging and notifications
+const rollbar = new Rollbar({
+  accessToken: config.rollbarToken,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
 
-  app.use(morgan('common'));
-  app.use(
-    cors({
-      origin:
-        process.env.NODE_ENV === 'development'
-          ? 'https://dmsp.local.asu.edu'
-          : 'https://dmsp.dev.rtd.asu.edu',
-    })
-  );
-  app.use(express.json());
-
-  app.use('/', AuthorizationRoutes(userService));
-  app.use('/user', [isAuthenticatedMiddleware.check], UserRoutes(userService));
-  app.use('/dmp', DmpRoutes);
-  app.use('/test', [isAuthenticatedMiddleware.check], TestRoutes);
-
-  // Health-check endpoint
-  app.get('/healthz', (req, res) => {
-    res.status(200).json({ status: 'ok' });
+AppDataSource.initialize()
+  .then(() => {
+    console.log('TypeORM has been initialized!');
+  })
+  .catch((err) => {
+    console.error('Error during TypeORM initialization:', err);
   });
 
-  // Rollbar error handler
-  app.use(rollbar.errorHandler());
+const app = express();
+app.use(express.json());
+app.use(morgan('common'));
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'development'
+        ? 'https://dmsp.local.asu.edu'
+        : 'https://dmsp.dev.rtd.asu.edu',
+    credentials: true,
+  })
+);
 
-  return app;
-}
+app.use(
+  session({
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: true, // Set to false if not using HTTPS
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      sameSite: 'lax',
+    },
+  })
+);
+
+// Init Passport middlewares
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Register routes
+
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    isAuthenticated: req.isAuthenticated(),
+    message: 'DMSP AI Tool API',
+  });
+});
+
+// Health-check for Kubernetes
+app.get('/healthz', (req, res) => {
+  res.status(200).json({ status: 'Healthy' });
+});
+
+// Initialize new userService with TypeORM data source and inject into route providers
+const userService = new UserService(AppDataSource);
+
+// Unprotected routes
+app.use('/auth', AuthRoutes(userService));
+
+// Protected routes
+app.use('/user', UserRoutes(userService));
+app.use('/dmp', DmpRoutes);
+
+
+// Rollbar error handler
+app.use(rollbar.errorHandler());
+
+export default app;
