@@ -6,7 +6,7 @@ import passport from 'passport';
 import Rollbar from 'rollbar';
 
 import { TypeormStore } from 'connect-typeorm';
-import ExpressSession from 'express-session';
+import session from 'express-session';
 import { Session } from './entities/Session';
 
 import config from './config/app.config';
@@ -54,7 +54,7 @@ const sessionStore = new TypeormStore({
 
 const sessionRepository = AppDataSource.getRepository(Session);
 app.use(
-  ExpressSession({
+  session({
     secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false,
