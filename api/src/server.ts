@@ -32,6 +32,9 @@ AppDataSource.initialize()
     console.error('Error during TypeORM initialization:', err);
   });
 
+// Initialize new userService with TypeORM data source to inject into route and authproviders
+const userService = new UserService(AppDataSource);
+
 const app = express();
 app.use(express.json());
 app.use(morgan('common'));
@@ -85,9 +88,6 @@ app.get('/', (req, res) => {
 app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'Healthy' });
 });
-
-// Initialize new userService with TypeORM data source and inject into route providers
-const userService = new UserService(AppDataSource);
 
 // Unprotected routes
 app.use('/auth', AuthRoutes(userService));
