@@ -56,8 +56,8 @@ const sessionRepository = AppDataSource.getRepository(Session);
 app.use(
   session({
     secret: config.sessionSecret,
-    resave: false,
-    saveUninitialized: false,
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored
     store: sessionStore.connect(sessionRepository),
     cookie: {
       secure: true, // Set to false if not using HTTPS
