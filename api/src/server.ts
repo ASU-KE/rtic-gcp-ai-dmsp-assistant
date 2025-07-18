@@ -74,6 +74,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Test middleware to view session and user data
+app.use((req, res, next) => {
+  console.log('Session:', req.session);
+  console.log('User:', req.user);
+  next();
+});
+
 // Register routes
 
 app.get('/', (req, res) => {
