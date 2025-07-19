@@ -25,13 +25,6 @@ export const deserializeUser = (UserService: UserService) =>
 
 export const configurePassport = (userService: UserService) => {
   passport.use(new LocalStrategy(
-    function(username, password, done) {
-      userService.findUser({ username: username }, function (err, user) {
-        if (err) { return done(err); }
-        if (!user) { return done(null, false); }
-        if (!user.verifyPassword(password)) { return done(null, false); }
-        return done(null, user);
-      });
-    }
+
   ));
 };
