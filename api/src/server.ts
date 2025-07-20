@@ -71,8 +71,7 @@ app.use(
 );
 
 // Init Passport middlewares
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.authenticate('session'));
 
 // Test middleware to view session and user data
 app.use((req, res, next) => {
