@@ -5,7 +5,7 @@ import { UserService } from '../modules/users/services/UserService';
 
 export const serializeUser = passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
-    return cb(null, user.id);
+    return cb(null, { id: user.id, username: user.username });
   });
 });
 
