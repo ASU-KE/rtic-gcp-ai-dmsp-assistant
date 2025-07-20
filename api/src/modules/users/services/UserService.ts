@@ -41,12 +41,15 @@ export class UserService {
   }
 
   async verifyPassword(
-    hashedPassword: string,
+    user: User,
     password: string
   ): Promise<boolean> {
     try {
-      // Verify the password against the hash
-      return await bcrypt.compare(password, hashedPassword);
+      // Verify the password against the hashed password stored in the user object
+      if (!user?.password) {
+        throw new Error('User or password not provided for verification.');
+      }
+      return await bcrypt.compare(password, user.password);
     } catch (err) {
       console.error('Verification failed:', err);
       throw err;

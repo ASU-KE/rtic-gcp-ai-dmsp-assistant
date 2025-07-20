@@ -32,8 +32,7 @@ export const configurePassport = (userService: UserService) => {
           return done(null, false); // reject authentication attempt
         }
 
-        const hashedPassword = user.password;
-        userService.verifyPassword(hashedPassword, password).then((isMatch) => {
+        userService.verifyPassword(user, password).then((isMatch) => {
           if (!isMatch) {
             return done(null, false); // password incorrect, reject authentication attempt
           }
