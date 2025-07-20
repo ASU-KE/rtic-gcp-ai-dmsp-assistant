@@ -26,18 +26,19 @@ export const deserializeUser = (UserService: UserService) =>
 export const configurePassport = (userService: UserService) => {
   passport.use(new LocalStrategy(
     (username, password, done) => {
+      // Search for user by username
       userService.findUser({ username }).then((user) => {
         if (!user) {
-          return done(null, false);
+          return done(null, false); // reject authentication attempt
         }
 
         const hashedPassword = user.password;
         userService.verifyPassword(hashedPassword, password).then((isMatch) => {
           if (!isMatch) {
-            return done(null, false);
+            return done(null, false); // password incorrect, reject authentication attempt
           }
 
-          return done(null, user);
+          return done(null, user); // authentication successful
         }).catch((err) => {
           return done(err);
         });
