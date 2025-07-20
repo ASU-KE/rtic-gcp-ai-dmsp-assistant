@@ -29,12 +29,12 @@ export const configurePassport = (userService: UserService) => {
       // Search for user by username
       userService.findUser({ username }).then((user) => {
         if (!user) {
-          return done(null, false); // reject authentication attempt
+          return done(null, false, { message: 'Incorrect username or password.' }); // reject authentication attempt
         }
 
         userService.verifyPassword(user, password).then((isMatch) => {
           if (!isMatch) {
-            return done(null, false); // password incorrect, reject authentication attempt
+            return done(null, false, { message: 'Incorrect username or password.' }); // password incorrect, reject authentication attempt
           }
 
           return done(null, user); // authentication successful
