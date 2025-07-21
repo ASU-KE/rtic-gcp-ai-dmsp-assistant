@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
 // Middleware Imports
-import SchemaValidationMiddleware from '../middlewares/SchemaValidationMiddleware';
-import { CheckPermissionMiddleware } from '../middlewares/CheckPermissionMiddleware';
+import SchemaValidationMiddleware from '../middlewares/schema-validation.middleware';
+import { CheckPermissionMiddleware } from '../middlewares/check-permission.middleware';
 
 // Controller Imports
 import UserController from '../modules/users/controllers/UserController';
