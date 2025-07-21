@@ -11,10 +11,7 @@ const authRoutes = () => {
     '/login',
     [
       SchemaValidationMiddleware.verify(loginPayload),
-      passport.authenticate('local', {
-        failureRedirect: '/login',
-        failureMessage: true,
-      }),
+      passport.authenticate('local'),
     ],
     function (req: Request, res: Response) {
       res.status(200).json({ message: 'Login successful', user: req.user });
