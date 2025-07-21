@@ -7,7 +7,7 @@ interface AuthenticatedRequest extends Request {
   user?: {
     id: number;
     username: string;
-    role?: string;
+    role: string;
   };
 }
 
