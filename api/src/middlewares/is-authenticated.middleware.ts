@@ -5,6 +5,9 @@ export const isAuthenticated = (
   res: Response,
   next: NextFunction
 ): Response | void => {
-  if (req.user) return next();
-  else res.redirect('/login');
+  if (req.user) {
+    return next();
+  } else {
+    res.json({ success: false, message: 'Unauthorized' });
+  }
 };
