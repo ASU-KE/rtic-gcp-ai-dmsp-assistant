@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 // Middleware Imports
 import SchemaValidationMiddleware from '../middlewares/schema-validation.middleware';
-import { CheckPermissionMiddleware } from '../middlewares/check-permission.middleware';
+import { checkPermission } from '../middlewares/check-permission.middleware';
 
 // Controller Imports
 import UserController from '../modules/users/controllers/UserController';
@@ -22,14 +22,13 @@ export default (userService: UserService) => {
 
   // instantiate controller and permission middleware with injected service
   const userController = new UserController(userService);
-  const checkPermissionMiddleware = CheckPermissionMiddleware(userService);
 
   router.get('/', userController.getUser);
 
   router.post(
     '/create/',
     [
-      checkPermissionMiddleware.has(roles.ADMIN as Role),
+      checkPermission(roles.ADMIN as Role),
       SchemaValidationMiddleware.verify(createUserPayload),
     ],
     userController.createUser
@@ -38,7 +37,7 @@ export default (userService: UserService) => {
   router.patch(
     '/update/:userId',
     [
-      checkPermissionMiddleware.has(roles.ADMIN as Role),
+      checkPermission(roles.ADMIN as Role),
       SchemaValidationMiddleware.verify(updateUserPayload),
     ],
     userController.updateUser
@@ -46,14 +45,14 @@ export default (userService: UserService) => {
 
   router.get(
     '/all',
-    [checkPermissionMiddleware.has(roles.ADMIN as Role)],
+    [checkPermission(roles.ADMIN as Role)],
     userController.getAllUsers
   );
 
   router.patch(
     '/change-role/:userId',
     [
-      checkPermissionMiddleware.has(roles.ADMIN as Role),
+      checkPermission(roles.ADMIN as Role),
       SchemaValidationMiddleware.verify(changeRolePayload),
     ],
     userController.changeRole
@@ -61,7 +60,7 @@ export default (userService: UserService) => {
 
   router.delete(
     '/delete/:userId',
-    [checkPermissionMiddleware.has(roles.ADMIN as Role)],
+    [checkPermission(roles.ADMIN as Role)],
     userController.deleteUser
   );
 
