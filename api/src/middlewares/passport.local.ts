@@ -4,7 +4,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 
 import { UserService } from '../modules/users/services/UserService';
 
-export const initPassport = (app: Express, userService: UserService) => {
+export const initLocalPassport = (app: Express, userService: UserService) => {
   passport.use(
     new LocalStrategy((username, password, done) => {
       userService

@@ -16,6 +16,7 @@ import { UserService } from './modules/users/services/UserService';
 import AuthRoutes from './routes/auth.routes';
 import UserRoutes from './routes/user.routes';
 import DmpRoutes from './routes/dmp.routes';
+import { initLocalPassport } from './middlewares/passport.local';
 
 // Initialize Rollbar error logging and notifications
 const rollbar = new Rollbar({
@@ -70,8 +71,10 @@ app.use(
   })
 );
 
-// Init Passport middlewares
-app.use(passport.authenticate('session'));
+// Init Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+initLocalPassport(app, userService);
 
 // Test middleware to view session and user data
 app.use((req, res, next) => {
