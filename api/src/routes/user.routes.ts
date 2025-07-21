@@ -26,6 +26,15 @@ export default (userService: UserService) => {
 
   router.get('/', userController.getUser);
 
+  router.post(
+    '/create/',
+    [
+      checkPermissionMiddleware.has(roles.ADMIN as Role),
+      SchemaValidationMiddleware.verify(createUserPayload),
+    ],
+    userController.createUser
+  );
+
   router.patch(
     '/update/:userId',
     [
