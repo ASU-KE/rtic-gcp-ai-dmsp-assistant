@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import express from 'express';
+import express, {Request, Response} from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
@@ -12,11 +12,13 @@ import { Session } from './entities/Session';
 import config from './config/app.config';
 import { AppDataSource } from './config/data-source.config';
 
+import { initLocalPassport } from './middlewares/passport.local.middleware';
+import { isAuthenticated } from './middlewares/is-authenticated.middleware';
+
 import { UserService } from './modules/users/services/UserService';
 import AuthRoutes from './routes/auth.routes';
 import UserRoutes from './routes/user.routes';
 import DmpRoutes from './routes/dmp.routes';
-import { initLocalPassport } from './middlewares/passport.local';
 
 // Initialize Rollbar error logging and notifications
 const rollbar = new Rollbar({
@@ -39,6 +41,8 @@ const userService = new UserService(AppDataSource);
 const app = express();
 app.use(express.json());
 app.use(morgan('common'));
+app.use(rollbar.errorHandler());
+
 app.use(
   cors({
     origin:
@@ -83,29 +87,23 @@ app.use((req, res, next) => {
   next();
 });
 
-// Register routes
-
-app.get('/', (req, res) => {
+// Register  unprotected routes
+app.get('/', (req: Request, res: Response) => {
   res.json({
     success: true,
     isAuthenticated: req.isAuthenticated(),
     message: 'DMSP AI Tool API',
   });
 });
+app.use('/auth', AuthRoutes());
 
 // Health-check for Kubernetes
 app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'Healthy' });
 });
 
-// Unprotected routes
-app.use('/auth', AuthRoutes(userService));
-
 // Protected routes
-app.use('/user', UserRoutes(userService));
-app.use('/dmp', DmpRoutes);
-
-// Rollbar error handler
-app.use(rollbar.errorHandler());
+app.use('/user', isAuthenticated, UserRoutes(userService));
+app.use('/dmp', isAuthenticated, DmpRoutes);
 
 export default app;
