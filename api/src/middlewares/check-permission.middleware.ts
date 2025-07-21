@@ -1,43 +1,16 @@
 import { RequestHandler } from 'express';
-import { Request } from 'express';
-import { UserService } from '../modules/users/services/UserService';
+import { Request, Response, NextFunction } from 'express';
 import { Role } from '../config/app.config';
 
-interface AuthenticatedRequest extends Request {
-  user?: {
-    id: number;
-    username: string;
-    role: string;
-  };
-}
-
-export function CheckPermissionMiddleware(userService: UserService) {
+export function CheckPermissionMiddleware() {
   const has = (role: Role): RequestHandler => {
-    return async (req, res, next) => {
-      const { user } = req as AuthenticatedRequest;
+    return (req: Request, res: Response, next: NextFunction) => {
+      const { user } = req;
 
-      if (!user) {
-        res.status(401).json({
-          status: false,
-          error: 'No user found in request context.',
-        });
-        return;
-      }
-
-      const foundUser = await userService.findUser({ id: Number(user.id) });
-
-      if (!foundUser) {
+      if (!user || user.role !== role) {
         res.status(403).json({
           status: false,
-          error: 'Invalid access token provided, please login again.',
-        });
-        return;
-      }
-
-      if (foundUser.role !== role) {
-        res.status(403).json({
-          status: false,
-          error: `Unauthorized: This endpoint is restricted to users with the '${role}' role.`,
+          error: `Unauthorized`,
         });
         return;
       }
