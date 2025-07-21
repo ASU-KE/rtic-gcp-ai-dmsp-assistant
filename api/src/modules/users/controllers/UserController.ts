@@ -27,7 +27,7 @@ export default class UserController {
     this.userService = userService;
   }
 
-  createUser = (req: Request<object, object, CreateUserPayload>, res: Response) => {
+  createUser = async (req: Request<object, object, CreateUserPayload>, res: Response) => {
     const payload = req.body;
     if (!payload.username || !payload.email || !payload.password) {
       return res.status(400).json({
@@ -38,9 +38,10 @@ export default class UserController {
 
     let role = payload.role;
     role ??= config.roles.USER;
+    const  password = await this.userService.hashPassword(payload.password);
 
     this.userService
-      .createUser(Object.assign(payload, { password: this.userService.hashPassword(payload.password), role }))
+      .createUser(Object.assign(payload, { password, role }))
       .then((user: User) => {
         return res.status(200).json({
           status: true,
