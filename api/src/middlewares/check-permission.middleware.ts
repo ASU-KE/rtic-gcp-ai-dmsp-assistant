@@ -5,7 +5,7 @@ import { Role } from '../config/app.config';
 
 interface AuthenticatedRequest extends Request {
   user?: {
-    userId: number; // use number if your JWT sets it that way
+    id: number;
     username: string;
     role?: string;
   };
@@ -24,7 +24,7 @@ export function CheckPermissionMiddleware(userService: UserService) {
         return;
       }
 
-      const foundUser = await userService.findUser({ id: Number(user.userId) });
+      const foundUser = await userService.findUser({ id: Number(user.id) });
 
       if (!foundUser) {
         res.status(403).json({
