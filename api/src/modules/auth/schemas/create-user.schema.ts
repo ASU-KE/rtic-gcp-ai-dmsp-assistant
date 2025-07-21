@@ -1,8 +1,9 @@
-import config from '../../../config/app.config';
 import { FromSchema } from 'json-schema-to-ts';
+
+import config from '../../../config/app.config';
 const roles = config.roles;
 
-const registerPayloadSchema = {
+const createUserPayloadSchema = {
   type: 'object',
   properties: {
     username: {
@@ -30,5 +31,5 @@ const registerPayloadSchema = {
   additionalProperties: false,
 } as const;
 
-export type RegisterPayload = FromSchema<typeof registerPayloadSchema>;
-export default registerPayloadSchema;
+export type CreateUserPayload = FromSchema<typeof createUserPayloadSchema>;
+export default createUserPayloadSchema;
