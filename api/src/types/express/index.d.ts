@@ -14,6 +14,7 @@ declare global {
     interface User {
       id: number;
       username: string;
+      role: string;
     }
     interface Request {
       user?: User;
