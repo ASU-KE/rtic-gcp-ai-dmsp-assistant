@@ -1,8 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import config from './app.config';
-import { User } from '../entities/User';
-import { Session } from '../entities/Session';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -11,7 +9,7 @@ export const AppDataSource = new DataSource({
   username: config.database.user,
   password: config.database.password,
   database: config.database.database,
-  entities: [User, Session],
+  entities: ["src/**/*.entity{.ts,.js}"],
   synchronize: false,
   logging: false,
   migrations: ['migrations/*.ts'],
