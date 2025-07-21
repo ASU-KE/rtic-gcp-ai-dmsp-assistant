@@ -1,7 +1,7 @@
 import { DataSource, Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
 
-import { User } from '../../../entities/User';
+import { User } from '../../../entities/user.entity';
 import config from '../../../config/app.config';
 
 export class UserService {

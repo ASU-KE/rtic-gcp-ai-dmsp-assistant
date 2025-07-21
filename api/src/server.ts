@@ -7,7 +7,7 @@ import Rollbar from 'rollbar';
 
 import { TypeormStore } from 'connect-typeorm';
 import session from 'express-session';
-import { Session } from './entities/Session';
+import { Session } from './entities/session.entity';
 
 import config from './config/app.config';
 import { AppDataSource } from './config/data-source.config';

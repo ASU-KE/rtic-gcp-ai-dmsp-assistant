@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { DeleteResult } from 'typeorm';
 
 import { UserService } from '../services/UserService';
-import { User } from '../../../entities/User';
+import { User } from '../../../entities/user.entity';
 import { CreateUserPayload } from '../schemas/create-user.schema';
 import config from '../../../config/app.config';
 
