@@ -9,8 +9,9 @@ import UserController from '../modules/users/controllers/UserController';
 import { UserService } from '../modules/users/services/UserService';
 
 // JSON Schema Imports for payload verification
-import updateUserPayload from '../modules/users/schemas/updateUserPayload';
-import changeRolePayload from '../modules/users/schemas/changeRolePayload';
+import changeRolePayload from '../modules/users/schemas/change-role.schema';
+import createUserPayload from '../modules/users/schemas/create-user.schema';
+import updateUserPayload from '../modules/users/schemas/update-user.schema';
 
 import config, { Role } from '../config/app.config';
 const roles = config.roles;

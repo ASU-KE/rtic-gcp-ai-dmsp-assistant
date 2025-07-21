@@ -3,7 +3,7 @@ import { FromSchema } from 'json-schema-to-ts';
 import config from '../../../config/app.config';
 const roles = config.roles;
 
-const createUserPayloadSchema = {
+const createUserPayload = {
   type: 'object',
   properties: {
     username: {
@@ -31,5 +31,5 @@ const createUserPayloadSchema = {
   additionalProperties: false,
 } as const;
 
-export type CreateUserPayload = FromSchema<typeof createUserPayloadSchema>;
-export default createUserPayloadSchema;
+export type CreateUserPayload = FromSchema<typeof createUserPayload>;
+export default createUserPayload;
