@@ -29,6 +29,7 @@ This repository contains the necessary resources and configurations to host the 
     - [Creating a GitHub Personal Access Token (Classic)](#creating-a-github-personal-access-token-classic)
     - [Generate local SSL cert for testing](#generate-local-ssl-cert-for-testing)
     - [Build and launch application stack](#build-and-launch-application-stack)
+    - [Database Migrations](#database-migrations)
   - [Server Hosting Overview](#server-hosting-overview)
   - [Procedure to Update](#procedure-to-update)
   - [Infrastructure Notes](#infrastructure-notes)
@@ -102,11 +103,28 @@ sudo echo "\n127.0.0.1 dmsp.local.asu.edu\n" >> /etc/hosts
 
 ### Build and launch application stack
 
-Build the application container images and insert the GH token into the command line: `docker compose build --build-arg NPM_TOKEN=TOKEN_VALUE`, and then launch the application: `docker compose up`.
+In order to build the application container images and launch the application, you must insert the GitHub Personal Access Token into the command line: `docker compose build --build-arg NPM_TOKEN=TOKEN_VALUE`, and then launch the application: `docker compose up`.
 
 The React frontend application can be accessed at: [https://dmsp.local.asu.edu](https://dmsp.local.asu.edu).
 
 THe API server can be accessed using Postman or other API clients at [http://localhost:3001](http://localhost:3001).
+
+### Database Migrations
+
+Whenever the database schema changes, a migration must be performed and committed into the code repository. For now, this must be done on the comand-line after the application stack is running, and must be performed within the API application container.
+
+In a new terminal window, located in the application root folder, run the following commands:
+
+```
+docker compose exec api bash
+```
+
+You will be logged into the container terminal, in the root folder of the application, where you can run NPM commands and scripts. The following DB migration-related scripts are available:
+
+* Run migrations: `npm run migration:run`
+* Generate migration: `npm run migration:generate --name=NameOfMigration` - Name the migration for the change to be performed, e.g. `--name=CreateUserTable`
+* Create new migration: `npm run migration:create --name=NameOfMigration`
+* Revert last migration: `npm run migration:revert`
 
 ## Server Hosting Overview
 

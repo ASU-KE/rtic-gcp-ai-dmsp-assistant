@@ -5,7 +5,7 @@ services:
         - NODE_ENV=development
       context: api
       target: dev-envs
-    command: sh -c "npm run migration:watch & npm run start:watch"
+    command: npm run start:watch
     env_file: "./secrets/.env.backend"
     environment:
       - NODE_ENV=development

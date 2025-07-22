@@ -1,16 +1,17 @@
 import { Router } from 'express';
 
 // Middleware Imports
-import SchemaValidationMiddleware from '../middlewares/SchemaValidationMiddleware';
-import { CheckPermissionMiddleware } from '../middlewares/CheckPermissionMiddleware';
+import SchemaValidationMiddleware from '../middlewares/schema-validation.middleware';
+import { checkPermission } from '../middlewares/check-permission.middleware';
 
 // Controller Imports
 import UserController from '../modules/users/controllers/UserController';
 import { UserService } from '../modules/users/services/UserService';
 
 // JSON Schema Imports for payload verification
-import updateUserPayload from '../modules/users/schemas/updateUserPayload';
-import changeRolePayload from '../modules/users/schemas/changeRolePayload';
+import changeRolePayload from '../modules/users/schemas/change-role.schema';
+import createUserPayload from '../modules/users/schemas/create-user.schema';
+import updateUserPayload from '../modules/users/schemas/update-user.schema';
 
 import config, { Role } from '../config/app.config';
 const roles = config.roles;
@@ -21,14 +22,22 @@ export default (userService: UserService) => {
 
   // instantiate controller and permission middleware with injected service
   const userController = new UserController(userService);
-  const checkPermissionMiddleware = CheckPermissionMiddleware(userService);
 
   router.get('/', userController.getUser);
+
+  router.post(
+    '/create/',
+    [
+      checkPermission(roles.ADMIN as Role),
+      SchemaValidationMiddleware.verify(createUserPayload),
+    ],
+    userController.createUser
+  );
 
   router.patch(
     '/update/:userId',
     [
-      checkPermissionMiddleware.has(roles.ADMIN as Role),
+      checkPermission(roles.ADMIN as Role),
       SchemaValidationMiddleware.verify(updateUserPayload),
     ],
     userController.updateUser
@@ -36,14 +45,14 @@ export default (userService: UserService) => {
 
   router.get(
     '/all',
-    [checkPermissionMiddleware.has(roles.ADMIN as Role)],
+    [checkPermission(roles.ADMIN as Role)],
     userController.getAllUsers
   );
 
   router.patch(
     '/change-role/:userId',
     [
-      checkPermissionMiddleware.has(roles.ADMIN as Role),
+      checkPermission(roles.ADMIN as Role),
       SchemaValidationMiddleware.verify(changeRolePayload),
     ],
     userController.changeRole
@@ -51,7 +60,7 @@ export default (userService: UserService) => {
 
   router.delete(
     '/delete/:userId',
-    [checkPermissionMiddleware.has(roles.ADMIN as Role)],
+    [checkPermission(roles.ADMIN as Role)],
     userController.deleteUser
   );
 

@@ -1,64 +1,33 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
+import passport from 'passport';
 
-// Controller Imports
-import AuthorizationController from '../modules/authorization/controllers/AuthorizationController';
-import { UserService } from '../modules/users/services/UserService';
+import SchemaValidationMiddleware from '../middlewares/schema-validation.middleware';
+import loginPayload from '../modules/auth/schemas/loginPayload';
 
-// Middleware Imports
-import SchemaValidationMiddleware from '../middlewares/SchemaValidationMiddleware';
-import isAuthenticatedMiddleware from '../middlewares/IsAuthenticatedMiddleware';
-
-// JSON Schema Imports for payload verification
-import registerPayload from '../modules/authorization/schemas/registerPayload';
-import loginPayload from '../modules/authorization/schemas/loginPayload';
-
-// import passport from 'passport';
-
-const AuthorizationRoutes = (userService: UserService) => {
+const authRoutes = () => {
   const router: Router = Router();
-
-  const authorizationController = new AuthorizationController(userService);
-
-  router.post(
-    '/create-user',
-    [
-      isAuthenticatedMiddleware.check,
-      SchemaValidationMiddleware.verify(registerPayload),
-    ],
-    authorizationController.register
-  );
 
   router.post(
     '/login',
-    [SchemaValidationMiddleware.verify(loginPayload)],
-    authorizationController.login
+    [
+      SchemaValidationMiddleware.verify(loginPayload),
+      passport.authenticate('local'),
+    ],
+    function (req: Request, res: Response) {
+      res.status(200).json({ message: 'Login successful', user: req.user });
+    }
   );
 
-  router.post('/refresh-token', authorizationController.refreshToken);
-
-  // router.get('/login/cas', passport.authenticate('cas'));
-
-  // router.get(
-  //   '/login/cas/callback',
-  //   passport.authenticate('cas', {
-  //     failureRedirect: '/login',
-  //   }),
-  //   (req, res) => {
-  //     console.log('✅ CAS Callback success, user:', req.user);
-  //     res.redirect('/dmp');
-  //   }
-  // );
-
-  // User info route for frontend
-  // router.get('/api/user', (req: Request, res: Response) => {
-  //   if (req.isAuthenticated()) {
-  //     res.json({ user: req.user });
-  //   } else {
-  //     res.status(401).json({ message: 'Unauthorized' });
-  //   }
-  // });
+  router.get('/logout', (req: Request, res: Response) => {
+    req.logout((err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+      res.status(200).json({ message: 'Logout successful' });
+    });
+  });
 
   return router;
 };
 
-export default AuthorizationRoutes;
+export default authRoutes;
