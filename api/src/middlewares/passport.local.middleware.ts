@@ -2,6 +2,7 @@ import { Express } from 'express';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 
+import { User } from '../entities/user.entity';
 import { UserService } from '../modules/users/services/UserService';
 
 export const initLocalPassport = (app: Express, userService: UserService) => {
@@ -43,9 +44,9 @@ export const initLocalPassport = (app: Express, userService: UserService) => {
     });
   });
 
-  passport.deserializeUser(function (id, cb) {
+  passport.deserializeUser(function (user: User, cb) {
     userService
-      .findUser({ id: id as number })
+      .findUser({ id: user.id })
       .then((user) => {
         if (!user) {
           return cb(null, false);
