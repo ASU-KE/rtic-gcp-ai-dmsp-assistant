@@ -45,11 +45,11 @@ app.use(rollbar.errorHandler());
 
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === 'development'
-        ? 'https://dmsp.local.asu.edu'
-        : 'https://dmsp.dev.rtd.asu.edu',
-    credentials: true,
+    origin: [
+      'http://localhost:3000',
+      'https://dmsp.local.asu.edu',
+      'https://dmsp.dev.rtd.asu.edu',
+    ],
   })
 );
 
