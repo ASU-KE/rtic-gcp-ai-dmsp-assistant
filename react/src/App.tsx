@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // import { useAuthContext } from './contexts/AuthContext';
 import { Layout } from './pages/Layout';
@@ -22,25 +23,29 @@ import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 //   return user ? children : <Navigate to="/login" />;
 // };
 
+const queryClient = new QueryClient();
+
 const App = (): JSX.Element => {
   // const { user } = useAuthContext();
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/submit-text" element={<SubmitDmpText />} />
-          {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && <Route path="/submit-id" element={<SubmitDmpId />} />}
+      <QueryClientProvider client={queryClient}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/submit-text" element={<SubmitDmpText />} />
+            {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && <Route path="/submit-id" element={<SubmitDmpId />} />}
 
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/logout" element={<LogoutPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/logout" element={<LogoutPage />} />
 
-          <Route path="/user/create" element={<CreateUserPage />} />
-          <Route path="/user/delete" element={<DeleteUserPage />} />
-          <Route path="/user/update" element={<UpdateUserPage />} />
-          <Route path="/user/all" element={<ListUsersPage />} />
-        </Route>
-      </Routes>
+            <Route path="/user/create" element={<CreateUserPage />} />
+            <Route path="/user/delete" element={<DeleteUserPage />} />
+            <Route path="/user/update" element={<UpdateUserPage />} />
+            <Route path="/user/all" element={<ListUsersPage />} />
+          </Route>
+        </Routes>
+      </QueryClientProvider>
     </BrowserRouter>
   );
 };
