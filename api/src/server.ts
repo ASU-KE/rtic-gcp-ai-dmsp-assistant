@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import express, {Request, Response} from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
@@ -45,14 +45,15 @@ app.use(rollbar.errorHandler());
 
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === 'development'
-        ? 'https://dmsp.local.asu.edu'
-        : 'https://dmsp.dev.rtd.asu.edu',
-    credentials: true,
+    origin: [
+      'http://localhost:3000',
+      'https://dmsp.local.asu.edu',
+      'https://dmsp.dev.rtd.asu.edu',
+    ],
+    // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // allow session cookie from browser to pass through
   })
 );
-
 // Initialize session store with TypeORM
 const sessionStore = new TypeormStore({
   cleanupLimit: 2,
@@ -66,11 +67,13 @@ app.use(
     secret: config.sessionSecret,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
+    proxy: true, // trust first proxy for secure cookies in production
     store: sessionStore.connect(sessionRepository),
     cookie: {
       secure: true, // Set to false if not using HTTPS
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: 'lax',
+      sameSite: 'none', // Use 'lax' or 'strict' if not using cross-origin requests
+      // httpOnly: true, // Helps prevent XSS attacks by not allowing client-side scripts to access the cookie
     },
   })
 );

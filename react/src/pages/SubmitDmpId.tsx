@@ -41,12 +41,7 @@ export function SubmitDmpId() {
     setValue,
   } = useForm<FormValues>({ mode: 'onSubmit' });
 
-  console.log('VITE_BACKEND_DOMAIN:', import.meta.env.VITE_BACKEND_DOMAIN);
-
-  const { lastMessage } = useWebSocket(
-    import.meta.env.PROD
-      ? `wss://${import.meta.env.VITE_BACKEND_DOMAIN}`
-      : `ws://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}`,
+  const { lastMessage } = useWebSocket(`wss://${import.meta.env.VITE_BACKEND_DOMAIN}`,
     {
       onOpen: () => console.log('WebSocket connected'),
       onClose: () => console.log('WebSocket disconnected'),
@@ -86,10 +81,7 @@ export function SubmitDmpId() {
   const { mutate } = useMutation<void, unknown, FormValues>({
     mutationFn: (values) => {
       return axios
-        .post(
-          import.meta.env.PROD
-            ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/dmp/id`
-            : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/dmp/id`,
+        .post(`https://${import.meta.env.VITE_BACKEND_DOMAIN}/dmp/id`,
           {
             dmpId: values.dmpId,
           }

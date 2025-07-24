@@ -17,21 +17,25 @@ export const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        import.meta.env.PROD
-          ? `https://${import.meta.env.VITE_BACKEND_DOMAIN}/auth/login`
-          : `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/auth/login`,
+      const response = await axios.post(`https://${import.meta.env.VITE_BACKEND_DOMAIN}/auth/login`,
         {
           username,
           password,
+        },
+        {
+          withCredentials: true
         }
       );
-      const { token, refreshToken } = response.data.data;
-      localStorage.setItem('token', token);
-      localStorage.setItem('refreshToken', refreshToken);
-      navigate('/');
-      window.location.reload();
+      const { user } = response.data;
+      console.log('User logged in:', user);
+
+      // localStorage.setItem('token', token);
+      // localStorage.setItem('refreshToken', refreshToken);
+      // navigate('/');
+      // window.location.reload();
+
     } catch (err: any) {
+      console.error('Login error:', err);
       setErrorMsg(err.response?.data?.error?.message || 'Login failed');
       setTimeout(() => {
         setErrorMsg('');

@@ -19,7 +19,12 @@ export const ListUsersPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await authorizedRequest('GET', '/user/all');
+        const response = await axios.get(`https://${import.meta.env.VITE_BACKEND_DOMAIN}/user/all`, {
+          withCredentials: true
+        });
+
+        console.log('Fetched response:', response.data.data);
+
         setUsers(response.data.data);
       } catch (err: any) {
         setErrorMsg(

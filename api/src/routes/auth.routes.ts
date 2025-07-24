@@ -14,7 +14,11 @@ const authRoutes = () => {
       passport.authenticate('local'),
     ],
     function (req: Request, res: Response) {
-      res.status(200).json({ message: 'Login successful', user: req.user });
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: 'Authentication failed' });
+      }
+
+      res.status(200).json({ message: 'Login successful', user: { id: req.user.id, username: req.user.username, role: req.user.role } });
     }
   );
 
@@ -23,6 +27,7 @@ const authRoutes = () => {
       if (err) {
         return res.status(500).json({ message: 'Logout failed' });
       }
+
       res.status(200).json({ message: 'Logout successful' });
     });
   });
