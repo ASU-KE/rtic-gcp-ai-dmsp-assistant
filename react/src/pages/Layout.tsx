@@ -4,14 +4,14 @@ import { ASUHeader, ASUFooter, HeaderProps, Button, Logo, NavTreeProps } from '@
 import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
 import { Outlet } from 'react-router-dom';
-import { getUserInfo } from '../utils/auth';
+// import { getUserInfo } from '../utils/auth';
 
 // Override HeaderProps to fix Typescript typing requirements
 export interface TsHeaderProps extends Omit<HeaderProps, 'partnerLogo'> {
   partnerLogo?: Logo;
 }
-const userInfo = getUserInfo() ?? { role: '', username: '' };
-const { role, username } = userInfo;
+// const userInfo = getUserInfo() ?? { role: '', username: '' };
+// const { role, username } = userInfo;
 
 const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
 const enableDmpIdMenu = `${import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID}` === 'true';
@@ -41,17 +41,18 @@ const manageUserItems = [
   { id: 4, href: '/user/delete', text: 'Delete User' },
 ];
 
-const navTree =
-  isAuthEnabled && role === 'admin'
-    ? [...primaryNavTree, { id: 3, text: 'Manage Users', href: '#', items: [manageUserItems] }]
-    : primaryNavTree;
+const navTree = primaryNavTree;
+  // isAuthEnabled && role === 'admin'
+  //   ? [...primaryNavTree, { id: 3, text: 'Manage Users', href: '#', items: [manageUserItems] }]
+  //   : primaryNavTree;
 
 const header: TsHeaderProps = {
   title: 'DMSP AI Tool Beta',
   loggedIn: isAuthEnabled ? true : false,
   logoutLink: '/logout',
   loginLink: '#',
-  userName: isAuthEnabled ? username : '',
+  // userName: isAuthEnabled ? username : '',
+  userName: 'TEMP',
   navTree,
   mobileNavTree: navTree,
   logo: {
@@ -67,6 +68,7 @@ const header: TsHeaderProps = {
   isPartner: false,
   animateTitle: true,
   expandOnHover: true,
+  buttons: [],
   // buttons:
   //   [
   //     {

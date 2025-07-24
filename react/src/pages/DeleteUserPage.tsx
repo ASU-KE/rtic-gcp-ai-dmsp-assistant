@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { authorizedRequest } from '../utils/authAxios';
 import { Form, Button, Alert, Modal } from 'react-bootstrap';
 
 export const DeleteUserPage = () => {
@@ -9,29 +8,29 @@ export const DeleteUserPage = () => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const submitDelete = async () => {
-    try {
-      const response = await authorizedRequest('DELETE', `/user/delete/${userId}`);
-      const deletedCount = response.data?.data?.numberOfUsersDeleted ?? 0;
+    // try {
+    //   const response = await authorizedRequest('DELETE', `/user/delete/${userId}`);
+    //   const deletedCount = response.data?.data?.numberOfUsersDeleted ?? 0;
 
-      if (deletedCount === 0) {
-        setErrorMsg('No user found with the given ID.');
-        setSuccessMsg('');
-        setTimeout(() => setErrorMsg(''), 3000);
-      } else {
-        setSuccessMsg('User deleted successfully.');
-        setErrorMsg('');
-        setUserId('');
-        setTimeout(() => {
-          setSuccessMsg('');
-        }, 2000);
-      }
-    } catch (err: any) {
-      setErrorMsg(err.response?.data?.error || 'Deletion failed');
-      setSuccessMsg('');
-      setTimeout(() => setErrorMsg(''), 3000);
-    } finally {
-      setShowConfirm(false);
-    }
+    //   if (deletedCount === 0) {
+    //     setErrorMsg('No user found with the given ID.');
+    //     setSuccessMsg('');
+    //     setTimeout(() => setErrorMsg(''), 3000);
+    //   } else {
+    //     setSuccessMsg('User deleted successfully.');
+    //     setErrorMsg('');
+    //     setUserId('');
+    //     setTimeout(() => {
+    //       setSuccessMsg('');
+    //     }, 2000);
+    //   }
+    // } catch (err: any) {
+    //   setErrorMsg(err.response?.data?.error || 'Deletion failed');
+    //   setSuccessMsg('');
+    //   setTimeout(() => setErrorMsg(''), 3000);
+    // } finally {
+    //   setShowConfirm(false);
+    // }
   };
 
   const handleDelete = (e: React.FormEvent) => {

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Alert, Container, Row, Col } from 'react-bootstrap';
-import { authorizedRequest } from '../utils/authAxios';
 
 export const UpdateUserPage = () => {
   const [userId, setUserId] = useState('');
@@ -13,32 +12,32 @@ export const UpdateUserPage = () => {
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await authorizedRequest('PATCH', `/user/update/${userId}`, {
-        firstName,
-        lastName,
-        role,
-      });
+    // try {
+    //   const response = await authorizedRequest('PATCH', `/user/update/${userId}`, {
+    //     firstName,
+    //     lastName,
+    //     role,
+    //   });
 
-      const updatedUser = response.data?.data;
+    //   const updatedUser = response.data?.data;
 
-      if (!updatedUser) {
-        setErrorMsg('User not found or not updated.');
-        setSuccessMsg('');
-        setTimeout(() => setErrorMsg(''), 3000);
-      } else {
-        setSuccessMsg('User updated successfully.');
-        setErrorMsg('');
-        setTimeout(() => {
-          setSuccessMsg('');
-        }, 2000);
-      }
-    } catch (err: any) {
-      console.log('err.response?.data:', err.response?.data);
-      setErrorMsg(err.response?.data?.error?.message || 'Update failed');
-      setSuccessMsg('');
-      setTimeout(() => setErrorMsg(''), 3000);
-    }
+    //   if (!updatedUser) {
+    //     setErrorMsg('User not found or not updated.');
+    //     setSuccessMsg('');
+    //     setTimeout(() => setErrorMsg(''), 3000);
+    //   } else {
+    //     setSuccessMsg('User updated successfully.');
+    //     setErrorMsg('');
+    //     setTimeout(() => {
+    //       setSuccessMsg('');
+    //     }, 2000);
+    //   }
+    // } catch (err: any) {
+    //   console.log('err.response?.data:', err.response?.data);
+    //   setErrorMsg(err.response?.data?.error?.message || 'Update failed');
+    //   setSuccessMsg('');
+    //   setTimeout(() => setErrorMsg(''), 3000);
+    // }
   };
 
   return (

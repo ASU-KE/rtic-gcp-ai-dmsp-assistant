@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Alert, Container, Row, Col } from 'react-bootstrap';
-import { authorizedRequest } from '../utils/authAxios';
 
 interface User {
   id: number;

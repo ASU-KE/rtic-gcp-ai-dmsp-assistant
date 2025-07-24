@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Form, Button, Alert, Card, Container, Row, Col } from 'react-bootstrap';
-import { authorizedRequest } from '../utils/authAxios';
 
 import '../App.css';
 import eyeIcon from '../assets/hide.png';
@@ -26,28 +25,28 @@ export const CreateUserPage = () => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await authorizedRequest('POST', '/auth/create-user', form);
-      setSuccessMsg('User created successfully!');
-      setErrorMsg('');
-      setForm({
-        username: '',
-        email: '',
-        password: '',
-        firstName: '',
-        lastName: '',
-        role: 'user',
-      });
-      setTimeout(() => {
-        setSuccessMsg('');
-      }, 3000);
-    } catch (err: any) {
-      setErrorMsg(err.response?.data?.error?.message || 'User not created. Please try again.');
-      setSuccessMsg('');
-      setTimeout(() => {
-        setErrorMsg('');
-      }, 3000);
-    }
+    // try {
+    //   const response = await authorizedRequest('POST', '/auth/create-user', form);
+    //   setSuccessMsg('User created successfully!');
+    //   setErrorMsg('');
+    //   setForm({
+    //     username: '',
+    //     email: '',
+    //     password: '',
+    //     firstName: '',
+    //     lastName: '',
+    //     role: 'user',
+    //   });
+    //   setTimeout(() => {
+    //     setSuccessMsg('');
+    //   }, 3000);
+    // } catch (err: any) {
+    //   setErrorMsg(err.response?.data?.error?.message || 'User not created. Please try again.');
+    //   setSuccessMsg('');
+    //   setTimeout(() => {
+    //     setErrorMsg('');
+    //   }, 3000);
+    // }
   };
 
   return (
