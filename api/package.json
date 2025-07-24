@@ -13,6 +13,8 @@
     "migration:generate": "npm run typeorm -- -d ./src/config/data-source.config.ts migration:generate ./src/migrations/$npm_config_name",
     "migration:create": "npm run typeorm -- migration:create ./src/migrations/$npm_config_name",
     "migration:revert": "npm run typeorm -- -d ./dist/config/data-source.config.js migration:revert",
+    "seed:run": "node ./node_modules/typeorm-extension/bin/cli.cjs -d ./dist/config/data-source.config.js seed:run",
+    "seed:create": "ts-node-esm ./node_modules/typeorm-extension/bin/cli.mjs seed:create --name $npm_config_name",
     "start": "ts-node --files -H -T ./src/index.ts",
     "start:watch": "nodemon -w *.ts -e ts -x ts-node --files -H -T ./src/index.ts",
     "start:wait-debug": "nodemon -w *.ts -e ts -x ts-node --files -H -T ./src/index.ts --inspect-brk=0.0.0.0:9229",
@@ -44,7 +46,9 @@
     "reflect-metadata": "^0.2.2",
     "rimraf": "^6.0.1",
     "rollbar": "^2.26.4",
+    "secure-random-password": "^0.2.3",
     "typeorm": "^0.3.22",
+    "typeorm-extension": "^3.7.1",
     "ws": "^8.18.1"
   },
   "devDependencies": {
@@ -61,6 +65,7 @@
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "@types/pdf-parse": "^1.1.5",
+    "@types/secure-random-password": "^0.2.3",
     "@types/ws": "^8.18.1",
     "concurrently": "^9.2.0",
     "cross-env": "^7.0.2",
