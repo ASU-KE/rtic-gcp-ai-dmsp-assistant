@@ -1,18 +1,19 @@
 import axios from 'axios';
-import '../App.css';
 import { useEffect, useRef, useState } from 'react';
-import { Col, Row, Button, Form, Card, Stack, Container, Accordion } from 'react-bootstrap';
+import { Col, Row, Button, Form, Container, Accordion } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/legacy/build/pdf';
-import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
 import useWebSocket from 'react-use-websocket';
-import 'github-markdown-css/github-markdown-light.css';
 import html2pdf from 'html2pdf.js';
-import { DownloadIcon, CheckIcon, CopyIcon } from '../../components/Icons';
 import mammoth from 'mammoth';
+import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
+import 'github-markdown-css/github-markdown-light.css';
+
+import { DownloadIcon, CheckIcon, CopyIcon } from '../../components';
+import '../App.css';
 
 GlobalWorkerOptions.workerSrc = workerSrc;
 
