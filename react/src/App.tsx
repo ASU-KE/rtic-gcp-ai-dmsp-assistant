@@ -1,33 +1,30 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { AuthProvider } from './context/provider';
+import { AuthProvider } from './context';
+import { useAuthContext } from './hooks';
 
-import { Layout } from './pages/Layout';
-import { HomePage } from './pages/HomePage';
-import { SubmitDmpText } from './pages/SubmitDmpText';
-import { SubmitDmpId } from './pages/SubmitDmpId';
-import { ListUsersPage } from './pages/ListUsersPage';
-import { LoginPage } from './pages/LoginPage';
-import { LogoutPage } from './pages/LogoutPage';
-import { CreateUserPage } from './pages/CreateUserPage';
-import { DeleteUserPage } from './pages/DeleteUserPage';
-import { UpdateUserPage } from './pages/UpdateUserPage';
+import { Layout } from './pages';
+import { HomePage } from './pages';
+import { SubmitDmpText } from './pages/dmsp';
+import { SubmitDmpId } from './pages/dmsp';
+import { ListUsersPage } from './pages/user';
+import { LoginPage } from './pages';
+import { LogoutPage } from './pages';
+import { CreateUserPage } from './pages';
+import { DeleteUserPage } from './pages';
+import { UpdateUserPage } from './pages';
 
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
-// const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-//   const { user } = useAuthContext();
-//   // Check if the user is authenticated
-//   // If authenticated, render the children (protected content)
-//   // If not authenticated, redirect to the login page
-//   return user ? children : <Navigate to="/login" />;
-// };
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const { state } = useAuthContext();
+  return state.isAuthenticated ? children : <Navigate to="/login" />;
+};
 
 const queryClient = new QueryClient();
 
 const App = (): JSX.Element => {
-  // const { user } = useAuthContext();
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -41,10 +38,38 @@ const App = (): JSX.Element => {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/logout" element={<LogoutPage />} />
 
-              <Route path="/user/create" element={<CreateUserPage />} />
-              <Route path="/user/delete" element={<DeleteUserPage />} />
-              <Route path="/user/update" element={<UpdateUserPage />} />
-              <Route path="/user/all" element={<ListUsersPage />} />
+              <Route
+                path="/user/create"
+                element={
+                  <ProtectedRoute>
+                    <CreateUserPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/user/delete"
+                element={
+                  <ProtectedRoute>
+                    <DeleteUserPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/user/update"
+                element={
+                  <ProtectedRoute>
+                    <UpdateUserPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/user/all"
+                element={
+                  <ProtectedRoute>
+                    <ListUsersPage />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
           </Routes>
         </QueryClientProvider>
