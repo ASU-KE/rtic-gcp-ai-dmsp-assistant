@@ -40,7 +40,7 @@ export const initLocalPassport = (app: Express, userService: UserService) => {
 
   passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
-      return cb(null, { id: user.id, username: user.username, role: user.role });
+      return cb(null, { id: user.id, role: user.role, username: user.username, email: user.email, firstName: user.firstName, lastName: user.lastName });
     });
   });
 
@@ -51,7 +51,7 @@ export const initLocalPassport = (app: Express, userService: UserService) => {
         if (!user) {
           return cb(null, false);
         }
-        return cb(null, user);
+        return cb(null, {id: user.id, role: user.role, username: user.username, email: user.email, firstName: user.firstName, lastName: user.lastName});
       })
       .catch((err) => {
         return cb(err);
