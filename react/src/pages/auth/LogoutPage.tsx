@@ -1,12 +1,23 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export const LogoutPage = () => {
+import { signout } from '../../api/auth';
+
+export const LogoutPage = async () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.removeItem('token');
+    const logout = async () => {
+      try {
+        await signout();
+      } catch (error) {
+        console.error('Logout failed:', error);
+      }
+    };
+    logout();
+
     navigate('/');
   }, [navigate]);
+
   return <p>Logging out...</p>;
 };
