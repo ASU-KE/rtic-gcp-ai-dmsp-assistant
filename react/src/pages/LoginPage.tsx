@@ -17,7 +17,7 @@ export const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`https://${import.meta.env.VITE_BACKEND_DOMAIN}/auth/login`,
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/auth/login`,
         {
           username,
           password,

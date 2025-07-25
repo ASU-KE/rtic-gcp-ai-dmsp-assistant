@@ -59,7 +59,8 @@ services:
       target: development
       args:
         - APP_BACKEND_DOMAIN=api.local.asu.edu
-        - APP_BACKEND_PORT=80
+        - APP_BACKEND_PORT=443
+        - APP_BACKEND_PROTOCOL=https
         - APP_FRONTEND_AUTH=local
         - APP_FRONTEND_ENABLE_DMP_ID=false
     ports:
