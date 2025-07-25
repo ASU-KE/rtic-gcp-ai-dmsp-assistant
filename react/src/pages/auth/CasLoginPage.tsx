@@ -1,6 +1,6 @@
 import '../App.css';
 import asuLogo from '../assets/arizona-state-university-logo.png';
-import { LoginCard } from '../components/LoginCard';
+import { LoginCard } from '../../components/LoginCard';
 
 export const CasLoginPage = () => {
 

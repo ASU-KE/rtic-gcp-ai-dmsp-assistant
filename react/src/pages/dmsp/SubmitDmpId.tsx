@@ -7,11 +7,11 @@ import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
 import { Modal } from 'react-bootstrap';
-import { DeleteUserPage } from './DeleteUserPage';
+import { DeleteUserPage } from '../user/DeleteUserPage';
 import useWebSocket from 'react-use-websocket';
 import 'github-markdown-css/github-markdown-light.css';
 import html2pdf from 'html2pdf.js';
-import { DownloadIcon, CheckIcon, CopyIcon } from '../components/Icons';
+import { DownloadIcon, CheckIcon, CopyIcon } from '../../components/Icons';
 
 type FormValues = {
   dmpId: string;

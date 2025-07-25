@@ -11,7 +11,7 @@ import Markdown from 'react-markdown';
 import useWebSocket from 'react-use-websocket';
 import 'github-markdown-css/github-markdown-light.css';
 import html2pdf from 'html2pdf.js';
-import { DownloadIcon, CheckIcon, CopyIcon } from '../components/Icons';
+import { DownloadIcon, CheckIcon, CopyIcon } from '../../components/Icons';
 import mammoth from 'mammoth';
 
 GlobalWorkerOptions.workerSrc = workerSrc;
