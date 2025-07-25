@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
+
+import { useAuthContext } from '../../hooks';
+import { signin } from '../../api/auth';
 
 import '../App.css';
 import eyeIcon from '../assets/hide.png';
@@ -14,32 +16,27 @@ export const LoginPage = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
+  const { state } = useAuthContext();
+  useEffect(() => {
+    if (state.isAuthenticated) {
+      navigate('/');
+    }
+  }, [state.isAuthenticated, navigate]);
+
+  const setError = (msg: string) => {
+    setErrorMsg(msg);
+    setTimeout(() => {
+      setErrorMsg('');
+    }, 5000);
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/auth/login`,
-        {
-          username,
-          password,
-        },
-        {
-          withCredentials: true
-        }
-      );
-      const { user } = response.data;
-      console.log('User logged in:', user);
 
-      // localStorage.setItem('token', token);
-      // localStorage.setItem('refreshToken', refreshToken);
-      // navigate('/');
-      // window.location.reload();
-
-    } catch (err: any) {
-      console.error('Login error:', err);
-      setErrorMsg(err.response?.data?.error?.message || 'Login failed');
-      setTimeout(() => {
-        setErrorMsg('');
-      }, 5000);
+    const user = await signin(username, password);
+    if (!user) {
+      setError('Login failed. Please check your username and password.');
+      return;
     }
   };
 
