@@ -70,9 +70,9 @@ app.use(
     proxy: true, // trust first proxy for secure cookies in production
     store: sessionStore.connect(sessionRepository),
     cookie: {
-      secure: true, // Set to false if not using HTTPS
+      secure: false, // Set to false if not using HTTPS
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: 'none', // Use 'lax' or 'strict' if not using cross-origin requests
+      // sameSite: 'none', // Use 'lax' or 'strict' if not using cross-origin requests
       // httpOnly: true, // Helps prevent XSS attacks by not allowing client-side scripts to access the cookie
     },
   })
