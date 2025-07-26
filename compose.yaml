@@ -17,11 +17,11 @@ services:
       - ./api/src:/code/src
       - ./api/package.json:/code/package.json
       - ./api/package-lock.json:/code/package-lock.json
-    labels:
-      - "traefik.enable=true" # Enable Traefik
-      - "traefik.http.routers.api.rule=Host(`api.local.asu.edu`)" # Determine what URL to use
-      - "traefik.http.routers.api.entrypoints=websecure" # Determine what entrypoint and port to use
-      - "traefik.http.routers.api.tls=true"
+    # labels:
+    #   - "traefik.enable=true" # Enable Traefik
+    #   - "traefik.http.routers.api.rule=Host(`api.local.asu.edu`)" # Determine what URL to use
+    #   - "traefik.http.routers.api.entrypoints=websecure" # Determine what entrypoint and port to use
+    #   - "traefik.http.routers.api.tls=true"
     networks:
       - proxy
       - private
@@ -59,9 +59,9 @@ services:
       context: react
       target: development
       args:
-        - APP_BACKEND_DOMAIN=api.local.asu.edu
-        - APP_BACKEND_PORT=443
-        - APP_BACKEND_PROTOCOL=https
+        - APP_BACKEND_DOMAIN=localhost
+        - APP_BACKEND_PORT=3001
+        - APP_BACKEND_PROTOCOL=http
         - APP_FRONTEND_AUTH=local
         - APP_FRONTEND_ENABLE_DMP_ID=false
     ports:
