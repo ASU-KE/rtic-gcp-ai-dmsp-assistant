@@ -1,4 +1,4 @@
-import { LoginPage, LogoutPage, CasLoginPage } from './auth';
+import { LoginPage, LogoutPage } from './auth';
 import { SubmitDmpText, SubmitDmpId } from './dmsp';
 import { CreateUserPage, DeleteUserPage, ListUsersPage, UpdateUserPage } from './user';
 
@@ -10,7 +10,6 @@ export {
   Layout,
   LoginPage,
   LogoutPage,
-  CasLoginPage,
   SubmitDmpText,
   SubmitDmpId,
   CreateUserPage,
