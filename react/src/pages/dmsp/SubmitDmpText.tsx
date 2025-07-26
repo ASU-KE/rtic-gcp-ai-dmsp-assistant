@@ -13,7 +13,7 @@ import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 import 'github-markdown-css/github-markdown-light.css';
 
 import { DownloadIcon, CheckIcon, CopyIcon } from '../../components';
-import '../App.css';
+import '../../App.css';
 
 GlobalWorkerOptions.workerSrc = workerSrc;
 

@@ -10,7 +10,7 @@ import html2pdf from 'html2pdf.js';
 import 'github-markdown-css/github-markdown-light.css';
 
 import { DownloadIcon, CheckIcon, CopyIcon } from '../../components';
-import '../App.css';
+import '../../App.css';
 
 type FormValues = {
   dmpId: string;

@@ -5,9 +5,9 @@ import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { useAuthContext } from '../../hooks';
 import { signin } from '../../api/auth';
 
-import '../App.css';
-import eyeIcon from '../assets/hide.png';
-import eyeOffIcon from '../assets/unhide.png';
+import '../../App.css';
+import eyeIcon from '../../assets/hide.png';
+import eyeOffIcon from '../../assets/unhide.png';
 
 export const LoginPage = () => {
   const [username, setUsername] = useState('');
