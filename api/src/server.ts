@@ -50,7 +50,6 @@ app.use(
       'https://dmsp.local.rtd.asu.edu',
       'https://dmsp.dev.rtd.asu.edu',
     ],
-    // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // allow session cookie from browser to pass through
   })
 );
@@ -72,8 +71,7 @@ app.use(
     cookie: {
       sameSite: 'none', // required for cross-site cookies
       secure: true, // Must be true when samesite is 'none' and using HTTPS (or with localhost)
-      // maxAge: 24 * 60 * 60 * 1000, // 1 day
-      // httpOnly: true, // Helps prevent XSS attacks by not allowing client-side scripts to access the cookie
+      httpOnly: true, // Helps prevent XSS attacks by not allowing client-side scripts to access the cookie
     },
   })
 );
