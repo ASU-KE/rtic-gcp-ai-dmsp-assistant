@@ -19,7 +19,7 @@ services:
       - ./api/package-lock.json:/code/package-lock.json
     labels:
       - "traefik.enable=true" # Enable Traefik
-      - "traefik.http.routers.api.rule=Host(`api.local.rtd.asu.edu`)" # Determine what URL to use
+      - "traefik.http.routers.api.rule=Host(`api.local.asu.edu`)" # Determine what URL to use
       - "traefik.http.routers.api.entrypoints=websecure" # Determine what entrypoint and port to use
       - "traefik.http.routers.api.tls=true"
     networks:
@@ -59,9 +59,9 @@ services:
       context: react
       target: development
       args:
-        - APP_BACKEND_DOMAIN=localhost
-        - APP_BACKEND_PORT=3001
-        - APP_BACKEND_PROTOCOL=http
+        - APP_BACKEND_DOMAIN=api.local.asu.edu
+        - APP_BACKEND_PORT=443
+        - APP_BACKEND_PROTOCOL=https
         - APP_FRONTEND_AUTH=local
         - APP_FRONTEND_ENABLE_DMP_ID=false
     ports:
@@ -71,7 +71,7 @@ services:
       - /code/node_modules
     labels:
       - "traefik.enable=true" # Enable Traefik
-      - "traefik.http.routers.react.rule=Host(`dmsp.local.rtd.asu.edu`)" # Determine what URL to use
+      - "traefik.http.routers.react.rule=Host(`dmsp.local.asu.edu`)" # Determine what URL to use
       - "traefik.http.routers.react.entrypoints=websecure" # Determine what entrypoint and port to use
       - "traefik.http.routers.react.tls=true"
     networks:
@@ -131,7 +131,7 @@ services:
       - "traefik.enable=true"
 
       # Dashboard router
-      - "traefik.http.routers.dashboard.rule=Host(`traefik.local.rtd.asu.edu`)"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.local.asu.edu`)"
       - "traefik.http.routers.dashboard.entrypoints=websecure"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.tls=true"
