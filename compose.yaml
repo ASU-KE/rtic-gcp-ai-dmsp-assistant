@@ -59,9 +59,9 @@ services:
       context: react
       target: development
       args:
-        - APP_BACKEND_DOMAIN=api.local.rtd.asu.edu
-        - APP_BACKEND_PORT=443
-        - APP_BACKEND_PROTOCOL=https
+        - APP_BACKEND_DOMAIN=localhost
+        - APP_BACKEND_PORT=3001
+        - APP_BACKEND_PROTOCOL=http
         - APP_FRONTEND_AUTH=local
         - APP_FRONTEND_ENABLE_DMP_ID=false
     ports:
@@ -96,7 +96,7 @@ services:
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./proxy:/configuration:ro
+      - ./proxy:/dynamic:ro
       - ./secrets/certs:/certs:ro
 
     command:
@@ -108,9 +108,8 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
 
-      # Attach the static configuration files that contain the tls configuration settings
-      - "--providers.file.directory=/configuration/"
-      - "--providers.file.watch=true"
+      # Attach the static configuration tls.yaml file that contains the tls configuration settings
+      - "--providers.file.filename=/dynamic/dynamic.yml"
 
       # Providers
       - "--providers.docker=true"

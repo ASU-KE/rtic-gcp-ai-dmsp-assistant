@@ -1,4 +1,0 @@
-tls:
-  certificates:
-    - certFile: "/certs/wildcard.local.rtd.asu.edu.pem"
-      keyFile: "/certs/wildcard.local.rtd.asu.edu.key"
