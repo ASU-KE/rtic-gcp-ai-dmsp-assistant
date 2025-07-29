@@ -47,7 +47,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
-      'https://dmsp.local.asu.edu',
+      'https://dmsp.local.rtd.asu.edu',
       'https://dmsp.dev.rtd.asu.edu',
     ],
     // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
