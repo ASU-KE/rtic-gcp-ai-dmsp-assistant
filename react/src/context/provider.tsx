@@ -2,10 +2,10 @@ import React, { useReducer } from 'react';
 import { AuthProviderProps } from '../types';
 import { AuthContext } from './context';
 import { AuthReducer } from './reducer';
-import { initialState } from './state';
+import { getInitialState } from './state';
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(AuthReducer, initialState);
+  const [state, dispatch] = useReducer(AuthReducer, getInitialState());
 
   return <AuthContext.Provider value={{ state, dispatch }}>{children}</AuthContext.Provider>;
 };

@@ -3,6 +3,7 @@ import { User } from './user';
 
 export interface AuthState {
   isAuthenticated: boolean;
+  storageKey: string;
   user: null | User;
 }
 
