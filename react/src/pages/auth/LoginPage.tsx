@@ -19,6 +19,9 @@ export const LoginPage = () => {
 
   const { dispatch, state } = useAuthContext();
 
+  console.log('LoginPage user:', state.user);
+  console.log('LoginPage isAuthenticated:', state.isAuthenticated);
+
   useEffect(() => {
     if (state.isAuthenticated) {
       navigate('/');

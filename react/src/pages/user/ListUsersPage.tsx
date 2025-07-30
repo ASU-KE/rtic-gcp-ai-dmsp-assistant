@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Alert, Container, Row, Col } from 'react-bootstrap';
+import { useAuthContext } from '../../hooks';
 
 interface User {
   id: number;
@@ -14,6 +15,12 @@ interface User {
 export const ListUsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [errorMsg, setErrorMsg] = useState('');
+
+    const { state } = useAuthContext();
+
+    console.log('ListUsersPage user:', state.user);
+    console.log('ListUsersPage isAuthenticated:', state.isAuthenticated);
+
 
   useEffect(() => {
     const fetchUsers = async () => {

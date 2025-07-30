@@ -2,7 +2,14 @@ import '../App.css';
 import { Accordion, Col, Row, Button } from 'react-bootstrap';
 import 'github-markdown-css/github-markdown-light.css';
 
-export const HomePage = () => (
+import { useAuthContext } from '../hooks';
+
+export const HomePage = () => {
+  const { state } = useAuthContext();
+  console.log('HomePage user:', state.user);
+  console.log('HomePage isAuthenticated:', state.isAuthenticated);
+
+  return (
   <Row className="mb-4">
     <Col md={8}>
       <h2 className="mt-2">Welcome to the ASU Data Management and Sharing Plan (DMSP) AI Tool Beta!</h2>
@@ -122,4 +129,4 @@ export const HomePage = () => (
       </Accordion>
     </Col>
   </Row>
-);
+)};
