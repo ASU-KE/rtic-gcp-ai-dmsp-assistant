@@ -63,7 +63,7 @@ services:
         - APP_BACKEND_PORT=443
         - APP_BACKEND_HTTP_PROTOCOL=https
         - APP_BACKEND_WS_PROTOCOL=wss
-        - APP_FRONTEND_AUTH=local
+        - APP_FRONTEND_AUTH=none
         - APP_FRONTEND_ENABLE_DMP_ID=false
     ports:
       - 3000:3000
