@@ -60,7 +60,7 @@ export const LoginPage = () => {
 
     } catch (err: any) {
       console.error('Login error:', err);
-      throw new Error(err.response?.data?.error?.message || 'Login failed');
+      setError(err.response?.data?.error?.message || 'Login failed');
     }
   };
 
