@@ -1,6 +1,10 @@
+import http from 'http';
 import { WebSocket, RawData } from 'ws';
 
 import config from './config/app.config';
+import { AppDataSource } from './config/data-source.config';
+import { UserService } from './modules/users/services/UserService';
+import { createApp } from './server';
 
 // include and initialize the rollbar library with your access token
 import Rollbar from 'rollbar';
@@ -10,11 +14,22 @@ const rollbar = new Rollbar({
   captureUnhandledRejections: true,
 });
 
-import app from './server';
 
-const server = app.listen(config.port, function () {
-  console.log('Server Listening on PORT:', config.port);
-});
+AppDataSource.initialize()
+  .then(() => {
+    console.log('TypeORM has been initialized!');
+  })
+  .catch((err) => {
+    console.error('Error during TypeORM initialization:', err);
+  });
+
+// Initialize new userService with TypeORM data source to inject into route and authproviders
+const userService = new UserService(AppDataSource);
+
+// Create Express app by injecting dependencies
+const app = createApp(rollbar, AppDataSource, userService);
+
+const server = http.createServer(app);
 
 // Create WebSocket server
 const wss = new WebSocket.Server({ server });
@@ -40,6 +55,12 @@ wss.on('connection', (ws: WebSocket) => {
 
 // Store WebSocket server in the Express app for later use
 app.locals.wss = wss;
+
+// Start listening
+server.listen(config.port, () => {
+  console.log(`Server listening on PORT: ${config.port}`);
+});
+
 
 //
 // need this in docker container to properly exit since node doesn't handle SIGINT/SIGTERM
