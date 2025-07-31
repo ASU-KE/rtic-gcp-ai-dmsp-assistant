@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { Form, Button, Alert, Container, Row, Col } from 'react-bootstrap';
 
 export const UpdateUserPage = () => {

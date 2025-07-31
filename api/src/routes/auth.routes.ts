@@ -18,7 +18,7 @@ const authRoutes = () => {
         return res.status(401).json({ message: 'Authentication failed' });
       }
 
-      res.status(200).json({ message: 'Login successful', user: { id: req.user.id, username: req.user.username, role: req.user.role } });
+      res.status(200).json({ message: 'Login successful', user: { id: req.user.id, username: req.user.username, role: req.user.role, email: req.user.email, firstName: req.user.firstName, lastName: req.user.lastName } });
     }
   );
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Alert, Container, Row, Col } from 'react-bootstrap';
+import { useAuthContext } from '../../hooks';
 
 interface User {
   id: number;
@@ -15,10 +16,17 @@ export const ListUsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [errorMsg, setErrorMsg] = useState('');
 
+    const { state } = useAuthContext();
+
+    if (import.meta.env.NODE_ENV !== 'production') {
+      console.log('ListUsersPage user:', state.user);
+      console.log('ListUsersPage isAuthenticated:', state.isAuthenticated);
+    }
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`https://${import.meta.env.VITE_BACKEND_DOMAIN}/user/all`, {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/all`, {
           withCredentials: true
         });
 

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Form, Button, Alert, Card, Container, Row, Col } from 'react-bootstrap';
 
-import '../App.css';
-import eyeIcon from '../assets/hide.png';
-import eyeOffIcon from '../assets/unhide.png';
+import '../../App.css';
+import eyeIcon from '../../assets/hide.png';
+import eyeOffIcon from '../../assets/unhide.png';
 
 export const CreateUserPage = () => {
   const [form, setForm] = useState({

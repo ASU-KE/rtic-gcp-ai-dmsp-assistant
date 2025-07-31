@@ -50,7 +50,6 @@ app.use(
       'https://dmsp.local.asu.edu',
       'https://dmsp.dev.rtd.asu.edu',
     ],
-    // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // allow session cookie from browser to pass through
   })
 );
@@ -70,10 +69,9 @@ app.use(
     proxy: true, // trust first proxy for secure cookies in production
     store: sessionStore.connect(sessionRepository),
     cookie: {
-      secure: true, // Set to false if not using HTTPS
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: 'none', // Use 'lax' or 'strict' if not using cross-origin requests
-      // httpOnly: true, // Helps prevent XSS attacks by not allowing client-side scripts to access the cookie
+      sameSite: 'none', // required for cross-site cookies
+      secure: true, // Must be true when samesite is 'none' and using HTTPS (or with localhost)
+      httpOnly: true, // Helps prevent XSS attacks by not allowing client-side scripts to access the cookie
     },
   })
 );

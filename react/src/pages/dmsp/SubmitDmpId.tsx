@@ -1,17 +1,16 @@
 import axios from 'axios';
-import '../App.css';
 import { useEffect, useRef, useState } from 'react';
 import { Col, Row, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
-import { Modal } from 'react-bootstrap';
-import { DeleteUserPage } from './DeleteUserPage';
 import useWebSocket from 'react-use-websocket';
-import 'github-markdown-css/github-markdown-light.css';
 import html2pdf from 'html2pdf.js';
-import { DownloadIcon, CheckIcon, CopyIcon } from '../components/Icons';
+import 'github-markdown-css/github-markdown-light.css';
+
+import { DownloadIcon, CheckIcon, CopyIcon } from '../../components';
+import '../../App.css';
 
 type FormValues = {
   dmpId: string;
@@ -25,8 +24,6 @@ export function SubmitDmpId() {
   const [downloaded, setDownloaded] = useState(false);
   const [submittedDmpId, setSubmittedDmpId] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [showSignup, setShowSignup] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const lastChunkRef = useRef('');
   const contentEndRef = useRef<HTMLDivElement>(null);
@@ -81,7 +78,7 @@ export function SubmitDmpId() {
   const { mutate } = useMutation<void, unknown, FormValues>({
     mutationFn: (values) => {
       return axios
-        .post(`https://${import.meta.env.VITE_BACKEND_DOMAIN}/dmp/id`,
+        .post(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/dmp/id`,
           {
             dmpId: values.dmpId,
           }

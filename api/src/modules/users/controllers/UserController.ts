@@ -16,6 +16,9 @@ interface AuthenticatedRequest extends Request<object, object, UpdateUserBody> {
   user?: {
     id: number;
     username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
     role: string;
   };
 }
