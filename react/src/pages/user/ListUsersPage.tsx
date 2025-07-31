@@ -26,7 +26,7 @@ export const ListUsersPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/all`, {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_HTTP_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/all`, {
           withCredentials: true
         });
 

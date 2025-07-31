@@ -42,7 +42,7 @@ export const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/auth/login`,
+        `${import.meta.env.VITE_BACKEND_HTTP_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/auth/login`,
         {
           username,
           password,
