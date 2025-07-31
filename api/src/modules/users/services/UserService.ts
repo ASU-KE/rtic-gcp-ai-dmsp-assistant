@@ -33,7 +33,7 @@ export class UserService {
 
   async hashPassword(password: string): Promise<string> {
     try {
-      return await bcrypt.hash(password, config.passwordSaltRounds);
+      return await bcrypt.hash(password, config.auth.passwordSaltRounds);
     } catch (err) {
       console.error('Hashing failed:', err);
       throw err;

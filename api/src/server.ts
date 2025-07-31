@@ -63,7 +63,7 @@ const sessionStore = new TypeormStore({
 const sessionRepository = AppDataSource.getRepository(Session);
 app.use(
   session({
-    secret: config.sessionSecret,
+    secret: config.auth.sessionSecret,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
     proxy: true, // trust first proxy for secure cookies in production
@@ -104,7 +104,7 @@ app.get('/healthz', (req, res) => {
 });
 
 // Protected routes
-app.use('/user', isAuthenticated, UserRoutes(userService));
-app.use('/dmp', isAuthenticated, DmpRoutes);
+app.use('/user', config.auth.strategy !== 'none' ? isAuthenticated : UserRoutes(userService));
+app.use('/dmp', config.auth.strategy !== 'none' ? isAuthenticated : DmpRoutes);
 
 export default app;
