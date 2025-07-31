@@ -104,7 +104,7 @@ app.get('/healthz', (req, res) => {
 });
 
 // Protected routes
-app.use('/user', config.auth.strategy !== 'none' ? isAuthenticated : UserRoutes(userService));
-app.use('/dmp', config.auth.strategy !== 'none' ? isAuthenticated : DmpRoutes);
+app.use('/user', isAuthenticated, UserRoutes(userService));
+app.use('/dmp', isAuthenticated, DmpRoutes);
 
 export default app;
