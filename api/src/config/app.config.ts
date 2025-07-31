@@ -81,7 +81,7 @@ interface Config {
 
 const config: Config = {
   auth: {
-    strategy: 'none',
+    strategy: process.env.AUTH_STRATEGY ?? 'local',
     passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
     sessionSecret: process.env.SESSION_SECRET!,
   },
