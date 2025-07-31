@@ -18,9 +18,10 @@ export const ListUsersPage = () => {
 
     const { state } = useAuthContext();
 
-    console.log('ListUsersPage user:', state.user);
-    console.log('ListUsersPage isAuthenticated:', state.isAuthenticated);
-
+    if (import.meta.env.NODE_ENV !== 'production') {
+      console.log('ListUsersPage user:', state.user);
+      console.log('ListUsersPage isAuthenticated:', state.isAuthenticated);
+    }
 
   useEffect(() => {
     const fetchUsers = async () => {

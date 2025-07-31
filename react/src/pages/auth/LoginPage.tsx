@@ -19,8 +19,10 @@ export const LoginPage = () => {
 
   const { dispatch, state } = useAuthContext();
 
-  console.log('LoginPage user:', state.user);
-  console.log('LoginPage isAuthenticated:', state.isAuthenticated);
+  if (import.meta.env.NODE_ENV !== 'production') {
+    console.log('LoginPage user:', state.user);
+    console.log('LoginPage isAuthenticated:', state.isAuthenticated);
+  }
 
   useEffect(() => {
     if (state.isAuthenticated) {

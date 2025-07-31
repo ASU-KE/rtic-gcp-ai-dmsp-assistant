@@ -6,8 +6,10 @@ import { useAuthContext } from '../hooks';
 
 export const HomePage = () => {
   const { state } = useAuthContext();
-  console.log('HomePage user:', state.user);
-  console.log('HomePage isAuthenticated:', state.isAuthenticated);
+  if (import.meta.env.NODE_ENV !== 'production') {
+    console.log('HomePage user:', state.user);
+    console.log('HomePage isAuthenticated:', state.isAuthenticated);
+  }
 
   return (
   <Row className="mb-4">
