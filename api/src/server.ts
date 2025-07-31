@@ -2,20 +2,20 @@ import 'reflect-metadata';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import passport from 'passport';
+// import passport from 'passport';
 import Rollbar from 'rollbar';
 
-import { TypeormStore } from 'connect-typeorm';
-import session from 'express-session';
-import { Session } from './entities/session.entity';
+// import { TypeormStore } from 'connect-typeorm';
+// import session from 'express-session';
+// import { Session } from './entities/session.entity';
 
-import config from './config/app.config';
+// import config from './config/app.config';
 
-import { initLocalPassport } from './middlewares/passport.local.middleware';
-import { isAuthenticated } from './middlewares/is-authenticated.middleware';
+// import { initLocalPassport } from './middlewares/passport.local.middleware';
+// import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';
-import AuthRoutes from './routes/auth.routes';
+// import AuthRoutes from './routes/auth.routes';
 import UserRoutes from './routes/user.routes';
 import DmpRoutes from './routes/dmp.routes';
 import { DataSource } from 'typeorm';
@@ -32,41 +32,37 @@ export function createApp(
 
   app.use(
     cors({
-      origin: [
-        'http://localhost:3000',
-        'https://dmsp.local.asu.edu',
-        'https://dmsp.dev.rtd.asu.edu',
-      ],
+      origin: true,
       credentials: true, // allow session cookie from browser to pass through
     })
   );
   // Initialize session store with TypeORM
-  const sessionStore = new TypeormStore({
-    cleanupLimit: 2,
-    limitSubquery: false, // If using MariaDB.
-    ttl: 86400,
-  });
+  // const sessionStore = new TypeormStore({
+  //   cleanupLimit: 2,
+  //   limitSubquery: false, // If using MariaDB.
+  //   ttl: 86400,
+  // });
 
-  const sessionRepository = dataSource.getRepository(Session);
-  app.use(
-    session({
-      secret: config.sessionSecret,
-      resave: false, // don't save session if unmodified
-      saveUninitialized: false, // don't create session until something stored
-      proxy: true, // trust first proxy for secure cookies in production
-      store: sessionStore.connect(sessionRepository),
-      cookie: {
-        sameSite: 'none', // required for cross-site cookies
-        secure: true, // Must be true when samesite is 'none' and using HTTPS (or with localhost)
-        httpOnly: true, // Helps prevent XSS attacks by not allowing client-side scripts to access the cookie
-      },
-    })
-  );
+  // const sessionRepository = dataSource.getRepository(Session);
+  // app.use(
+  //   session({
+  //     secret: config.sessionSecret,
+  //     resave: false, // don't save session if unmodified
+  //     saveUninitialized: false, // don't create session until something stored
+  //     proxy: true, // trust first proxy for secure cookies in production
+  //     // store: sessionStore.connect(sessionRepository),
+  //     cookie: {
+  //       sameSite: 'none', // required for cross-site cookies
+  //       secure: true, // Must be true when samesite is 'none' and using HTTPS (or with localhost)
+  //       httpOnly: true, // Helps prevent XSS attacks by not allowing client-side scripts to access the cookie
+  //     },
+  //   })
+  // );
 
   // Init Passport middleware
-  app.use(passport.initialize());
-  app.use(passport.session());
-  initLocalPassport(app, userService);
+  // app.use(passport.initialize());
+  // app.use(passport.session());
+  // initLocalPassport(app, userService);
 
   // Test middleware to view session and user data
   app.use((req, res, next) => {
@@ -76,14 +72,14 @@ export function createApp(
   });
 
   // Register  unprotected routes
-  app.get('/', (req: Request, res: Response) => {
-    res.json({
-      success: true,
-      isAuthenticated: req.isAuthenticated(),
-      message: 'DMSP AI Tool API',
-    });
-  });
-  app.use('/auth', AuthRoutes());
+  // app.get('/', (req: Request, res: Response) => {
+  //   res.json({
+  //     success: true,
+  //     isAuthenticated: req.isAuthenticated(),
+  //     message: 'DMSP AI Tool API',
+  //   });
+  // });
+  // app.use('/auth', AuthRoutes());
 
   // Health-check for Kubernetes
   app.get('/healthz', (req, res) => {
@@ -91,8 +87,8 @@ export function createApp(
   });
 
   // Protected routes
-  app.use('/user', isAuthenticated, UserRoutes(userService));
-  app.use('/dmp', isAuthenticated, DmpRoutes);
+  app.use('/user', UserRoutes(userService));
+  app.use('/dmp', DmpRoutes);
 
   return app;
 }
