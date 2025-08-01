@@ -1,4 +1,9 @@
 interface Config {
+  auth: {
+    strategy: string;
+    passwordSaltRounds: number;
+    sessionSecret: string;
+  };
   database: {
     host: string;
     port: string;
@@ -8,12 +13,6 @@ interface Config {
   };
   port: string;
   rollbarToken: string;
-  passwordSaltRounds: number;
-  sessionSecret: string;
-  jwtSecret: string;
-  jwtExpiration: number;
-  jwtRefreshSecret: string;
-  jwtRefreshExpiration: number;
   dmptoolClientId: string;
   dmptoolClientSecret: string;
   llmAccessSecret: string;
@@ -81,6 +80,11 @@ interface Config {
 }
 
 const config: Config = {
+  auth: {
+    strategy: process.env.AUTH_STRATEGY ?? 'local',
+    passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
+    sessionSecret: process.env.SESSION_SECRET!,
+  },
   database: {
     host: process.env.DB_HOST ?? 'localhost',
     port: process.env.DB_PORT ?? '3306',
@@ -93,12 +97,6 @@ const config: Config = {
   // because containers don't have that issue :)
   port: process.env.API_PORT ?? '3001',
   rollbarToken: process.env.ROLLBAR_TOKEN!,
-  passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
-  sessionSecret: process.env.SESSION_SECRET!,
-  jwtSecret: process.env.JWT_SECRET!,
-  jwtExpiration: parseInt(process.env.JWT_EXPIRATION ?? '86400', 10),
-  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,
-  jwtRefreshExpiration: parseInt(process.env.JWT_REFRESH_EXPIRATION_SECS ?? '604800', 10),
   dmptoolClientId: process.env.DMPTOOL_CLIENT_ID!,
   dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET!,
   llmAccessSecret: process.env.LLM_ACCESS_SECRET!,
