@@ -1,3 +1,4 @@
+import { plainToClass } from 'class-transformer';
 import { Express } from 'express';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
@@ -40,7 +41,10 @@ export const initLocalPassport = (app: Express, userService: UserService) => {
 
   passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
-      return cb(null, { id: user.id, role: user.role, username: user.username, email: user.email, firstName: user.firstName, lastName: user.lastName });
+      const userDTO = plainToClass(User, user, {
+        excludeExtraneousValues: true,
+      });
+      return cb(null, userDTO);
     });
   });
 
@@ -51,7 +55,10 @@ export const initLocalPassport = (app: Express, userService: UserService) => {
         if (!user) {
           return cb(null, false);
         }
-        return cb(null, {id: user.id, role: user.role, username: user.username, email: user.email, firstName: user.firstName, lastName: user.lastName});
+        const userDTO = plainToClass(User, user, {
+          excludeExtraneousValues: true,
+        });
+        return cb(null, userDTO);
       })
       .catch((err) => {
         return cb(err);

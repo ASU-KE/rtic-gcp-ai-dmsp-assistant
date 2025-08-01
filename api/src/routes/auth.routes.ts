@@ -1,6 +1,8 @@
+import { plainToClass } from 'class-transformer';
 import { Router, Request, Response } from 'express';
 import passport from 'passport';
 
+import { User } from '../entities/user.entity';
 import SchemaValidationMiddleware from '../middlewares/schema-validation.middleware';
 import loginPayload from '../modules/auth/schemas/loginPayload';
 
@@ -18,7 +20,10 @@ const authRoutes = () => {
         return res.status(401).json({ message: 'Authentication failed' });
       }
 
-      res.status(200).json({ message: 'Login successful', user: { id: req.user.id, username: req.user.username, role: req.user.role, email: req.user.email, firstName: req.user.firstName, lastName: req.user.lastName } });
+      const userDTO = plainToClass(User, req.user as User, {
+        excludeExtraneousValues: true,
+      });
+      res.status(200).json({ message: 'Login successful', user: userDTO });
     }
   );
 
