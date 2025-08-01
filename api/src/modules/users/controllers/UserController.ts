@@ -80,7 +80,7 @@ export default class UserController {
           return;
         }
 
-        const userDto = plainToClass(User, user, { excludeExtraneousValues: true });
+        const userDto = plainToClass(User, foundUser, { excludeExtraneousValues: true });
         res.status(200).json({
           status: true,
           data: userDto,
