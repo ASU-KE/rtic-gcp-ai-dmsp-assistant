@@ -1,3 +1,4 @@
+import { plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import { DeleteResult } from 'typeorm';
 
@@ -5,23 +6,6 @@ import { UserService } from '../services/UserService';
 import { User } from '../../../entities/user.entity';
 import { CreateUserPayload } from '../schemas/create-user.schema';
 import config from '../../../config/app.config';
-
-interface UpdateUserBody {
-  name?: string;
-  email?: string;
-  role?: string;
-}
-
-interface AuthenticatedRequest extends Request<object, object, UpdateUserBody> {
-  user?: {
-    id: number;
-    username: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-  };
-}
 
 export default class UserController {
   private userService: UserService;
@@ -74,8 +58,8 @@ export default class UserController {
       });
   };
 
-  getUser = (req: AuthenticatedRequest, res: Response) => {
-    const { user } = req;
+  getUser = (req: Request, res: Response) => {
+    const user = req.user as User;
 
     if (!user) {
       res.status(401).json({
@@ -96,9 +80,10 @@ export default class UserController {
           return;
         }
 
+        const userDto = plainToClass(User, foundUser, { excludeExtraneousValues: true });
         res.status(200).json({
           status: true,
-          data: foundUser,
+          data: userDto,
         });
       })
       .catch((err: Error) => {
@@ -151,9 +136,10 @@ export default class UserController {
           return;
         }
 
+        const userDto = plainToClass(User, updatedUser, { excludeExtraneousValues: true });
         res.status(200).json({
           status: true,
-          data: updatedUser,
+          data: userDto,
         });
       })
       .catch((err: Error) => {
@@ -190,9 +176,12 @@ export default class UserController {
     this.userService
       .findAllUsers(req.query)
       .then((users: User[]) => {
+        const userDtos = users.map((user) =>
+          plainToClass(User, user, { excludeExtraneousValues: true })
+        );
         res.status(200).json({
           status: true,
-          data: users,
+          data: userDtos,
         });
       })
       .catch((err: Error) => {
@@ -222,9 +211,10 @@ export default class UserController {
           return;
         }
 
+        const userDto = plainToClass(User, user, { excludeExtraneousValues: true });
         res.status(200).json({
           status: true,
-          data: user,
+          data: userDto,
         });
       })
       .catch((err: Error) => {
