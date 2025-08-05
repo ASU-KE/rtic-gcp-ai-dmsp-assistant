@@ -16,7 +16,8 @@ import { initLocalPassport } from './middlewares/passport.local.middleware';
 import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';
-import AuthRoutes from './routes/auth.routes';
+// import AuthRoutes from './routes/auth.local.routes';
+import SamlAuthRoutes from './routes/auth.saml.routes';
 import UserRoutes from './routes/user.routes';
 import DmpRoutes from './routes/dmp.routes';
 
@@ -96,7 +97,9 @@ app.get('/', (req: Request, res: Response) => {
     message: 'DMSP AI Tool API',
   });
 });
-app.use('/auth', AuthRoutes());
+if (config.auth.strategy === 'saml') {
+  app.use('/auth', SamlAuthRoutes());
+}
 
 // Health-check for Kubernetes
 app.get('/healthz', (req, res) => {
