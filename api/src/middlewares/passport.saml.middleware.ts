@@ -1,10 +1,14 @@
 import { Express } from 'express';
 import passport from 'passport';
-import { Strategy as SamlStrategy } from '@node-saml/passport-saml';
+import {
+  Strategy as SamlStrategy,
+  Profile,
+  VerifiedCallback,
+} from '@node-saml/passport-saml';
 
 import { User } from '../entities/user.entity';
 import { UserService } from '../modules/users/services/UserService';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, instanceToPlain } from 'class-transformer';
 
 export const initPassport = (app: Express, userService: UserService) => {
   passport.use(
@@ -16,44 +20,73 @@ export const initPassport = (app: Express, userService: UserService) => {
         issuer: 'passport-saml',
         cert: 'fake cert', // cert must be provided
       },
-      (profile, done) => {
+      (profile: Profile | null | undefined, done: VerifiedCallback) => {
         // for signon
-        userService
-          .findUser({ username: profile.nameID })
-          .then((user) => {
-            if (!user) {
-              return done(null, false, {
-                message: 'Incorrect username or password.',
-              }); // reject authentication attempt
-            }
 
-            userService
-              .verifyPassword(user, password)
-              .then((isMatch) => {
-                if (!isMatch) {
-                  return done(null, false, {
-                    message: 'Incorrect username or password.',
-                  }); // password incorrect, reject authentication attempt
-                }
+        if (!profile) {
+          return done(new Error('SSO failed'));
+        }
 
-                return done(null, user); // authentication successful
-              })
-              .catch((err) => {
-                return done(err);
-              });
-          })
-          .catch((err) => {
-            return done(err);
-          });
+        if (profile != null && typeof profile.nameID === 'string')
+          userService
+            .findUser({ username: profile.nameID })
+            .then((user) => {
+              if (!user) {
+                // If user does not exist, create a new user
+
+                userService
+                  .createUser({
+                    username: profile.nameID,
+                    email: profile.email ?? '',
+                    // firstName: profile.givenName ?? '',
+                    // lastName: profile.familyName ?? '',
+                    role: 'user', // default role
+                  })
+                  .then((newUser) => {
+                    const userDTO = plainToClass(User, newUser, {
+                      excludeExtraneousValues: true,
+                    });
+                    return done(null, instanceToPlain(userDTO));
+                  })
+                  .catch((err) => {
+                    return done(err instanceof Error ? err : new Error(String(err)));
+                  });
+              } else {
+                // If user exists, return the user
+                const userDTO = plainToClass(User, user, {
+                  excludeExtraneousValues: true,
+                });
+                return done(null, instanceToPlain(userDTO));
+              }
+            })
+            .catch((err) => {
+              return done(err instanceof Error ? err : new Error(String(err)));
+            });
       },
-      (profile, done) => {
+      (profile: Profile | null | undefined, done: VerifiedCallback) => {
         // for logout
-        findByNameID(profile.nameID, (err, user) => {
-          if (err) {
-            return done(err);
-          }
-          return done(null, user);
-        });
+
+        if (!profile) {
+          return done(new Error('SSO logout failure'));
+        }
+
+        if (profile != null && typeof profile.nameID === 'string')
+          userService
+            .findUser({ username: profile.nameID })
+            .then((user) => {
+              if (!user) {
+                return done(new Error('No user to log out'));
+              } else {
+                // If user exists, return the user
+                const userDTO = plainToClass(User, user, {
+                  excludeExtraneousValues: true,
+                });
+                return done(null, instanceToPlain(userDTO));
+              }
+            })
+            .catch((err) => {
+              return done(err instanceof Error ? err : new Error(String(err)));
+            });
       }
     )
   );
@@ -81,7 +114,7 @@ export const initPassport = (app: Express, userService: UserService) => {
         return cb(null, userDTO);
       })
       .catch((err) => {
-        return cb(err);
+        return cb(err instanceof Error ? err : new Error(String(err)));
       });
   });
 };
