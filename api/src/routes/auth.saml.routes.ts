@@ -16,6 +16,10 @@ const authRoutes = () => {
     }
   );
 
+  router.get('/login/fail', (req, res) => {
+    res.status(401).send('Login failed');
+  });
+
   router.post(
     '/login/callback',
     bodyParser.urlencoded({ extended: false }),
