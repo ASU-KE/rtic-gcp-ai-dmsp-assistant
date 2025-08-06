@@ -98,7 +98,7 @@ app.get('/', (req: Request, res: Response) => {
   });
 });
 if (config.auth.strategy === 'saml') {
-  app.use('/auth', SamlAuthRoutes());
+  app.use('/saml', SamlAuthRoutes());
 }
 
 // Health-check for Kubernetes
