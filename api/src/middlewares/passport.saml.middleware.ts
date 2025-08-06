@@ -42,8 +42,9 @@ export const initPassport = (app: Express, userService: UserService) => {
                   .createUser({
                     username: profile.nameID,
                     email: profile.email ?? '',
-                    // firstName: profile.givenName ?? '',
-                    // lastName: profile.familyName ?? '',
+                    password: '', // Password is not used for SAML, but required by UserService
+                    firstName: '',
+                    lastName: '',
                     role: 'user', // default role
                   })
                   .then((newUser) => {
