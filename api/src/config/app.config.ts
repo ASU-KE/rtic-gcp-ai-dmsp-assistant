@@ -1,8 +1,10 @@
 interface Config {
   auth: {
-    strategy: string;
-    passwordSaltRounds: number;
     sessionSecret: string;
+    strategy: string;
+    local: {
+      passwordSaltRounds: number;
+    };
   };
   database: {
     host: string;
@@ -81,9 +83,11 @@ interface Config {
 
 const config: Config = {
   auth: {
-    strategy: process.env.AUTH_STRATEGY ?? 'local',
-    passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
     sessionSecret: process.env.SESSION_SECRET!,
+    strategy: process.env.AUTH_STRATEGY ?? 'local',
+    local: {
+      passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
+    },
   },
   database: {
     host: process.env.DB_HOST ?? 'localhost',
