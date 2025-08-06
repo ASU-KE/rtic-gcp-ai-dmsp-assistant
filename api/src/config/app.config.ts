@@ -2,13 +2,13 @@ interface Config {
   auth: {
     sessionSecret: string;
     strategy: string;
-    local: {
-      passwordSaltRounds: number;
-    };
+    passwordSaltRounds: number;
     saml: {
       entryPoint: string;
+      callbackUrl: string;
       issuer: string;
       cert: string;
+      privateKey?: string;
     };
   };
   database: {
@@ -90,13 +90,13 @@ const config: Config = {
   auth: {
     sessionSecret: process.env.SESSION_SECRET!,
     strategy: process.env.AUTH_STRATEGY ?? 'local',
-    local: {
-      passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
-    },
+    passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
     saml: {
       entryPoint: process.env.SAML_ENTRY_POINT!,
+      callbackUrl: process.env.SAML_CALLBACK_URL!,
       issuer: process.env.SAML_ISSUER!,
       cert: process.env.SAML_CERT!,
+      privateKey: process.env.SAML_PRIVATE_KEY, // Optional, if using SAML
     },
   },
   database: {
