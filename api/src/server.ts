@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import express, { Request, Response } from 'express';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
@@ -77,6 +78,10 @@ app.use(
     },
   })
 );
+
+// Body parser middleware for SAML authentication
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Init Passport middleware
 app.use(passport.initialize());
