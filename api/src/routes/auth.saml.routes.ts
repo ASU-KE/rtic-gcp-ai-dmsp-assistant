@@ -1,4 +1,3 @@
-import bodyParser from 'body-parser';
 import { Router, Request, RequestHandler, Response } from 'express';
 import passport from 'passport';
 
@@ -8,7 +7,7 @@ const authRoutes = () => {
   router.get(
     '/login',
     passport.authenticate('saml', {
-      failureRedirect: '/login/failure',
+      failureRedirect: '/login/fail',
       failureFlash: true,
     }) as RequestHandler,
     function (req, res) {
@@ -22,9 +21,8 @@ const authRoutes = () => {
 
   router.post(
     '/login/callback',
-    bodyParser.urlencoded({ extended: false }),
     passport.authenticate('saml', {
-      failureRedirect: '/',
+      failureRedirect: '/login/fail',
       failureFlash: true,
     }) as RequestHandler,
     function (req, res) {
