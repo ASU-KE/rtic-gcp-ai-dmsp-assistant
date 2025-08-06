@@ -7,7 +7,10 @@ const authRoutes = () => {
 
   router.get(
     '/login',
-    passport.authenticate('saml', { failureRedirect: '/', failureFlash: true }) as RequestHandler,
+    passport.authenticate('saml', {
+      failureRedirect: '/login/failure',
+      failureFlash: true,
+    }) as RequestHandler,
     function (req, res) {
       res.redirect('/');
     }
