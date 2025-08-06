@@ -12,7 +12,8 @@ import { Session } from './entities/session.entity';
 import config from './config/app.config';
 import { AppDataSource } from './config/data-source.config';
 
-import { initLocalPassport } from './middlewares/passport.local.middleware';
+// import { initLocalPassport } from './middlewares/passport.local.middleware';
+import { initPassport } from './middlewares/passport.saml.middleware';
 import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';
@@ -80,7 +81,7 @@ app.use(
 // Init Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
-initLocalPassport(app, userService);
+initPassport(app, userService);
 
 // Test middleware to view session and user data
 app.use((req, res, next) => {
