@@ -20,7 +20,9 @@ export const initPassport = (app: Express, userService: UserService) => {
         issuer: config.auth.saml.issuer,
         cert: config.auth.saml.cert,
         // privateKey: config.auth.saml.privateKey,
-        callbackUrl: config.auth.saml.callbackUrl,
+        // callbackUrl: config.auth.saml.callbackUrl,
+        wantAssertionsSigned: true,
+        wantAuthnResponseSigned: false,
       },
       (profile: Profile | null | undefined, done: VerifiedCallback) => {
         // for signon
