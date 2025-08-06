@@ -9,16 +9,18 @@ import {
 import { User } from '../entities/user.entity';
 import { UserService } from '../modules/users/services/UserService';
 import { plainToClass, instanceToPlain } from 'class-transformer';
+import config from '../config/app.config';
 
 export const initPassport = (app: Express, userService: UserService) => {
   passport.use(
     new SamlStrategy(
       {
-        path: '/login/callback',
-        entryPoint:
-          'https://openidp.feide.no/simplesaml/saml2/idp/SSOService.php',
-        issuer: 'passport-saml',
-        cert: 'fake cert', // cert must be provided
+        path: '/saml/login',
+        entryPoint: config.auth.saml.entryPoint,
+        issuer: config.auth.saml.issuer,
+        cert: config.auth.saml.cert,
+        // privateKey: config.auth.saml.privateKey,
+        callbackUrl: config.auth.saml.callbackUrl,
       },
       (profile: Profile | null | undefined, done: VerifiedCallback) => {
         // for signon
@@ -49,7 +51,9 @@ export const initPassport = (app: Express, userService: UserService) => {
                     return done(null, instanceToPlain(userDTO));
                   })
                   .catch((err) => {
-                    return done(err instanceof Error ? err : new Error(String(err)));
+                    return done(
+                      err instanceof Error ? err : new Error(String(err))
+                    );
                   });
               } else {
                 // If user exists, return the user
