@@ -5,6 +5,11 @@ interface Config {
     local: {
       passwordSaltRounds: number;
     };
+    saml: {
+      entryPoint: string;
+      issuer: string;
+      cert: string;
+    };
   };
   database: {
     host: string;
@@ -87,6 +92,11 @@ const config: Config = {
     strategy: process.env.AUTH_STRATEGY ?? 'local',
     local: {
       passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
+    },
+    saml: {
+      entryPoint: process.env.SAML_ENTRY_POINT!,
+      issuer: process.env.SAML_ISSUER!,
+      cert: process.env.SAML_CERT!,
     },
   },
   database: {
