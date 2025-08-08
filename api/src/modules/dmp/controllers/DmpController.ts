@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { WebSocket, WebSocketServer } from 'ws';
+import { Submission } from '../../../entities/submission.entity';
+import { AppDataSource } from '../../../config/data-source.config';
 
 export interface DmpReportByIdRequestBody {
   dmpId: string;
