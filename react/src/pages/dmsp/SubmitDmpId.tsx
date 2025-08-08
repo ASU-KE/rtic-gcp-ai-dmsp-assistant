@@ -81,6 +81,9 @@ export function SubmitDmpId() {
         .post(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/dmp/id`,
           {
             dmpId: values.dmpId,
+          },
+          {
+            withCredentials: true,
           }
         )
         .then(() => {
