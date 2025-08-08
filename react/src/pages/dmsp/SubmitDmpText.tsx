@@ -88,6 +88,9 @@ export function SubmitDmpText() {
         .post(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/dmp/text`,
           {
             dmpText: values.dmpText,
+          },
+          {
+            withCredentials: true,
           }
         )
         .then(() => {
