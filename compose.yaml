@@ -126,24 +126,24 @@ services:
       - "--providers.docker.network=proxy"
 
       # API & Dashboard
-      - "--api.dashboard=true"
-      - "--api.insecure=false"
+      # - "--api.dashboard=true"
+      # - "--api.insecure=false"
 
       # Observability
-      - "--log.level=INFO"
-      - "--accesslog=true"
+      - "--log.level=WARNING"
+      - "--accesslog=false"
       - "--metrics.prometheus=true"
 
     # Traefik Dynamic configuration via Docker labels
     labels:
       # Enable self‑routing
-      - "traefik.enable=true"
+      - "traefik.enable=false"
 
       # Dashboard router
-      - "traefik.http.routers.dashboard.rule=Host(`traefik.local.asu.edu`)"
-      - "traefik.http.routers.dashboard.entrypoints=websecure"
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.tls=true"
+      # - "traefik.http.routers.dashboard.rule=Host(`traefik.local.asu.edu`)"
+      # - "traefik.http.routers.dashboard.entrypoints=websecure"
+      # - "traefik.http.routers.dashboard.service=api@internal"
+      # - "traefik.http.routers.dashboard.tls=true"
 
 
 networks:
