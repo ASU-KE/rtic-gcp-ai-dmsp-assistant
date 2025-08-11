@@ -14,6 +14,7 @@ import { LogoutPage } from './pages';
 import { CreateUserPage } from './pages';
 import { DeleteUserPage } from './pages';
 import { UpdateUserPage } from './pages';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
@@ -63,7 +64,7 @@ const App = (): JSX.Element => {
                 }
               />
               <Route
-                path="/user/all"
+              <Route path="*" element={<NotFoundPage />} />
                 element={
                   <ProtectedRoute>
                     <ListUsersPage />
