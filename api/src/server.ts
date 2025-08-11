@@ -117,4 +117,9 @@ app.get('/api/healthz', (req, res) => {
 app.use('/api/user', isAuthenticated, UserRoutes(userService));
 app.use('/api/dmp', isAuthenticated, DmpRoutes);
 
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ message: 'Path Not Found' });
+});
+
 export default app;
