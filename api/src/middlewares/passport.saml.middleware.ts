@@ -16,13 +16,12 @@ export const initPassport = (app: Express, userService: UserService) => {
     new SamlStrategy(
       {
         path: '/saml/login',
+        // callbackUrl: config.auth.saml.callbackUrl,
         entryPoint: config.auth.saml.entryPoint,
         issuer: config.auth.saml.issuer,
         cert: config.auth.saml.cert,
-        // privateKey: config.auth.saml.privateKey,
-        // callbackUrl: config.auth.saml.callbackUrl,
-        wantAssertionsSigned: true,
-        wantAuthnResponseSigned: false,
+        // wantAssertionsSigned: true,
+        wantAuthnResponseSigned: false, // test provider doesn't sign the response payload
       },
       (profile: Profile | null | undefined, done: VerifiedCallback) => {
         // for signon
