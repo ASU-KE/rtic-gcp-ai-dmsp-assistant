@@ -1,4 +1,5 @@
 interface Config {
+  clientUrl: string;
   auth: {
     sessionSecret: string;
     strategy: string;
@@ -87,6 +88,7 @@ interface Config {
 }
 
 const config: Config = {
+  clientUrl: process.env.CLIENT_URL!,
   auth: {
     sessionSecret: process.env.SESSION_SECRET!,
     strategy: process.env.AUTH_STRATEGY ?? 'local',
