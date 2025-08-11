@@ -31,6 +31,8 @@ export const initPassport = (app: Express, userService: UserService) => {
         }
 
         if (profile != null && typeof profile.nameID === 'string')
+          console.log(`SAML login profile received: ${JSON.stringify(profile)}`);
+
           userService
             .findUser({ username: profile.nameID })
             .then((user) => {
@@ -62,6 +64,8 @@ export const initPassport = (app: Express, userService: UserService) => {
                 const userDTO = plainToClass(User, user, {
                   excludeExtraneousValues: true,
                 });
+
+                console.log(`SAML user found: ${JSON.stringify(instanceToPlain(userDTO))} `);
                 return done(null, instanceToPlain(userDTO));
               }
             })
@@ -71,10 +75,11 @@ export const initPassport = (app: Express, userService: UserService) => {
       },
       (profile: Profile | null | undefined, done: VerifiedCallback) => {
         // for logout
-
         if (!profile) {
           return done(new Error('SSO logout failure'));
         }
+
+        console.log(`SAML logout profile received: ${JSON.stringify(profile)}`);
 
         if (profile != null && typeof profile.nameID === 'string')
           userService
