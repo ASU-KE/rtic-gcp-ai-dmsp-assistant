@@ -4,7 +4,7 @@ import { User } from '../types';
 export async function getCurrentUser(): Promise<User> {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/user/current`,
+      `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/user/current`,
       {
         withCredentials: true,
       }

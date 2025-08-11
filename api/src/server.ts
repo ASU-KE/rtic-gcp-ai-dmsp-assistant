@@ -96,7 +96,7 @@ app.use((req, res, next) => {
 });
 
 // Register  unprotected routes
-app.get('/', (req: Request, res: Response) => {
+app.get('/api', (req: Request, res: Response) => {
   res.json({
     success: true,
     isAuthenticated: req.isAuthenticated(),
@@ -104,16 +104,17 @@ app.get('/', (req: Request, res: Response) => {
   });
 });
 if (config.auth.strategy === 'saml') {
-  app.use('/saml', SamlAuthRoutes());
+  console.log('config.auth.strategy:', config.auth.strategy);
+  app.use('/api/sso', SamlAuthRoutes());
 }
 
 // Health-check for Kubernetes
-app.get('/healthz', (req, res) => {
+app.get('/api/healthz', (req, res) => {
   res.status(200).json({ status: 'Healthy' });
 });
 
 // Protected routes
-app.use('/user', isAuthenticated, UserRoutes(userService));
-app.use('/dmp', isAuthenticated, DmpRoutes);
+app.use('/api/user', isAuthenticated, UserRoutes(userService));
+app.use('/api/dmp', isAuthenticated, DmpRoutes);
 
 export default app;

@@ -7,7 +7,7 @@ const authRoutes = () => {
   router.get(
     '/login',
     passport.authenticate('saml', {
-      failureRedirect: '/login/fail',
+      failureRedirect: '/api/sso/login',
       failureFlash: true,
     }) as RequestHandler,
     function (req, res) {
@@ -22,7 +22,7 @@ const authRoutes = () => {
   router.post(
     '/login/callback',
     passport.authenticate('saml', {
-      failureRedirect: '/login/fail',
+      failureRedirect: '/api/sso/login',
       failureFlash: true,
     }) as RequestHandler,
     function (req, res) {
