@@ -40,7 +40,7 @@ export const initPassport = (app: Express, userService: UserService) => {
                 userService
                   .createUser({
                     username: profile.nameID,
-                    email: profile.email ?? '',
+                    email: profile.nameID,
                     password: '', // Password is not used for SAML, but required by UserService
                     firstName: '',
                     lastName: '',
