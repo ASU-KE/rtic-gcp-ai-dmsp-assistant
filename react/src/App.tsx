@@ -9,7 +9,8 @@ import { HomePage } from './pages';
 import { SubmitDmpText } from './pages/dmsp';
 import { SubmitDmpId } from './pages/dmsp';
 import { ListUsersPage } from './pages/user';
-import { LoginPage } from './pages';
+// import { LoginPage } from './pages';
+import { SamlLoginPage } from './pages/auth/SamlLoginPage';
 import { LogoutPage } from './pages';
 import { CreateUserPage } from './pages';
 import { DeleteUserPage } from './pages';
@@ -32,11 +33,34 @@ const App = (): JSX.Element => {
         <QueryClientProvider client={queryClient}>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-              <Route path="/submit-text" element={<ProtectedRoute><SubmitDmpText /></ProtectedRoute>} />
-              {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && <Route path="/submit-id" element={<ProtectedRoute><SubmitDmpId /></ProtectedRoute>} />}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/submit-text"
+                element={
+                  <ProtectedRoute>
+                    <SubmitDmpText />
+                  </ProtectedRoute>
+                }
+              />
+              {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && (
+                <Route
+                  path="/submit-id"
+                  element={
+                    <ProtectedRoute>
+                      <SubmitDmpId />
+                    </ProtectedRoute>
+                  }
+                />
+              )}
 
-              <Route path="/login" element={<LoginPage />} />
+              <Route path="/login" element={<SamlLoginPage />} />
               <Route path="/logout" element={<LogoutPage />} />
 
               <Route
@@ -63,14 +87,8 @@ const App = (): JSX.Element => {
                   </ProtectedRoute>
                 }
               />
-              <Route
+              <Route path="/user/all" element={<ListUsersPage /> } />
               <Route path="*" element={<NotFoundPage />} />
-                element={
-                  <ProtectedRoute>
-                    <ListUsersPage />
-                  </ProtectedRoute>
-                }
-              />
             </Route>
           </Routes>
         </QueryClientProvider>
