@@ -35,6 +35,7 @@ export const DmpController = ({
   pdfService,
   llmService,
 }: DmpDependencies) => {
+  const submissionRepo = AppDataSource.getRepository(Submission);
   return {
     getDmpReportById: async (
       req: Request<unknown, unknown, DmpReportByIdRequestBody>,
@@ -55,9 +56,17 @@ export const DmpController = ({
         const dmpPdfUrl = await dmpService.getDmpResource(dmpId);
         const pdfDocument = await pdfService.fetchPdfInMemory(dmpPdfUrl);
         const dmpText = await pdfService.extractText(Buffer.from(pdfDocument));
-        llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
+        const llmResult = await llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
           console.error('Failed to fetch LLM response: ', err);
         });
+
+        const submission = submissionRepo.create({
+          username: req.user?.username ?? 'anonymous',
+          dmspText: dmpText,
+          llmResponse: llmResult?.response ?? '',
+        });
+        await submissionRepo.save(submission);
+        console.log(`DMP submission saved successfully for user: ${submission.username}`);
 
         res.status(202).json({
           status: 202,
@@ -105,9 +114,17 @@ export const DmpController = ({
       }
       try {
         const wss = req.app.locals.wss as WebSocketServer;
-        await llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
+        const llmResult = await llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
           console.error('Failed to fetch LLM response: ', err);
         });
+
+        const submission = submissionRepo.create({
+          username: req.user?.username ?? 'anonymous',
+          dmspText: dmpText,
+          llmResponse: llmResult?.response ?? '',
+        });
+        await submissionRepo.save(submission);
+        console.log(`DMP submission saved successfully for user: ${submission.username}`);
 
         res.status(202).json({
           status: 202,

@@ -89,7 +89,9 @@ export function SubmitDmpText() {
           {
             dmpText: values.dmpText,
           },
-          { withCredentials: true }
+          {
+            withCredentials: true,
+          }
         )
         .then(() => {
           setSubmittedDmpText(values.dmpText);

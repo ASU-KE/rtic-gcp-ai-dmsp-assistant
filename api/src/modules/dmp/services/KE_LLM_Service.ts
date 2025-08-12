@@ -78,6 +78,10 @@ export default {
 
         fullResponse += chunk;
 
+        if (chunk.includes('<EOS>')) {
+          upstream.close();
+        }
+
         const message = JSON.stringify({ chunk });
 
         // Send to individual WebSocket
