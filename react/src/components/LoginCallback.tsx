@@ -59,9 +59,6 @@ export const LoginCallback = () => {
   }, [navigate]);
 
   return (
-    <div>
-      <h2>Login Callback</h2>
-      <p>Processing login...</p>
-    </div>
+    <></>
   );
 };
