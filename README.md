@@ -41,6 +41,8 @@ This repository contains the necessary resources and configurations to host the 
       - [\> cloudbuild.yaml](#-cloudbuildyaml)
       - [\> workload-identity-setup.sh](#-workload-identity-setupsh)
     - [Cloud Build Variables](#cloud-build-variables)
+  - [Commit Message Guidelines](#commit-message-guidelines)
+    - [How to Commit](#how-to-commit)
 
 <br>
 <br>
@@ -194,3 +196,13 @@ The script is used in the Cloud Build steps to ensure that the correct permissio
 | `_GSA_NAME`             | The name of the Google IAM Service Account which will be used for Workload Identity.                                                                                                                                                                                                                   |
 | `_KSA_NAME`             | The name of the Kubernetes Service Account that the workloads will run under in the cluster. This defaults to `example` plus any prefix or suffix defined in the overlay `kustomization.yaml` file.                                                                                                    |
 | `_GKE_NAMESPACE_NAME`   | The name of the namespace on the GKE cluster where the instance is being deployed.                                                                                                                                                                                                                     |
+## Commit Message Guidelines
+
+We use [Commitizen](https://commitizen-tools.github.io/commitizen/) to standardize commit messages.
+
+### How to Commit
+
+Run the following command from the root of the repo to create a properly formatted commit message:
+
+```bash
+npm run commit

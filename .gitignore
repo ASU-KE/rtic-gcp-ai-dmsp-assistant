@@ -6,3 +6,4 @@ secrets/*
 !secrets/certs
 !secrets/*.example
 dist
+node_modules
