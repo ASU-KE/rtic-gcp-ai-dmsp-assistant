@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, ReactElement, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 
 import { useAuthContext } from '../hooks';
 import { login } from '../context';
@@ -18,40 +17,32 @@ export const LoginCallbackWrapper = ({ children }: LoginCallbackType) => {
 
   useEffect(() => {
     console.log('LoginCallbackWrapper useEffect triggered');
-
-    // if SAML login was successful, we have an active user session and can fetch user info
-    const sessionId = Cookies.get('asukedmsp.sid');
-    if (sessionId) {
-      console.log('Session ID found:', sessionId);
-
-      // Use the session ID to fetch current user data from the API
-      const fetchUser = async () => {
-        try {
-          const response = await axios.get(
-            `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/user/session/${sessionId}`,
-            {
-              withCredentials: true,
-            }
-          );
-          console.log('Fetched response:', response.data);
-
-          if (!response.data || !response.data.user) {
-            throw new Error('Login failed: No user data returned');
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/user`,
+          {
+            withCredentials: true,
           }
+        );
+        console.log('Fetched response:', response.data);
 
-          const user: User = response.data.user;
-          console.log('User logged in:', user);
-
-          // Update auth context with the logged-in user
-          dispatch(login(user));
-        } catch (err: any) {
-          console.error('Error fetching user data:', err);
-          // Handle error appropriately, e.g., redirect to login or show an error message
+        if (!response.data || !response.data.user) {
+          throw new Error('Login failed: No user data returned');
         }
-      };
 
-      fetchUser();
-    }
+        const user: User = response.data.user;
+        console.log('Current user logged in:', user);
+
+        // Update auth context with the logged-in user
+        dispatch(login(user));
+      } catch (err: any) {
+        console.error('Error fetching user data:', err);
+        // Handle error appropriately, e.g., redirect to login or show an error message
+      }
+    };
+
+    fetchCurrentUser();
   }, []);
 
   return children;
