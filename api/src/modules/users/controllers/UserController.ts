@@ -14,7 +14,10 @@ export default class UserController {
     this.userService = userService;
   }
 
-  createUser = async (req: Request<object, object, CreateUserPayload>, res: Response) => {
+  createUser = async (
+    req: Request<object, object, CreateUserPayload>,
+    res: Response
+  ) => {
     const payload = req.body;
     if (!payload.username || !payload.email || !payload.password) {
       return res.status(400).json({
@@ -26,7 +29,7 @@ export default class UserController {
 
     let role = payload.role;
     role ??= config.roles.USER;
-    const  password = await this.userService.hashPassword(payload.password);
+    const password = await this.userService.hashPassword(payload.password);
 
     this.userService
       .createUser(Object.assign(payload, { password, role }))
@@ -86,7 +89,9 @@ export default class UserController {
           return;
         }
 
-        const userDto = plainToClass(User, foundUser, { excludeExtraneousValues: true });
+        const userDto = plainToClass(User, foundUser, {
+          excludeExtraneousValues: true,
+        });
         res.status(200).json({
           status: true,
           data: {
@@ -149,7 +154,9 @@ export default class UserController {
           return;
         }
 
-        const userDto = plainToClass(User, updatedUser, { excludeExtraneousValues: true });
+        const userDto = plainToClass(User, updatedUser, {
+          excludeExtraneousValues: true,
+        });
         res.status(200).json({
           status: true,
           data: {
@@ -233,7 +240,9 @@ export default class UserController {
           return;
         }
 
-        const userDto = plainToClass(User, user, { excludeExtraneousValues: true });
+        const userDto = plainToClass(User, user, {
+          excludeExtraneousValues: true,
+        });
         res.status(200).json({
           status: true,
           data: {
