@@ -1,6 +1,7 @@
 interface Config {
   clientUrl: string;
   auth: {
+    sessionName: string;
     sessionSecret: string;
     strategy: string;
     passwordSaltRounds: number;
@@ -90,6 +91,7 @@ interface Config {
 const config: Config = {
   clientUrl: process.env.CLIENT_URL!,
   auth: {
+    sessionName: 'asukedmsp.sid',
     sessionSecret: process.env.SESSION_SECRET!,
     strategy: process.env.AUTH_STRATEGY ?? 'local',
     passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),

@@ -66,6 +66,7 @@ const sessionStore = new TypeormStore({
 const sessionRepository = AppDataSource.getRepository(Session);
 app.use(
   session({
+    name: config.auth.sessionName,
     secret: config.auth.sessionSecret,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
