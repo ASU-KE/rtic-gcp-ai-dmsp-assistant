@@ -16,6 +16,7 @@ import { CreateUserPage } from './pages';
 import { DeleteUserPage } from './pages';
 import { UpdateUserPage } from './pages';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { LoginCallbackWrapper, LoginCallback } from './components/LoginCallback';
 
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
@@ -61,6 +62,7 @@ const App = (): JSX.Element => {
               )}
 
               <Route path="/login" element={<SamlLoginPage />} />
+              <Route path="/login/callback" element={<LoginCallbackWrapper><LoginCallback /></LoginCallbackWrapper>} />
               <Route path="/logout" element={<LogoutPage />} />
 
               <Route

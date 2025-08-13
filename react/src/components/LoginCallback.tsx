@@ -1,0 +1,81 @@
+import axios from 'axios';
+import React, { useEffect, ReactElement, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
+import { useAuthContext } from '../hooks';
+import { login } from '../context';
+import { User } from '../types';
+
+interface LoginCallbackType {
+  children: typeof React.Children | ReactNode | ReactElement;
+}
+
+export const LoginCallbackWrapper = ({ children }: LoginCallbackType) => {
+  const { dispatch } = useAuthContext();
+
+  console.log('LoginCallbackWrapper mounted');
+
+  useEffect(() => {
+    console.log('LoginCallbackWrapper useEffect triggered');
+
+    // if SAML login was successful, we have an active user session and can fetch user info
+    const sessionId = Cookies.get('asukedmsp.sid');
+    if (sessionId) {
+      console.log('Session ID found:', sessionId);
+
+      // Use the session ID to fetch current user data from the API
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/user/session/${sessionId}`,
+            {
+              withCredentials: true,
+            }
+          );
+          console.log('Fetched response:', response.data);
+
+          if (!response.data || !response.data.user) {
+            throw new Error('Login failed: No user data returned');
+          }
+
+          const user: User = response.data.user;
+          console.log('User logged in:', user);
+
+          // Update auth context with the logged-in user
+          dispatch(login(user));
+        } catch (err: any) {
+          console.error('Error fetching user data:', err);
+          // Handle error appropriately, e.g., redirect to login or show an error message
+        }
+      };
+
+      fetchUser();
+    }
+  }, []);
+
+  return children;
+};
+
+export const LoginCallback = () => {
+  let navigate = useNavigate();
+
+  // This component is rendered after the SAML IdP redirects back to our app
+  // We use the LoginCallbackWrapper to handle fetching user info and updating auth state
+  // After processing, we redirect to the home page or another appropriate page
+  useEffect(() => {
+    // After a short delay to ensure user state is updated, redirect to home
+    const timer = setTimeout(() => {
+      return navigate('/');
+    }, 2000); // 2 seconds delay
+
+    return () => clearTimeout(timer);
+  }, [navigate]);
+
+  return (
+    <div>
+      <h2>Login Callback</h2>
+      <p>Processing login...</p>
+    </div>
+  );
+};

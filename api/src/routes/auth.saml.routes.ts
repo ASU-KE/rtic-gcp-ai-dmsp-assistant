@@ -27,7 +27,7 @@ const authRoutes = () => {
       failureFlash: true,
     }) as RequestHandler,
     function (req, res) {
-      res.redirect(config.clientUrl || '/');
+      res.redirect(config.clientUrl + '/login/callback');
     }
   );
 
