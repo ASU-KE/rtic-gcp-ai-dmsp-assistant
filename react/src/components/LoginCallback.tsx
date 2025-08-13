@@ -13,10 +13,7 @@ interface LoginCallbackType {
 export const LoginCallbackWrapper = ({ children }: LoginCallbackType) => {
   const { dispatch } = useAuthContext();
 
-  console.log('LoginCallbackWrapper mounted');
-
   useEffect(() => {
-    console.log('LoginCallbackWrapper useEffect triggered');
     const fetchCurrentUser = async () => {
       try {
         const response = await axios.get(
@@ -25,19 +22,17 @@ export const LoginCallbackWrapper = ({ children }: LoginCallbackType) => {
             withCredentials: true,
           }
         );
-        console.log('Fetched response:', response.data);
 
-        if (!response.data || !response.data.user) {
+        if (!response.data || !response.data.data || !response.data.data.user) {
           throw new Error('Login failed: No user data returned');
         }
 
-        const user: User = response.data.user;
-        console.log('Current user logged in:', user);
-
-        // Update auth context with the logged-in user
+        const user: User = response.data.data.user;
+        // Store user info in auth context
         dispatch(login(user));
+
       } catch (err: any) {
-        console.error('Error fetching user data:', err);
+        throw new Error('Failed to retrieve user data: ' + err.message);
         // Handle error appropriately, e.g., redirect to login or show an error message
       }
     };
