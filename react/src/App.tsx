@@ -9,8 +9,7 @@ import { HomePage } from './pages';
 import { SubmitDmpText } from './pages/dmsp';
 import { SubmitDmpId } from './pages/dmsp';
 import { ListUsersPage } from './pages/user';
-// import { LoginPage } from './pages';
-import { SamlLoginPage } from './pages/auth/SamlLoginPage';
+import { LoginRedirect } from './components/LoginRedirect';
 import { LogoutPage } from './pages';
 import { CreateUserPage } from './pages';
 import { DeleteUserPage } from './pages';
@@ -61,7 +60,7 @@ const App = (): JSX.Element => {
                 />
               )}
 
-              <Route path="/login" element={<SamlLoginPage />} />
+              <Route path="/login" element={<LoginRedirect />} />
               <Route path="/login/callback" element={<LoginCallbackWrapper><LoginCallback /></LoginCallbackWrapper>} />
               <Route path="/logout" element={<LogoutPage />} />
 
