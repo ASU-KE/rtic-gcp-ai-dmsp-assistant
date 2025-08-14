@@ -15,7 +15,7 @@ export const initPassport = (app: Express, userService: UserService) => {
   passport.use(
     new SamlStrategy(
       {
-        path: '/saml/login',
+        path: '/api/sso/login/callback',
         // callbackUrl: config.auth.saml.callbackUrl,
         entryPoint: config.auth.saml.entryPoint,
         issuer: config.auth.saml.issuer,
