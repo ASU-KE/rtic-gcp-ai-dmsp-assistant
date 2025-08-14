@@ -85,7 +85,7 @@ export function SubmitDmpText() {
   const { mutate } = useMutation<void, unknown, FormValues>({
     mutationFn: (values) => {
       return axios
-        .post(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/dmp/text`,
+        .post(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/dmp/text`,
           {
             dmpText: values.dmpText,
           },

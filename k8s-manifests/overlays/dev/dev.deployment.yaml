@@ -70,13 +70,30 @@ spec:
                 secretKeyRef:
                   key: DB_PASSWORD
                   name: ai-dmsp-secret
-            - name: JWT_SECRET
+            - name: AUTH_STRATEGY
+              value: "saml"
+            - name: PASSWORD_SALT_ROUNDS
+              value: "10"
+            - name: SAML_ENTRY_POINT
               valueFrom:
                 secretKeyRef:
-                  key: JWT_SECRET
+                  key: SAML_ENTRY_POINT
                   name: ai-dmsp-secret
-            - name: JWT_EXPIRATION
-              value: "3600"
+            - name: SAML_CALLBACK_URL
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_CALLBACK_URL
+                  name: ai-dmsp-secret
+            - name: SAML_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_ISSUER
+                  name: ai-dmsp-secret
+            - name: SAML_CERT
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_CERT
+                  name: ai-dmsp-secret
             - name: DMPTOOL_CLIENT_ID
               valueFrom:
                 secretKeyRef:
@@ -108,7 +125,7 @@ spec:
           readinessProbe:
             httpGet:
               port: 3001
-              path: /healthz
+              path: /api/healthz
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -133,17 +150,6 @@ spec:
         - name: react-web
           image: ai-dmsp-react-image
           imagePullPolicy: Always
-          envFrom:
-            - secretRef:
-                name: ai-dmsp-secret
-          env:
-            - name: VITE_BACKEND_DOMAIN
-              value: "dmsp.dev.api.rtd.asu.edu"
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  key: DB_HOST
-                  name: ai-dmsp-secret
           ports:
             - containerPort: 80
           readinessProbe:

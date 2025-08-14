@@ -43,10 +43,11 @@ steps:
       ]
     env: [
       'DOCKER_BUILDKIT=1',
-      'APP_BACKEND_DOMAIN=dmsp.dev.api.rtd.asu.edu',
+      'APP_BACKEND_DOMAIN=dmsp.ai.dev.rtd.asu.edu',
+      'APP_BACKEND_PATH_PREFIX=api',
       'APP_BACKEND_PORT=443',
       'APP_BACKEND_PROTOCOL=https',
-      'APP_FRONTEND_AUTH=local',
+      'APP_FRONTEND_AUTH=saml',
       'APP_FRONTEND_ENABLE_DMP_ID=false',
     ]
     secretEnv: ['NPM_TOKEN']

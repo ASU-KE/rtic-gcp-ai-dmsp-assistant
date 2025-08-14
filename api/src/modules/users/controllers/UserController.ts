@@ -14,18 +14,22 @@ export default class UserController {
     this.userService = userService;
   }
 
-  createUser = async (req: Request<object, object, CreateUserPayload>, res: Response) => {
+  createUser = async (
+    req: Request<object, object, CreateUserPayload>,
+    res: Response
+  ) => {
     const payload = req.body;
     if (!payload.username || !payload.email || !payload.password) {
       return res.status(400).json({
         status: false,
+        data: null,
         error: { message: 'Username, email, and password are required.' },
       });
     }
 
     let role = payload.role;
     role ??= config.roles.USER;
-    const  password = await this.userService.hashPassword(payload.password);
+    const password = await this.userService.hashPassword(payload.password);
 
     this.userService
       .createUser(Object.assign(payload, { password, role }))
@@ -35,6 +39,7 @@ export default class UserController {
           data: {
             user: user,
           },
+          error: null,
         });
       })
       .catch((err: HttpError) => {
@@ -45,6 +50,7 @@ export default class UserController {
         ) {
           return res.status(400).json({
             status: false,
+            data: null,
             error: {
               message: 'A user with that email or username already exists.',
             },
@@ -53,6 +59,7 @@ export default class UserController {
 
         return res.status(500).json({
           status: false,
+          data: null,
           error: err,
         });
       });
@@ -64,6 +71,7 @@ export default class UserController {
     if (!user) {
       res.status(401).json({
         status: false,
+        data: null,
         error: { message: 'Unauthorized access.' },
       });
       return;
@@ -75,20 +83,27 @@ export default class UserController {
         if (!foundUser) {
           res.status(404).json({
             status: false,
+            data: null,
             error: { message: 'User not found.' },
           });
           return;
         }
 
-        const userDto = plainToClass(User, foundUser, { excludeExtraneousValues: true });
+        const userDto = plainToClass(User, foundUser, {
+          excludeExtraneousValues: true,
+        });
         res.status(200).json({
           status: true,
-          data: userDto,
+          data: {
+            user: userDto,
+          },
+          error: null,
         });
       })
       .catch((err: Error) => {
         res.status(500).json({
           status: false,
+          data: null,
           error: err,
         });
       });
@@ -109,6 +124,7 @@ export default class UserController {
     if (!user) {
       res.status(401).json({
         status: false,
+        data: null,
         error: { message: 'Unauthorized access.' },
       });
       return;
@@ -117,6 +133,7 @@ export default class UserController {
     if (!Object.keys(req.body).length) {
       res.status(400).json({
         status: false,
+        data: null,
         error: {
           message: 'Body is empty, hence cannot update the user.',
         },
@@ -131,20 +148,27 @@ export default class UserController {
         if (!updatedUser) {
           res.status(404).json({
             status: false,
+            data: null,
             error: { message: 'User not found after update.' },
           });
           return;
         }
 
-        const userDto = plainToClass(User, updatedUser, { excludeExtraneousValues: true });
+        const userDto = plainToClass(User, updatedUser, {
+          excludeExtraneousValues: true,
+        });
         res.status(200).json({
           status: true,
-          data: userDto,
+          data: {
+            user: userDto,
+          },
+          error: null,
         });
       })
       .catch((err: Error) => {
         res.status(500).json({
           status: false,
+          data: null,
           error: err,
         });
       });
@@ -162,11 +186,13 @@ export default class UserController {
           data: {
             numberOfUsersDeleted: deleted,
           },
+          error: null,
         });
       })
       .catch((err: Error) => {
         res.status(500).json({
           status: false,
+          data: null,
           error: err,
         });
       });
@@ -181,12 +207,14 @@ export default class UserController {
         );
         res.status(200).json({
           status: true,
-          data: userDtos,
+          data: { user: userDtos },
+          error: null,
         });
       })
       .catch((err: Error) => {
         res.status(500).json({
           status: false,
+          data: null,
           error: err,
         });
       });
@@ -206,20 +234,27 @@ export default class UserController {
         if (!user) {
           res.status(404).json({
             status: false,
+            data: null,
             error: { message: 'User not found after role change.' },
           });
           return;
         }
 
-        const userDto = plainToClass(User, user, { excludeExtraneousValues: true });
+        const userDto = plainToClass(User, user, {
+          excludeExtraneousValues: true,
+        });
         res.status(200).json({
           status: true,
-          data: userDto,
+          data: {
+            user: userDto,
+          },
+          error: null,
         });
       })
       .catch((err: Error) => {
         res.status(500).json({
           status: false,
+          data: null,
           error: err,
         });
       });

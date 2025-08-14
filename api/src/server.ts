@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import express, { Request, Response } from 'express';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
@@ -12,11 +13,13 @@ import { Session } from './entities/session.entity';
 import config from './config/app.config';
 import { AppDataSource } from './config/data-source.config';
 
-import { initLocalPassport } from './middlewares/passport.local.middleware';
+// import { initLocalPassport } from './middlewares/passport.local.middleware';
+import { initPassport } from './middlewares/passport.saml.middleware';
 import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';
-import AuthRoutes from './routes/auth.routes';
+// import AuthRoutes from './routes/auth.local.routes';
+import SamlAuthRoutes from './routes/auth.saml.routes';
 import UserRoutes from './routes/user.routes';
 import DmpRoutes from './routes/dmp.routes';
 
@@ -48,7 +51,7 @@ app.use(
     origin: [
       'http://localhost:3000',
       'https://dmsp.local.asu.edu',
-      'https://dmsp.dev.rtd.asu.edu',
+      'https://dmsp.ai.dev.rtd.asu.edu',
     ],
     credentials: true, // allow session cookie from browser to pass through
   })
@@ -63,6 +66,7 @@ const sessionStore = new TypeormStore({
 const sessionRepository = AppDataSource.getRepository(Session);
 app.use(
   session({
+    name: config.auth.sessionName,
     secret: config.auth.sessionSecret,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
@@ -76,10 +80,14 @@ app.use(
   })
 );
 
+// Body parser middleware for SAML authentication
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 // Init Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
-initLocalPassport(app, userService);
+initPassport(app, userService);
 
 // Test middleware to view session and user data
 app.use((req, res, next) => {
@@ -89,22 +97,30 @@ app.use((req, res, next) => {
 });
 
 // Register  unprotected routes
-app.get('/', (req: Request, res: Response) => {
+app.get('/api', (req: Request, res: Response) => {
   res.json({
     success: true,
     isAuthenticated: req.isAuthenticated(),
     message: 'DMSP AI Tool API',
   });
 });
-app.use('/auth', AuthRoutes());
+if (config.auth.strategy === 'saml') {
+  console.log('config.auth.strategy:', config.auth.strategy);
+  app.use('/api/sso', SamlAuthRoutes());
+}
 
 // Health-check for Kubernetes
-app.get('/healthz', (req, res) => {
+app.get('/api/healthz', (req, res) => {
   res.status(200).json({ status: 'Healthy' });
 });
 
 // Protected routes
-app.use('/user', isAuthenticated, UserRoutes(userService));
-app.use('/dmp', isAuthenticated, DmpRoutes);
+app.use('/api/user', isAuthenticated, UserRoutes(userService));
+app.use('/api/dmp', isAuthenticated, DmpRoutes);
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ message: 'Path Not Found' });
+});
 
 export default app;

@@ -1,8 +1,15 @@
 interface Config {
   auth: {
+    sessionName: string;
+    sessionSecret: string;
     strategy: string;
     passwordSaltRounds: number;
-    sessionSecret: string;
+    saml: {
+      entryPoint: string;
+      callbackUrl: string;
+      issuer: string;
+      cert: string;
+    };
   };
   database: {
     host: string;
@@ -81,9 +88,16 @@ interface Config {
 
 const config: Config = {
   auth: {
+    sessionName: 'asukedmsp.sid',
+    sessionSecret: process.env.SESSION_SECRET!,
     strategy: process.env.AUTH_STRATEGY ?? 'local',
     passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
-    sessionSecret: process.env.SESSION_SECRET!,
+    saml: {
+      entryPoint: process.env.SAML_ENTRY_POINT!,
+      callbackUrl: process.env.SAML_CALLBACK_URL!,
+      issuer: process.env.SAML_ISSUER!,
+      cert: process.env.SAML_CERT!,
+    },
   },
   database: {
     host: process.env.DB_HOST ?? 'localhost',
