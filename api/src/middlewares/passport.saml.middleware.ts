@@ -43,7 +43,7 @@ export const initPassport = (app: Express, userService: UserService) => {
                   .createUser({
                     username: profile.nameID,
                     email: profile.nameID,
-                    password: '', // Password is not used for SAML, but required by UserService
+                    password: crypto.randomBytes(32).toString('hex'), // Secure random password for SAML users
                     firstName: '',
                     lastName: '',
                     role: 'user', // default role
