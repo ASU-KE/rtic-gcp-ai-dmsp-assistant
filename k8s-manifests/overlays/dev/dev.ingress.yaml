@@ -14,12 +14,14 @@ spec:
       http:
         paths:
           - path: /api/*
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: ai-dmsp-api-service
                 port:
                   number: 8081
           - path: /*
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: ai-dmsp-react-service
