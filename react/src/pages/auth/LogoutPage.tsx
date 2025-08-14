@@ -19,7 +19,7 @@ export const LogoutPage = () => {
     const logoutUser = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/auth/logout`,
+          `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/auth/logout`,
           {
             withCredentials: true,
           }

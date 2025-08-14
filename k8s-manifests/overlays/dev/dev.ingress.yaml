@@ -10,18 +10,16 @@ metadata:
     app.kubernetes.io/component: "ingress"
 spec:
   rules:
-    - http:
+    - host: dmsp.dev.rtd.asu.edu
+      http:
         paths:
-          - path: /*
+          - path: /api/*
             pathType: ImplementationSpecific
             backend:
               service:
                 name: ai-dmsp-api-service
                 port:
                   number: 8081
-      host: dmsp.dev.api.rtd.asu.edu
-    - http:
-        paths:
           - path: /*
             pathType: ImplementationSpecific
             backend:
@@ -29,9 +27,7 @@ spec:
                 name: ai-dmsp-react-service
                 port:
                   number: 8080
-      host: dmsp.dev.rtd.asu.edu
   tls:
     - secretName: ai-dmsp-tls
       hosts:
         - dmsp.dev.rtd.asu.edu
-        - dmsp.dev.api.rtd.asu.edu

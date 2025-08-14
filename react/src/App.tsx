@@ -9,11 +9,13 @@ import { HomePage } from './pages';
 import { SubmitDmpText } from './pages/dmsp';
 import { SubmitDmpId } from './pages/dmsp';
 import { ListUsersPage } from './pages/user';
-import { LoginPage } from './pages';
+import { LoginRedirect } from './components/LoginRedirect';
 import { LogoutPage } from './pages';
 import { CreateUserPage } from './pages';
 import { DeleteUserPage } from './pages';
 import { UpdateUserPage } from './pages';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { LoginCallbackWrapper, LoginCallback } from './components/LoginCallback';
 
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
@@ -31,11 +33,35 @@ const App = (): JSX.Element => {
         <QueryClientProvider client={queryClient}>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-              <Route path="/submit-text" element={<ProtectedRoute><SubmitDmpText /></ProtectedRoute>} />
-              {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && <Route path="/submit-id" element={<ProtectedRoute><SubmitDmpId /></ProtectedRoute>} />}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/submit-text"
+                element={
+                  <ProtectedRoute>
+                    <SubmitDmpText />
+                  </ProtectedRoute>
+                }
+              />
+              {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && (
+                <Route
+                  path="/submit-id"
+                  element={
+                    <ProtectedRoute>
+                      <SubmitDmpId />
+                    </ProtectedRoute>
+                  }
+                />
+              )}
 
-              <Route path="/login" element={<LoginPage />} />
+              <Route path="/login" element={<LoginRedirect />} />
+              <Route path="/login/callback" element={<LoginCallbackWrapper><LoginCallback /></LoginCallbackWrapper>} />
               <Route path="/logout" element={<LogoutPage />} />
 
               <Route
@@ -70,6 +96,7 @@ const App = (): JSX.Element => {
                   </ProtectedRoute>
                 }
               />
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
         </QueryClientProvider>
