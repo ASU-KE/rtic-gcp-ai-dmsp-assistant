@@ -88,7 +88,14 @@ const App = (): JSX.Element => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/user/all" element={<ListUsersPage /> } />
+              <Route
+                path="/user/all"
+                element={
+                  <ProtectedRoute>
+                    <ListUsersPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
