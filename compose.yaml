@@ -130,7 +130,7 @@ services:
       # - "--api.insecure=false"
 
       # Observability
-      - "--log.level=WARNING"
+      - "--log.level=ERROR"
       - "--accesslog=false"
       - "--metrics.prometheus=true"
 
