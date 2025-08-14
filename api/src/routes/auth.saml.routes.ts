@@ -1,6 +1,5 @@
 import { Router, Request, RequestHandler, Response } from 'express';
 import passport from 'passport';
-import config from '../config/app.config';
 
 const authRoutes = () => {
   const router: Router = Router();
@@ -12,7 +11,7 @@ const authRoutes = () => {
       failureFlash: true,
     }) as RequestHandler,
     function (req, res) {
-      res.redirect(config.clientUrl || '/');
+      res.redirect('/');
     }
   );
 
@@ -27,7 +26,7 @@ const authRoutes = () => {
       failureFlash: true,
     }) as RequestHandler,
     function (req, res) {
-      res.redirect(config.clientUrl + '/login/callback');
+      res.redirect('/login/callback');
     }
   );
 

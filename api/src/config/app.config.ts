@@ -1,5 +1,4 @@
 interface Config {
-  clientUrl: string;
   auth: {
     sessionName: string;
     sessionSecret: string;
@@ -10,7 +9,6 @@ interface Config {
       callbackUrl: string;
       issuer: string;
       cert: string;
-      privateKey?: string;
     };
   };
   database: {
@@ -89,7 +87,6 @@ interface Config {
 }
 
 const config: Config = {
-  clientUrl: process.env.CLIENT_URL!,
   auth: {
     sessionName: 'asukedmsp.sid',
     sessionSecret: process.env.SESSION_SECRET!,
@@ -100,7 +97,6 @@ const config: Config = {
       callbackUrl: process.env.SAML_CALLBACK_URL!,
       issuer: process.env.SAML_ISSUER!,
       cert: process.env.SAML_CERT!,
-      privateKey: process.env.SAML_PRIVATE_KEY, // Optional, if using SAML
     },
   },
   database: {
