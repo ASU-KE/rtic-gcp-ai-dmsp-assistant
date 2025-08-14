@@ -36,9 +36,9 @@ const App = (): JSX.Element => {
               <Route
                 path="/"
                 element={
-                  <ProtectedRoute>
+                  // <ProtectedRoute>
                     <HomePage />
-                  </ProtectedRoute>
+                  // </ProtectedRoute>
                 }
               />
               <Route
