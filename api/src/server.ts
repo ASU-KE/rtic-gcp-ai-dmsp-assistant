@@ -51,7 +51,7 @@ app.use(
     origin: [
       'http://localhost:3000',
       'https://dmsp.local.asu.edu',
-      'https://dmsp.ai.dev.rtd.asu.edu',
+      'https://dmsp.dev.rtd.asu.edu',
     ],
     credentials: true, // allow session cookie from browser to pass through
   })
@@ -89,13 +89,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 initPassport(app, userService);
 
-// Test middleware to view session and user data
-app.use((req, res, next) => {
-  console.log('Session:', req.session);
-  console.log('User:', req.user);
-  next();
-});
-
 // Register  unprotected routes
 app.get('/api', (req: Request, res: Response) => {
   res.json({
@@ -105,7 +98,6 @@ app.get('/api', (req: Request, res: Response) => {
   });
 });
 if (config.auth.strategy === 'saml') {
-  console.log('config.auth.strategy:', config.auth.strategy);
   app.use('/api/sso', SamlAuthRoutes());
 }
 
