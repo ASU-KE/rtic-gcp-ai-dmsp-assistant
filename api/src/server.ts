@@ -51,7 +51,7 @@ app.use(
     origin: [
       'http://localhost:3000',
       'https://dmsp.local.asu.edu',
-      'https://dmsp.ai.dev.rtd.asu.edu',
+      'https://dmsp.dev.rtd.asu.edu',
     ],
     credentials: true, // allow session cookie from browser to pass through
   })

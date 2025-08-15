@@ -11,7 +11,7 @@ export const LoginRedirect = () => {
       navigate('/');
     }
 
-    window.location.href = 'https://dmsp.ai.dev.rtd.asu.edu/api/sso/login';
+    window.location.href = 'https://dmsp.dev.rtd.asu.edu/api/sso/login';
   }, [state.isAuthenticated, navigate]);
 
   return <></>;
