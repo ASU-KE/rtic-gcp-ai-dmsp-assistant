@@ -96,7 +96,7 @@ const config: Config = {
       entryPoint: process.env.SAML_ENTRY_POINT!,
       callbackUrl: process.env.SAML_CALLBACK_URL!,
       issuer: process.env.SAML_ISSUER!,
-      cert: process.env.SAML_CERT!,
+      cert: Buffer.from(process.env.SAML_CERT!, 'base64').toString('utf8'), // Base64 decode the certificate
     },
   },
   database: {
