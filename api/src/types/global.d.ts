@@ -7,11 +7,4 @@ declare global {
     code?: string;
     errno?: number;
   }
-
-  namespace Express {
-    interface User {
-      username: string;
-      email?: string;
-    }
-  }
 }

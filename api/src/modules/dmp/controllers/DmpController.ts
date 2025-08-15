@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { WebSocket, WebSocketServer } from 'ws';
 import { Submission } from '../../../entities/submission.entity';
 import { AppDataSource } from '../../../config/data-source.config';
+import { User } from '../../../entities/user.entity';
 
 export interface DmpReportByIdRequestBody {
   dmpId: string;
@@ -58,12 +59,13 @@ export const DmpController = ({
         const dmpText = await pdfService.extractText(Buffer.from(pdfDocument));
         const llmResult = await llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
           console.error('Failed to fetch LLM response: ', err);
+          throw err;
         });
 
         const submission = submissionRepo.create({
-          username: req.user?.username ?? 'anonymous',
+          username: (req.user as User)?.username,
           dmspText: dmpText,
-          llmResponse: llmResult?.response ?? '',
+          llmResponse: llmResult?.response,
         });
         await submissionRepo.save(submission);
         console.log(`DMP submission saved successfully for user: ${submission.username}`);
@@ -116,12 +118,13 @@ export const DmpController = ({
         const wss = req.app.locals.wss as WebSocketServer;
         const llmResult = await llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
           console.error('Failed to fetch LLM response: ', err);
+          throw err;
         });
 
         const submission = submissionRepo.create({
-          username: req.user?.username ?? 'anonymous',
+          username: (req.user as User)?.username,
           dmspText: dmpText,
-          llmResponse: llmResult?.response ?? '',
+          llmResponse: llmResult?.response,
         });
         await submissionRepo.save(submission);
         console.log(`DMP submission saved successfully for user: ${submission.username}`);
