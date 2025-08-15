@@ -57,10 +57,12 @@ export const DmpController = ({
         const dmpPdfUrl = await dmpService.getDmpResource(dmpId);
         const pdfDocument = await pdfService.fetchPdfInMemory(dmpPdfUrl);
         const dmpText = await pdfService.extractText(Buffer.from(pdfDocument));
-        const llmResult = await llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
-          console.error('Failed to fetch LLM response: ', err);
-          throw err;
-        });
+        const llmResult = await llmService
+          .queryLlm(dmpText, undefined, wss)
+          .catch((err) => {
+            console.error('Failed to fetch LLM response: ', err);
+            throw err;
+          });
 
         const submission = submissionRepo.create({
           username: (req.user as User)?.username,
@@ -68,7 +70,9 @@ export const DmpController = ({
           llmResponse: llmResult?.response,
         });
         await submissionRepo.save(submission);
-        console.log(`DMP submission saved successfully for user: ${submission.username}`);
+        console.log(
+          `DMP submission saved successfully for user: ${submission.username}`
+        );
 
         res.status(202).json({
           status: 202,
@@ -116,10 +120,12 @@ export const DmpController = ({
       }
       try {
         const wss = req.app.locals.wss as WebSocketServer;
-        const llmResult = await llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
-          console.error('Failed to fetch LLM response: ', err);
-          throw err;
-        });
+        const llmResult = await llmService
+          .queryLlm(dmpText, undefined, wss)
+          .catch((err) => {
+            console.error('Failed to fetch LLM response: ', err);
+            throw err;
+          });
 
         const submission = submissionRepo.create({
           username: (req.user as User)?.username,
@@ -127,7 +133,9 @@ export const DmpController = ({
           llmResponse: llmResult?.response,
         });
         await submissionRepo.save(submission);
-        console.log(`DMP submission saved successfully for user: ${submission.username}`);
+        console.log(
+          `DMP submission saved successfully for user: ${submission.username}`
+        );
 
         res.status(202).json({
           status: 202,

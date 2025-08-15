@@ -31,47 +31,53 @@ export const initPassport = (app: Express, userService: UserService) => {
         }
 
         if (profile != null && typeof profile.nameID === 'string')
-          console.log(`SAML login profile received: ${JSON.stringify(profile)}`);
+          console.log(
+            `SAML login profile received: ${JSON.stringify(profile)}`
+          );
 
-          userService
-            .findUser({ username: profile.nameID })
-            .then((user) => {
-              if (!user) {
-                // If user does not exist, create a new user
+        userService
+          .findUser({ username: profile.nameID })
+          .then((user) => {
+            if (!user) {
+              // If user does not exist, create a new user
 
-                userService
-                  .createUser({
-                    username: profile.nameID,
-                    email: profile.nameID,
-                    password: crypto.getRandomValues(new Uint8Array(32)).toString(), // Secure random password for SAML users
-                    firstName: '',
-                    lastName: '',
-                    role: 'user', // default role
-                  })
-                  .then((newUser) => {
-                    const userDTO = plainToClass(User, newUser, {
-                      excludeExtraneousValues: true,
-                    });
-                    return done(null, instanceToPlain(userDTO));
-                  })
-                  .catch((err) => {
-                    return done(
-                      err instanceof Error ? err : new Error(String(err))
-                    );
+              userService
+                .createUser({
+                  username: profile.nameID,
+                  email: profile.nameID,
+                  password: crypto
+                    .getRandomValues(new Uint8Array(32))
+                    .toString(), // Secure random password for SAML users
+                  firstName: '',
+                  lastName: '',
+                  role: 'user', // default role
+                })
+                .then((newUser) => {
+                  const userDTO = plainToClass(User, newUser, {
+                    excludeExtraneousValues: true,
                   });
-              } else {
-                // If user exists, return the user
-                const userDTO = plainToClass(User, user, {
-                  excludeExtraneousValues: true,
+                  return done(null, instanceToPlain(userDTO));
+                })
+                .catch((err) => {
+                  return done(
+                    err instanceof Error ? err : new Error(String(err))
+                  );
                 });
+            } else {
+              // If user exists, return the user
+              const userDTO = plainToClass(User, user, {
+                excludeExtraneousValues: true,
+              });
 
-                console.log(`SAML user found: ${JSON.stringify(instanceToPlain(userDTO))} `);
-                return done(null, instanceToPlain(userDTO));
-              }
-            })
-            .catch((err) => {
-              return done(err instanceof Error ? err : new Error(String(err)));
-            });
+              console.log(
+                `SAML user found: ${JSON.stringify(instanceToPlain(userDTO))} `
+              );
+              return done(null, instanceToPlain(userDTO));
+            }
+          })
+          .catch((err) => {
+            return done(err instanceof Error ? err : new Error(String(err)));
+          });
       },
       (profile: Profile | null | undefined, done: VerifiedCallback) => {
         // for logout

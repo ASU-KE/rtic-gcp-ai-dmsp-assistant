@@ -11,7 +11,6 @@ export const DeleteUserPage = () => {
     // try {
     //   const response = await authorizedRequest('DELETE', `/user/delete/${userId}`);
     //   const deletedCount = response.data?.data?.numberOfUsersDeleted ?? 0;
-
     //   if (deletedCount === 0) {
     //     setErrorMsg('No user found with the given ID.');
     //     setSuccessMsg('');

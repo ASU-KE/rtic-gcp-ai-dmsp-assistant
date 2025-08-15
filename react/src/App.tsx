@@ -37,7 +37,7 @@ const App = (): JSX.Element => {
                 path="/"
                 element={
                   // <ProtectedRoute>
-                    <HomePage />
+                  <HomePage />
                   // </ProtectedRoute>
                 }
               />
@@ -61,7 +61,14 @@ const App = (): JSX.Element => {
               )}
 
               <Route path="/login" element={<LoginRedirect />} />
-              <Route path="/login/callback" element={<LoginCallbackWrapper><LoginCallback /></LoginCallbackWrapper>} />
+              <Route
+                path="/login/callback"
+                element={
+                  <LoginCallbackWrapper>
+                    <LoginCallback />
+                  </LoginCallbackWrapper>
+                }
+              />
               <Route path="/logout" element={<LogoutPage />} />
 
               <Route

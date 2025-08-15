@@ -40,10 +40,7 @@ export class UserService {
     }
   }
 
-  async verifyPassword(
-    user: User,
-    password: string
-  ): Promise<boolean> {
+  async verifyPassword(user: User, password: string): Promise<boolean> {
     try {
       // Verify the password against the hashed password stored in the user object
       if (!user?.password) {

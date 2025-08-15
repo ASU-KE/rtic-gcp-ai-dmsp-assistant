@@ -45,13 +45,11 @@ export function SubmitDmpText() {
     formState: { errors },
   } = useForm<FormValues>();
 
-  const { lastMessage } = useWebSocket(`wss://${import.meta.env.VITE_BACKEND_DOMAIN}`,
-    {
-      onOpen: () => console.log('WebSocket connected'),
-      onClose: () => console.log('WebSocket disconnected'),
-      shouldReconnect: () => true,
-    }
-  );
+  const { lastMessage } = useWebSocket(`wss://${import.meta.env.VITE_BACKEND_DOMAIN}`, {
+    onOpen: () => console.log('WebSocket connected'),
+    onClose: () => console.log('WebSocket disconnected'),
+    shouldReconnect: () => true,
+  });
 
   useEffect(() => {
     if (contentEndRef.current) {
@@ -85,7 +83,8 @@ export function SubmitDmpText() {
   const { mutate } = useMutation<void, unknown, FormValues>({
     mutationFn: (values) => {
       return axios
-        .post(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/dmp/text`,
+        .post(
+          `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/dmp/text`,
           {
             dmpText: values.dmpText,
           },
@@ -208,126 +207,154 @@ export function SubmitDmpText() {
   };
 
   return (
-      <Container className="mt-4 mb-4">
-        <Row className="mb-3">
-          <h2 className="mt-2">AI Feedback Tool Beta Upload Page</h2>
-          <Col md={8}>
+    <Container className="mt-4 mb-4">
+      <Row className="mb-3">
+        <h2 className="mt-2">AI Feedback Tool Beta Upload Page</h2>
+        <Col md={8}>
           <p className="mt-2">
             This AI Feedback Tool has been trained to review Data Management and Sharing Plans (DMSP) according to the
             NSF's guidelines. Support for additional funding agencies will be added in the future. This tool can be
             tested by uploading a DMSP file, such as a PDF, OR by pasting the text of the plan.
           </p>
           <p className="mt-2">Click the "Choose File" button below to select and upload a DMSP file.</p>
-          </Col>
-          <Col md={6} className="mb-3">
-            <Accordion defaultActiveKey="0">
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>Upload a DMSP File</Accordion.Header>
-                <Accordion.Body>
-                  <Form.Group controlId="formFile">
-                    {/* <Form.Label className="fw-semibold">Upload a PDF, MS Word, or plain text file.</Form.Label> */}
-                    <Form.Control className="mt-2" type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} />
-                    <Form.Text className="text-muted">
-                      Accepted formats: <strong>PDF</strong>, <strong>DOCX</strong>, or <strong>TXT</strong>
-                    </Form.Text>
-                    {fileError && <div className="text-danger mt-1 fw-semibold">{fileError}</div>}
-                  </Form.Group>
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="1">
-                <Accordion.Header>Paste DMSP text</Accordion.Header>
-                <Accordion.Body>
-                  <Form.Control
-                    as="textarea"
-                    rows={10}
-                    {...register('dmpText', { required: 'DMP Text is required' })}
-                    onBlur={() => clearErrors('dmpText')}
-                  />
-                  {errors.dmpText && <div className="text-danger fw-semibold">{errors.dmpText.message}</div>}
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
+        </Col>
+        <Col md={6} className="mb-3">
+          <Accordion defaultActiveKey="0">
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>Upload a DMSP File</Accordion.Header>
+              <Accordion.Body>
+                <Form.Group controlId="formFile">
+                  {/* <Form.Label className="fw-semibold">Upload a PDF, MS Word, or plain text file.</Form.Label> */}
+                  <Form.Control className="mt-2" type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} />
+                  <Form.Text className="text-muted">
+                    Accepted formats: <strong>PDF</strong>, <strong>DOCX</strong>, or <strong>TXT</strong>
+                  </Form.Text>
+                  {fileError && <div className="text-danger mt-1 fw-semibold">{fileError}</div>}
+                </Form.Group>
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="1">
+              <Accordion.Header>Paste DMSP text</Accordion.Header>
+              <Accordion.Body>
+                <Form.Control
+                  as="textarea"
+                  rows={10}
+                  {...register('dmpText', { required: 'DMP Text is required' })}
+                  onBlur={() => clearErrors('dmpText')}
+                />
+                {errors.dmpText && <div className="text-danger fw-semibold">{errors.dmpText.message}</div>}
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
 
-            <div className="d-flex justify-content-end mt-3">
-              <Button
-                type="submit"
-                onClick={handleSubmit(onSubmit)}
-                disabled={submissionInProgress}
-                className="btn-custom-medium"
-              >
-                {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
-              </Button>
-            </div>
-          </Col>
+          <div className="d-flex justify-content-end mt-3">
+            <Button
+              type="submit"
+              onClick={handleSubmit(onSubmit)}
+              disabled={submissionInProgress}
+              className="btn-custom-medium"
+            >
+              {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
+            </Button>
+          </div>
+        </Col>
 
-          {showLoadingIndicator && (
-            <Row className="mt-2">
-              <Col md={12}>
-                <div className="border p-2">
-                  <div className="d-flex justify-content-center">
-                    <Row>
-                      <h4>Analyzing your DMP... please wait</h4>
-                    </Row>
-                  </div>
-                  <div className="d-flex justify-content-center">
-                    <Row>
-                      <Atom color="#000000" size="medium" />
-                    </Row>
-                  </div>
+        {showLoadingIndicator && (
+          <Row className="mt-2">
+            <Col md={12}>
+              <div className="border p-2">
+                <div className="d-flex justify-content-center">
+                  <Row>
+                    <h4>Analyzing your DMP... please wait</h4>
+                  </Row>
                 </div>
-              </Col>
-            </Row>
-          )}
+                <div className="d-flex justify-content-center">
+                  <Row>
+                    <Atom color="#000000" size="medium" />
+                  </Row>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        )}
 
-          {streamedText && submittedDmpText && (
-            <Row className="mt-2 mb-4">
-              <Col md={12}>
-                <div className="border p-3" style={{ position: 'relative' }}>
-                  <div className="d-flex justify-content-between align-items-start mb-3">
-                    {/* <div>
+        {streamedText && submittedDmpText && (
+          <Row className="mt-2 mb-4">
+            <Col md={12}>
+              <div className="border p-3" style={{ position: 'relative' }}>
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  {/* <div>
                   <h5 className="m-0 fw-semibold">AI Analysis for DMP Text:</h5>
                   <div className="dmp-info-box">
                     {submittedDmpText.slice(0, 100)}
                     {submittedDmpText.length > 100 ? '...' : ''}
                   </div>
                 </div> */}
-                    <div>
-                      {/* <h5 className="m-0 fw-semibold">AI Analysis for DMP Text:</h5> */}
-                      <p>
-                        Thank you for using the ASU DMSP AI Feedback Tool! This AI-generated response is based on the{' '}
-                        <a href="https://osf.io/mgjpp">DART Data Management Plan Rubric</a> to gauge your plan’s
-                        effectiveness.{' '}
-                        <strong>
-                          Your feedback will be displayed below with an option to download your feedback as a PDF
-                        </strong>
-                        .
-                      </p>
-                      <p>
-                        <strong>Consider this response as guidance only.</strong> As the author and investigator of your
-                        project, you are ultimately responsible for the project's outcomes and adhering to your data
-                        management plan. The DMPTool generated this feedback to give you a quick response so that you
-                        can adapt your plan immediately.
-                      </p>
-                      <p>
-                        <strong>If you have any questions</strong> or would like the review of your plan to be done by a
-                        human, request a consultation with the{' '}
-                        <a href="https://asu.service-now.com/sp?sysparm_stack=no&sys_id=fcadee6d1b1c20d09a9cca2b234bcbf3&id=sc_category">
-                          Research Data Management Office
-                        </a>
-                        . Please allow three business days for someone to respond to your request.
-                      </p>
-                      <p>
-                        <strong>Staff may contact you</strong> to ensure your plan is connected with the most
-                        appropriate available resources. Contact the{' '}
-                        <a href="https://asu.service-now.com/sp?sysparm_stack=no">Research Technology Office</a> to
-                        ensure those services are available and determine if your proposal should include any costs.
-                      </p>
-                      <p>
-                        <strong>Don’t wait for feedback on your plan before submitting your proposal.</strong> After
-                        submission, you may also receive a Just in Time (JIT) request from your funder if they have
-                        questions about your plan.
-                      </p>
-                    </div>
+                  <div>
+                    {/* <h5 className="m-0 fw-semibold">AI Analysis for DMP Text:</h5> */}
+                    <p>
+                      Thank you for using the ASU DMSP AI Feedback Tool! This AI-generated response is based on the{' '}
+                      <a href="https://osf.io/mgjpp">DART Data Management Plan Rubric</a> to gauge your plan’s
+                      effectiveness.{' '}
+                      <strong>
+                        Your feedback will be displayed below with an option to download your feedback as a PDF
+                      </strong>
+                      .
+                    </p>
+                    <p>
+                      <strong>Consider this response as guidance only.</strong> As the author and investigator of your
+                      project, you are ultimately responsible for the project's outcomes and adhering to your data
+                      management plan. The DMPTool generated this feedback to give you a quick response so that you can
+                      adapt your plan immediately.
+                    </p>
+                    <p>
+                      <strong>If you have any questions</strong> or would like the review of your plan to be done by a
+                      human, request a consultation with the{' '}
+                      <a href="https://asu.service-now.com/sp?sysparm_stack=no&sys_id=fcadee6d1b1c20d09a9cca2b234bcbf3&id=sc_category">
+                        Research Data Management Office
+                      </a>
+                      . Please allow three business days for someone to respond to your request.
+                    </p>
+                    <p>
+                      <strong>Staff may contact you</strong> to ensure your plan is connected with the most appropriate
+                      available resources. Contact the{' '}
+                      <a href="https://asu.service-now.com/sp?sysparm_stack=no">Research Technology Office</a> to ensure
+                      those services are available and determine if your proposal should include any costs.
+                    </p>
+                    <p>
+                      <strong>Don’t wait for feedback on your plan before submitting your proposal.</strong> After
+                      submission, you may also receive a Just in Time (JIT) request from your funder if they have
+                      questions about your plan.
+                    </p>
+                  </div>
+                  <div className="d-flex gap-2">
+                    <Button
+                      disabled={submissionInProgress}
+                      size="sm"
+                      className="btn-custom-yellow"
+                      onClick={handleCopy}
+                    >
+                      {copied ? <CheckIcon /> : <CopyIcon />}
+                      {copied ? 'Copied' : 'Copy'}
+                    </Button>
+                    <Button
+                      disabled={submissionInProgress}
+                      size="sm"
+                      className="btn-custom-yellow"
+                      onClick={handleDownload}
+                    >
+                      {downloaded ? <CheckIcon /> : <DownloadIcon />}
+                      {downloaded ? 'Downloaded' : 'Download'}
+                    </Button>
+                  </div>
+                </div>
+
+                <div ref={markdownRef} className="markdown-body">
+                  <Markdown>{streamedText}</Markdown>
+                </div>
+
+                {!submissionInProgress && (
+                  <div className="d-flex justify-content-between align-items-start mt-3">
                     <div className="d-flex gap-2">
                       <Button
                         disabled={submissionInProgress}
@@ -349,42 +376,14 @@ export function SubmitDmpText() {
                       </Button>
                     </div>
                   </div>
+                )}
+              </div>
+            </Col>
+          </Row>
+        )}
 
-                  <div ref={markdownRef} className="markdown-body">
-                    <Markdown>{streamedText}</Markdown>
-                  </div>
-
-                  {!submissionInProgress && (
-                    <div className="d-flex justify-content-between align-items-start mt-3">
-                      <div className="d-flex gap-2">
-                        <Button
-                          disabled={submissionInProgress}
-                          size="sm"
-                          className="btn-custom-yellow"
-                          onClick={handleCopy}
-                        >
-                          {copied ? <CheckIcon /> : <CopyIcon />}
-                          {copied ? 'Copied' : 'Copy'}
-                        </Button>
-                        <Button
-                          disabled={submissionInProgress}
-                          size="sm"
-                          className="btn-custom-yellow"
-                          onClick={handleDownload}
-                        >
-                          {downloaded ? <CheckIcon /> : <DownloadIcon />}
-                          {downloaded ? 'Downloaded' : 'Download'}
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </Col>
-            </Row>
-          )}
-
-          <div ref={contentEndRef} />
-        </Row>
-      </Container>
+        <div ref={contentEndRef} />
+      </Row>
+    </Container>
   );
 }
