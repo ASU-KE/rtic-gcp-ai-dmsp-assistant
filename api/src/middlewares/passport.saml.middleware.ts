@@ -43,7 +43,7 @@ export const initPassport = (app: Express, userService: UserService) => {
                 const userDetail = {
                   username: profile.nameID,
                   email: profile.nameID,
-                  password: crypto.getRandomValues(new Uint8Array(32)).toString(), // Secure random password for SAML users
+                  password: '', // No password for SAML users
                   firstName: 'Test first name',
                   lastName: 'Test last name',
                   role: 'user', // default role
