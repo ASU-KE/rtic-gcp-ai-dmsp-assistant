@@ -39,22 +39,26 @@ export const initPassport = (app: Express, userService: UserService) => {
               if (!user) {
                 // If user does not exist, create a new user
 
+                console.log(`SAML user not found, creating new user: ${profile.nameID}`);
+                const userDetail = {
+                  username: profile.nameID,
+                  email: profile.nameID,
+                  password: crypto.getRandomValues(new Uint8Array(32)).toString(), // Secure random password for SAML users
+                  firstName: 'Test first name',
+                  lastName: 'Test last name',
+                  role: 'user', // default role
+                };
                 userService
-                  .createUser({
-                    username: profile.nameID,
-                    email: profile.nameID,
-                    password: crypto.getRandomValues(new Uint8Array(32)).toString(), // Secure random password for SAML users
-                    firstName: '',
-                    lastName: '',
-                    role: 'user', // default role
-                  })
+                  .createUser(userDetail)
                   .then((newUser) => {
+                    console.log(`SAML user created: ${JSON.stringify(newUser)}`);
                     const userDTO = plainToClass(User, newUser, {
                       excludeExtraneousValues: true,
                     });
                     return done(null, instanceToPlain(userDTO));
                   })
                   .catch((err) => {
+                    console.error(`Error creating SAML user: ${err}`);
                     return done(
                       err instanceof Error ? err : new Error(String(err))
                     );
