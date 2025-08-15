@@ -11,7 +11,7 @@ export const LoginRedirect = () => {
       navigate('/');
     }
 
-    window.location.href = 'https://dmsp.dev.rtd.asu.edu/api/sso/login';
+    window.location.href = `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/sso/login`; // Redirect to SSO login
   }, [state.isAuthenticated, navigate]);
 
   return <></>;
