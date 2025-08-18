@@ -2,6 +2,8 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import config from './app.config';
 
+const baseDir = process.env.NODE_ENV == 'production' ? 'dist' : 'src';
+
 export const AppDataSource = new DataSource({
   type: 'mysql',
   host: config.database.host,
@@ -9,9 +11,9 @@ export const AppDataSource = new DataSource({
   username: config.database.user,
   password: config.database.password,
   database: config.database.database,
-  entities: ["src/**/*.entity{.ts,.js}"],
+  entities: [`${baseDir}/**/*.entity{.ts,.js}`],
   synchronize: false,
   logging: false,
-  migrations: ['src/migrations/*.ts'],
+  migrations: [`${baseDir}/migrations/*.{ts,js}`],
   migrationsTableName: 'migrations',
 });
