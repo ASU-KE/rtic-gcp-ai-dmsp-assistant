@@ -10,6 +10,6 @@ export const isAuthenticated = (
   if (config.auth.strategy === 'none' || req.user) {
     return next();
   } else {
-    res.status(403).json({ success: false, message: 'Access Forbidden' });
+    res.status(401).json({ success: false, message: 'Unauthorized Access' });
   }
 };
