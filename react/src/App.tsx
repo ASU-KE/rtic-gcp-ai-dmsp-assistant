@@ -20,6 +20,11 @@ import { LoginCallbackWrapper, LoginCallback } from './components/LoginCallback'
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  // If auth strategy is "none", allow access to child routes
+  {import.meta.env.VITE_FRONTEND_AUTH === 'none' && (
+    children
+  )}
+
   const { state } = useAuthContext();
   return state.isAuthenticated ? children : <Navigate to="/login" />;
 };
@@ -44,25 +49,29 @@ const App = (): JSX.Element => {
               <Route
                 path="/submit-text"
                 element={
-                  <ProtectedRoute>
+                  // <ProtectedRoute>
                     <SubmitDmpText />
-                  </ProtectedRoute>
+                  // </ProtectedRoute>
                 }
               />
               {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && (
                 <Route
                   path="/submit-id"
                   element={
-                    <ProtectedRoute>
+                    // <ProtectedRoute>
                       <SubmitDmpId />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                   }
                 />
               )}
 
-              <Route path="/login" element={<LoginRedirect />} />
-              <Route path="/login/callback" element={<LoginCallbackWrapper><LoginCallback /></LoginCallbackWrapper>} />
-              <Route path="/logout" element={<LogoutPage />} />
+              {import.meta.env.VITE_FRONTEND_AUTH !== 'none' && (
+                <>
+                  <Route path="/login" element={<LoginRedirect />} />
+                  <Route path="/login/callback" element={<LoginCallbackWrapper><LoginCallback /></LoginCallbackWrapper>} />
+                  <Route path="/logout" element={<LogoutPage />} />
+                </>
+              )}
 
               <Route
                 path="/user/create"
