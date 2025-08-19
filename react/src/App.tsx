@@ -21,9 +21,9 @@ import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   // If auth strategy is "none", allow access to child routes
-  {import.meta.env.VITE_FRONTEND_AUTH === 'none' && (
-    children
-  )}
+  {
+    import.meta.env.VITE_FRONTEND_AUTH === 'none' && children;
+  }
 
   const { state } = useAuthContext();
   return state.isAuthenticated ? children : <Navigate to="/login" />;
@@ -50,7 +50,7 @@ const App = (): JSX.Element => {
                 path="/submit-text"
                 element={
                   // <ProtectedRoute>
-                    <SubmitDmpText />
+                  <SubmitDmpText />
                   // </ProtectedRoute>
                 }
               />
@@ -59,7 +59,7 @@ const App = (): JSX.Element => {
                   path="/submit-id"
                   element={
                     // <ProtectedRoute>
-                      <SubmitDmpId />
+                    <SubmitDmpId />
                     // </ProtectedRoute>
                   }
                 />
@@ -68,7 +68,14 @@ const App = (): JSX.Element => {
               {import.meta.env.VITE_FRONTEND_AUTH !== 'none' && (
                 <>
                   <Route path="/login" element={<LoginRedirect />} />
-                  <Route path="/login/callback" element={<LoginCallbackWrapper><LoginCallback /></LoginCallbackWrapper>} />
+                  <Route
+                    path="/login/callback"
+                    element={
+                      <LoginCallbackWrapper>
+                        <LoginCallback />
+                      </LoginCallbackWrapper>
+                    }
+                  />
                   <Route path="/logout" element={<LogoutPage />} />
                 </>
               )}

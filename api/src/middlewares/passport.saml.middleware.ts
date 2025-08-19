@@ -41,35 +41,37 @@ export const initPassport = (app: Express, userService: UserService) => {
             if (!user) {
               // If user does not exist, create a new user
 
-                console.log(`SAML user not found, creating new user: ${profile.nameID}`);
-                const userDetail = {
-                  username: profile.nameID,
-                  email: profile.nameID,
-                  password: '', // No password for SAML users
-                  firstName: 'Test first name',
-                  lastName: 'Test last name',
-                  role: 'user', // default role
-                };
-                userService
-                  .createUser(userDetail)
-                  .then((newUser) => {
-                    console.log(`SAML user created: ${JSON.stringify(newUser)}`);
-                    const userDTO = plainToClass(User, newUser, {
-                      excludeExtraneousValues: true,
-                    });
-                    return done(null, instanceToPlain(userDTO));
-                  })
-                  .catch((err) => {
-                    console.error(`Error creating SAML user: ${err}`);
-                    return done(
-                      err instanceof Error ? err : new Error(String(err))
-                    );
+              console.log(
+                `SAML user not found, creating new user: ${profile.nameID}`
+              );
+              const userDetail = {
+                username: profile.nameID,
+                email: profile.nameID,
+                password: '', // No password for SAML users
+                firstName: 'Test first name',
+                lastName: 'Test last name',
+                role: 'user', // default role
+              };
+              userService
+                .createUser(userDetail)
+                .then((newUser) => {
+                  console.log(`SAML user created: ${JSON.stringify(newUser)}`);
+                  const userDTO = plainToClass(User, newUser, {
+                    excludeExtraneousValues: true,
                   });
-              } else {
-                // If user exists, return the user
-                const userDTO = plainToClass(User, user, {
-                  excludeExtraneousValues: true,
+                  return done(null, instanceToPlain(userDTO));
+                })
+                .catch((err) => {
+                  console.error(`Error creating SAML user: ${err}`);
+                  return done(
+                    err instanceof Error ? err : new Error(String(err))
+                  );
                 });
+            } else {
+              // If user exists, return the user
+              const userDTO = plainToClass(User, user, {
+                excludeExtraneousValues: true,
+              });
 
               console.log(
                 `SAML user found: ${JSON.stringify(instanceToPlain(userDTO))} `
