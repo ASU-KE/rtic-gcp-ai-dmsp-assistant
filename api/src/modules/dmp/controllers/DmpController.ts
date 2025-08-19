@@ -26,7 +26,7 @@ export interface DmpDependencies {
       ws?: WebSocket,
       wss?: WebSocketServer
     ): Promise<
-      { response: string; metadata?: Record<string, unknown> } | undefined
+      { response: string; metadata?: Record<string, unknown> }
     >;
   };
 }
@@ -64,10 +64,12 @@ export const DmpController = ({
             throw err;
           });
 
+        const user = req.user as User;
+
         const submission = submissionRepo.create({
-          username: (req.user as User)?.username,
+          username: user.username,
           dmspText: dmpText,
-          llmResponse: llmResult?.response,
+          llmResponse: llmResult.response,
         });
         await submissionRepo.save(submission);
         console.log(
@@ -127,11 +129,14 @@ export const DmpController = ({
             throw err;
           });
 
+        const user = req.user as User;
+
         const submission = submissionRepo.create({
-          username: (req.user as User)?.username,
+          username: user.username,
           dmspText: dmpText,
-          llmResponse: llmResult?.response,
+          llmResponse: llmResult.response,
         });
+
         await submissionRepo.save(submission);
         console.log(
           `DMP submission saved successfully for user: ${submission.username}`
