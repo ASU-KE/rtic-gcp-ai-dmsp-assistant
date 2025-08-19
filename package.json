@@ -9,7 +9,8 @@
     "react"
   ],
   "scripts": {
-    "commit": "cz"
+    "commit": "cz",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -23,8 +24,11 @@
   },
   "homepage": "https://github.com/ASU-KE/rtic-gcp-ai-dmsp-assistant#readme",
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "commitizen": "^4.3.1",
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^9.1.7"
   },
   "config": {
     "commitizen": {
