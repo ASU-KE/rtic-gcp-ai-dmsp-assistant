@@ -6,13 +6,10 @@ export const isAuthenticated = (
   res: Response,
   next: NextFunction
 ): Response | void => {
-  if (
-    (config.auth.strategy === 'none' &&
-      process.env.NODE_ENV !== 'production') ||
-    req.user
-  ) {
+  console.log('auth strategy:', config.auth.strategy);
+  if (config.auth.strategy === 'none' || req.user) {
     return next();
   } else {
-    res.json({ success: false, message: 'Unauthorized' });
+    res.status(401).json({ success: false, message: 'Unauthorized Access' });
   }
 };
