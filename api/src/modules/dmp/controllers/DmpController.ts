@@ -66,6 +66,7 @@ export const DmpController = ({
 
         const user = req.user as User;
 
+        if (user) {
         const submission = submissionRepo.create({
           username: user.username,
           dmspText: dmpText,
@@ -75,6 +76,7 @@ export const DmpController = ({
         console.log(
           `DMP submission saved successfully for user: ${submission.username}`
         );
+      }
 
         res.status(202).json({
           status: 202,
@@ -131,16 +133,18 @@ export const DmpController = ({
 
         const user = req.user as User;
 
-        const submission = submissionRepo.create({
-          username: user.username,
-          dmspText: dmpText,
-          llmResponse: llmResult.response,
-        });
+        if (user){
+          const submission = submissionRepo.create({
+            username: user.username,
+            dmspText: dmpText,
+            llmResponse: llmResult.response,
+          });
 
-        await submissionRepo.save(submission);
-        console.log(
-          `DMP submission saved successfully for user: ${submission.username}`
-        );
+          await submissionRepo.save(submission);
+          console.log(
+            `DMP submission saved successfully for user: ${submission.username}`
+          );
+        }
 
         res.status(202).json({
           status: 202,
