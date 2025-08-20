@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
 import { WebSocket, WebSocketServer } from 'ws';
+import { Submission } from '../../../entities/submission.entity';
+import { AppDataSource } from '../../../config/data-source.config';
+import { User } from '../../../entities/user.entity';
 
 export interface DmpReportByIdRequestBody {
   dmpId: string;
@@ -22,9 +25,7 @@ export interface DmpDependencies {
       planText: string,
       ws?: WebSocket,
       wss?: WebSocketServer
-    ): Promise<
-      { response: string; metadata?: Record<string, unknown> } | undefined
-    >;
+    ): Promise<{ response: string; metadata?: Record<string, unknown> }>;
   };
 }
 
@@ -33,6 +34,7 @@ export const DmpController = ({
   pdfService,
   llmService,
 }: DmpDependencies) => {
+  const submissionRepo = AppDataSource.getRepository(Submission);
   return {
     getDmpReportById: async (
       req: Request<unknown, unknown, DmpReportByIdRequestBody>,
@@ -53,9 +55,26 @@ export const DmpController = ({
         const dmpPdfUrl = await dmpService.getDmpResource(dmpId);
         const pdfDocument = await pdfService.fetchPdfInMemory(dmpPdfUrl);
         const dmpText = await pdfService.extractText(Buffer.from(pdfDocument));
-        llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
-          console.error('Failed to fetch LLM response: ', err);
-        });
+        const llmResult = await llmService
+          .queryLlm(dmpText, undefined, wss)
+          .catch((err) => {
+            console.error('Failed to fetch LLM response: ', err);
+            throw err;
+          });
+
+        const user = req.user as User;
+
+        if (user) {
+          const submission = submissionRepo.create({
+            username: user.username,
+            dmspText: dmpText,
+            llmResponse: llmResult.response,
+          });
+          await submissionRepo.save(submission);
+          console.log(
+            `DMP submission saved successfully for user: ${submission.username}`
+          );
+        }
 
         res.status(202).json({
           status: 202,
@@ -103,9 +122,27 @@ export const DmpController = ({
       }
       try {
         const wss = req.app.locals.wss as WebSocketServer;
-        await llmService.queryLlm(dmpText, undefined, wss).catch((err) => {
-          console.error('Failed to fetch LLM response: ', err);
-        });
+        const llmResult = await llmService
+          .queryLlm(dmpText, undefined, wss)
+          .catch((err) => {
+            console.error('Failed to fetch LLM response: ', err);
+            throw err;
+          });
+
+        const user = req.user as User;
+
+        if (user) {
+          const submission = submissionRepo.create({
+            username: user.username,
+            dmspText: dmpText,
+            llmResponse: llmResult.response,
+          });
+
+          await submissionRepo.save(submission);
+          console.log(
+            `DMP submission saved successfully for user: ${submission.username}`
+          );
+        }
 
         res.status(202).json({
           status: 202,

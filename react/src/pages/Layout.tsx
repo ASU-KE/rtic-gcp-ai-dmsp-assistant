@@ -42,9 +42,9 @@ const manageUserItems = [
 ];
 
 const navTree = primaryNavTree;
-  // isAuthEnabled && role === 'admin'
-  //   ? [...primaryNavTree, { id: 3, text: 'Manage Users', href: '#', items: [manageUserItems] }]
-  //   : primaryNavTree;
+// isAuthEnabled && role === 'admin'
+//   ? [...primaryNavTree, { id: 3, text: 'Manage Users', href: '#', items: [manageUserItems] }]
+//   : primaryNavTree;
 
 const header: TsHeaderProps = {
   title: 'DMSP AI Tool Beta',

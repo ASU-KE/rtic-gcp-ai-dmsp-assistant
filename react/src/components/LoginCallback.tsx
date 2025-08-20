@@ -30,7 +30,6 @@ export const LoginCallbackWrapper = ({ children }: LoginCallbackType) => {
         const user: User = response.data.data.user;
         // Store user info in auth context
         dispatch(login(user));
-
       } catch (err: any) {
         throw new Error('Failed to retrieve user data: ' + err.message);
         // Handle error appropriately, e.g., redirect to login or show an error message
@@ -58,7 +57,5 @@ export const LoginCallback = () => {
     return () => clearTimeout(timer);
   }, [navigate]);
 
-  return (
-    <></>
-  );
+  return <></>;
 };

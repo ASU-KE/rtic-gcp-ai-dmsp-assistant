@@ -23,7 +23,6 @@ export async function getCurrentUser(): Promise<User> {
     const { user } = response.data;
     console.log('Fetched user:', user);
     return user;
-
   } catch (err: any) {
     console.error('API query error:', err);
     throw new Error(err.response?.data?.error?.message || 'General API query error');
