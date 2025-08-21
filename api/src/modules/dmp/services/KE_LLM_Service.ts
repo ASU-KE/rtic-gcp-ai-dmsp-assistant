@@ -12,7 +12,7 @@ export default {
     planText: string,
     ws?: WebSocket,
     wss?: WebSocketServer
-  ): Promise<LlmResponse | undefined> => {
+  ): Promise<LlmResponse> => {
     const {
       action,
       endpoints: { queryLlmWebsocketEndpoint },
@@ -29,7 +29,7 @@ export default {
     const system_prompt =
       sourceType === 'file' ? promptConfig.prompt : sourceValue;
 
-    return new Promise<LlmResponse | undefined>((resolve, reject) => {
+    return new Promise<LlmResponse>((resolve, reject) => {
       const upstream = new WebSocket(
         `${queryLlmWebsocketEndpoint}/?access_token=${llmAccessSecret}`
       );
@@ -77,6 +77,10 @@ export default {
         receivedValidChunk = true;
 
         fullResponse += chunk;
+
+        if (chunk.includes('<EOS>')) {
+          upstream.close();
+        }
 
         const message = JSON.stringify({ chunk });
 

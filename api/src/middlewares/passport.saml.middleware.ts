@@ -31,51 +31,57 @@ export const initPassport = (app: Express, userService: UserService) => {
         }
 
         if (profile != null && typeof profile.nameID === 'string')
-          console.log(`SAML login profile received: ${JSON.stringify(profile)}`);
+          console.log(
+            `SAML login profile received: ${JSON.stringify(profile)}`
+          );
 
-          userService
-            .findUser({ username: profile.nameID })
-            .then((user) => {
-              if (!user) {
-                // If user does not exist, create a new user
+        userService
+          .findUser({ username: profile.nameID })
+          .then((user) => {
+            if (!user) {
+              // If user does not exist, create a new user
 
-                console.log(`SAML user not found, creating new user: ${profile.nameID}`);
-                const userDetail = {
-                  username: profile.nameID,
-                  email: profile.nameID,
-                  password: '', // No password for SAML users
-                  firstName: 'Test first name',
-                  lastName: 'Test last name',
-                  role: 'user', // default role
-                };
-                userService
-                  .createUser(userDetail)
-                  .then((newUser) => {
-                    console.log(`SAML user created: ${JSON.stringify(newUser)}`);
-                    const userDTO = plainToClass(User, newUser, {
-                      excludeExtraneousValues: true,
-                    });
-                    return done(null, instanceToPlain(userDTO));
-                  })
-                  .catch((err) => {
-                    console.error(`Error creating SAML user: ${err}`);
-                    return done(
-                      err instanceof Error ? err : new Error(String(err))
-                    );
+              console.log(
+                `SAML user not found, creating new user: ${profile.nameID}`
+              );
+              const userDetail = {
+                username: profile.nameID,
+                email: profile.nameID,
+                password: '', // No password for SAML users
+                firstName: 'Test first name',
+                lastName: 'Test last name',
+                role: 'user', // default role
+              };
+              userService
+                .createUser(userDetail)
+                .then((newUser) => {
+                  console.log(`SAML user created: ${JSON.stringify(newUser)}`);
+                  const userDTO = plainToClass(User, newUser, {
+                    excludeExtraneousValues: true,
                   });
-              } else {
-                // If user exists, return the user
-                const userDTO = plainToClass(User, user, {
-                  excludeExtraneousValues: true,
+                  return done(null, instanceToPlain(userDTO));
+                })
+                .catch((err) => {
+                  console.error(`Error creating SAML user: ${err}`);
+                  return done(
+                    err instanceof Error ? err : new Error(String(err))
+                  );
                 });
+            } else {
+              // If user exists, return the user
+              const userDTO = plainToClass(User, user, {
+                excludeExtraneousValues: true,
+              });
 
-                console.log(`SAML user found: ${JSON.stringify(instanceToPlain(userDTO))} `);
-                return done(null, instanceToPlain(userDTO));
-              }
-            })
-            .catch((err) => {
-              return done(err instanceof Error ? err : new Error(String(err)));
-            });
+              console.log(
+                `SAML user found: ${JSON.stringify(instanceToPlain(userDTO))} `
+              );
+              return done(null, instanceToPlain(userDTO));
+            }
+          })
+          .catch((err) => {
+            return done(err instanceof Error ? err : new Error(String(err)));
+          });
       },
       (profile: Profile | null | undefined, done: VerifiedCallback) => {
         // for logout

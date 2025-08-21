@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 
 import { useAuthContext } from '../../hooks';
-import { login } from "../../context";
+import { login } from '../../context';
 
 import '../../App.css';
 import eyeIcon from '../../assets/hide.png';
@@ -59,7 +59,6 @@ export const LoginPage = () => {
       const { user } = response.data;
       console.log('User logged in:', user);
       dispatch(login(user));
-
     } catch (err: any) {
       console.error('Login error:', err);
       setError(err.response?.data?.error?.message || 'Login failed');

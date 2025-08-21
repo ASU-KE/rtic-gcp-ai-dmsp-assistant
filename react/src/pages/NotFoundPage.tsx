@@ -12,12 +12,11 @@ export const NotFoundPage = () => {
   }
 
   return (
-  <Row className="mb-4">
-    <Col md={8}>
-      <h2 className="mt-2">Page Not Found</h2>
-      <p className="mt-2">
-        We're sorry, but the page you are looking for does not exist.
-      </p>
-    </Col>
-  </Row>
-)};
+    <Row className="mb-4">
+      <Col md={8}>
+        <h2 className="mt-2">Page Not Found</h2>
+        <p className="mt-2">We're sorry, but the page you are looking for does not exist.</p>
+      </Col>
+    </Row>
+  );
+};

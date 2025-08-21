@@ -16,19 +16,22 @@ export const ListUsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [errorMsg, setErrorMsg] = useState('');
 
-    const { state } = useAuthContext();
+  const { state } = useAuthContext();
 
-    if (import.meta.env.NODE_ENV !== 'production') {
-      console.log('ListUsersPage user:', state.user);
-      console.log('ListUsersPage isAuthenticated:', state.isAuthenticated);
-    }
+  if (import.meta.env.NODE_ENV !== 'production') {
+    console.log('ListUsersPage user:', state.user);
+    console.log('ListUsersPage isAuthenticated:', state.isAuthenticated);
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/user/all`, {
-          withCredentials: true
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/user/all`,
+          {
+            withCredentials: true,
+          }
+        );
 
         console.log('Fetched response:', response.data.data);
 
