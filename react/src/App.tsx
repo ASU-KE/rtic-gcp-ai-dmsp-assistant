@@ -31,8 +31,8 @@ const App = (): JSX.Element => {
         <QueryClientProvider client={queryClient}>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-              <Route path="/submit-text" element={<ProtectedRoute><SubmitDmpText /></ProtectedRoute>} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/submit-text" element={<SubmitDmpText />} />
               {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && <Route path="/submit-id" element={<ProtectedRoute><SubmitDmpId /></ProtectedRoute>} />}
 
               <Route path="/login" element={<LoginPage />} />
