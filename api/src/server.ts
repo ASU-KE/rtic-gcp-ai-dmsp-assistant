@@ -45,11 +45,7 @@ app.use(rollbar.errorHandler());
 
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      'https://dmsp.local.asu.edu',
-      'https://dmsp.dev.rtd.asu.edu',
-    ],
+    origin: true, // reflect (enable) the requested origin in the CORS response
     credentials: true, // allow session cookie from browser to pass through
   })
 );
