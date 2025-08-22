@@ -10,10 +10,6 @@ interface Config {
   rollbarToken: string;
   passwordSaltRounds: number;
   sessionSecret: string;
-  jwtSecret: string;
-  jwtExpiration: number;
-  jwtRefreshSecret: string;
-  jwtRefreshExpiration: number;
   dmptoolClientId: string;
   dmptoolClientSecret: string;
   llmAccessSecret: string;
@@ -95,10 +91,6 @@ const config: Config = {
   rollbarToken: process.env.ROLLBAR_TOKEN!,
   passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
   sessionSecret: process.env.SESSION_SECRET!,
-  jwtSecret: process.env.JWT_SECRET!,
-  jwtExpiration: parseInt(process.env.JWT_EXPIRATION ?? '86400', 10),
-  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,
-  jwtRefreshExpiration: parseInt(process.env.JWT_REFRESH_EXPIRATION_SECS ?? '604800', 10),
   dmptoolClientId: process.env.DMPTOOL_CLIENT_ID!,
   dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET!,
   llmAccessSecret: process.env.LLM_ACCESS_SECRET!,
