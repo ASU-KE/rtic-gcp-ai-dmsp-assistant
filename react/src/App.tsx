@@ -51,23 +51,23 @@ const App = (): JSX.Element => {
               <Route
                 path="/submit-text"
                 element={
-                  // <ProtectedRoute>
-                  <SubmitDmpText />
-                  // </ProtectedRoute>
+                  <ProtectedRoute>
+                    <SubmitDmpText />
+                  </ProtectedRoute>
                 }
               />
               {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && (
                 <Route
                   path="/submit-id"
                   element={
-                    // <ProtectedRoute>
-                    <SubmitDmpId />
-                    // </ProtectedRoute>
+                    <ProtectedRoute>
+                      <SubmitDmpId />
+                    </ProtectedRoute>
                   }
                 />
               )}
 
-              {import.meta.env.VITE_FRONTEND_AUTH !== 'none' && (
+              {import.meta.env.VITE_FRONTEND_AUTH === 'saml' && (
                 <>
                   <Route path="/login" element={<SamlLoginRedirect />} />
                   <Route
@@ -79,6 +79,13 @@ const App = (): JSX.Element => {
                     }
                   />
                   <Route path="/logout" element={<LogoutPage />} />
+                </>
+              )}
+
+              {import.meta.env.VITE_FRONTEND_AUTH === 'local' && (
+                <>
+                  <Route path="/login" element={<LocalLoginPage />} />
+                  <Route path="/logout" element={<LocalLogoutPage />} />
                 </>
               )}
 

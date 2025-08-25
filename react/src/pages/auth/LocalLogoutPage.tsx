@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../hooks';
 import { logout } from '../../context';
 
-export const LogoutPage = () => {
+export const LocalLogoutPage = () => {
   const navigate = useNavigate();
   const { dispatch, state } = useAuthContext();
 
