@@ -39,7 +39,7 @@ steps:
     args:
       [
         '-c',
-        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN --build-arg APP_BACKEND_DOMAIN=$$APP_BACKEND_DOMAIN --build-arg APP_BACKEND_PORT=$$APP_BACKEND_PORT --build-arg APP_BACKEND_PROTOCOL=$$APP_BACKEND_PROTOCOL --build-arg APP_FRONTEND_AUTH=$$APP_FRONTEND_AUTH -t us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:$BUILD_ID .',
+        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN --build-arg APP_BACKEND_DOMAIN=$$APP_BACKEND_DOMAIN --build-arg APP_BACKEND_PORT=$$APP_BACKEND_PORT --build-arg APP_BACKEND_PROTOCOL=$$APP_BACKEND_PROTOCOL --build-arg APP_FRONTEND_AUTH=$$APP_FRONTEND_AUTH --build-arg APP_FRONTEND_ENABLE_DMP_ID=$$APP_FRONTEND_ENABLE_DMP_ID -t us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:$BUILD_ID .',
       ]
     env: [
       'DOCKER_BUILDKIT=1',
