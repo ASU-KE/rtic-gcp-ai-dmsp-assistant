@@ -43,7 +43,7 @@ steps:
       ]
     env: [
       'DOCKER_BUILDKIT=1',
-      'APP_BACKEND_DOMAIN=dmsp.dev.api.rtd.asu.edu',
+      'APP_BACKEND_DOMAIN=api.dmsp.ai.dev.rtd.asu.edu',
       'APP_BACKEND_PORT=443',
       'APP_BACKEND_PROTOCOL=https',
       'APP_FRONTEND_AUTH=none',
