@@ -2,9 +2,9 @@ import axios from 'axios';
 import React, { useEffect, ReactElement, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuthContext } from '../hooks';
-import { login } from '../context';
-import { User } from '../types';
+import { useAuthContext } from '../../hooks';
+import { login } from '../../context';
+import { User } from '../../types';
 
 interface LoginCallbackType {
   children: typeof React.Children | ReactNode | ReactElement;
