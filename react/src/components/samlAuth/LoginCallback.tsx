@@ -10,7 +10,7 @@ interface LoginCallbackType {
   children: typeof React.Children | ReactNode | ReactElement;
 }
 
-export const LoginCallbackWrapper = ({ children }: LoginCallbackType) => {
+export const SamlLoginCallbackWrapper = ({ children }: LoginCallbackType) => {
   const { dispatch } = useAuthContext();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export const LoginCallbackWrapper = ({ children }: LoginCallbackType) => {
   return children;
 };
 
-export const LoginCallback = () => {
+export const SamlLoginCallback = () => {
   let navigate = useNavigate();
 
   // This component is rendered after the SAML IdP redirects back to our app

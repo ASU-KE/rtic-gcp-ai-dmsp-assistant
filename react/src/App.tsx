@@ -16,6 +16,8 @@ import { DeleteUserPage } from './pages';
 import { UpdateUserPage } from './pages';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { LoginCallbackWrapper, LoginCallback } from './components/LoginCallback';
+import { SamlLoginRedirect } from './components/samlAuth/LoginRedirect';
+import { SamlLoginCallbackWrapper, SamlLoginCallback } from './components/samlAuth/LoginCallback';
 
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
@@ -67,13 +69,13 @@ const App = (): JSX.Element => {
 
               {import.meta.env.VITE_FRONTEND_AUTH !== 'none' && (
                 <>
-                  <Route path="/login" element={<LoginRedirect />} />
+                  <Route path="/login" element={<SamlLoginRedirect />} />
                   <Route
                     path="/login/callback"
                     element={
-                      <LoginCallbackWrapper>
-                        <LoginCallback />
-                      </LoginCallbackWrapper>
+                      <SamlLoginCallbackWrapper>
+                        <SamlLoginCallback />
+                      </SamlLoginCallbackWrapper>
                     }
                   />
                   <Route path="/logout" element={<LogoutPage />} />
