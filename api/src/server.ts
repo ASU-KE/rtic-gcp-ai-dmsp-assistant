@@ -78,11 +78,13 @@ app.use(passport.session());
 initLocalPassport(app, userService);
 
 // Test middleware to view session and user data
-app.use((req, res, next) => {
-  console.log('Session:', req.session);
-  console.log('User:', req.user);
-  next();
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    console.log('Session:', req.session);
+    console.log('User:', req.user);
+    next();
+  });
+}
 
 // Register  unprotected routes
 app.get('/', (req: Request, res: Response) => {
