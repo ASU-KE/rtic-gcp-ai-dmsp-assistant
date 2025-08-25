@@ -23,10 +23,11 @@ import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   // If auth strategy is "none", allow access to child routes
-  {
-    import.meta.env.VITE_FRONTEND_AUTH === 'none' && children;
+  if (import.meta.env.VITE_FRONTEND_AUTH === 'none') {
+    return children;
   }
 
+  // Otherwise, check if user is authenticated
   const { state } = useAuthContext();
   return state.isAuthenticated ? children : <Navigate to="/login" />;
 };
