@@ -13,12 +13,12 @@ import { Session } from './entities/session.entity';
 import config from './config/app.config';
 import { AppDataSource } from './config/data-source.config';
 
-// import { initLocalPassport } from './middlewares/passport.local.middleware';
-import { initPassport } from './middlewares/passport.saml.middleware';
+import { initLocalPassport } from './middlewares/passport.local.middleware';
+import { initSamlPassport } from './middlewares/passport.saml.middleware';
 import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';
-// import AuthRoutes from './routes/auth.local.routes';
+import LocalAuthRoutes from './routes/auth.local.routes';
 import SamlAuthRoutes from './routes/auth.saml.routes';
 import UserRoutes from './routes/user.routes';
 import DmpRoutes from './routes/dmp.routes';
@@ -87,7 +87,12 @@ app.use(bodyParser.json());
 // Init Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
-initPassport(app, userService);
+if (config.auth.strategy === 'local') {
+  initLocalPassport(app, userService);
+}
+if (config.auth.strategy === 'saml') {
+  initSamlPassport(app, userService);
+}
 
 // Register  unprotected routes
 app.get('/api', (req: Request, res: Response) => {
@@ -99,6 +104,9 @@ app.get('/api', (req: Request, res: Response) => {
 });
 if (config.auth.strategy === 'saml') {
   app.use('/api/sso', SamlAuthRoutes());
+}
+if (config.auth.strategy === 'local') {
+  app.use('/auth', LocalAuthRoutes());
 }
 
 // Health-check for Kubernetes
