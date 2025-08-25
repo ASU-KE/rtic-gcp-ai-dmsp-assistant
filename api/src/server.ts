@@ -106,7 +106,7 @@ if (config.auth.strategy === 'saml') {
   app.use('/api/sso', SamlAuthRoutes());
 }
 if (config.auth.strategy === 'local') {
-  app.use('/auth', LocalAuthRoutes());
+  app.use('/api/auth', LocalAuthRoutes());
 }
 
 // Health-check for Kubernetes
