@@ -4,9 +4,11 @@ import { CreateUserPage, DeleteUserPage, ListUsersPage, UpdateUserPage } from '.
 
 import { HomePage } from './HomePage';
 import { Layout } from './Layout';
+import { NotFoundPage } from './NotFoundPage';
 
 export {
   HomePage,
+  NotFoundPage,
   Layout,
   LocalLoginPage,
   LocalLogoutPage,

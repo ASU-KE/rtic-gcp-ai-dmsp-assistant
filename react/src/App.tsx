@@ -4,18 +4,19 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context';
 import { useAuthContext } from './hooks';
 
-import { Layout } from './pages';
-import { HomePage } from './pages';
-import { SubmitDmpText } from './pages/dmsp';
-import { SubmitDmpId } from './pages/dmsp';
-import { ListUsersPage } from './pages/user';
-import { LoginRedirect } from './components/LoginRedirect';
-import { LogoutPage } from './pages';
-import { CreateUserPage } from './pages';
-import { DeleteUserPage } from './pages';
-import { UpdateUserPage } from './pages';
-import { NotFoundPage } from './pages/NotFoundPage';
-import { LoginCallbackWrapper, LoginCallback } from './components/LoginCallback';
+import {
+  Layout,
+  HomePage,
+  NotFoundPage,
+  LocalLoginPage,
+  LocalLogoutPage,
+  SubmitDmpText,
+  SubmitDmpId,
+  CreateUserPage,
+  DeleteUserPage,
+  ListUsersPage,
+  UpdateUserPage,
+} from './pages';
 import { SamlLoginRedirect } from './components/samlAuth/LoginRedirect';
 import { SamlLoginCallbackWrapper, SamlLoginCallback } from './components/samlAuth/LoginCallback';
 
