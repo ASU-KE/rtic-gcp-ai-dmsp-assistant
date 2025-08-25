@@ -80,7 +80,7 @@ const App = (): JSX.Element => {
                       </SamlLoginCallbackWrapper>
                     }
                   />
-                  <Route path="/logout" element={<LogoutPage />} />
+                  {/* <Route path="/logout" element={<LogoutPage />} /> */}
                 </>
               )}
 
