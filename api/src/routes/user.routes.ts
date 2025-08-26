@@ -28,7 +28,7 @@ export default (userService: UserService) => {
   router.post(
     '/create/',
     [
-      checkPermission(roles.ADMIN as Role),
+      // checkPermission(roles.ADMIN as Role),
       SchemaValidationMiddleware.verify(createUserPayload),
     ],
     userController.createUser
