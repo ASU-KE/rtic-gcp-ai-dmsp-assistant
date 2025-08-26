@@ -76,7 +76,7 @@ export const CreateUserPage = () => {
                   placeholder="Enter email"
                   onChange={handleChange}
                   required
-                  pattern="^[a-zA-Z0-9._%+-]+@asu\.edu$"
+                  // pattern="^[a-zA-Z0-9._%+-]+@asu\.edu$"
                   title="Please enter a valid ASU email (e.g., user@asu.edu)"
                 />
               </Form.Group>
