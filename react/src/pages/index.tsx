@@ -1,15 +1,17 @@
-import { LoginPage, LogoutPage } from './auth';
+import { LocalLoginPage, LocalLogoutPage } from './auth';
 import { SubmitDmpText, SubmitDmpId } from './dmsp';
 import { CreateUserPage, DeleteUserPage, ListUsersPage, UpdateUserPage } from './user';
 
 import { HomePage } from './HomePage';
 import { Layout } from './Layout';
+import { NotFoundPage } from './NotFoundPage';
 
 export {
   HomePage,
+  NotFoundPage,
   Layout,
-  LoginPage,
-  LogoutPage,
+  LocalLoginPage,
+  LocalLogoutPage,
   SubmitDmpText,
   SubmitDmpId,
   CreateUserPage,

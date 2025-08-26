@@ -11,7 +11,7 @@ import { UserService } from '../modules/users/services/UserService';
 import { plainToClass, instanceToPlain } from 'class-transformer';
 import config from '../config/app.config';
 
-export const initPassport = (app: Express, userService: UserService) => {
+export const initSamlPassport = (app: Express, userService: UserService) => {
   passport.use(
     new SamlStrategy(
       {

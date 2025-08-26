@@ -10,7 +10,7 @@ import '../../App.css';
 import eyeIcon from '../../assets/hide.png';
 import eyeOffIcon from '../../assets/unhide.png';
 
-export const LoginPage = () => {
+export const LocalLoginPage = () => {
   const [username, setUsername] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState('');

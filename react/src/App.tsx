@@ -4,27 +4,31 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context';
 import { useAuthContext } from './hooks';
 
-import { Layout } from './pages';
-import { HomePage } from './pages';
-import { SubmitDmpText } from './pages/dmsp';
-import { SubmitDmpId } from './pages/dmsp';
-import { ListUsersPage } from './pages/user';
-import { LoginRedirect } from './components/LoginRedirect';
-import { LogoutPage } from './pages';
-import { CreateUserPage } from './pages';
-import { DeleteUserPage } from './pages';
-import { UpdateUserPage } from './pages';
-import { NotFoundPage } from './pages/NotFoundPage';
-import { LoginCallbackWrapper, LoginCallback } from './components/LoginCallback';
+import {
+  Layout,
+  HomePage,
+  NotFoundPage,
+  LocalLoginPage,
+  LocalLogoutPage,
+  SubmitDmpText,
+  SubmitDmpId,
+  CreateUserPage,
+  DeleteUserPage,
+  ListUsersPage,
+  UpdateUserPage,
+} from './pages';
+import { SamlLoginRedirect } from './components/samlAuth/LoginRedirect';
+import { SamlLoginCallbackWrapper, SamlLoginCallback } from './components/samlAuth/LoginCallback';
 
 import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   // If auth strategy is "none", allow access to child routes
-  {
-    import.meta.env.VITE_FRONTEND_AUTH === 'none' && children;
+  if (import.meta.env.VITE_FRONTEND_AUTH === 'none') {
+    return children;
   }
 
+  // Otherwise, check if user is authenticated
   const { state } = useAuthContext();
   return state.isAuthenticated ? children : <Navigate to="/login" />;
 };
@@ -49,34 +53,41 @@ const App = (): JSX.Element => {
               <Route
                 path="/submit-text"
                 element={
-                  // <ProtectedRoute>
-                  <SubmitDmpText />
-                  // </ProtectedRoute>
+                  <ProtectedRoute>
+                    <SubmitDmpText />
+                  </ProtectedRoute>
                 }
               />
               {import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID && (
                 <Route
                   path="/submit-id"
                   element={
-                    // <ProtectedRoute>
-                    <SubmitDmpId />
-                    // </ProtectedRoute>
+                    <ProtectedRoute>
+                      <SubmitDmpId />
+                    </ProtectedRoute>
                   }
                 />
               )}
 
-              {import.meta.env.VITE_FRONTEND_AUTH !== 'none' && (
+              {import.meta.env.VITE_FRONTEND_AUTH === 'saml' && (
                 <>
-                  <Route path="/login" element={<LoginRedirect />} />
+                  <Route path="/login" element={<SamlLoginRedirect />} />
                   <Route
                     path="/login/callback"
                     element={
-                      <LoginCallbackWrapper>
-                        <LoginCallback />
-                      </LoginCallbackWrapper>
+                      <SamlLoginCallbackWrapper>
+                        <SamlLoginCallback />
+                      </SamlLoginCallbackWrapper>
                     }
                   />
-                  <Route path="/logout" element={<LogoutPage />} />
+                  {/* <Route path="/logout" element={<LogoutPage />} /> */}
+                </>
+              )}
+
+              {import.meta.env.VITE_FRONTEND_AUTH === 'local' && (
+                <>
+                  <Route path="/login" element={<LocalLoginPage />} />
+                  <Route path="/logout" element={<LocalLogoutPage />} />
                 </>
               )}
 

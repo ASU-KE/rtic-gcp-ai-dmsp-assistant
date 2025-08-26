@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthContext } from '../hooks';
+import { useAuthContext } from '../../hooks';
 
-export const LoginRedirect = () => {
+export const SamlLoginRedirect = () => {
   const navigate = useNavigate();
   const { state } = useAuthContext();
 

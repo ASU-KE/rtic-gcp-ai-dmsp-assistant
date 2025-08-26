@@ -1,4 +1,4 @@
-import { LoginPage } from './LoginPage';
-import { LogoutPage } from './LogoutPage';
+import { LocalLoginPage } from './LocalLoginPage';
+import { LocalLogoutPage } from './LocalLogoutPage';
 
-export { LoginPage, LogoutPage };
+export { LocalLoginPage, LocalLogoutPage };

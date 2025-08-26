@@ -6,7 +6,7 @@ import { User } from '../entities/user.entity';
 import SchemaValidationMiddleware from '../middlewares/schema-validation.middleware';
 import loginPayload from '../modules/auth/schemas/loginPayload';
 
-const authRoutes = () => {
+const localAuthRoutes = () => {
   const router: Router = Router();
 
   router.post(
@@ -40,4 +40,4 @@ const authRoutes = () => {
   return router;
 };
 
-export default authRoutes;
+export default localAuthRoutes;
