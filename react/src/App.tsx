@@ -94,9 +94,9 @@ const App = (): JSX.Element => {
               <Route
                 path="/user/create"
                 element={
-                  // <ProtectedRoute>
+                  <ProtectedRoute>
                     <CreateUserPage />
-                  // </ProtectedRoute>
+                  </ProtectedRoute>
                 }
               />
               <Route
