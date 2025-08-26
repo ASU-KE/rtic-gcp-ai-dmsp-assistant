@@ -85,10 +85,7 @@ steps:
         "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-phpmyadmin-repo/ai-dmsp-phpmyadmin-image:$BUILD_ID",
         ".",
       ]
-    env: [
-      'DOCKER_BUILDKIT=1',
-      'PMA_HOST=127.0.0.1',
-    ]
+    env: ['DOCKER_BUILDKIT=1']
 
   # Push the image to GCR
   - id: docker push ai-dmsp-phpmyadmin
