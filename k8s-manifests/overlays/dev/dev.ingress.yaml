@@ -27,7 +27,10 @@ spec:
               name: ai-dmsp-react-service
               port:
                 number: 8080
-        - path: /dbadmin
+    - host: api.dmsp.ai.dev.rtd.asu.edu
+      http:
+        paths:
+        - path: /
           pathType: Prefix
           backend:
             service:
@@ -38,3 +41,4 @@ spec:
     - secretName: ai-dmsp-tls
       hosts:
         - dmsp.ai.dev.rtd.asu.edu
+        - api.dmsp.ai.dev.rtd.asu.edu
