@@ -27,6 +27,13 @@ spec:
               name: ai-dmsp-react-service
               port:
                 number: 8080
+        - path: /dbadmin
+          pathType: Prefix
+          backend:
+            service:
+              name: ai-dmsp-phpmyadmin-service
+              port:
+                number: 8082
   tls:
     - secretName: ai-dmsp-tls
       hosts:

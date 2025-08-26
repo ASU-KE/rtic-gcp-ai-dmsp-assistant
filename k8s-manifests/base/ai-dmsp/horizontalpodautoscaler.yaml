@@ -21,3 +21,15 @@ spec:
     name: ai-dmsp-react-deployment
     apiVersion: apps/v1
   targetCPUUtilizationPercentage: 50
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ai-dmsp-phpmyadmin-hpa
+spec:
+  maxReplicas: 10
+  scaleTargetRef:
+    kind: Deployment
+    name: ai-dmsp-phpmyadmin-deployment
+    apiVersion: apps/v1
+  targetCPUUtilizationPercentage: 50

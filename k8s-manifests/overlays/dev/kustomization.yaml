@@ -19,6 +19,8 @@ replicas:
     name: ai-dmsp-api-deployment
   - count: 1
     name: ai-dmsp-react-deployment
+  - count: 1
+    name: ai-dmsp-phpmyadmin-deployment
 
 # The namespace for all resources
 namespace: dev-default
@@ -38,6 +40,9 @@ images:
     newTag: latest
   - name: ai-dmsp-react-image
     newName: ai-dmsp-react
+    newTag: latest
+  - name: ai-dmsp-phpmyadmin-image
+    newName: ai-dmsp-phpmyadmin
     newTag: latest
 
 # Generates the Kubernetes secret which holds the SSL certificate and key. The files

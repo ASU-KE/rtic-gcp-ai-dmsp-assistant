@@ -73,6 +73,40 @@ steps:
       - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
       - "GCLOUD_PROJECT=$PROJECT_ID"
 
+  # Build the phpMyAdmin image for ai-dmsp-phpmyadmin
+  - id: docker build ai-dmsp-phpmyadmin
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-f",
+        "Dockerfile.phpmyadmin",
+        "-t",
+        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-phpmyadmin-repo/ai-dmsp-phpmyadmin-image:$BUILD_ID",
+        ".",
+      ]
+    env: ['DOCKER_BUILDKIT=1']
+
+  # Push the image to GCR
+  - id: docker push ai-dmsp-phpmyadmin
+    name: "gcr.io/cloud-builders/docker"
+    args: ["push", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-phpmyadmin-repo/ai-dmsp-phpmyadmin-image:$BUILD_ID"]
+
+  # Set image tag
+  - id: update Kubernetes ai-dmsp-phpmyadmin Container Image
+    name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
+    entrypoint: bash
+    args:
+      - "-c"
+      - |
+        cd /workspace/k8s-manifests/${_KUST_BUILD_DIR}
+        kustomize edit set image ai-dmsp-phpmyadmin-image=us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-phpmyadmin-repo/ai-dmsp-phpmyadmin-image:$BUILD_ID
+    env:
+      - "APPLY=true"
+      - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
+      - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
+      - "GCLOUD_PROJECT=$PROJECT_ID"
+
   # Copy secrets and SSL certificate files from secret manager
   - id: load kubernetes secrets file
     name: gcr.io/cloud-builders/gcloud
