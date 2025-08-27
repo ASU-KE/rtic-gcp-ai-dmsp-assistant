@@ -71,7 +71,10 @@ spec:
                   key: DB_PASSWORD
                   name: ai-dmsp-secret
             - name: AUTH_STRATEGY
-              value: "saml"
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_STRATEGY
+                  name: ai-dmsp-secret
             - name: PASSWORD_SALT_ROUNDS
               value: "10"
             - name: SAML_ENTRY_POINT
@@ -155,4 +158,4 @@ spec:
           readinessProbe:
             httpGet:
               port: 80
-              path: /
+              path: /healthz
