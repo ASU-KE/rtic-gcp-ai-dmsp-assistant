@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "ingress"
 spec:
   rules:
-    - host: dmsp.dev.rtd.asu.edu
+    - host: dmsp.ai.dev.rtd.asu.edu
       http:
         paths:
         - path: /api
@@ -30,4 +30,4 @@ spec:
   tls:
     - secretName: ai-dmsp-tls
       hosts:
-        - dmsp.dev.rtd.asu.edu
+        - dmsp.ai.dev.rtd.asu.edu
