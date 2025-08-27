@@ -9,12 +9,14 @@
     "react"
   ],
   "scripts": {
+    "clean": "rm -rf node_modules api/node_modules react/node_modules",
+    "install:clean": "npm run clean && npm install",
     "commit": "cz",
     "prepare": "husky",
     "api:lock": "cd api && npm i --package-lock-only --workspaces=false",
     "react:lock": "cd react && npm i --package-lock-only --workspaces=false",
     "genlock": "concurrently \"npm run react:lock\" \"npm run api:lock\"",
-    "prerelease": "npm run genlock && git add api/package-lock.json react/package-lock.json",
+    "prerelease": "npm run install:clean && npm run genlock && git add api/package-lock.json react/package-lock.json",
     "release": "cz"
   },
   "repository": {
