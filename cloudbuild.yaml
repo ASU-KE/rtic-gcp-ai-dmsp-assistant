@@ -17,20 +17,21 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID"]
 
-  # Set image tag
-  - id: update Kubernetes ai-dmsp-api Container Image
-    name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
-    entrypoint: bash
+  - id: docker push build id
+    name: "gcr.io/cloud-builders/docker"
     args:
-      - "-c"
-      - |
-        cd /workspace/k8s-manifests/${_KUST_BUILD_DIR}
-        kustomize edit set image ai-dmsp-api-image=us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID
-    env:
-      - "APPLY=true"
-      - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
-      - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
-      - "GCLOUD_PROJECT=$PROJECT_ID"
+      [
+        "push",
+        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID"
+      ]
+
+  - id: docker push latest
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:latest"
+      ]
 
   # Build the Docker image for ai-dmsp react
   - id: docker build ai-dmsp-react
@@ -58,20 +59,21 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:$BUILD_ID"]
 
-  # Set image tag
-  - id: update Kubernetes ai-dmsp-react Container Image
-    name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
-    entrypoint: bash
+  - id: docker push build id react
+    name: "gcr.io/cloud-builders/docker"
     args:
-      - "-c"
-      - |
-        cd /workspace/k8s-manifests/${_KUST_BUILD_DIR}
-        kustomize edit set image ai-dmsp-react-image=us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:$BUILD_ID
-    env:
-      - "APPLY=true"
-      - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
-      - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
-      - "GCLOUD_PROJECT=$PROJECT_ID"
+      [
+        "push",
+        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:$BUILD_ID"
+      ]
+
+  - id: docker push latest react
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:latest"
+      ]
 
   # Copy secrets and SSL certificate files from secret manager
   - id: load kubernetes secrets file
@@ -85,15 +87,43 @@ steps:
         gcloud secrets versions access latest --secret=${_SSL_KEY_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/tls.key
         gcloud secrets versions access latest --secret=${_KUST_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets/kustomization.yaml
 
-  # Deploy to the cluster
-  - id: deploy ai-dmsp
-    name: "gcr.io/$PROJECT_ID/kustomize:${_KUSTOMIZE_VERSION}"
-    dir: "k8s-manifests"
+  - id: deploy azalz
+    name: "gcr.io/cloud-builders/kubectl"
     args:
-      - "build"
-      - "${_KUST_BUILD_DIR}"
+      - "apply"
+      - "-k"
+      - "k8s-manifests/${_KUST_BUILD_DIR}"
     env:
-      - "APPLY=true"
+      - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
+      - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
+      - "GCLOUD_PROJECT=$PROJECT_ID"
+
+  - id: rollout azalz
+    name: "gcr.io/cloud-builders/kubectl"
+    args:
+      [
+        "rollout",
+        "restart",
+        "deployment/${_ENVIRONMENT}-ai-dmsp-api-deployment",
+        "-n",
+        "${_ENVIRONMENT}-default"
+      ]
+    env:
+      - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
+      - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
+      - "GCLOUD_PROJECT=$PROJECT_ID"
+
+  - id: rollout azalz React
+    name: "gcr.io/cloud-builders/kubectl"
+    args:
+      [
+        "rollout",
+        "restart",
+        "deployment/${_ENVIRONMENT}-ai-dmsp-react-deployment",
+        "-n",
+        "${_ENVIRONMENT}-default"
+      ]
+    env:
       - "CLOUDSDK_COMPUTE_ZONE=${_GKE_LOCATION}"
       - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
       - "GCLOUD_PROJECT=$PROJECT_ID"
