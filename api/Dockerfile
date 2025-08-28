@@ -55,7 +55,7 @@ COPY --from=builder /code/dist /code/dist
 # COPY --from=builder /code/public /code/public
 
 ENV NODE_ENV=production
-ARG PORT=3001
+ARG PORT=8080
 ENV PORT=$PORT
 EXPOSE $PORT
 
