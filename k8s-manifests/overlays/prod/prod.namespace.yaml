@@ -1,0 +1,4 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: default # Keep in mind that any prefix or suffix you define in the Kustomization will be applied to this name.

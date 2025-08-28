@@ -1,0 +1,9 @@
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: ai-dmsp-frontend-config
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: MOVED_PERMANENTLY_DEFAULT # 301. https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-features#https_redirect
+  # sslPolicy: example-ssl-policy-name # https://cloud.google.com/load-balancing/docs/use-ssl-policies#creating_ssl_policies

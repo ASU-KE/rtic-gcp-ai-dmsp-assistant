@@ -1,0 +1,161 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-dmsp-api-deployment
+  labels:
+    app.kubernetes.io/name: ai-dmsp-api
+    app.kubernetes.io/component: web-api-deployment
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ai-dmsp-api
+      app.kubernetes.io/component: web-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ai-dmsp-api
+        app.kubernetes.io/component: web-api
+    spec:
+      serviceAccountName: ai-dmsp
+      containers:
+        - name: cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.17
+          env:
+          - name: CLOUDSQL_INSTANCE_NAME
+            valueFrom:
+              secretKeyRef:
+                key: CLOUDSQL_INSTANCE_NAME
+                name: ai-dmsp-secret
+          securityContext:
+            runAsNonRoot: true
+          command:
+          - "/cloud_sql_proxy"
+          - "-ip_address_types=PRIVATE"
+          - "-instances=$(CLOUDSQL_INSTANCE_NAME)=tcp:3306"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+        - name: api-web
+          image: ai-dmsp-api-image
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: ai-dmsp-secret
+          env:
+            - name: API_PORT
+              value: "3001"
+            - name: ROLLBAR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: ROLLBAR_TOKEN
+                  name: ai-dmsp-secret
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: DB_HOST
+                  name: ai-dmsp-secret
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: DB_NAME
+                  name: ai-dmsp-secret
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: DB_USER
+                  name: ai-dmsp-secret
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DB_PASSWORD
+                  name: ai-dmsp-secret
+            - name: AUTH_STRATEGY
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_STRATEGY
+                  name: ai-dmsp-secret
+            - name: PASSWORD_SALT_ROUNDS
+              value: "10"
+            - name: SAML_ENTRY_POINT
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_ENTRY_POINT
+                  name: ai-dmsp-secret
+            - name: SAML_CALLBACK_URL
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_CALLBACK_URL
+                  name: ai-dmsp-secret
+            - name: SAML_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_ISSUER
+                  name: ai-dmsp-secret
+            - name: SAML_CERT
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_CERT
+                  name: ai-dmsp-secret
+            - name: DMPTOOL_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: DMPTOOL_CLIENT_ID
+                  name: ai-dmsp-secret
+            - name: DMPTOOL_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: DMPTOOL_CLIENT_SECRET
+                  name: ai-dmsp-secret
+            - name: LLM_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: LLM_ACCESS_SECRET
+                  name: ai-dmsp-secret
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 3001
+          readinessProbe:
+            httpGet:
+              port: 3001
+              path: /api/healthz
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-dmsp-react-deployment
+  labels:
+    app.kubernetes.io/name: ai-dmsp-react
+    app.kubernetes.io/component: web-react-deployment
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ai-dmsp-react
+      app.kubernetes.io/component: web-react
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ai-dmsp-react
+        app.kubernetes.io/component: web-react
+    spec:
+      serviceAccountName: ai-dmsp
+      containers:
+        - name: react-web
+          image: ai-dmsp-react-image
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              port: 80
+              path: /healthz
