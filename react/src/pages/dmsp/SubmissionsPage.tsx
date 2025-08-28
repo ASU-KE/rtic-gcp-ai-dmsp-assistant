@@ -18,7 +18,7 @@ export const SubmissionsPage = () => {
       try {
         const res = await fetch('/api/submissions');
         const result = await res.json();
-        console.log("Fetched submissions:", result);
+        console.log('Fetched submissions:', result);
         setSubmissions(result.data.submissions || []);
       } catch (err) {
         console.error('Error fetching submissions:', err);
@@ -37,9 +37,12 @@ export const SubmissionsPage = () => {
         <p className="text-muted">List of submitted DMSPs with AI analysis</p>
 
         <div className="mb-3">
-          <Button variant="primary" onClick={() => {
-            window.open("/api/submissions/export", "_blank");
-          }} >
+          <Button
+            variant="primary"
+            onClick={() => {
+              window.open('/api/submissions/export', '_blank');
+            }}
+          >
             Download Excel Report
           </Button>
         </div>

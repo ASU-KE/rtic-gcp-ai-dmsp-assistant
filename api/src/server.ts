@@ -120,7 +120,11 @@ app.get('/api/healthz', (req, res) => {
 
 // Protected routes
 app.use('/api/user', isAuthenticated, UserRoutes(userService));
-app.use('/api/submissions', isAuthenticated, SubmissionRoutes(submissionService));
+app.use(
+  '/api/submissions',
+  isAuthenticated,
+  SubmissionRoutes(submissionService)
+);
 app.use('/api/dmp', isAuthenticated, DmpRoutes);
 
 // 404 handler

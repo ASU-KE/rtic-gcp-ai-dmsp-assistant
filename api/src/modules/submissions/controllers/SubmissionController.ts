@@ -3,8 +3,8 @@ import { Request, Response } from 'express';
 
 import { SubmissionService } from '../services/SubmissionService';
 import { Submission } from '../../../entities/submission.entity';
-import { utils, write } from "xlsx";
-import { format } from "date-fns";
+import { utils, write } from 'xlsx';
+import { format } from 'date-fns';
 
 export default class SubmissionController {
   private submissionService: SubmissionService;
@@ -18,7 +18,9 @@ export default class SubmissionController {
       .findAllSubmissions()
       .then((submissions: Submission[]) => {
         const submissionDtos = submissions.map((submission) =>
-          plainToClass(Submission, submission, { excludeExtraneousValues: true })
+          plainToClass(Submission, submission, {
+            excludeExtraneousValues: true,
+          })
         );
         res.status(200).json({
           status: true,
@@ -41,32 +43,31 @@ export default class SubmissionController {
 
       // Convert to plain objects (DTOs)
       const submissionDtos = submissions.map((submission) => {
-        const dto = plainToClass(Submission, submission, { excludeExtraneousValues: true })
+        const dto = plainToClass(Submission, submission, {
+          excludeExtraneousValues: true,
+        });
         return {
           ...dto,
-          submittedAt: format(new Date(dto.submittedAt), "yyyy-MM-dd HH:mm:ss")
+          submittedAt: format(new Date(dto.submittedAt), 'yyyy-MM-dd HH:mm:ss'),
         };
-    });
+      });
 
       // Convert JSON → worksheet
       const worksheet = utils.json_to_sheet(submissionDtos);
       const workbook = utils.book_new();
-      utils.book_append_sheet(workbook, worksheet, "Submissions");
+      utils.book_append_sheet(workbook, worksheet, 'Submissions');
 
       // Generate buffer
-      const buffer = write(workbook, { type: "buffer", bookType: "xlsx" });
+      const buffer = write(workbook, { type: 'buffer', bookType: 'xlsx' });
 
-      const timestamp = format(new Date(), "yyyy-MM-dd_HH-mm-ss");
+      const timestamp = format(new Date(), 'yyyy-MM-dd_HH-mm-ss');
       const filename = `submissions_${timestamp}.xlsx`;
 
       // Send as file response
+      res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
       res.setHeader(
-        "Content-Disposition",
-        `attachment; filename=${filename}`,
-      );
-      res.setHeader(
-        "Content-Type",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       );
       res.send(buffer);
     } catch (err) {

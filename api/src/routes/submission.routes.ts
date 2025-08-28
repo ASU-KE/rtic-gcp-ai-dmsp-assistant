@@ -32,4 +32,3 @@ export default (submissionService: SubmissionService) => {
 
   return router;
 };
-
