@@ -16,6 +16,7 @@ import {
   DeleteUserPage,
   ListUsersPage,
   UpdateUserPage,
+  SubmissionsPage,
 } from './pages';
 import { SamlLoginRedirect } from './components/samlAuth/LoginRedirect';
 import { SamlLoginCallbackWrapper, SamlLoginCallback } from './components/samlAuth/LoginCallback';
@@ -55,6 +56,14 @@ const App = (): JSX.Element => {
                 element={
                   <ProtectedRoute>
                     <SubmitDmpText />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/submissions"
+                element={
+                  <ProtectedRoute>
+                    <SubmissionsPage />
                   </ProtectedRoute>
                 }
               />

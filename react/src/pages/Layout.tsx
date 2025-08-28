@@ -24,6 +24,11 @@ let primaryNavTree: NavTreeProps[] = [
     type: 'icon-home',
     class: 'test-class',
   },
+  {
+    id: 2,
+    href: '/submissions',
+    text: 'View Submissions',
+  },
 ];
 
 if (enableDmpIdMenu) {
