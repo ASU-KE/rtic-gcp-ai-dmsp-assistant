@@ -41,7 +41,7 @@ steps:
       'DOCKER_BUILDKIT=1',
       'APP_BACKEND_PORT=443',
       'APP_BACKEND_PROTOCOL=https',
-      'APP_BACKEND_DOMAIN=dmsp.ai.dev.rtd.asu.edu',
+      'APP_BACKEND_DOMAIN=dmsp.local.rtd.asu.edu',
       'APP_BACKEND_PATH_PREFIX=api',
       'APP_FRONTEND_AUTH=local',
       'APP_FRONTEND_ENABLE_DMP_ID=false',
