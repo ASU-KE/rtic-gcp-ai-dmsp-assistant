@@ -5,9 +5,9 @@ steps:
     args:
       [
         "build",
-        "-t",
-        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID",
-        ".",
+        "-t", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID",
+        "-t", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:latest",
+        "."
       ]
     env: ['DOCKER_BUILDKIT=1']
     dir: 'api'
