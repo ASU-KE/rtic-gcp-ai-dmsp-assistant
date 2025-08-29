@@ -2,20 +2,18 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { Col, Row, Button, Form, Container, Accordion } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/legacy/build/pdf';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
 import Markdown from 'react-markdown';
 import useWebSocket from 'react-use-websocket';
+
+import pdfToText from 'react-pdftotext';
 import html2pdf from 'html2pdf.js';
 import mammoth from 'mammoth';
-import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
-import 'github-markdown-css/github-markdown-light.css';
 
+import 'github-markdown-css/github-markdown-light.css';
 import { DownloadIcon, CheckIcon, CopyIcon } from '../../components';
 import '../../App.css';
-
-GlobalWorkerOptions.workerSrc = workerSrc;
 
 type FormValues = {
   dmpText: string;
@@ -168,28 +166,21 @@ export function SubmitDmpText() {
       let text = '';
 
       if (fileType === 'application/pdf') {
-        try {
-          const arrayBuffer = await file.arrayBuffer();
-          const pdf = await getDocument({ data: arrayBuffer }).promise;
+        pdfToText(file)
+          .then((text) => {
+            setValue('dmpText', text);
+          })
+          .catch((error) => {
+            console.error('Error reading PDF:', error);
+            setFileError('Failed to extract text from PDF. Please try another file.');
+          });
 
-          let content = '';
-          for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            const pageText = textContent.items.map((item: any) => item.str).join(' ');
-            content += pageText + '\n';
-          }
-
-          setValue('dmpText', content);
-        } catch (error) {
-          console.error('Error reading PDF:', error);
-          setFileError('Failed to extract text from PDF. Please try another file.');
-        }
       } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
         const arrayBuffer = await file.arrayBuffer();
         const result = await mammoth.extractRawText({ arrayBuffer });
         text = result.value;
         setValue('dmpText', text);
+
       } else if (fileType === 'text/plain') {
         const reader = new FileReader();
         reader.onload = () => {
@@ -197,6 +188,7 @@ export function SubmitDmpText() {
           setValue('dmpText', content);
         };
         reader.readAsText(file);
+
       } else {
         setFileError('Unsupported file type. Please upload PDF, DOCX, or TXT.');
       }
