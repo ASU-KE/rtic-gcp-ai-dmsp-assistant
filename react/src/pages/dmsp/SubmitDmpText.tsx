@@ -168,7 +168,6 @@ export function SubmitDmpText() {
       if (fileType === 'application/pdf') {
         pdfToText(file)
           .then((text) => {
-            console.log(text);
             setValue('dmpText', text);
           })
           .catch((error) => {
