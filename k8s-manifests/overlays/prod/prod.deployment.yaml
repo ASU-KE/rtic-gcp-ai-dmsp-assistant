@@ -124,10 +124,10 @@ spec:
               memory: "512Mi"
               cpu: "500m"
           ports:
-            - containerPort: 8080
+            - containerPort: 3001
           readinessProbe:
             httpGet:
-              port: 8080
+              port: 3001
               path: /api/healthz
 ---
 apiVersion: apps/v1

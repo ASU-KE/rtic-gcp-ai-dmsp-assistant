@@ -2,14 +2,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 # The YAML that is part of this overlay
 resources:
-  - dev.deployment.yaml
+  - prod.deployment.yaml
   # Bases. Base directories must have their own kustomization.yaml file with resources listed.
   - ../../base/ai-dmsp
   # Overlay resources
-  - dev.namespace.yaml
-  - dev.ingress.yaml
-  - dev.frontendconfig.yaml
-  - dev.backendconfig.yaml
+  - prod.namespace.yaml
+  - prod.ingress.yaml
+  - prod.frontendconfig.yaml
+  - prod.backendconfig.yaml
   # Secrets folder. Contents are copied in from Google Secret Manager during build.
   - ./secrets
 
@@ -21,23 +21,23 @@ replicas:
     name: ai-dmsp-react-deployment
 
 # The namespace for all resources
-namespace: dev-default
+namespace: prod-default
 
 # This will be prefixed to all resource names
-namePrefix: dev-
+namePrefix: prod-
 
 # These labels will be applied to all resources.
 # https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
 commonLabels:
-  app.kubernetes.io/instance: ai-dmsp-dev
+  app.kubernetes.io/instance: ai-dmsp-prod
   app.kubernetes.io/part-of: ai-dmsp-app
 
 images:
   - name: ai-dmsp-api-image
-    newName: us-west4-docker.pkg.dev/asu-ke-rto-web-svcs/ai-dmsp-api-repo/ai-dmsp-api-image
+    newName: ai-dmsp-api
     newTag: latest
   - name: ai-dmsp-react-image
-    newName: us-west4-docker.pkg.dev/asu-ke-rto-web-svcs/ai-dmsp-react-repo/ai-dmsp-react-image
+    newName: ai-dmsp-react
     newTag: latest
 
 # Generates the Kubernetes secret which holds the SSL certificate and key. The files

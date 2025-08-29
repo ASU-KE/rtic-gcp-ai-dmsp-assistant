@@ -18,8 +18,10 @@ import { initSamlPassport } from './middlewares/passport.saml.middleware';
 import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';
+import { SubmissionService } from './modules/submissions/services/SubmissionService';
 import LocalAuthRoutes from './routes/auth.local.routes';
 import SamlAuthRoutes from './routes/auth.saml.routes';
+import SubmissionRoutes from './routes/submission.routes';
 import UserRoutes from './routes/user.routes';
 import DmpRoutes from './routes/dmp.routes';
 
@@ -38,8 +40,9 @@ AppDataSource.initialize()
     console.error('Error during TypeORM initialization:', err);
   });
 
-// Initialize new userService with TypeORM data source to inject into route and authproviders
+// Initialize new userService and submissionService with TypeORM data source to inject into route and authproviders
 const userService = new UserService(AppDataSource);
+const submissionService = new SubmissionService(AppDataSource);
 
 const app = express();
 app.use(express.json());
@@ -52,7 +55,7 @@ app.use(
       'http://localhost:3000',
       'https://dmsp.local.asu.edu',
       'https://dmsp.dev.rtd.asu.edu',
-      'https://dmsp.ai.dev.rtd.asu.edu',
+      'https://dmsp.local.rtd.asu.edu',
     ],
     credentials: true, // allow session cookie from browser to pass through
   })
@@ -117,6 +120,11 @@ app.get('/api/healthz', (req, res) => {
 
 // Protected routes
 app.use('/api/user', isAuthenticated, UserRoutes(userService));
+app.use(
+  '/api/submissions',
+  isAuthenticated,
+  SubmissionRoutes(submissionService)
+);
 app.use('/api/dmp', isAuthenticated, DmpRoutes);
 
 // 404 handler

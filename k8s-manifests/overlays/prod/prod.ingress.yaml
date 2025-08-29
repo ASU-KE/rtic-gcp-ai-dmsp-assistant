@@ -4,13 +4,13 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "gce"
     networking.gke.io/v1beta1.FrontendConfig: "$(INGRESS_FRONTEND_CONFIG_NAME)"
-    kubernetes.io/ingress.global-static-ip-name: "dev-ai-dmsp"
+    kubernetes.io/ingress.global-static-ip-name: "prod-ai-dmsp"
   name: ai-dmsp-ingress
   labels:
     app.kubernetes.io/component: "ingress"
 spec:
   rules:
-    - host: dmsp.local.rtd.asu.edu
+    - host: dmsp.ai.rto.asu.edu
       http:
         paths:
         - path: /api
@@ -19,15 +19,15 @@ spec:
             service:
               name: ai-dmsp-api-service
               port:
-                number: 8080
+                number: 8081
         - path: /
           pathType: Prefix
           backend:
             service:
               name: ai-dmsp-react-service
               port:
-                number: 8081
+                number: 8080
   tls:
     - secretName: ai-dmsp-tls
       hosts:
-        - dmsp.local.rtd.asu.edu
+        - dmsp.ai.rto.asu.edu

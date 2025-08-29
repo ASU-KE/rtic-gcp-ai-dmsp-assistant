@@ -109,7 +109,7 @@ const config: Config = {
   // if you're not using docker compose for local development, this will default to 8080
   // to prevent non-root permission problems with 80. Dockerfile is set to make this 80
   // because containers don't have that issue :)
-  port: process.env.API_PORT ?? '3001',
+  port: process.env.PORT ?? '8080',
   rollbarToken: process.env.ROLLBAR_TOKEN!,
   dmptoolClientId: process.env.DMPTOOL_CLIENT_ID!,
   dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET!,
