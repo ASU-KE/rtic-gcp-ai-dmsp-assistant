@@ -1,5 +1,5 @@
 import { LocalLoginPage, LocalLogoutPage } from './auth';
-import { SubmitDmpText, SubmitDmpId } from './dmsp';
+import { SubmitDmpText, SubmitDmpId, SubmissionsPage } from './dmsp';
 import { CreateUserPage, DeleteUserPage, ListUsersPage, UpdateUserPage } from './user';
 
 import { HomePage } from './HomePage';
@@ -18,4 +18,5 @@ export {
   DeleteUserPage,
   ListUsersPage,
   UpdateUserPage,
+  SubmissionsPage,
 };

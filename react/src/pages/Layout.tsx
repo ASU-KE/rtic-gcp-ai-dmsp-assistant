@@ -1,6 +1,8 @@
 import { Container } from 'react-bootstrap';
 import { ASUHeader, ASUFooter, HeaderProps, Button, Logo, NavTreeProps } from '@asu/component-header-footer';
 
+import { getInitialState } from '../context/state';
+
 import vertAsuLogo from '../assets/arizona-state-university-logo-vertical.png';
 import horizAsuLogo from '../assets/arizona-state-university-logo.png';
 import { Outlet } from 'react-router-dom';
@@ -12,6 +14,7 @@ export interface TsHeaderProps extends Omit<HeaderProps, 'partnerLogo'> {
 }
 // const userInfo = getUserInfo() ?? { role: '', username: '' };
 // const { role, username } = userInfo;
+const { user } = getInitialState();
 
 const isAuthEnabled = `${import.meta.env.VITE_FRONTEND_AUTH}` === 'local';
 const enableDmpIdMenu = `${import.meta.env.VITE_FRONTEND_ENABLE_DMP_ID}` === 'true';
@@ -25,6 +28,14 @@ let primaryNavTree: NavTreeProps[] = [
     class: 'test-class',
   },
 ];
+
+if (user && user.role === 'admin') {
+  primaryNavTree.push({
+    id: 2,
+    href: '/submissions',
+    text: 'View Submissions',
+  });
+}
 
 if (enableDmpIdMenu) {
   primaryNavTree.push({
@@ -52,7 +63,7 @@ const header: TsHeaderProps = {
   logoutLink: '/logout',
   loginLink: '#',
   // userName: isAuthEnabled ? username : '',
-  userName: 'TEMP',
+  userName: user ? user.username : '',
   navTree,
   mobileNavTree: navTree,
   logo: {
