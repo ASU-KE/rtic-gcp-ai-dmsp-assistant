@@ -29,7 +29,7 @@ let primaryNavTree: NavTreeProps[] = [
   },
 ];
 
-if (user && user.role !== 'user') {
+if (user && user.role === 'admin') {
   primaryNavTree.push({
     id: 2,
     href: '/submissions',
