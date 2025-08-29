@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Table, Button, Row, Col, Spinner } from 'react-bootstrap';
+import { format, parseISO } from 'date-fns';
+import DataTable, { TableColumn } from 'react-data-table-component';
+import { Row, Col, Spinner, Button } from 'react-bootstrap';
 
 type Submission = {
   id: number;
@@ -9,16 +11,30 @@ type Submission = {
   submittedAt: string;
 };
 
+const ExpandableCell = ({ text, expanded, lines = 3 }: { text: string; expanded: boolean; lines?: number }) => (
+  <div
+    style={{
+      display: '-webkit-box',
+      WebkitLineClamp: expanded ? 'none' : lines,
+      WebkitBoxOrient: 'vertical',
+      overflow: 'hidden',
+      whiteSpace: 'normal',
+    }}
+  >
+    {text}
+  </div>
+);
+
 export const SubmissionsPage = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
         const res = await fetch('/api/submissions');
         const result = await res.json();
-        console.log('Fetched submissions:', result);
         setSubmissions(result.data.submissions || []);
       } catch (err) {
         console.error('Error fetching submissions:', err);
@@ -26,23 +42,51 @@ export const SubmissionsPage = () => {
         setLoading(false);
       }
     };
-
     fetchSubmissions();
   }, []);
+
+  const toggleRow = (rowId: number) => {
+    const newSet = new Set(expandedRows);
+    if (newSet.has(rowId)) newSet.delete(rowId);
+    else newSet.add(rowId);
+    setExpandedRows(newSet);
+  };
+
+  const columns: TableColumn<Submission>[] = [
+    {
+      name: 'Submitted At',
+      selector: (row) => format(parseISO(row.submittedAt), 'yyyy-MM-dd HH:mm:ss'),
+      sortable: true,
+      wrap: false,
+    },
+    {
+      name: 'Username',
+      selector: (row) => row.username,
+      sortable: true,
+      wrap: false,
+    },
+    {
+      name: 'DMSP Text',
+      cell: (row) => <ExpandableCell text={row.dmspText} expanded={expandedRows.has(row.id)} />,
+      sortable: false,
+      wrap: true,
+    },
+    {
+      name: 'AI Response',
+      cell: (row) => <ExpandableCell text={row.llmResponse} expanded={expandedRows.has(row.id)} />,
+      sortable: false,
+      wrap: true,
+    },
+  ];
 
   return (
     <Row className="mt-4">
       <Col md={12}>
         <h2>DMSP Submissions Report</h2>
-        <p className="text-muted">List of submitted DMSPs with AI analysis</p>
+        <p className="text-muted">List of submitted Data Management Plans with AI-generated analysis.</p>
 
         <div className="mb-3">
-          <Button
-            variant="primary"
-            onClick={() => {
-              window.open('/api/submissions/export', '_blank');
-            }}
-          >
+          <Button variant="primary" onClick={() => window.open('/api/submissions/export', '_blank')}>
             Download Excel Report
           </Button>
         </div>
@@ -50,32 +94,30 @@ export const SubmissionsPage = () => {
         {loading ? (
           <Spinner animation="border" />
         ) : (
-          <Table striped bordered hover responsive>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>DMSP Text</th>
-                <th>AI Response</th>
-                <th>Submitted At</th>
-              </tr>
-            </thead>
-            <tbody>
-              {submissions.map((sub) => (
-                <tr key={sub.id}>
-                  <td>{sub.id}</td>
-                  <td>{sub.username}</td>
-                  <td style={{ maxWidth: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {sub.dmspText}
-                  </td>
-                  <td style={{ maxWidth: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {sub.llmResponse}
-                  </td>
-                  <td>{sub.submittedAt}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          <DataTable
+            columns={columns}
+            data={submissions}
+            pagination
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[10, 25, 50, 100]}
+            highlightOnHover
+            responsive
+            defaultSortFieldId="submittedAt"
+            defaultSortAsc={false}
+            onRowClicked={(row) => toggleRow(row.id)}
+            customStyles={{
+              rows: {
+                style: {
+                  cursor: 'pointer',
+                },
+              },
+              headCells: {
+                style: {
+                  fontSize: '14px',
+                },
+              },
+            }}
+          />
         )}
       </Col>
     </Row>

@@ -47,8 +47,10 @@ export default class SubmissionController {
           excludeExtraneousValues: true,
         });
         return {
-          ...dto,
           submittedAt: format(new Date(dto.submittedAt), 'yyyy-MM-dd HH:mm:ss'),
+          username: dto.username,
+          dmspText: dto.dmspText,
+          llmResponse: dto.llmResponse,
         };
       });
 
