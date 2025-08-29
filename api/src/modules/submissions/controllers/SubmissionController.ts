@@ -22,6 +22,7 @@ export default class SubmissionController {
             excludeExtraneousValues: true,
           })
         );
+
         res.status(200).json({
           status: true,
           data: { submissions: submissionDtos },
@@ -46,6 +47,7 @@ export default class SubmissionController {
         const dto = plainToClass(Submission, submission, {
           excludeExtraneousValues: true,
         });
+
         return {
           submittedAt: format(new Date(dto.submittedAt), 'yyyy-MM-dd HH:mm:ss'),
           username: dto.username,
