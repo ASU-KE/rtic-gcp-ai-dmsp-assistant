@@ -5,10 +5,11 @@ interface Config {
     strategy: string;
     passwordSaltRounds: number;
     saml: {
-      entryPoint: string;
-      callbackUrl: string;
-      issuer: string;
-      cert: string;
+      spPrivateKey: string; // Service Provider private key for signing requests
+      entryPoint: string; // Identity Provider SSO URL
+      callbackUrl: string; // Service Provider ACS URL
+      logoutCallbackUrl: string; // Service Provider SLO URL
+      issuer: string; // Service Provider identification string
     };
   };
   database: {
@@ -93,10 +94,11 @@ const config: Config = {
     strategy: process.env.AUTH_STRATEGY ?? 'local',
     passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
     saml: {
+      spPrivateKey: Buffer.from(process.env.SAML_SP_PRIVATEKEY!, 'base64').toString('utf8'), // Base64 decode the private key
       entryPoint: process.env.SAML_ENTRY_POINT!,
       callbackUrl: process.env.SAML_CALLBACK_URL!,
+      logoutCallbackUrl: process.env.SAML_LOGOUT_CALLBACK_URL!,
       issuer: process.env.SAML_ISSUER!,
-      cert: Buffer.from(process.env.SAML_CERT!, 'base64').toString('utf8'), // Base64 decode the certificate
     },
   },
   database: {
@@ -106,10 +108,7 @@ const config: Config = {
     user: process.env.DB_USER!,
     password: process.env.DB_PASSWORD!,
   },
-  // if you're not using docker compose for local development, this will default to 8080
-  // to prevent non-root permission problems with 80. Dockerfile is set to make this 80
-  // because containers don't have that issue :)
-  port: process.env.PORT ?? '8080',
+  port: process.env.PORT!,
   rollbarToken: process.env.ROLLBAR_TOKEN!,
   dmptoolClientId: process.env.DMPTOOL_CLIENT_ID!,
   dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET!,
