@@ -5,6 +5,9 @@ import {
   Profile,
   VerifiedCallback,
 } from '@node-saml/passport-saml';
+import { MetadataReader, toPassportConfig } from 'passport-saml-metadata';
+import fs from 'fs';
+import path from 'path';
 
 import { User } from '../entities/user.entity';
 import { UserService } from '../modules/users/services/UserService';
@@ -12,16 +15,27 @@ import { plainToClass, instanceToPlain } from 'class-transformer';
 import config from '../config/app.config';
 
 export const initSamlPassport = (app: Express, userService: UserService) => {
+
+  // Read and parse the SAML IdP metadata XML file
+  const reader = new MetadataReader(
+    fs.readFileSync(path.join(__dirname, '../config/saml-idp-metadata.xml'), 'utf8')
+  );
+  const { entryPoint, logoutUrl, idpCert: cert } = toPassportConfig(reader);
+
+  const spConfig = {
+      callbackUrl: config.auth.saml.callbackUrl,
+      logoutCallbackUrl: config.auth.saml.logoutCallbackUrl,
+      issuer: config.auth.saml.issuer,
+      privateKey: process.env.SAML_SP_PRIVATEKEY,
+  };
+
   passport.use(
     new SamlStrategy(
       {
-        path: '/api/sso/login/callback',
-        // callbackUrl: config.auth.saml.callbackUrl,
-        entryPoint: config.auth.saml.entryPoint,
-        issuer: config.auth.saml.issuer,
-        cert: config.auth.saml.cert,
-        // wantAssertionsSigned: true,
-        wantAuthnResponseSigned: false, // test provider doesn't sign the response payload
+        entryPoint,
+        logoutUrl,
+        cert,
+        ...spConfig,
       },
       (profile: Profile | null | undefined, done: VerifiedCallback) => {
         // for signon
