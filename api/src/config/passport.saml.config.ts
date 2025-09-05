@@ -14,6 +14,7 @@ import { plainToClass, instanceToPlain } from 'class-transformer';
 import config from './app.config';
 
 export const getSamlStrategy = (userService: UserService) => {
+  console.log('Parsing SAML IdP metadata from saml-idp-metadata.xml');
   // Read and parse the SAML IdP metadata XML file
   const reader = new MetadataReader(
     fs.readFileSync(path.join(__dirname, '../config/saml-idp-metadata.xml'), 'utf8')

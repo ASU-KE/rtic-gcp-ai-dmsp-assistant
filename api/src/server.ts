@@ -95,6 +95,7 @@ if (config.auth.strategy === 'local') {
   initLocalPassport(app, userService);
 }
 if (config.auth.strategy === 'saml') {
+  console.log('Initializing SAML authentication strategy');
   const samlStrategy = getSamlStrategy(userService);
   initSamlPassport(samlStrategy, userService);
   app.use('/api/sso', SamlAuthRoutes(samlStrategy));
