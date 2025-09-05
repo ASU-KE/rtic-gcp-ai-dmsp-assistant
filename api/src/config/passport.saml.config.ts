@@ -20,7 +20,6 @@ export const getSamlStrategy = (userService: UserService) => {
   console.log('SAML IdP Configuration:');
   console.log(`Entry Point: ${entryPoint}`);
   console.log(`Logout URL: ${logoutUrl}`);
-  console.log(`IdP Public Certificate: ${cert}`);
 
   const spConfig = {
       callbackUrl: config.auth.saml.callbackUrl,
