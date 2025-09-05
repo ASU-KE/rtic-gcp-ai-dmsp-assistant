@@ -6,6 +6,7 @@ interface Config {
     passwordSaltRounds: number;
     saml: {
       idpMetadataFile: string; // Base64-encoded contents of IdP metadata XML file
+      spPublicCert: string; // Service Provider public certificate for verifying responses
       spPrivateKey: string; // Service Provider private key for signing requests
       callbackUrl: string; // Service Provider ACS URL
       logoutCallbackUrl: string; // Service Provider SLO URL
@@ -98,7 +99,14 @@ const config: Config = {
         process.env.SAML_IDP_METADATA_FILE!,
         'base64'
       ).toString('utf8'), // Base64 decode the metadata XML
-      spPrivateKey: Buffer.from(process.env.SAML_SP_PRIVATEKEY!, 'base64').toString('utf8'), // Base64 decode the private key
+      spPublicCert: Buffer.from(
+        process.env.SAML_SP_PUBLIC_CERT!,
+        'base64'
+      ).toString('utf8'), // Base64 decode the SP public cert
+      spPrivateKey: Buffer.from(
+        process.env.SAML_SP_PRIVATE_KEY!,
+        'base64'
+      ).toString('utf8'), // Base64 decode the SP private key
       callbackUrl: process.env.SAML_CALLBACK_URL!,
       logoutCallbackUrl: process.env.SAML_LOGOUT_CALLBACK_URL!,
       issuer: process.env.SAML_ISSUER!,
