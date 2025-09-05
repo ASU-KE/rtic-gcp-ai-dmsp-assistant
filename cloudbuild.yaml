@@ -82,7 +82,7 @@ steps:
         gcloud secrets versions access latest --secret=${_SSL_KEY_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/tls.key
         gcloud secrets versions access latest --secret=${_KUST_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets/kustomization.yaml
 
-  - id: deploy azalz
+  - id: deploy to GKE
     name: "gcr.io/cloud-builders/kubectl"
     args:
       - "apply"
@@ -93,7 +93,7 @@ steps:
       - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
       - "GCLOUD_PROJECT=$PROJECT_ID"
 
-  - id: rollout azalz
+  - id: rollout api
     name: "gcr.io/cloud-builders/kubectl"
     args:
       [
@@ -108,7 +108,7 @@ steps:
       - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
       - "GCLOUD_PROJECT=$PROJECT_ID"
 
-  - id: rollout azalz React
+  - id: rollout React
     name: "gcr.io/cloud-builders/kubectl"
     args:
       [
