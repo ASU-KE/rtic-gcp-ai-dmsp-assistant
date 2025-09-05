@@ -106,7 +106,7 @@ const config: Config = {
     user: process.env.DB_USER!,
     password: process.env.DB_PASSWORD!,
   },
-  port: process.env.PORT!,
+  port: process.env.PORT ?? '8080',
   rollbarToken: process.env.ROLLBAR_TOKEN!,
   dmptoolClientId: process.env.DMPTOOL_CLIENT_ID!,
   dmptoolClientSecret: process.env.DMPTOOL_CLIENT_SECRET!,
