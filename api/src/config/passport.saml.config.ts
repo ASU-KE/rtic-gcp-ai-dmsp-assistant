@@ -29,6 +29,7 @@ export const getSamlStrategy = (userService: UserService) => {
       privateKey: config.auth.saml.spPrivateKey,
       decryptionPvk: config.auth.saml.spPrivateKey,
   };
+
   console.log('SAML SP Configuration:');
   console.log(`Callback URL: ${spConfig.callbackUrl}`);
   console.log(`Logout Callback URL: ${spConfig.logoutCallbackUrl}`);
@@ -39,6 +40,8 @@ export const getSamlStrategy = (userService: UserService) => {
       entryPoint,
       logoutUrl,
       cert,
+      signatureAlgorithm: 'sha256',
+      // wantAssertionsSigned: true,
       ...spConfig,
     },
     (profile: Profile | null | undefined, done: VerifiedCallback) => {
