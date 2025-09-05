@@ -134,8 +134,8 @@ export const getSamlStrategy = (userService: UserService) => {
 
 export const generateSamlMetadata = (samlStrategy: SamlStrategy) => {
   return samlStrategy.generateServiceProviderMetadata(
-    config.auth.saml.spPrivateKey,
-    config.auth.saml.spPrivateKey
+    config.auth.saml.spPublicCert,
+    config.auth.saml.spPublicCert
     );
 };
 
