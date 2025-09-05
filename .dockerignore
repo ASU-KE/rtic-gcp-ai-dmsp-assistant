@@ -8,3 +8,4 @@ k8s-manifests/
 *.sh
 dist/
 node_modules/
+secrets/certs/

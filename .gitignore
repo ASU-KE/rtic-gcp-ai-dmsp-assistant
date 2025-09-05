@@ -1,7 +1,8 @@
 *.crt
 *.key
 *.pem
-secrets/*
+*.base64
+secrets/
 !secrets/.gitkeep
 !secrets/certs
 !secrets/*.example
