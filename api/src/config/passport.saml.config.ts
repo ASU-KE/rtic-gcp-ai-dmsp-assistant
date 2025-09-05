@@ -68,8 +68,8 @@ export const getSamlStrategy = (userService: UserService) => {
               username: profile.nameID,
               email: profile.nameID,
               password: '', // No password for SAML users
-              firstName: 'Test first name',
-              lastName: 'Test last name',
+              firstName: typeof profile['urn:oid:2.5.4.42'] === 'string' ? profile['urn:oid:2.5.4.42'] : '',
+              lastName: typeof profile['urn:oid:2.5.4.4'] === 'string' ? profile['urn:oid:2.5.4.4'] : '',
               role: 'user', // default role
             };
             userService
