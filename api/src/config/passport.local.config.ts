@@ -1,0 +1,67 @@
+import { plainToClass } from 'class-transformer';
+import { Express } from 'express';
+import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
+
+import { User } from '../entities/user.entity';
+import { UserService } from '../modules/users/services/UserService';
+
+export const initLocalPassport = (app: Express, userService: UserService) => {
+  passport.use(
+    new LocalStrategy((username, password, done) => {
+      userService
+        .findUser({ username })
+        .then((user) => {
+          if (!user) {
+            return done(null, false, {
+              message: 'Incorrect username or password.',
+            }); // reject authentication attempt
+          }
+
+          userService
+            .verifyPassword(user, password)
+            .then((isMatch) => {
+              if (!isMatch) {
+                return done(null, false, {
+                  message: 'Incorrect username or password.',
+                }); // password incorrect, reject authentication attempt
+              }
+
+              return done(null, user); // authentication successful
+            })
+            .catch((err) => {
+              return done(err);
+            });
+        })
+        .catch((err) => {
+          return done(err);
+        });
+    })
+  );
+
+  passport.serializeUser(function (user, cb) {
+    process.nextTick(function () {
+      const userDTO = plainToClass(User, user, {
+        excludeExtraneousValues: true,
+      });
+      return cb(null, userDTO);
+    });
+  });
+
+  passport.deserializeUser(function (user: User, cb) {
+    userService
+      .findUser({ id: user.id })
+      .then((user) => {
+        if (!user) {
+          return cb(null, false);
+        }
+        const userDTO = plainToClass(User, user, {
+          excludeExtraneousValues: true,
+        });
+        return cb(null, userDTO);
+      })
+      .catch((err) => {
+        return cb(err);
+      });
+  });
+};

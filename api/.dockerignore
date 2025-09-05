@@ -1,0 +1,4 @@
+.editorconfig
+.env
+dist/
+node_modules/

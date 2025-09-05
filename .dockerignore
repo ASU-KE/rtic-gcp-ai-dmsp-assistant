@@ -5,4 +5,7 @@ cloudbuild.yaml
 docker-compose.yml
 README.md
 k8s-manifests/
-**.sh
+*.sh
+dist/
+node_modules/
+secrets/certs/

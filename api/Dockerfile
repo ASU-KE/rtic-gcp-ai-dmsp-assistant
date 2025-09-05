@@ -1,17 +1,14 @@
 # syntax=docker/dockerfile:1.4
 
-FROM node:22.9-bookworm AS development
-
-# set our node environment, either development or production
-# defaults to production, compose overrides this to development on build and run
-ARG NODE_ENV=production
-ENV NODE_ENV $NODE_ENV
+# Multi-stage Image Build
+# Stage 1 - Clean-Install node packages and compile TS code
+FROM node:22.16-bookworm AS builder
 
 WORKDIR /code
 
-# default to port 3001 for node, and 9229 and 9230 (tests) for debug
-ARG PORT=3001
-ENV PORT $PORT
+# default to port 8080 for node, and 9229 and 9230 (tests) for debug
+ARG PORT=8080
+ENV PORT=$PORT
 EXPOSE $PORT 9229 9230
 
 COPY ./package.json /code/package.json
@@ -21,13 +18,11 @@ RUN npm ci
 # copy in our source code last, as it changes the most
 COPY . /code
 
-# if you want to use npm start instead, then use `docker run --init in production`
-# so that signals are passed properly. Note the code in index.js is needed to catch Docker signals
-# using node here is still more graceful stopping then npm with --init afaik
-# I still can't come up with a good production way to run with npm and graceful shutdown
-CMD [ "node", "src/index.js" ]
+# Build application
+RUN npm run build
 
-FROM development as dev-envs
+# Stage 2 - Build optimized environment with Docker dev tools
+FROM builder AS dev-envs
 RUN  <<EOF
 apt-get update
 apt-get install -y --no-install-recommends git
@@ -41,3 +36,27 @@ EOF
 
 # install Docker tools (cli, buildx, compose)
 COPY --from=gloursdocker/docker / /
+CMD [ "npm", "start" ]
+
+# Stage 3 - Production-optimized final image
+FROM node:22.16-bookworm-slim AS production
+
+WORKDIR /code
+
+# Only copy production dependencies
+COPY --from=builder /code/package.json /code/package.json
+COPY --from=builder /code/package-lock.json /code/package-lock.json
+RUN npm ci --omit=dev
+
+# Copy built application
+COPY --from=builder /code/dist /code/dist
+
+# Copy any other necessary files (e.g., static assets, config)
+# COPY --from=builder /code/public /code/public
+
+ENV NODE_ENV=production
+ARG PORT=8080
+ENV PORT=$PORT
+EXPOSE $PORT
+
+CMD [ "node", "dist/index.js" ]

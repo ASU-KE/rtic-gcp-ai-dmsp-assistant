@@ -1,0 +1,139 @@
+.btn-custom-yellow {
+  background-color: #8c1d40 !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+}
+
+.btn-custom-yellow:hover,
+.btn-custom-yellow:focus,
+.btn-custom-yellow:active,
+.btn-custom-yellow:focus-visible {
+  background-color: #8c1d40 !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+/* Prevent content from breaking awkwardly across PDF pages */
+.markdown-body.pdf-print,
+.markdown-body.pdf-print * {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  page-break-before: auto;
+  page-break-after: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Ensure longer sections flow naturally */
+.markdown-body.pdf-print p,
+.markdown-body.pdf-print h1,
+.markdown-body.pdf-print h2,
+.markdown-body.pdf-print h3,
+.markdown-body.pdf-print ul,
+.markdown-body.pdf-print ol {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  margin-bottom: 1em;
+}
+
+/* Optional: Add bottom padding for better last-page spacing */
+.markdown-body.pdf-print {
+  padding-bottom: 40px;
+}
+
+.dmp-id-tag {
+  background: #f0f0f0;
+  border-radius: 5px;
+  padding: 2px 8px;
+  font-family: monospace;
+  font-size: 0.95rem;
+  margin-left: 6px;
+}
+
+.dmp-info-box {
+  font-size: 0.85rem;
+  margin-top: 4px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: monospace;
+  color: #555;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.btn-custom-medium {
+  background-color: #8c1d40 !important;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  /* medium size font */
+  padding: 0.45rem 1.2rem;
+  /* top-bottom, left-right */
+  border: none !important;
+  border-radius: 0.375rem;
+}
+
+.btn-custom-medium:hover,
+.btn-custom-medium:focus {
+  background-color: #731634 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.asu-login-wrapper {
+  background-color: #f2f2f2;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.btn-maroon {
+  background-color: #8c1d40;
+  color: #fff;
+  border: none;
+}
+
+.btn-maroon:hover {
+  background-color: #701c38;
+  color: #fff;
+}
+
+.modal-narrow {
+  max-width: 650px;
+  margin: auto;
+}
+
+.modal-center {
+  display: flex !important;
+  align-items: center;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+.modal-center .modal-dialog {
+  margin: 0 auto;
+  max-width: 650px;
+  width: 100%;
+}
+
+.modal-center .modal-content {
+  width: 100%;
+  max-height: 100vh;
+  overflow-y: auto;
+  margin: auto;
+}
+
+.custom-modal-header {
+  padding: 0.5rem 1rem;
+}
+
+.custom-modal-body {
+  padding: 2rem 1rem;
+}
+
+.custom-modal-title {
+  line-height: 1.5;
+  margin: 0;
+}

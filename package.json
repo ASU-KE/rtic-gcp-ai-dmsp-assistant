@@ -1,0 +1,45 @@
+{
+  "name": "rtic-gcp-ai-dmsp-assistant",
+  "version": "1.0.0",
+  "description": "![Org unit](https://img.shields.io/badge/Org%20unit-KE-blue)",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "api",
+    "react"
+  ],
+  "scripts": {
+    "clean": "rm -rf node_modules api/node_modules react/node_modules",
+    "install:clean": "npm run clean && npm install",
+    "commit": "cz",
+    "prepare": "husky",
+    "api:lock": "cd api && npm i --package-lock-only --workspaces=false",
+    "react:lock": "cd react && npm i --package-lock-only --workspaces=false",
+    "genlock": "concurrently \"npm run react:lock\" \"npm run api:lock\"",
+    "prerelease": "npm run install:clean && npm run genlock && git add api/package-lock.json react/package-lock.json",
+    "release": "cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ASU-KE/rtic-gcp-ai-dmsp-assistant.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ASU-KE/rtic-gcp-ai-dmsp-assistant/issues"
+  },
+  "homepage": "https://github.com/ASU-KE/rtic-gcp-ai-dmsp-assistant#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^9.1.7"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

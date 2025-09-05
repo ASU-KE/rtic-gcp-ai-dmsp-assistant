@@ -34,10 +34,10 @@ commonLabels:
 
 images:
   - name: ai-dmsp-api-image
-    newName: ai-dmsp-api
+    newName: us-west4-docker.pkg.dev/asu-ke-rto-web-svcs/ai-dmsp-api-repo/ai-dmsp-api-image
     newTag: latest
   - name: ai-dmsp-react-image
-    newName: ai-dmsp-react
+    newName: us-west4-docker.pkg.dev/asu-ke-rto-web-svcs/ai-dmsp-react-repo/ai-dmsp-react-image
     newTag: latest
 
 # Generates the Kubernetes secret which holds the SSL certificate and key. The files
