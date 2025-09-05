@@ -5,8 +5,6 @@ import {
   VerifiedCallback,
 } from '@node-saml/passport-saml';
 import { MetadataReader, toPassportConfig } from 'passport-saml-metadata';
-import fs from 'fs';
-import path from 'path';
 
 import { User } from '../entities/user.entity';
 import { UserService } from '../modules/users/services/UserService';
@@ -16,9 +14,7 @@ import config from './app.config';
 export const getSamlStrategy = (userService: UserService) => {
   console.log('Parsing SAML IdP metadata from saml-idp-metadata.xml');
   // Read and parse the SAML IdP metadata XML file
-  const reader = new MetadataReader(
-    fs.readFileSync(path.join(__dirname, '../config/saml-idp-metadata.xml'), 'utf8')
-  );
+  const reader = new MetadataReader(config.auth.saml.idpMetadataFile);
   const { entryPoint, logoutUrl, idpCert: cert } = toPassportConfig(reader);
 
   console.log('SAML IdP Configuration:');

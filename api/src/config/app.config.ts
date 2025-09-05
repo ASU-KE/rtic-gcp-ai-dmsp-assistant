@@ -5,6 +5,7 @@ interface Config {
     strategy: string;
     passwordSaltRounds: number;
     saml: {
+      idpMetadataFile: string; // Base64-encoded contents of IdP metadata XML file
       spPrivateKey: string; // Service Provider private key for signing requests
       callbackUrl: string; // Service Provider ACS URL
       logoutCallbackUrl: string; // Service Provider SLO URL
@@ -93,6 +94,10 @@ const config: Config = {
     strategy: process.env.AUTH_STRATEGY ?? 'local',
     passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
     saml: {
+      idpMetadataFile: Buffer.from(
+        process.env.SAML_IDP_METADATA_FILE!,
+        'base64'
+      ).toString('utf8'), // Base64 decode the metadata XML
       spPrivateKey: Buffer.from(process.env.SAML_SP_PRIVATEKEY!, 'base64').toString('utf8'), // Base64 decode the private key
       callbackUrl: process.env.SAML_CALLBACK_URL!,
       logoutCallbackUrl: process.env.SAML_LOGOUT_CALLBACK_URL!,
