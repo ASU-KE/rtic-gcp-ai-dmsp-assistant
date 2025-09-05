@@ -44,7 +44,7 @@ spec:
                 name: ai-dmsp-secret
           env:
             - name: API_PORT
-              value: "3001"
+              value: "8080"
             - name: ROLLBAR_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -124,10 +124,10 @@ spec:
               memory: "512Mi"
               cpu: "500m"
           ports:
-            - containerPort: 3001
+            - containerPort: 8080
           readinessProbe:
             httpGet:
-              port: 3001
+              port: 8080
               path: /api/healthz
 ---
 apiVersion: apps/v1

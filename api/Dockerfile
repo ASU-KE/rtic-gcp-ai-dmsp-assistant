@@ -6,8 +6,8 @@ FROM node:22.16-bookworm AS builder
 
 WORKDIR /code
 
-# default to port 3001 for node, and 9229 and 9230 (tests) for debug
-ARG PORT=3001
+# default to port 8080 for node, and 9229 and 9230 (tests) for debug
+ARG PORT=8080
 ENV PORT=$PORT
 EXPOSE $PORT 9229 9230
 
