@@ -22,7 +22,7 @@ services:
       - "traefik.http.routers.api.rule=Host(`dmsp.local.asu.edu`) && PathPrefix(`/api`)" # Determine what URL to use
       - "traefik.http.routers.api.entrypoints=websecure" # Determine what entrypoint and port to use
       - "traefik.http.routers.api.tls=true"
-      - "traefik.http.services.api.loadbalancer.server.port=3001"
+      - "traefik.http.services.api.loadbalancer.server.port=8080"
       - "traefik.http.middlewares.api.headers.accesscontrolallowmethods=GET,OPTIONS,POST,PUT"
       - "traefik.http.middlewares.api.headers.accesscontrolallowheaders=*"
       - "traefik.http.middlewares.api.headers.accesscontrolalloworiginlist=https://dmsp.local.asu.edu"
