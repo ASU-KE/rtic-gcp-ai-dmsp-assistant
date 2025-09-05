@@ -20,6 +20,11 @@ export const getSamlStrategy = (userService: UserService) => {
   );
   const { entryPoint, logoutUrl, idpCert: cert } = toPassportConfig(reader);
 
+  console.log('SAML IdP Configuration:');
+  console.log(`Entry Point: ${entryPoint}`);
+  console.log(`Logout URL: ${logoutUrl}`);
+  console.log(`IdP Public Certificate: ${cert}`);
+
   const spConfig = {
       callbackUrl: config.auth.saml.callbackUrl,
       logoutCallbackUrl: config.auth.saml.logoutCallbackUrl,
@@ -27,6 +32,10 @@ export const getSamlStrategy = (userService: UserService) => {
       privateKey: config.auth.saml.spPrivateKey,
       decryptionPvk: config.auth.saml.spPrivateKey,
   };
+  console.log('SAML SP Configuration:');
+  console.log(`Callback URL: ${spConfig.callbackUrl}`);
+  console.log(`Logout Callback URL: ${spConfig.logoutCallbackUrl}`);
+  console.log(`Issuer: ${spConfig.issuer}`);
 
   const strategy = new SamlStrategy(
     {
