@@ -92,10 +92,20 @@ spec:
                 secretKeyRef:
                   key: SAML_ISSUER
                   name: ai-dmsp-secret
-            - name: SAML_SP_PRIVATEKEY
+            - name: SAML_IDP_METADATA_FILE
               valueFrom:
                 secretKeyRef:
-                  key: SAML_SP_PRIVATEKEY
+                  key: SAML_IDP_METADATA_FILE
+                  name: ai-dmsp-secret
+            - name: SAML_SP_PUBLIC_CERT
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_SP_PUBLIC_CERT
+                  name: ai-dmsp-secret
+            - name: SAML_SP_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_SP_PRIVATE_KEY
                   name: ai-dmsp-secret
             - name: DMPTOOL_CLIENT_ID
               valueFrom:
