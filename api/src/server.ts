@@ -97,6 +97,7 @@ if (config.auth.strategy === 'local') {
 if (config.auth.strategy === 'saml') {
   const samlStrategy = getSamlStrategy(userService);
   initSamlPassport(samlStrategy, userService);
+  app.use('/api/sso', SamlAuthRoutes(samlStrategy));
 }
 
 // Register  unprotected routes
@@ -107,9 +108,6 @@ app.get('/api', (req: Request, res: Response) => {
     message: 'DMSP AI Tool API',
   });
 });
-if (config.auth.strategy === 'saml') {
-  app.use('/api/sso', SamlAuthRoutes());
-}
 if (config.auth.strategy === 'local') {
   app.use('/api/auth', LocalAuthRoutes());
 }
