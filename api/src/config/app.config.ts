@@ -6,7 +6,6 @@ interface Config {
     passwordSaltRounds: number;
     saml: {
       spPrivateKey: string; // Service Provider private key for signing requests
-      entryPoint: string; // Identity Provider SSO URL
       callbackUrl: string; // Service Provider ACS URL
       logoutCallbackUrl: string; // Service Provider SLO URL
       issuer: string; // Service Provider identification string
@@ -95,7 +94,6 @@ const config: Config = {
     passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
     saml: {
       spPrivateKey: Buffer.from(process.env.SAML_SP_PRIVATEKEY!, 'base64').toString('utf8'), // Base64 decode the private key
-      entryPoint: process.env.SAML_ENTRY_POINT!,
       callbackUrl: process.env.SAML_CALLBACK_URL!,
       logoutCallbackUrl: process.env.SAML_LOGOUT_CALLBACK_URL!,
       issuer: process.env.SAML_ISSUER!,
