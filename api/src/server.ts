@@ -14,7 +14,7 @@ import config from './config/app.config';
 import { AppDataSource } from './config/data-source.config';
 
 import { initLocalPassport } from './middlewares/passport.local.middleware';
-import { initSamlPassport } from './middlewares/passport.saml.middleware';
+import { getSamlStrategy, initSamlPassport } from './middlewares/passport.saml.middleware';
 import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';
@@ -95,7 +95,8 @@ if (config.auth.strategy === 'local') {
   initLocalPassport(app, userService);
 }
 if (config.auth.strategy === 'saml') {
-  initSamlPassport(app, userService);
+  const samlStrategy = getSamlStrategy(userService);
+  initSamlPassport(samlStrategy, userService);
 }
 
 // Register  unprotected routes
