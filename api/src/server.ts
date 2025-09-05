@@ -13,8 +13,8 @@ import { Session } from './entities/session.entity';
 import config from './config/app.config';
 import { AppDataSource } from './config/data-source.config';
 
-import { initLocalPassport } from './middlewares/passport.local.middleware';
-import { getSamlStrategy, initSamlPassport } from './middlewares/passport.saml.middleware';
+import { initLocalPassport } from './config/passport.local.config';
+import { getSamlStrategy, initSamlPassport } from './config/passport.saml.config';
 import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';

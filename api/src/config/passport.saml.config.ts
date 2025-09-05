@@ -11,7 +11,7 @@ import path from 'path';
 import { User } from '../entities/user.entity';
 import { UserService } from '../modules/users/services/UserService';
 import { plainToClass, instanceToPlain } from 'class-transformer';
-import config from '../config/app.config';
+import config from './app.config';
 
 export const getSamlStrategy = (userService: UserService) => {
   // Read and parse the SAML IdP metadata XML file

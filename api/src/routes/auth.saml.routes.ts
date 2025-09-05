@@ -1,7 +1,7 @@
 import { Router, Request, RequestHandler, Response } from 'express';
 import passport from 'passport';
 import { Strategy as SamlStrategy } from '@node-saml/passport-saml';
-import { generateSamlMetadata } from '../middlewares/passport.saml.middleware';
+import { generateSamlMetadata } from '../config/passport.saml.config';
 
 const authRoutes = (samlStrategy: SamlStrategy) => {
   const router: Router = Router();
