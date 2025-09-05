@@ -126,6 +126,13 @@ export const getSamlStrategy = (userService: UserService) => {
   return strategy;
 };
 
+export const generateSamlMetadata = (samlStrategy: SamlStrategy) => {
+  samlStrategy.generateServiceProviderMetadata(
+    config.auth.saml.spPrivateKey,
+    config.auth.saml.spPrivateKey
+    );
+};
+
 export const initSamlPassport = (samlStrategy: SamlStrategy, userService: UserService) => {
   passport.use(samlStrategy);
 
