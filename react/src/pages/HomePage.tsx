@@ -5,12 +5,6 @@ import 'github-markdown-css/github-markdown-light.css';
 import { useAuthContext } from '../hooks';
 
 export const HomePage = () => {
-  const { state } = useAuthContext();
-  if (import.meta.env.NODE_ENV !== 'production') {
-    console.log('HomePage user:', state.user);
-    console.log('HomePage isAuthenticated:', state.isAuthenticated);
-  }
-
   return (
     <Row className="mb-4">
       <Col md={8}>

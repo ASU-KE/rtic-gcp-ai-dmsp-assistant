@@ -19,11 +19,6 @@ export const LocalLoginPage = () => {
 
   const { dispatch, state } = useAuthContext();
 
-  if (import.meta.env.NODE_ENV !== 'production') {
-    console.log('LoginPage user:', state.user);
-    console.log('LoginPage isAuthenticated:', state.isAuthenticated);
-  }
-
   useEffect(() => {
     if (state.isAuthenticated) {
       navigate('/');
@@ -57,10 +52,8 @@ export const LocalLoginPage = () => {
       }
 
       const { user } = response.data;
-      console.log('User logged in:', user);
       dispatch(login(user));
     } catch (err: any) {
-      console.error('Login error:', err);
       setError(err.response?.data?.error?.message || 'Login failed');
     }
   };

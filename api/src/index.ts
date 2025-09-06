@@ -34,7 +34,6 @@ wss.on('connection', (ws: WebSocket) => {
     } else {
       message = '[Unrecognized message format]';
     }
-    console.log('Received:', message);
   });
 });
 
