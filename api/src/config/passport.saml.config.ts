@@ -12,14 +12,9 @@ import { plainToClass, instanceToPlain } from 'class-transformer';
 import config from './app.config';
 
 export const getSamlStrategy = (userService: UserService) => {
-  console.log('Parsing SAML IdP metadata from saml-idp-metadata.xml');
   // Read and parse the SAML IdP metadata XML file
   const reader = new MetadataReader(config.auth.saml.idpMetadataFile);
   const { entryPoint, logoutUrl, idpCert: cert } = toPassportConfig(reader);
-
-  console.log('SAML IdP Configuration:');
-  console.log(`Entry Point: ${entryPoint}`);
-  console.log(`Logout URL: ${logoutUrl}`);
 
   const spConfig = {
       callbackUrl: config.auth.saml.callbackUrl,
@@ -29,18 +24,12 @@ export const getSamlStrategy = (userService: UserService) => {
       decryptionPvk: config.auth.saml.spPrivateKey,
   };
 
-  console.log('SAML SP Configuration:');
-  console.log(`Callback URL: ${spConfig.callbackUrl}`);
-  console.log(`Logout Callback URL: ${spConfig.logoutCallbackUrl}`);
-  console.log(`Issuer: ${spConfig.issuer}`);
-
   const strategy = new SamlStrategy(
     {
       entryPoint,
       logoutUrl,
       cert,
       signatureAlgorithm: 'sha256',
-      // wantAssertionsSigned: true,
       ...spConfig,
     },
     (profile: Profile | null | undefined, done: VerifiedCallback) => {
@@ -50,39 +39,29 @@ export const getSamlStrategy = (userService: UserService) => {
         return done(new Error('SSO failed'));
       }
 
-      if (profile != null && typeof profile.nameID === 'string')
-        console.log(
-          `SAML login profile received: ${JSON.stringify(profile)}`
-        );
-
       userService
         .findUser({ username: profile.nameID })
         .then((user) => {
           if (!user) {
             // If user does not exist, create a new user
-
-            console.log(
-              `SAML user not found, creating new user: ${profile.nameID}`
-            );
             const userDetail = {
               username: profile.nameID,
               email: profile.nameID,
               password: '', // No password for SAML users
-              firstName: 'Test first name',
-              lastName: 'Test last name',
+              firstName: typeof profile['urn:oid:2.5.4.42'] === 'string' ? profile['urn:oid:2.5.4.42'] : '',
+              lastName: typeof profile['urn:oid:2.5.4.4'] === 'string' ? profile['urn:oid:2.5.4.4'] : '',
               role: 'user', // default role
             };
+
             userService
               .createUser(userDetail)
               .then((newUser) => {
-                console.log(`SAML user created: ${JSON.stringify(newUser)}`);
                 const userDTO = plainToClass(User, newUser, {
                   excludeExtraneousValues: true,
                 });
                 return done(null, instanceToPlain(userDTO));
               })
               .catch((err) => {
-                console.error(`Error creating SAML user: ${err}`);
                 return done(
                   err instanceof Error ? err : new Error(String(err))
                 );
@@ -93,9 +72,6 @@ export const getSamlStrategy = (userService: UserService) => {
               excludeExtraneousValues: true,
             });
 
-            console.log(
-              `SAML user found: ${JSON.stringify(instanceToPlain(userDTO))} `
-            );
             return done(null, instanceToPlain(userDTO));
           }
         })
@@ -108,8 +84,6 @@ export const getSamlStrategy = (userService: UserService) => {
       if (!profile) {
         return done(new Error('SSO logout failure'));
       }
-
-      console.log(`SAML logout profile received: ${JSON.stringify(profile)}`);
 
       if (profile != null && typeof profile.nameID === 'string')
         userService
