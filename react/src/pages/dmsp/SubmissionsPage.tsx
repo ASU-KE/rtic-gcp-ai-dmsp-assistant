@@ -5,7 +5,9 @@ import { Row, Col, Spinner, Button } from 'react-bootstrap';
 
 type Submission = {
   id: number;
-  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
   dmspText: string;
   llmResponse: string;
   submittedAt: string;
@@ -60,8 +62,14 @@ export const SubmissionsPage = () => {
       wrap: false,
     },
     {
-      name: 'Username',
-      selector: (row) => row.username,
+      name: 'Email',
+      selector: (row) => row.email,
+      sortable: true,
+      wrap: false,
+    },
+    {
+      name: 'Name',
+      selector: (row) => `${row.firstName} ${row.lastName}`,
       sortable: true,
       wrap: false,
     },
