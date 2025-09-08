@@ -13,8 +13,8 @@ import { Session } from './entities/session.entity';
 import config from './config/app.config';
 import { AppDataSource } from './config/data-source.config';
 
-import { initLocalPassport } from './middlewares/passport.local.middleware';
-import { initSamlPassport } from './middlewares/passport.saml.middleware';
+import { initLocalPassport } from './config/passport.local.config';
+import { getSamlStrategy, initSamlPassport } from './config/passport.saml.config';
 import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';
@@ -95,7 +95,9 @@ if (config.auth.strategy === 'local') {
   initLocalPassport(app, userService);
 }
 if (config.auth.strategy === 'saml') {
-  initSamlPassport(app, userService);
+  const samlStrategy = getSamlStrategy(userService);
+  initSamlPassport(samlStrategy, userService);
+  app.use('/api/sso', SamlAuthRoutes(samlStrategy));
 }
 
 // Register  unprotected routes
@@ -106,9 +108,6 @@ app.get('/api', (req: Request, res: Response) => {
     message: 'DMSP AI Tool API',
   });
 });
-if (config.auth.strategy === 'saml') {
-  app.use('/api/sso', SamlAuthRoutes());
-}
 if (config.auth.strategy === 'local') {
   app.use('/api/auth', LocalAuthRoutes());
 }

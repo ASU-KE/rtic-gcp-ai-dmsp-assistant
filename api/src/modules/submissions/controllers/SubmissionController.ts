@@ -50,7 +50,9 @@ export default class SubmissionController {
 
         return {
           submittedAt: format(new Date(dto.submittedAt), 'yyyy-MM-dd HH:mm:ss'),
-          username: dto.username,
+          email: dto.email,
+          firstName: dto.firstName,
+          lastName: dto.lastName,
           dmspText: dto.dmspText,
           llmResponse: dto.llmResponse,
         };

@@ -5,10 +5,12 @@ interface Config {
     strategy: string;
     passwordSaltRounds: number;
     saml: {
-      entryPoint: string;
-      callbackUrl: string;
-      issuer: string;
-      cert: string;
+      idpMetadataFile: string; // Base64-encoded contents of IdP metadata XML file
+      spPublicCert: string; // Service Provider public certificate for verifying responses
+      spPrivateKey: string; // Service Provider private key for signing requests
+      callbackUrl: string; // Service Provider ACS URL
+      logoutCallbackUrl: string; // Service Provider SLO URL
+      issuer: string; // Service Provider identification string
     };
   };
   database: {
@@ -93,10 +95,21 @@ const config: Config = {
     strategy: process.env.AUTH_STRATEGY ?? 'local',
     passwordSaltRounds: parseInt(process.env.PASSWORD_SALT_ROUNDS ?? '10', 10),
     saml: {
-      entryPoint: process.env.SAML_ENTRY_POINT!,
+      idpMetadataFile: Buffer.from(
+        process.env.SAML_IDP_METADATA_FILE!,
+        'base64'
+      ).toString('utf8'), // Base64 decode the metadata XML
+      spPublicCert: Buffer.from(
+        process.env.SAML_SP_PUBLIC_CERT!,
+        'base64'
+      ).toString('utf8'), // Base64 decode the SP public cert
+      spPrivateKey: Buffer.from(
+        process.env.SAML_SP_PRIVATE_KEY!,
+        'base64'
+      ).toString('utf8'), // Base64 decode the SP private key
       callbackUrl: process.env.SAML_CALLBACK_URL!,
+      logoutCallbackUrl: process.env.SAML_LOGOUT_CALLBACK_URL!,
       issuer: process.env.SAML_ISSUER!,
-      cert: Buffer.from(process.env.SAML_CERT!, 'base64').toString('utf8'), // Base64 decode the certificate
     },
   },
   database: {
@@ -106,9 +119,6 @@ const config: Config = {
     user: process.env.DB_USER!,
     password: process.env.DB_PASSWORD!,
   },
-  // if you're not using docker compose for local development, this will default to 8080
-  // to prevent non-root permission problems with 80. Dockerfile is set to make this 80
-  // because containers don't have that issue :)
   port: process.env.PORT ?? '8080',
   rollbarToken: process.env.ROLLBAR_TOKEN!,
   dmptoolClientId: process.env.DMPTOOL_CLIENT_ID!,

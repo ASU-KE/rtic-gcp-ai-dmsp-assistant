@@ -20,11 +20,9 @@ services:
     labels:
       - "traefik.enable=true" # Enable Traefik
       - "traefik.http.routers.api.rule=Host(`dmsp.local.asu.edu`) && PathPrefix(`/api`)" # Determine what URL to use
-      # - "traefik.http.middlewares.api.replacepathregex.regex=^/api/(.*)"
-      # - "traefik.http.middlewares.api.replacepathregex.replacement=/$$1"
       - "traefik.http.routers.api.entrypoints=websecure" # Determine what entrypoint and port to use
       - "traefik.http.routers.api.tls=true"
-      - "traefik.http.services.api.loadbalancer.server.port=3001"
+      - "traefik.http.services.api.loadbalancer.server.port=8080"
       - "traefik.http.middlewares.api.headers.accesscontrolallowmethods=GET,OPTIONS,POST,PUT"
       - "traefik.http.middlewares.api.headers.accesscontrolallowheaders=*"
       - "traefik.http.middlewares.api.headers.accesscontrolalloworiginlist=https://dmsp.local.asu.edu"
@@ -71,7 +69,7 @@ services:
         - APP_BACKEND_PATH_PREFIX=api
         - APP_BACKEND_PORT=443
         - APP_BACKEND_PROTOCOL=https
-        - APP_FRONTEND_AUTH=local
+        - APP_FRONTEND_AUTH=saml
         - APP_FRONTEND_ENABLE_DMP_ID=false
     ports:
       - 3000:3000

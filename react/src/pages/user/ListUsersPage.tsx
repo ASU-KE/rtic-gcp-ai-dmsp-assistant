@@ -16,13 +16,6 @@ export const ListUsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const { state } = useAuthContext();
-
-  if (import.meta.env.NODE_ENV !== 'production') {
-    console.log('ListUsersPage user:', state.user);
-    console.log('ListUsersPage isAuthenticated:', state.isAuthenticated);
-  }
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -32,10 +25,8 @@ export const ListUsersPage = () => {
             withCredentials: true,
           }
         );
-
-        console.log('Fetched response:', response.data.data);
-
         setUsers(response.data.data);
+
       } catch (err: any) {
         setErrorMsg(
           typeof err.response?.data?.error === 'string'

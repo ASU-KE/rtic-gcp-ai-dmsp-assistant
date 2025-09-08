@@ -69,14 +69,13 @@ export const DmpController = ({
 
         if (user) {
           const submission = submissionRepo.create({
-            username: user.username,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
             dmspText: dmpText,
             llmResponse: llmResult.response,
           });
           await submissionRepo.save(submission);
-          console.log(
-            `DMP submission saved successfully for user: ${submission.username}`
-          );
         }
 
         res.status(202).json({
@@ -136,15 +135,14 @@ export const DmpController = ({
 
         if (user) {
           const submission = submissionRepo.create({
-            username: user.username,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
             dmspText: dmpText,
             llmResponse: llmResult.response,
           });
 
           await submissionRepo.save(submission);
-          console.log(
-            `DMP submission saved successfully for user: ${submission.username}`
-          );
         }
 
         res.status(202).json({

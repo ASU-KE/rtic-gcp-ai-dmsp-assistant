@@ -14,7 +14,15 @@ export class Submission {
 
   @Column()
   @Expose()
-  username!: string;
+  email!: string;
+
+  @Column()
+  @Expose()
+  firstName!: string;
+
+  @Column()
+  @Expose()
+  lastName!: string;
 
   @Column('text')
   @Expose()

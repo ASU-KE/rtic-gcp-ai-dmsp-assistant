@@ -1,7 +1,9 @@
 import { Router, Request, RequestHandler, Response } from 'express';
 import passport from 'passport';
+import { Strategy as SamlStrategy } from '@node-saml/passport-saml';
+import { generateSamlMetadata } from '../config/passport.saml.config';
 
-const authRoutes = () => {
+const authRoutes = (samlStrategy: SamlStrategy) => {
   const router: Router = Router();
 
   // /api/sso/login
@@ -45,6 +47,14 @@ const authRoutes = () => {
 
       res.status(200).json({ message: 'Logout successful' });
     });
+  });
+
+  // /api/sso/metadata
+  // This route serves the SAML Service Provider metadata XML
+  router.get('/metadata', (req: Request, res: Response) => {
+    res.type('application/xml');
+    res.status(200);
+    res.send(generateSamlMetadata(samlStrategy));
   });
 
   return router;

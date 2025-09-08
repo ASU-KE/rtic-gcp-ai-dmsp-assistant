@@ -6,7 +6,6 @@ export const isAuthenticated = (
   res: Response,
   next: NextFunction
 ): Response | void => {
-  console.log('auth strategy:', config.auth.strategy);
   if (config.auth.strategy === 'none' || req.user) {
     return next();
   } else {

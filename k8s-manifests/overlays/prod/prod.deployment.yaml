@@ -43,8 +43,8 @@ spec:
             - secretRef:
                 name: ai-dmsp-secret
           env:
-            - name: API_PORT
-              value: "3001"
+            - name: PORT
+              value: "8080"
             - name: ROLLBAR_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -77,25 +77,35 @@ spec:
                   name: ai-dmsp-secret
             - name: PASSWORD_SALT_ROUNDS
               value: "10"
-            - name: SAML_ENTRY_POINT
-              valueFrom:
-                secretKeyRef:
-                  key: SAML_ENTRY_POINT
-                  name: ai-dmsp-secret
             - name: SAML_CALLBACK_URL
               valueFrom:
                 secretKeyRef:
                   key: SAML_CALLBACK_URL
+                  name: ai-dmsp-secret
+            - name: SAML_LOGOUT_CALLBACK_URL
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_LOGOUT_CALLBACK_URL
                   name: ai-dmsp-secret
             - name: SAML_ISSUER
               valueFrom:
                 secretKeyRef:
                   key: SAML_ISSUER
                   name: ai-dmsp-secret
-            - name: SAML_CERT
+            - name: SAML_IDP_METADATA_FILE
               valueFrom:
                 secretKeyRef:
-                  key: SAML_CERT
+                  key: SAML_IDP_METADATA_FILE
+                  name: ai-dmsp-secret
+            - name: SAML_SP_PUBLIC_CERT
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_SP_PUBLIC_CERT
+                  name: ai-dmsp-secret
+            - name: SAML_SP_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: SAML_SP_PRIVATE_KEY
                   name: ai-dmsp-secret
             - name: DMPTOOL_CLIENT_ID
               valueFrom:
@@ -124,10 +134,10 @@ spec:
               memory: "512Mi"
               cpu: "500m"
           ports:
-            - containerPort: 3001
+            - containerPort: 8080
           readinessProbe:
             httpGet:
-              port: 3001
+              port: 8080
               path: /api/healthz
 ---
 apiVersion: apps/v1

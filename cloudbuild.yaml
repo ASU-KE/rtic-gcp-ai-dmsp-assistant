@@ -5,8 +5,8 @@ steps:
     args:
       [
         "build",
-        "-t", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID",
-        "-t", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:latest",
+        "-t", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/${_ENVIRONMENT}/ai-dmsp-api-image:$BUILD_ID",
+        "-t", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/${_ENVIRONMENT}/ai-dmsp-api-image:latest",
         "."
       ]
     env: ['DOCKER_BUILDKIT=1']
@@ -17,7 +17,7 @@ steps:
     args:
       [
         "push",
-        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:$BUILD_ID"
+        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/${_ENVIRONMENT}/ai-dmsp-api-image:$BUILD_ID"
       ]
 
   - id: docker push latest
@@ -25,7 +25,7 @@ steps:
     args:
       [
         "push",
-        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/ai-dmsp-api-image:latest"
+        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-api-repo/${_ENVIRONMENT}/ai-dmsp-api-image:latest"
       ]
 
   # Build the Docker image for ai-dmsp react
@@ -35,13 +35,13 @@ steps:
     args:
       [
         '-c',
-        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN --build-arg APP_BACKEND_PORT=$$APP_BACKEND_PORT --build-arg APP_BACKEND_PROTOCOL=$$APP_BACKEND_PROTOCOL --build-arg APP_BACKEND_DOMAIN=$$APP_BACKEND_DOMAIN  --build-arg APP_BACKEND_PATH_PREFIX=$$APP_BACKEND_PATH_PREFIX --build-arg APP_FRONTEND_AUTH=$$APP_FRONTEND_AUTH --build-arg APP_FRONTEND_ENABLE_DMP_ID=$$APP_FRONTEND_ENABLE_DMP_ID -t us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:$BUILD_ID -t us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:latest .',
+        'docker build --build-arg NPM_TOKEN=$$NPM_TOKEN --build-arg APP_BACKEND_PORT=$$APP_BACKEND_PORT --build-arg APP_BACKEND_PROTOCOL=$$APP_BACKEND_PROTOCOL --build-arg APP_BACKEND_DOMAIN=$$APP_BACKEND_DOMAIN  --build-arg APP_BACKEND_PATH_PREFIX=$$APP_BACKEND_PATH_PREFIX --build-arg APP_FRONTEND_AUTH=$$APP_FRONTEND_AUTH --build-arg APP_FRONTEND_ENABLE_DMP_ID=$$APP_FRONTEND_ENABLE_DMP_ID -t us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/${_ENVIRONMENT}/ai-dmsp-react-image:$BUILD_ID -t us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/${_ENVIRONMENT}/ai-dmsp-react-image:latest .',
       ]
     env: [
       'DOCKER_BUILDKIT=1',
       'APP_BACKEND_PORT=443',
       'APP_BACKEND_PROTOCOL=https',
-      'APP_BACKEND_DOMAIN=dmsp.dev.rtd.asu.edu',
+      'APP_BACKEND_DOMAIN=${_APP_BACKEND_DOMAIN}',
       'APP_BACKEND_PATH_PREFIX=api',
       'APP_FRONTEND_AUTH=saml',
       'APP_FRONTEND_ENABLE_DMP_ID=false',
@@ -52,14 +52,14 @@ steps:
   # Push the image to GCR
   - id: docker push ai-dmsp-react
     name: "gcr.io/cloud-builders/docker"
-    args: ["push", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:$BUILD_ID"]
+    args: ["push", "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/${_ENVIRONMENT}/ai-dmsp-react-image:$BUILD_ID"]
 
   - id: docker push build id react
     name: "gcr.io/cloud-builders/docker"
     args:
       [
         "push",
-        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:$BUILD_ID"
+        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/${_ENVIRONMENT}/ai-dmsp-react-image:$BUILD_ID"
       ]
 
   - id: docker push latest react
@@ -67,7 +67,7 @@ steps:
     args:
       [
         "push",
-        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/ai-dmsp-react-image:latest"
+        "us-west4-docker.pkg.dev/$PROJECT_ID/ai-dmsp-react-repo/${_ENVIRONMENT}/ai-dmsp-react-image:latest"
       ]
 
   # Copy secrets and SSL certificate files from secret manager
@@ -82,7 +82,7 @@ steps:
         gcloud secrets versions access latest --secret=${_SSL_KEY_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/tls.key
         gcloud secrets versions access latest --secret=${_KUST_SECRET_FILE} > /workspace/k8s-manifests/${_KUST_BUILD_DIR}/secrets/kustomization.yaml
 
-  - id: deploy azalz
+  - id: deploy to GKE
     name: "gcr.io/cloud-builders/kubectl"
     args:
       - "apply"
@@ -93,7 +93,7 @@ steps:
       - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
       - "GCLOUD_PROJECT=$PROJECT_ID"
 
-  - id: rollout azalz
+  - id: rollout api
     name: "gcr.io/cloud-builders/kubectl"
     args:
       [
@@ -108,7 +108,7 @@ steps:
       - "CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}"
       - "GCLOUD_PROJECT=$PROJECT_ID"
 
-  - id: rollout azalz React
+  - id: rollout React
     name: "gcr.io/cloud-builders/kubectl"
     args:
       [
