@@ -6,10 +6,12 @@ import { User } from '../../../entities/user.entity';
 
 export interface DmpReportByIdRequestBody {
   dmpId: string;
+  agency: string;
 }
 
 export interface DmpReportByTextRequestBody {
   dmpText: string;
+  agency: string;
 }
 
 export interface DmpDependencies {
@@ -23,6 +25,7 @@ export interface DmpDependencies {
   llmService: {
     queryLlm(
       planText: string,
+      agency: string,
       ws?: WebSocket,
       wss?: WebSocketServer
     ): Promise<{ response: string; metadata?: Record<string, unknown> }>;
@@ -40,7 +43,7 @@ export const DmpController = ({
       req: Request<unknown, unknown, DmpReportByIdRequestBody>,
       res: Response
     ): Promise<void> => {
-      const { dmpId } = req.body;
+      const { dmpId, agency } = req.body;
 
       if (!dmpId || typeof dmpId !== 'string') {
         res.status(400).json({
@@ -56,7 +59,7 @@ export const DmpController = ({
         const pdfDocument = await pdfService.fetchPdfInMemory(dmpPdfUrl);
         const dmpText = await pdfService.extractText(Buffer.from(pdfDocument));
         const llmResult = await llmService
-          .queryLlm(dmpText, undefined, wss)
+          .queryLlm(dmpText, agency, undefined, wss)
           .catch((err) => {
             console.error('Failed to fetch LLM response: ', err);
             throw err;
@@ -110,7 +113,7 @@ export const DmpController = ({
       req: Request<unknown, unknown, DmpReportByTextRequestBody>,
       res: Response
     ): Promise<void> => {
-      const { dmpText } = req.body;
+      const { dmpText, agency } = req.body;
 
       if (!dmpText || typeof dmpText !== 'string') {
         res.status(400).json({
@@ -122,7 +125,7 @@ export const DmpController = ({
       try {
         const wss = req.app.locals.wss as WebSocketServer;
         const llmResult = await llmService
-          .queryLlm(dmpText, undefined, wss)
+          .queryLlm(dmpText, agency, undefined, wss)
           .catch((err) => {
             console.error('Failed to fetch LLM response: ', err);
             throw err;

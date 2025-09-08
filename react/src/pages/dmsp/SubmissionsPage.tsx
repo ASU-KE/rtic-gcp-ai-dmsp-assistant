@@ -56,6 +56,7 @@ export const SubmissionsPage = () => {
 
   const columns: TableColumn<Submission>[] = [
     {
+      id: 'submittedAt',
       name: 'Submitted At',
       selector: (row) => format(parseISO(row.submittedAt), 'yyyy-MM-dd HH:mm:ss'),
       sortable: true,
