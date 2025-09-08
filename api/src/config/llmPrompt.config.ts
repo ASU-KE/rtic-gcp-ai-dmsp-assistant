@@ -40,7 +40,7 @@ const rubricMap: Record<FundingAgency, string> = {
 export function getSystemPrompt(agency: string): SystemPrompt {
   const key = agency.toUpperCase() as FundingAgency;
 
-  if (!(key in FundingAgency)) {
+  if (!Object.values(FundingAgency).includes(key)) {
     throw new Error(`Invalid funding agency: ${agency}`);
   }
 
@@ -48,9 +48,6 @@ export function getSystemPrompt(agency: string): SystemPrompt {
   const rubric = loadRubric(rubricFile);
 
   return {
-    prompt: `
-      You are a research administrator evaluating data management plans. For each section of performance criteria, determine whether the plan is complete/detailed, addressed issue but incomplete, or did not address. Skip sections that are complete/detailed. If a section of criteria is not complete/detailed, quote the relevant text from the plan, and provide a list of recommended improvements. Format each section with a section header. Use the following rubric to assess the data management plan:
-      ${rubric}
-    `,
+    prompt: `You are a research administrator evaluating data management plans. For each section of performance criteria, determine whether the plan is complete/detailed, addressed issue but incomplete, or did not address. Skip sections that are complete/detailed. If a section of criteria is not complete/detailed, quote the relevant text from the plan, and provide a list of recommended improvements. Format each section with a section header. Use the following rubric to assess the data management plan: ${rubric}`,
   };
 }
