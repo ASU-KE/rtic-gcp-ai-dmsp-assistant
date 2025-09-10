@@ -1,6 +1,6 @@
 {
   "name": "rtic-gcp-ai-dmsp-assistant",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "![Org unit](https://img.shields.io/badge/Org%20unit-KE-blue)",
   "main": "index.js",
   "private": true,
