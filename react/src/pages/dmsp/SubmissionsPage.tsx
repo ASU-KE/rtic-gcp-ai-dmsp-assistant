@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import DataTable, { TableColumn } from 'react-data-table-component';
-import { Row, Col, Spinner, Button } from 'react-bootstrap';
+import { Row, Col, Spinner, Button, Modal } from 'react-bootstrap';
 
 type Submission = {
   id: number;
@@ -13,24 +15,10 @@ type Submission = {
   submittedAt: string;
 };
 
-const ExpandableCell = ({ text, expanded, lines = 3 }: { text: string; expanded: boolean; lines?: number }) => (
-  <div
-    style={{
-      display: '-webkit-box',
-      WebkitLineClamp: expanded ? 'none' : lines,
-      WebkitBoxOrient: 'vertical',
-      overflow: 'hidden',
-      whiteSpace: 'normal',
-    }}
-  >
-    {text}
-  </div>
-);
-
 export const SubmissionsPage = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+  const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
 
   useEffect(() => {
     const fetchSubmissions = async () => {
@@ -46,13 +34,6 @@ export const SubmissionsPage = () => {
     };
     fetchSubmissions();
   }, []);
-
-  const toggleRow = (rowId: number) => {
-    const newSet = new Set(expandedRows);
-    if (newSet.has(rowId)) newSet.delete(rowId);
-    else newSet.add(rowId);
-    setExpandedRows(newSet);
-  };
 
   const columns: TableColumn<Submission>[] = [
     {
@@ -76,15 +57,21 @@ export const SubmissionsPage = () => {
     },
     {
       name: 'DMSP Text',
-      cell: (row) => <ExpandableCell text={row.dmspText} expanded={expandedRows.has(row.id)} />,
+      cell: (row) => (
+        <div style={{ maxWidth: 250, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {row.dmspText}
+        </div>
+      ),
       sortable: false,
-      wrap: true,
     },
     {
       name: 'AI Response',
-      cell: (row) => <ExpandableCell text={row.llmResponse} expanded={expandedRows.has(row.id)} />,
+      cell: (row) => (
+        <div style={{ maxWidth: 250, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {row.llmResponse}
+        </div>
+      ),
       sortable: false,
-      wrap: true,
     },
   ];
 
@@ -103,30 +90,71 @@ export const SubmissionsPage = () => {
         {loading ? (
           <Spinner animation="border" />
         ) : (
-          <DataTable
-            columns={columns}
-            data={submissions}
-            pagination
-            paginationPerPage={10}
-            paginationRowsPerPageOptions={[10, 25, 50, 100]}
-            highlightOnHover
-            responsive
-            defaultSortFieldId="submittedAt"
-            defaultSortAsc={false}
-            onRowClicked={(row) => toggleRow(row.id)}
-            customStyles={{
-              rows: {
-                style: {
-                  cursor: 'pointer',
+          <>
+            <DataTable
+              columns={columns}
+              data={submissions}
+              pagination
+              paginationPerPage={10}
+              paginationRowsPerPageOptions={[10, 25, 50, 100]}
+              highlightOnHover
+              responsive
+              defaultSortFieldId="submittedAt"
+              defaultSortAsc={false}
+              onRowClicked={(row) => setSelectedSubmission(row)}
+              customStyles={{
+                rows: {
+                  style: {
+                    cursor: 'pointer',
+                  },
                 },
-              },
-              headCells: {
-                style: {
-                  fontSize: '14px',
+                headCells: {
+                  style: {
+                    fontSize: '14px',
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+
+            {/* Modal for full submission view */}
+            <Modal show={!!selectedSubmission} onHide={() => setSelectedSubmission(null)} size="xl" centered>
+              <Modal.Header className="py-1" closeButton>
+                <Modal.Title className="mb-0">Submission Details</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {selectedSubmission && (
+                  <div className="basic-info">
+                    <p>
+                      <strong>Submitted At:</strong>{' '}
+                      {format(parseISO(selectedSubmission.submittedAt), 'yyyy-MM-dd HH:mm:ss')}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {selectedSubmission.email}
+                    </p>
+                    <p>
+                      <strong>Name:</strong> {selectedSubmission.firstName} {selectedSubmission.lastName}
+                    </p>
+                    <hr className="my-2" />
+                    <p>
+                      <strong>DMSP Text:</strong>
+                    </p>
+                    <div className="p-2 bg-light rounded" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                      {selectedSubmission.dmspText}
+                    </div>
+                    <hr className="my-2" />
+                    <p>
+                      <strong>AI Response:</strong>
+                    </p>
+                    <div className="p-2 bg-light rounded" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {selectedSubmission.llmResponse.replace(/<EOS>$/, '').trim()}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
+                )}
+              </Modal.Body>
+            </Modal>
+          </>
         )}
       </Col>
     </Row>

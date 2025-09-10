@@ -137,3 +137,7 @@
   line-height: 1.5;
   margin: 0;
 }
+
+.basic-info p {
+  margin-bottom: 0.25rem;
+}
