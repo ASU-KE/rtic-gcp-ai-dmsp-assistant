@@ -14,7 +14,10 @@ import config from './config/app.config';
 import { AppDataSource } from './config/data-source.config';
 
 import { initLocalPassport } from './config/passport.local.config';
-import { getSamlStrategy, initSamlPassport } from './config/passport.saml.config';
+import {
+  getSamlStrategy,
+  initSamlPassport,
+} from './config/passport.saml.config';
 import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';

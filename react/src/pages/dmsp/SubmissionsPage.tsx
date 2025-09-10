@@ -117,26 +117,34 @@ export const SubmissionsPage = () => {
             />
 
             {/* Modal for full submission view */}
-            <Modal
-              show={!!selectedSubmission}
-              onHide={() => setSelectedSubmission(null)}
-              size="xl"
-              centered
-            >
+            <Modal show={!!selectedSubmission} onHide={() => setSelectedSubmission(null)} size="xl" centered>
               <Modal.Header className="py-1" closeButton>
                 <Modal.Title className="mb-0">Submission Details</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 {selectedSubmission && (
                   <div className="basic-info">
-                    <p><strong>Submitted At:</strong> {format(parseISO(selectedSubmission.submittedAt), 'yyyy-MM-dd HH:mm:ss')}</p>
-                    <p><strong>Email:</strong> {selectedSubmission.email}</p>
-                    <p><strong>Name:</strong> {selectedSubmission.firstName} {selectedSubmission.lastName}</p>
+                    <p>
+                      <strong>Submitted At:</strong>{' '}
+                      {format(parseISO(selectedSubmission.submittedAt), 'yyyy-MM-dd HH:mm:ss')}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {selectedSubmission.email}
+                    </p>
+                    <p>
+                      <strong>Name:</strong> {selectedSubmission.firstName} {selectedSubmission.lastName}
+                    </p>
                     <hr className="my-2" />
-                    <p><strong>DMSP Text:</strong></p>
-                    <div className="p-2 bg-light rounded" style={{ maxHeight: '400px', overflowY: 'auto' }}>{selectedSubmission.dmspText}</div>
+                    <p>
+                      <strong>DMSP Text:</strong>
+                    </p>
+                    <div className="p-2 bg-light rounded" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                      {selectedSubmission.dmspText}
+                    </div>
                     <hr className="my-2" />
-                    <p><strong>AI Response:</strong></p>
+                    <p>
+                      <strong>AI Response:</strong>
+                    </p>
                     <div className="p-2 bg-light rounded" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {selectedSubmission.llmResponse.replace(/<EOS>$/, '').trim()}
