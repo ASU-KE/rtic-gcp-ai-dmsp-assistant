@@ -109,19 +109,6 @@ export const HomePage = () => {
               at this time.
             </Accordion.Body>
           </Accordion.Item>
-
-          <Accordion.Item eventKey="7">
-            <Accordion.Header>
-              Can I use this AI feedback tool for my study if my funding doesn’t come from NSF?
-            </Accordion.Header>
-            <Accordion.Body>
-              Although this DMSP AI Feedback Tool is currently configured to review plans using the NSF guidelines,
-              there are plans to add support for additional funding agencies in the near future. As those agencies are
-              added to this tool, this page will be updated to reflect the available agencies’ guidelines. In the
-              meantime, if you use this tool for an unsupported agency, your plan will be evaluated against the NSF
-              criteria, and the evaluation may not be accurate for your funding agency’s criteria.
-            </Accordion.Body>
-          </Accordion.Item>
         </Accordion>
       </Col>
     </Row>
