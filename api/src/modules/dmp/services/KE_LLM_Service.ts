@@ -1,5 +1,5 @@
 import config from '../../../config/app.config';
-import promptConfig from '../../../config/llmPrompt.config';
+import { getSystemPrompt } from '../../../config/llmPrompt.config';
 import { WebSocketServer, WebSocket } from 'ws';
 
 interface LlmResponse {
@@ -10,6 +10,7 @@ interface LlmResponse {
 export default {
   queryLlm: async (
     planText: string,
+    agency: string,
     ws?: WebSocket,
     wss?: WebSocketServer
   ): Promise<LlmResponse> => {
@@ -26,8 +27,9 @@ export default {
       },
     } = config;
 
-    const system_prompt =
-      sourceType === 'file' ? promptConfig.prompt : sourceValue;
+    const { prompt } = getSystemPrompt(agency);
+
+    const system_prompt = sourceType === 'file' ? prompt : sourceValue;
 
     return new Promise<LlmResponse>((resolve, reject) => {
       const upstream = new WebSocket(
