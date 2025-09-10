@@ -22,7 +22,7 @@
     "lint:fix": "eslint --fix \"{src,test}/**/*.ts\""
   },
   "dependencies": {
-    "@node-saml/passport-saml": "^4.0.0",
+    "@node-saml/passport-saml": "^5.1.0",
     "ajv": "^8.17.1",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
