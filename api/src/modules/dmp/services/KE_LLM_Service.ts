@@ -1,5 +1,6 @@
 import config from '../../../config/app.config';
-import { getSystemPrompt } from '../../../config/llmPrompt.config';
+import { Rubric } from '../../../entities/rubric.entity';
+import { AppDataSource } from '../../../config/data-source.config';
 import { WebSocketServer, WebSocket } from 'ws';
 
 interface LlmResponse {
@@ -7,13 +8,35 @@ interface LlmResponse {
   metadata?: Record<string, unknown>;
 }
 
+interface SystemPrompt {
+  prompt: string;
+}
+
+enum FundingAgency {
+  NSF = 'NSF',
+  DOE = 'DOE',
+  DOD = 'DOD',
+  NIH = 'NIH',
+  NASA = 'NASA',
+  NOAA = 'NOAA',
+  USDA = 'USDA',
+  USGS = 'USGS',
+}
+
 export default {
   queryLlm: async (
     planText: string,
-    agency: string,
+    agency: FundingAgency,
     ws?: WebSocket,
     wss?: WebSocketServer
   ): Promise<LlmResponse> => {
+    const rubricRepo = AppDataSource.getRepository(Rubric);
+
+    const rubric = await rubricRepo.findOneBy({ agency });
+    if (!rubric) {
+      throw new Error(`Rubric not found for agency: ${agency}`);
+    }
+
     const {
       action,
       endpoints: { queryLlmWebsocketEndpoint },
@@ -27,7 +50,7 @@ export default {
       },
     } = config;
 
-    const { prompt } = getSystemPrompt(agency);
+    const prompt = `You are a research administrator evaluating data management plans. For each section of performance criteria, determine whether the plan is complete/detailed, addressed issue but incomplete, or did not address. Skip sections that are complete/detailed. If a section of criteria is not complete/detailed, quote the relevant text from the plan, and provide a list of recommended improvements. Format each section with a section header. Use the following rubric to assess the data management plan: ${rubric.rubricText}`;
 
     const system_prompt = sourceType === 'file' ? prompt : sourceValue;
 
