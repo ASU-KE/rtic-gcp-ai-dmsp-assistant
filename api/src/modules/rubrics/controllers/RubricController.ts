@@ -35,12 +35,16 @@ export default class RubricController {
           error: null,
         });
       })
-      .catch((err: Error) => {
-        return res.status(500).json({
-          status: false,
-          data: null,
-          error: err,
-        });
+      .catch((err: unknown) => {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Internal server error';
+        return res
+          .status(500)
+          .json({
+            status: false,
+            data: null,
+            error: { message: errorMessage },
+          });
       });
   };
 
@@ -82,11 +86,14 @@ export default class RubricController {
         data: { rubric: rubricDto },
         error: null,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (
-        err.code === '23505' ||
-        err.code === 'ER_DUP_ENTRY' ||
-        err.errno === 1062
+        typeof err === 'object' &&
+        err !== null &&
+        'code' in err &&
+        ((err as any).code === '23505' ||
+          (err as any).code === 'ER_DUP_ENTRY' ||
+          (err as any).errno === 1062)
       ) {
         return res.status(400).json({
           status: false,
@@ -97,10 +104,13 @@ export default class RubricController {
         });
       }
 
+      const errorMessage =
+        err instanceof Error ? err.message : 'Internal server error';
+
       return res.status(500).json({
         status: false,
         data: null,
-        error: { message: err.message || 'Internal server error' },
+        error: { message: errorMessage },
       });
     }
   };
@@ -146,12 +156,16 @@ export default class RubricController {
           error: null,
         });
       })
-      .catch((err: Error) => {
-        return res.status(500).json({
-          status: false,
-          data: null,
-          error: { message: err.message },
-        });
+      .catch((err: unknown) => {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Internal server error';
+        return res
+          .status(500)
+          .json({
+            status: false,
+            data: null,
+            error: { message: errorMessage },
+          });
       });
   };
 
@@ -206,12 +220,12 @@ export default class RubricController {
         data: { rubric: rubricDto },
         error: null,
       });
-    } catch (err: any) {
-      return res.status(500).json({
-        status: false,
-        data: null,
-        error: { message: err.message || 'Internal server error' },
-      });
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Internal server error';
+      return res
+        .status(500)
+        .json({ status: false, data: null, error: { message: errorMessage } });
     }
   };
 
@@ -256,12 +270,16 @@ export default class RubricController {
           error: null,
         });
       })
-      .catch((err: Error) => {
-        return res.status(500).json({
-          status: false,
-          data: null,
-          error: { message: err.message || 'Internal server error' },
-        });
+      .catch((err: unknown) => {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Internal server error';
+        return res
+          .status(500)
+          .json({
+            status: false,
+            data: null,
+            error: { message: errorMessage },
+          });
       });
   };
 }
