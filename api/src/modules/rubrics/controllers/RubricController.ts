@@ -102,7 +102,7 @@ export default class RubricController {
     }
 
     this.rubricService
-      .findRubric({ agency })
+      .findRubric({ agency: agency.toUpperCase() })
       .then((rubric: Rubric | null) => {
         if (!rubric) {
           res.status(404).json({
@@ -187,7 +187,7 @@ export default class RubricController {
     const { agency } = req.params;
 
     this.rubricService
-      .deleteRubric({ agency })
+      .deleteRubric({ agency: agency.toUpperCase() })
       .then((result: DeleteResult) => {
         const deleted = result.affected ?? 0;
         res.status(200).json({
