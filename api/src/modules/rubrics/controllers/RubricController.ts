@@ -260,7 +260,7 @@ export default class RubricController {
         return res.status(500).json({
           status: false,
           data: null,
-          error: err.message || 'Internal server error',
+          error: { message: err.message || 'Internal server error' },
         });
       });
   };
