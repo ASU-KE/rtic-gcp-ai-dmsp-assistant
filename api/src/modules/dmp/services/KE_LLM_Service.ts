@@ -1,27 +1,12 @@
 import config from '../../../config/app.config';
-import { Rubric } from '../../../entities/rubric.entity';
+import { Rubric, FundingAgency } from '../../../entities/rubric.entity';
 import { AppDataSource } from '../../../config/data-source.config';
 import { WebSocketServer, WebSocket } from 'ws';
-import promptConfig from '../../../config/llmPrompt.config';
+import promptConfig, { SystemPrompt } from '../../../config/llmPrompt.config';
 
 interface LlmResponse {
   response: string;
   metadata?: Record<string, unknown>;
-}
-
-interface SystemPrompt {
-  prompt: string;
-}
-
-enum FundingAgency {
-  NSF = 'NSF',
-  DOE = 'DOE',
-  DOD = 'DOD',
-  NIH = 'NIH',
-  NASA = 'NASA',
-  NOAA = 'NOAA',
-  USDA = 'USDA',
-  USGS = 'USGS',
 }
 
 export default {

@@ -3,13 +3,20 @@ import { Request, Response } from 'express';
 import { DeleteResult } from 'typeorm';
 
 import { RubricService } from '../services/RubricService';
-import { Rubric } from '../../../entities/rubric.entity';
+import { Rubric, FundingAgency } from '../../../entities/rubric.entity';
 
 export default class RubricController {
   private rubricService: RubricService;
 
   constructor(rubricService: RubricService) {
     this.rubricService = rubricService;
+  }
+
+  private normalizeAgency(agency: string): FundingAgency | null {
+    const normalized = agency.toUpperCase();
+    return Object.values(FundingAgency).includes(normalized as FundingAgency)
+      ? (normalized as FundingAgency)
+      : null;
   }
 
   getAllRubrics = (req: Request, res: Response) => {
@@ -22,14 +29,14 @@ export default class RubricController {
           })
         );
 
-        res.status(200).json({
+        return res.status(200).json({
           status: true,
           data: { rubrics: rubricDtos },
           error: null,
         });
       })
       .catch((err: Error) => {
-        res.status(500).json({
+        return res.status(500).json({
           status: false,
           data: null,
           error: err,
@@ -38,7 +45,7 @@ export default class RubricController {
   };
 
   createRubric = async (
-    req: Request<object, object, { agency: string; rubricText: string }>,
+    req: Request<object, object, { agency: FundingAgency; rubricText: string }>,
     res: Response
   ) => {
     const { agency, rubricText } = req.body;
@@ -51,19 +58,28 @@ export default class RubricController {
       });
     }
 
+    const normalizedAgency = this.normalizeAgency(agency);
+    if (!normalizedAgency) {
+      return res.status(400).json({
+        status: false,
+        data: null,
+        error: { message: `Invalid agency: ${agency}` },
+      });
+    }
+
     try {
       const rubric = await this.rubricService.createRubric({
-        agency: agency.toUpperCase(),
+        agency,
         rubricText: rubricText,
       });
 
-      const safeRubric = plainToClass(Rubric, rubric, {
+      const rubricDto = plainToClass(Rubric, rubric, {
         excludeExtraneousValues: true,
       });
 
       return res.status(201).json({
         status: true,
-        data: { rubric: safeRubric },
+        data: { rubric: rubricDto },
         error: null,
       });
     } catch (err: any) {
@@ -93,38 +109,45 @@ export default class RubricController {
     const { agency } = req.params;
 
     if (!agency) {
-      res.status(400).json({
+      return res.status(400).json({
         status: false,
         data: null,
         error: { message: 'Agency is required.' },
       });
-      return;
+    }
+
+    const normalizedAgency = this.normalizeAgency(agency);
+    if (!normalizedAgency) {
+      return res.status(400).json({
+        status: false,
+        data: null,
+        error: { message: `Invalid agency: ${agency}` },
+      });
     }
 
     this.rubricService
-      .findRubric({ agency: agency.toUpperCase() })
+      .findRubric({ agency: normalizedAgency })
       .then((rubric: Rubric | null) => {
         if (!rubric) {
-          res.status(404).json({
+          return res.status(404).json({
             status: false,
             data: null,
             error: { message: 'Rubric not found.' },
           });
-          return;
         }
 
         const rubricDto = plainToClass(Rubric, rubric, {
           excludeExtraneousValues: true,
         });
 
-        res.status(200).json({
+        return res.status(200).json({
           status: true,
           data: { rubric: rubricDto },
           error: null,
         });
       })
       .catch((err: Error) => {
-        res.status(500).json({
+        return res.status(500).json({
           status: false,
           data: null,
           error: { message: err.message },
@@ -147,9 +170,18 @@ export default class RubricController {
       });
     }
 
+    const normalizedAgency = this.normalizeAgency(agency);
+    if (!normalizedAgency) {
+      return res.status(400).json({
+        status: false,
+        data: null,
+        error: { message: `Invalid agency: ${agency}` },
+      });
+    }
+
     try {
       const result = await this.rubricService.updateRubric(
-        { agency: agency.toUpperCase() },
+        { agency: normalizedAgency },
         { rubricText: rubricText }
       );
 
@@ -163,15 +195,15 @@ export default class RubricController {
 
       // Fetch the updated rubric to return
       const updatedRubric = await this.rubricService.findRubric({
-        agency: agency.toUpperCase(),
+        agency: normalizedAgency,
       });
-      const safeRubric = plainToClass(Rubric, updatedRubric, {
+      const rubricDto = plainToClass(Rubric, updatedRubric, {
         excludeExtraneousValues: true,
       });
 
       return res.status(200).json({
         status: true,
-        data: { rubric: safeRubric },
+        data: { rubric: rubricDto },
         error: null,
       });
     } catch (err: any) {
@@ -186,11 +218,37 @@ export default class RubricController {
   deleteRubric = (req: Request<{ agency: string }>, res: Response) => {
     const { agency } = req.params;
 
+    if (!agency) {
+      return res.status(400).json({
+        status: false,
+        data: null,
+        error: { message: 'Agency is required.' },
+      });
+    }
+
+    const normalizedAgency = this.normalizeAgency(agency);
+    if (!normalizedAgency) {
+      return res.status(400).json({
+        status: false,
+        data: null,
+        error: { message: `Invalid agency: ${agency}` },
+      });
+    }
+
     this.rubricService
-      .deleteRubric({ agency: agency.toUpperCase() })
+      .deleteRubric({ agency: normalizedAgency })
       .then((result: DeleteResult) => {
         const deleted = result.affected ?? 0;
-        res.status(200).json({
+
+        if (deleted === 0) {
+          return res.status(404).json({
+            status: false,
+            data: null,
+            error: { message: `Rubric for agency "${agency}" not found.` },
+          });
+        }
+
+        return res.status(200).json({
           status: true,
           data: {
             numberOfRubricsDeleted: deleted,
@@ -199,10 +257,10 @@ export default class RubricController {
         });
       })
       .catch((err: Error) => {
-        res.status(500).json({
+        return res.status(500).json({
           status: false,
           data: null,
-          error: err,
+          error: err.message || 'Internal server error',
         });
       });
   };

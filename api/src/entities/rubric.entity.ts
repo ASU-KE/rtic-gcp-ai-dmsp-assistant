@@ -5,13 +5,33 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
+
+export enum FundingAgency {
+  NSF = 'NSF',
+  DOE = 'DOE',
+  DOD = 'DOD',
+  NIH = 'NIH',
+  NASA = 'NASA',
+  NOAA = 'NOAA',
+  USDA = 'USDA',
+  USGS = 'USGS',
+}
 
 @Entity()
 export class Rubric {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   @Expose()
-  agency!: string;
+  id!: number;
+
+  @Column({
+    type: 'enum',
+    enum: FundingAgency,
+    unique: true,
+  })
+  @Expose()
+  agency!: FundingAgency;
 
   @Column('text')
   @Expose()

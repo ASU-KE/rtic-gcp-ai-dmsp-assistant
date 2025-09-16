@@ -1,4 +1,4 @@
-interface SystemPrompt {
+export interface SystemPrompt {
   prompt: string;
 }
 
