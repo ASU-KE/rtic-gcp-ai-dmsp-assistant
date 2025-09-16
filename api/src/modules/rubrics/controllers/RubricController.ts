@@ -69,7 +69,7 @@ export default class RubricController {
 
     try {
       const rubric = await this.rubricService.createRubric({
-        agency,
+        agency: normalizedAgency,
         rubricText: rubricText,
       });
 
