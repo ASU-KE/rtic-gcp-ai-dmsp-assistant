@@ -38,13 +38,11 @@ export default class RubricController {
       .catch((err: unknown) => {
         const errorMessage =
           err instanceof Error ? err.message : 'Internal server error';
-        return res
-          .status(500)
-          .json({
-            status: false,
-            data: null,
-            error: { message: errorMessage },
-          });
+        return res.status(500).json({
+          status: false,
+          data: null,
+          error: { message: errorMessage },
+        });
       });
   };
 
@@ -159,13 +157,11 @@ export default class RubricController {
       .catch((err: unknown) => {
         const errorMessage =
           err instanceof Error ? err.message : 'Internal server error';
-        return res
-          .status(500)
-          .json({
-            status: false,
-            data: null,
-            error: { message: errorMessage },
-          });
+        return res.status(500).json({
+          status: false,
+          data: null,
+          error: { message: errorMessage },
+        });
       });
   };
 
@@ -273,13 +269,11 @@ export default class RubricController {
       .catch((err: unknown) => {
         const errorMessage =
           err instanceof Error ? err.message : 'Internal server error';
-        return res
-          .status(500)
-          .json({
-            status: false,
-            data: null,
-            error: { message: errorMessage },
-          });
+        return res.status(500).json({
+          status: false,
+          data: null,
+          error: { message: errorMessage },
+        });
       });
   };
 }

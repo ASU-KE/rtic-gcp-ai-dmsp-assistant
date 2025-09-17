@@ -36,10 +36,7 @@ export default {
       },
     } = config;
 
-    const prompt = promptConfig.prompt.replace(
-      '{{RUBRIC_TEXT}}',
-      rubric.rubricText
-    );
+    const prompt = `${promptConfig.prompt} ${rubric.rubricText}`;
 
     const system_prompt = sourceType === 'file' ? prompt : sourceValue;
 
