@@ -25,13 +25,9 @@ export class Rubric {
   @Expose()
   id!: number;
 
-  @Column({
-    type: 'enum',
-    enum: FundingAgency,
-    unique: true,
-  })
+  @Column()
   @Expose()
-  agency!: FundingAgency;
+  agency!: string;
 
   @Column('text')
   @Expose()

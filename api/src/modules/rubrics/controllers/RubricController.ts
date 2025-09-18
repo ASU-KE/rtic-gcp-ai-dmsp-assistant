@@ -85,23 +85,6 @@ export default class RubricController {
         error: null,
       });
     } catch (err: unknown) {
-      if (
-        typeof err === 'object' &&
-        err !== null &&
-        'code' in err &&
-        ((err as any).code === '23505' ||
-          (err as any).code === 'ER_DUP_ENTRY' ||
-          (err as any).errno === 1062)
-      ) {
-        return res.status(400).json({
-          status: false,
-          data: null,
-          error: {
-            message: `A rubric for agency "${agency}" already exists.`,
-          },
-        });
-      }
-
       const errorMessage =
         err instanceof Error ? err.message : 'Internal server error';
 
