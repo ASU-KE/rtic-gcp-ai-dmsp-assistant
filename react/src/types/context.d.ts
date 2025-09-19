@@ -5,6 +5,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   storageKey: string;
   user: null | User;
+  sessionExpiration: number | null;
 }
 
 export interface AuthContextProps {
