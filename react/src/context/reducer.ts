@@ -3,12 +3,21 @@ import { AuthAction, AuthState } from "../types";
 export const AuthReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case "LOGIN":
-      localStorage.setItem(state.storageKey, JSON.stringify(action.payload.user));
+      const sessionExpiration = Date.now() + 23 * 60 * 60 * 1000; // 23 hours in milliseconds; why 23? to eliminate possible overlap when backend session expires at 24 hours
+
+      localStorage.setItem(
+        state.storageKey,
+        JSON.stringify({
+          user: action.payload.user,
+          sessionExpiration,
+        })
+      );
 
       return {
         ...state,
         isAuthenticated: true,
         user: action.payload.user,
+        sessionExpiration,
       };
 
     case "LOGOUT":
@@ -18,6 +27,7 @@ export const AuthReducer = (state: AuthState, action: AuthAction): AuthState => 
         ...state,
         isAuthenticated: false,
         user: null,
+        sessionExpiration: null,
       };
 
     default:
