@@ -3,7 +3,7 @@ import { AuthAction, AuthState } from "../types";
 export const AuthReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case "LOGIN":
-      const sessionExpiration = Date.now() + 23 * 60 * 60 * 1000; // 23 hours in milliseconds
+      const sessionExpiration = Date.now() + 23 * 60 * 60 * 1000; // 23 hours in milliseconds; why 23? to eliminate possible overlap when backend session expires at 24 hours
 
       localStorage.setItem(
         state.storageKey,
