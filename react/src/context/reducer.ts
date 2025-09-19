@@ -3,7 +3,7 @@ import { AuthAction, AuthState } from "../types";
 export const AuthReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case "LOGIN":
-      const sessionExpiration = Date.now() + 24 * 60 * 60 * 1000; // 1 day in ms
+      const sessionExpiration = Date.now() + 23 * 60 * 60 * 1000; // 23 hours in milliseconds
 
       localStorage.setItem(
         state.storageKey,
