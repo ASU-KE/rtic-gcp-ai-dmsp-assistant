@@ -67,7 +67,7 @@ app.use(
 const sessionStore = new TypeormStore({
   cleanupLimit: 2,
   limitSubquery: false, // If using MariaDB.
-  ttl: (24 * 60 * 60 * 1000), // 1 day in milliseconds
+  ttl: (24 * 60 * 60), // 1 day in seconds
 });
 
 const sessionRepository = AppDataSource.getRepository(Session);
