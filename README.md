@@ -43,6 +43,7 @@ This repository contains the necessary resources and configurations to host the 
     - [Cloud Build Variables](#cloud-build-variables)
   - [Commit Message Guidelines](#commit-message-guidelines)
     - [How to Commit](#how-to-commit)
+  - [First-Time Launch Instructions (Local Setup)](#first-time-launch-instructions-local-setup)
 
 <br>
 <br>
@@ -206,3 +207,43 @@ Run the following command from the root of the repo to create a properly formatt
 
 ```bash
 npm run commit
+```
+
+## First-Time Launch Instructions (Local Setup)
+
+If you are setting up the application for the first time, follow these steps to ensure that your containers and database are initialized correctly.
+
+1. **Clean up existing containers and volumes (recommended for fresh setup)**
+
+   Before building, remove any previously created containers or volumes to avoid conflicts:
+   ```bash
+   docker compose down -v
+   docker system prune -f
+2. **Build the application containers**
+
+   Run this command from the project root, replacing `<YOUR_GITHUB_TOKEN>` with your GitHub Personal Access Token:
+
+   ```bash
+   docker compose build --build-arg NPM_TOKEN=<YOUR_GITHUB_TOKEN>
+   ```
+
+3. **Start the containers**
+
+   Once the build completes successfully, launch the full application stack:
+
+   ```bash
+   docker compose up -d
+   ```
+
+   This will start the API server, React frontend, and database containers in the background.
+
+4. **Run database migrations**
+
+   After the containers are running, open a terminal inside the API container and execute the migration command to initialize the database schema:
+
+   ```bash
+   docker compose exec api bash
+   npm run migration:run
+   ```
+
+   Once migrations complete, your local environment is fully set up and the application is ready to run.
