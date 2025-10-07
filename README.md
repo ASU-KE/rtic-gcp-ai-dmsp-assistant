@@ -246,4 +246,31 @@ If you are setting up the application for the first time, follow these steps to 
    npm run migration:run
    ```
 
-   Once migrations complete, your local environment is fully set up and the application is ready to run.
+5. **Seed initial rubric data**
+
+   After running the migrations, insert the required base rubric data.
+   These rubrics define the evaluation criteria used by the DMSP AI Assistant and are required for proper application functionality.
+
+   Inside the same API container, run the following command:
+
+   ```bash
+   npm run seed
+   ```
+
+   This command will:
+
+   * Insert missing rubrics.
+   * Update existing rubrics if their text has changed.
+   * Skip any that are already up to date.
+
+   Example output:
+
+   ```
+   Inserted rubric for agency: NSF
+   No changes for agency: NIH
+   Updated rubric for agency: DOE
+   ```
+  
+   You should see one entry per rubric (e.g., NSF, NIH, DOE).
+  
+   Once this is done, your local environment is fully ready for use.
