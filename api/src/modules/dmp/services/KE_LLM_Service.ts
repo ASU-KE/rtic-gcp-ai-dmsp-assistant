@@ -2,7 +2,6 @@ import config from '../../../config/app.config';
 import { Rubric, FundingAgency } from '../../../entities/rubric.entity';
 import { AppDataSource } from '../../../config/data-source.config';
 import { WebSocketServer, WebSocket } from 'ws';
-import promptConfig, { SystemPrompt } from '../../../config/llmPrompt.config';
 
 interface LlmResponse {
   response: string;
@@ -36,7 +35,7 @@ export default {
       },
     } = config;
 
-    const prompt = `${promptConfig.prompt} ${rubric.rubricText}`;
+    const prompt = `${rubric.rubricText}`;
 
     const system_prompt = sourceType === 'file' ? prompt : sourceValue;
 
