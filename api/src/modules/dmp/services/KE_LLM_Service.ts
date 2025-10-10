@@ -1,5 +1,6 @@
 import config from '../../../config/app.config';
-import { getSystemPrompt } from '../../../config/llmPrompt.config';
+import { Rubric, FundingAgency } from '../../../entities/rubric.entity';
+import { AppDataSource } from '../../../config/data-source.config';
 import { WebSocketServer, WebSocket } from 'ws';
 
 interface LlmResponse {
@@ -10,10 +11,17 @@ interface LlmResponse {
 export default {
   queryLlm: async (
     planText: string,
-    agency: string,
+    agency: FundingAgency,
     ws?: WebSocket,
     wss?: WebSocketServer
   ): Promise<LlmResponse> => {
+    const rubricRepo = AppDataSource.getRepository(Rubric);
+
+    const rubric = await rubricRepo.findOneBy({ agency });
+    if (!rubric) {
+      throw new Error(`Rubric not found for agency: ${agency}`);
+    }
+
     const {
       action,
       endpoints: { queryLlmWebsocketEndpoint },
@@ -27,7 +35,7 @@ export default {
       },
     } = config;
 
-    const { prompt } = getSystemPrompt(agency);
+    const prompt = `${rubric.rubricText}`;
 
     const system_prompt = sourceType === 'file' ? prompt : sourceValue;
 

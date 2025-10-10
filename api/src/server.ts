@@ -22,9 +22,11 @@ import { isAuthenticated } from './middlewares/is-authenticated.middleware';
 
 import { UserService } from './modules/users/services/UserService';
 import { SubmissionService } from './modules/submissions/services/SubmissionService';
+import { RubricService } from './modules/rubrics/services/RubricService';
 import LocalAuthRoutes from './routes/auth.local.routes';
 import SamlAuthRoutes from './routes/auth.saml.routes';
 import SubmissionRoutes from './routes/submission.routes';
+import RubricRoutes from './routes/rubric.routes';
 import UserRoutes from './routes/user.routes';
 import DmpRoutes from './routes/dmp.routes';
 
@@ -46,6 +48,7 @@ AppDataSource.initialize()
 // Initialize new userService and submissionService with TypeORM data source to inject into route and authproviders
 const userService = new UserService(AppDataSource);
 const submissionService = new SubmissionService(AppDataSource);
+const rubricService = new RubricService(AppDataSource);
 
 const app = express();
 app.use(express.json());
@@ -67,7 +70,7 @@ app.use(
 const sessionStore = new TypeormStore({
   cleanupLimit: 2,
   limitSubquery: false, // If using MariaDB.
-  ttl: (24 * 60 * 60), // 1 day in seconds
+  ttl: 24 * 60 * 60, // 1 day in seconds
 });
 
 const sessionRepository = AppDataSource.getRepository(Session);
@@ -88,8 +91,8 @@ app.use(
 );
 
 // Body parser middleware for SAML authentication
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false, limit: '10mb' }));
+app.use(bodyParser.json({ limit: '10mb' }));
 
 // Init Passport middleware
 app.use(passport.initialize());
@@ -127,6 +130,7 @@ app.use(
   isAuthenticated,
   SubmissionRoutes(submissionService)
 );
+app.use('/api/rubrics', isAuthenticated, RubricRoutes(rubricService));
 app.use('/api/dmp', isAuthenticated, DmpRoutes);
 
 // 404 handler
