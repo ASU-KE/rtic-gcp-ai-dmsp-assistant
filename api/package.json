@@ -20,7 +20,7 @@
     "format:write": "prettier --write \"src/**/*.ts\"",
     "lint:check": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "eslint --fix \"{src,test}/**/*.ts\"",
-    "seed": "ts-node src/seed.ts"
+    "seed": "node dist/seed.js"
   },
   "dependencies": {
     "@node-saml/passport-saml": "^4.0.0",
