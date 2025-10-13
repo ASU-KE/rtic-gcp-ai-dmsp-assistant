@@ -17,11 +17,11 @@ export const getSamlStrategy = (userService: UserService) => {
   const { entryPoint, logoutUrl, idpCert: cert } = toPassportConfig(reader);
 
   const spConfig = {
-      callbackUrl: config.auth.saml.callbackUrl,
-      logoutCallbackUrl: config.auth.saml.logoutCallbackUrl,
-      issuer: config.auth.saml.issuer,
-      privateKey: config.auth.saml.spPrivateKey,
-      decryptionPvk: config.auth.saml.spPrivateKey,
+    callbackUrl: config.auth.saml.callbackUrl,
+    logoutCallbackUrl: config.auth.saml.logoutCallbackUrl,
+    issuer: config.auth.saml.issuer,
+    privateKey: config.auth.saml.spPrivateKey,
+    decryptionPvk: config.auth.saml.spPrivateKey,
   };
 
   const strategy = new SamlStrategy(
@@ -48,8 +48,14 @@ export const getSamlStrategy = (userService: UserService) => {
               username: profile.nameID,
               email: profile.nameID,
               password: '', // No password for SAML users
-              firstName: typeof profile['urn:oid:2.5.4.42'] === 'string' ? profile['urn:oid:2.5.4.42'] : '',
-              lastName: typeof profile['urn:oid:2.5.4.4'] === 'string' ? profile['urn:oid:2.5.4.4'] : '',
+              firstName:
+                typeof profile['urn:oid:2.5.4.42'] === 'string'
+                  ? profile['urn:oid:2.5.4.42']
+                  : '',
+              lastName:
+                typeof profile['urn:oid:2.5.4.4'] === 'string'
+                  ? profile['urn:oid:2.5.4.4']
+                  : '',
               role: 'user', // default role
             };
 
@@ -112,10 +118,13 @@ export const generateSamlMetadata = (samlStrategy: SamlStrategy) => {
   return samlStrategy.generateServiceProviderMetadata(
     config.auth.saml.spPublicCert,
     config.auth.saml.spPublicCert
-    );
+  );
 };
 
-export const initSamlPassport = (samlStrategy: SamlStrategy, userService: UserService) => {
+export const initSamlPassport = (
+  samlStrategy: SamlStrategy,
+  userService: UserService
+) => {
   passport.use(samlStrategy);
 
   passport.serializeUser(function (user, cb) {

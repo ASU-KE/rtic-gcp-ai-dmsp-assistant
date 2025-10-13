@@ -26,7 +26,6 @@ export const ListUsersPage = () => {
           }
         );
         setUsers(response.data.data);
-
       } catch (err: any) {
         setErrorMsg(
           typeof err.response?.data?.error === 'string'

@@ -18,16 +18,19 @@ services:
       - ./api/package.json:/code/package.json
       - ./api/package-lock.json:/code/package-lock.json
     labels:
-      - "traefik.enable=true" # Enable Traefik
-      - "traefik.http.routers.api.rule=Host(`dmsp.local.asu.edu`) && PathPrefix(`/api`)" # Determine what URL to use
-      - "traefik.http.routers.api.entrypoints=websecure" # Determine what entrypoint and port to use
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`dmsp.dev.rtd.asu.edu`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls=true"
+      - "traefik.http.routers.api.priority=100"
+      - "traefik.http.routers.api.middlewares=api-headers@docker,api-buffering@docker"
       - "traefik.http.services.api.loadbalancer.server.port=8080"
-      - "traefik.http.middlewares.api.headers.accesscontrolallowmethods=GET,OPTIONS,POST,PUT"
-      - "traefik.http.middlewares.api.headers.accesscontrolallowheaders=*"
-      - "traefik.http.middlewares.api.headers.accesscontrolalloworiginlist=https://dmsp.local.asu.edu"
-      - "traefik.http.middlewares.api.headers.accesscontrolmaxage=100"
-      - "traefik.http.middlewares.api.headers.addvaryheader=true"
+      - "traefik.http.middlewares.api-headers.headers.accesscontrolallowmethods=GET,OPTIONS,POST,PUT"
+      - "traefik.http.middlewares.api-headers.headers.accesscontrolallowheaders=*"
+      - "traefik.http.middlewares.api-headers.headers.accesscontrolalloworiginlist=https://dmsp.dev.rtd.asu.edu"
+      - "traefik.http.middlewares.api-headers.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.api-headers.headers.addvaryheader=true"
+      - "traefik.http.middlewares.api-buffering.buffering.maxRequestBodyBytes=10485760"  # 10MB
     networks:
       - proxy
       - private
@@ -65,7 +68,7 @@ services:
       context: react
       target: development
       args:
-        - APP_BACKEND_DOMAIN=dmsp.local.asu.edu
+        - APP_BACKEND_DOMAIN=dmsp.dev.rtd.asu.edu
         - APP_BACKEND_PATH_PREFIX=api
         - APP_BACKEND_PORT=443
         - APP_BACKEND_PROTOCOL=https
@@ -77,10 +80,11 @@ services:
       - ./react/src:/code/src
       - /code/node_modules
     labels:
-      - "traefik.enable=true" # Enable Traefik
-      - "traefik.http.routers.react.rule=Host(`dmsp.local.asu.edu`)" # Determine what URL to use
-      - "traefik.http.routers.react.entrypoints=websecure" # Determine what entrypoint and port to use
+      - "traefik.enable=true"
+      - "traefik.http.routers.react.rule=Host(`dmsp.dev.rtd.asu.edu`)"
+      - "traefik.http.routers.react.entrypoints=websecure"
       - "traefik.http.routers.react.tls=true"
+      - "traefik.http.routers.react.priority=1"
     networks:
       - proxy
     depends_on:
@@ -128,9 +132,9 @@ services:
       # - "--api.insecure=false"
 
       # Observability
-      - "--log.level=ERROR"
-      - "--accesslog=false"
-      - "--metrics.prometheus=true"
+      - "--log.level=DEBUG"
+      - "--accesslog=true"
+      # - "--metrics.prometheus=true"
 
     # Traefik Dynamic configuration via Docker labels
     labels:

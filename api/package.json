@@ -1,6 +1,6 @@
 {
   "name": "dmp-ai-assistant-poc",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,8 @@
     "format:check": "prettier --check \"src/**/*.ts\"",
     "format:write": "prettier --write \"src/**/*.ts\"",
     "lint:check": "eslint \"{src,test}/**/*.ts\"",
-    "lint:fix": "eslint --fix \"{src,test}/**/*.ts\""
+    "lint:fix": "eslint --fix \"{src,test}/**/*.ts\"",
+    "seed": "node dist/seed.js"
   },
   "dependencies": {
     "@node-saml/passport-saml": "^4.0.0",

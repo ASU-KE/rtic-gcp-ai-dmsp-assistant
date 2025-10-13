@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Col, Row, Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { Atom } from 'react-loading-indicators';
@@ -14,6 +14,7 @@ import '../../App.css';
 
 type FormValues = {
   dmpId: string;
+  agency: string;
 };
 
 export function SubmitDmpId() {
@@ -80,6 +81,7 @@ export function SubmitDmpId() {
           `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/dmp/id`,
           {
             dmpId: values.dmpId,
+            agency: values.agency,
           },
           {
             withCredentials: true,
@@ -166,11 +168,11 @@ export function SubmitDmpId() {
             </li>
           </ul>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <label>Please submit DMP ID:</label>
-            </div>
-            <div className="d-flex gap-1 align-items-start">
-              <input
+            {/* DMP ID */}
+            <Form.Group className="mb-3" controlId="dmpId">
+              <Form.Label className="fw-semibold">Please submit DMP ID:</Form.Label>
+              <Form.Control
+                type="text"
                 {...register('dmpId', { required: 'DMP ID is required' })}
                 style={{ width: '250px' }}
                 onChange={(e) => {
@@ -182,16 +184,51 @@ export function SubmitDmpId() {
                   clearErrors('dmpId');
                   setApiError(null);
                 }}
+                disabled={submissionInProgress}
               />
-              <Button type="submit" disabled={submissionInProgress} className="btn-custom-medium">
-                {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
-              </Button>
-            </div>
-            {(errors.dmpId || apiError) && (
-              <div style={{ color: '#8c1d40', fontSize: '0.875rem', marginTop: '0.20rem' }}>
-                {errors.dmpId?.message || apiError}
-              </div>
-            )}
+              {(errors.dmpId || apiError) && (
+                <Form.Text className="text-danger">{errors.dmpId?.message || apiError}</Form.Text>
+              )}
+            </Form.Group>
+
+            {/* Funding Agency */}
+            <Form.Group className="mb-3" controlId="fundingAgency">
+              <Form.Label className="fw-semibold">Funding Agency</Form.Label>
+              <Form.Select
+                {...register('agency')}
+                style={{ width: '250px' }}
+                defaultValue="NSF"
+                disabled={submissionInProgress}
+              >
+                <option value="NSF">NSF</option>
+                <option value="DOD" disabled>
+                  DOD (Coming)
+                </option>
+                <option value="DOE" disabled>
+                  DOE (Coming)
+                </option>
+                <option value="NASA" disabled>
+                  NASA (Coming)
+                </option>
+                <option value="NIH" disabled>
+                  NIH (Coming)
+                </option>
+                <option value="NOAA" disabled>
+                  NOAA (Coming)
+                </option>
+                <option value="USDA" disabled>
+                  USDA (Coming)
+                </option>
+                <option value="USGS" disabled>
+                  USGS (Coming)
+                </option>
+              </Form.Select>
+            </Form.Group>
+
+            {/* Submit Button */}
+            <Button type="submit" className="btn-custom-medium" disabled={submissionInProgress}>
+              {showLoadingIndicator ? 'Submitting...' : submissionInProgress ? 'Submitted' : 'Submit'}
+            </Button>
           </form>
         </Col>
       </Row>

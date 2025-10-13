@@ -17,6 +17,7 @@ import '../../App.css';
 
 type FormValues = {
   dmpText: string;
+  agency: string;
 };
 
 export function SubmitDmpText() {
@@ -85,6 +86,7 @@ export function SubmitDmpText() {
           `${import.meta.env.VITE_BACKEND_PROTOCOL}://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/${import.meta.env.VITE_BACKEND_PATH_PREFIX}/dmp/text`,
           {
             dmpText: values.dmpText,
+            agency: values.agency,
           },
           {
             withCredentials: true,
@@ -174,13 +176,11 @@ export function SubmitDmpText() {
             console.error('Error reading PDF:', error);
             setFileError('Failed to extract text from PDF. Please try another file.');
           });
-
       } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
         const arrayBuffer = await file.arrayBuffer();
         const result = await mammoth.extractRawText({ arrayBuffer });
         text = result.value;
         setValue('dmpText', text);
-
       } else if (fileType === 'text/plain') {
         const reader = new FileReader();
         reader.onload = () => {
@@ -188,7 +188,6 @@ export function SubmitDmpText() {
           setValue('dmpText', content);
         };
         reader.readAsText(file);
-
       } else {
         setFileError('Unsupported file type. Please upload PDF, DOCX, or TXT.');
       }
@@ -238,6 +237,35 @@ export function SubmitDmpText() {
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
+
+          {/* Funding Agency Dropdown */}
+          <Form.Group className="mt-3" controlId="fundingAgency">
+            <Form.Label className="fw-semibold">Funding Agency</Form.Label>
+            <Form.Select {...register('agency')} defaultValue="NSF" disabled={submissionInProgress}>
+              <option value="NSF">NSF</option>
+              <option value="DOD" disabled>
+                DOD (Coming)
+              </option>
+              <option value="DOE" disabled>
+                DOE (Coming)
+              </option>
+              <option value="NASA" disabled>
+                NASA (Coming)
+              </option>
+              <option value="NIH" disabled>
+                NIH (Coming)
+              </option>
+              <option value="NOAA" disabled>
+                NOAA (Coming)
+              </option>
+              <option value="USDA" disabled>
+                USDA (Coming)
+              </option>
+              <option value="USGS" disabled>
+                USGS (Coming)
+              </option>
+            </Form.Select>
+          </Form.Group>
 
           <div className="d-flex justify-content-end mt-3">
             <Button
