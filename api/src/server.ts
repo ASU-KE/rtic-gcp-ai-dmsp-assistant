@@ -99,13 +99,27 @@ async function createApp() {
   // Init Passport middleware
   app.use(passport.initialize());
   app.use(passport.session());
-  if (config.auth.strategy === 'local') {
-    initLocalPassport(app, userService);
-  }
-  if (config.auth.strategy === 'saml') {
-    const samlStrategy = getSamlStrategy(userService);
-    initSamlPassport(samlStrategy, userService);
-    app.use('/api/sso', SamlAuthRoutes(samlStrategy));
+
+  switch (config.auth.strategy) {
+    case 'local':
+      initLocalPassport(app, userService);
+      app.use('/api/auth', LocalAuthRoutes());
+      break;
+
+    case 'saml':
+      const samlStrategy = getSamlStrategy(userService);
+      initSamlPassport(samlStrategy, userService);
+      app.use('/api/sso', SamlAuthRoutes(samlStrategy));
+      break;
+
+    case 'none':
+      console.log('Auth strategy: NONE — no authentication required');
+      break;
+
+    default:
+      console.warn(
+        `Unknown or unsupported auth strategy: ${config.auth.strategy}`
+      );
   }
 
   // Register  unprotected routes
@@ -116,9 +130,6 @@ async function createApp() {
       message: 'DMSP AI Tool API',
     });
   });
-  if (config.auth.strategy === 'local') {
-    app.use('/api/auth', LocalAuthRoutes());
-  }
 
   // Health-check for Kubernetes
   app.get('/api/healthz', (req, res) => {
