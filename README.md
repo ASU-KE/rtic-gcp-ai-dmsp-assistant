@@ -254,7 +254,7 @@ If you are setting up the application for the first time, follow these steps to 
    Inside the same API container, run the following command:
 
    ```bash
-   npm run seed
+   npm run seed:dev
    ```
 
    This command will:
