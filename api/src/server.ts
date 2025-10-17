@@ -37,105 +37,121 @@ const rollbar = new Rollbar({
   captureUnhandledRejections: true,
 });
 
-AppDataSource.initialize()
-  .then(() => {
+async function createApp() {
+  // Wait for TypeORM initialization to complete
+  try {
+    await AppDataSource.initialize();
     console.log('TypeORM has been initialized!');
-  })
-  .catch((err) => {
+  } catch (err) {
     console.error('Error during TypeORM initialization:', err);
+    throw err;
+  }
+
+  // Initialize services only after TypeORM is ready
+  const userService = new UserService(AppDataSource);
+  const submissionService = new SubmissionService(AppDataSource);
+  const rubricService = new RubricService(AppDataSource);
+
+  const app = express();
+  app.use(express.json());
+  app.use(morgan('common'));
+  app.use(rollbar.errorHandler());
+
+  app.use(
+    cors({
+      origin: [
+        'http://localhost:3000',
+        'https://dmsp.local.asu.edu',
+        'https://dmsp.dev.rtd.asu.edu',
+        'https://dmsp.ai.rto.asu.edu',
+      ],
+      credentials: true, // allow session cookie from browser to pass through
+    })
+  );
+  // Initialize session store with TypeORM
+  const sessionStore = new TypeormStore({
+    cleanupLimit: 2,
+    limitSubquery: false, // If using MariaDB.
+    ttl: 24 * 60 * 60, // 24 hours in seconds
   });
 
-// Initialize new userService and submissionService with TypeORM data source to inject into route and authproviders
-const userService = new UserService(AppDataSource);
-const submissionService = new SubmissionService(AppDataSource);
-const rubricService = new RubricService(AppDataSource);
+  const sessionRepository = AppDataSource.getRepository(Session);
+  app.use(
+    session({
+      name: config.auth.sessionName,
+      secret: config.auth.sessionSecret,
+      resave: false, // don't save session if unmodified
+      saveUninitialized: false, // don't create session until something stored
+      proxy: true, // trust first proxy for secure cookies in production
+      store: sessionStore.connect(sessionRepository),
+      cookie: {
+        sameSite: 'none', // required for cross-site cookies
+        secure: true, // Must be true when samesite is 'none' and using HTTPS (or with localhost)
+        httpOnly: true, // Helps prevent XSS attacks by not allowing client-side scripts to access the cookie
+      },
+    })
+  );
 
-const app = express();
-app.use(express.json());
-app.use(morgan('common'));
-app.use(rollbar.errorHandler());
+  // Body parser middleware for SAML authentication
+  app.use(bodyParser.urlencoded({ extended: false, limit: '10mb' }));
+  app.use(bodyParser.json({ limit: '10mb' }));
 
-app.use(
-  cors({
-    origin: [
-      'http://localhost:3000',
-      'https://dmsp.local.asu.edu',
-      'https://dmsp.dev.rtd.asu.edu',
-      'https://dmsp.ai.rto.asu.edu',
-    ],
-    credentials: true, // allow session cookie from browser to pass through
-  })
-);
-// Initialize session store with TypeORM
-const sessionStore = new TypeormStore({
-  cleanupLimit: 2,
-  limitSubquery: false, // If using MariaDB.
-  ttl: (24 * 60 * 60), // 24 hours in seconds
-});
+  // Init Passport middleware
+  app.use(passport.initialize());
+  app.use(passport.session());
 
-const sessionRepository = AppDataSource.getRepository(Session);
-app.use(
-  session({
-    name: config.auth.sessionName,
-    secret: config.auth.sessionSecret,
-    resave: false, // don't save session if unmodified
-    saveUninitialized: false, // don't create session until something stored
-    proxy: true, // trust first proxy for secure cookies in production
-    store: sessionStore.connect(sessionRepository),
-    cookie: {
-      sameSite: 'none', // required for cross-site cookies
-      secure: true, // Must be true when samesite is 'none' and using HTTPS (or with localhost)
-      httpOnly: true, // Helps prevent XSS attacks by not allowing client-side scripts to access the cookie
-    },
-  })
-);
+  switch (config.auth.strategy) {
+    case 'local':
+      initLocalPassport(app, userService);
+      app.use('/api/auth', LocalAuthRoutes());
+      break;
 
-// Body parser middleware for SAML authentication
-app.use(bodyParser.urlencoded({ extended: false, limit: '10mb' }));
-app.use(bodyParser.json({ limit: '10mb' }));
+    case 'saml':
+      const samlStrategy = getSamlStrategy(userService);
+      initSamlPassport(samlStrategy, userService);
+      app.use('/api/sso', SamlAuthRoutes(samlStrategy));
+      break;
 
-// Init Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
-if (config.auth.strategy === 'local') {
-  initLocalPassport(app, userService);
-}
-if (config.auth.strategy === 'saml') {
-  const samlStrategy = getSamlStrategy(userService);
-  initSamlPassport(samlStrategy, userService);
-  app.use('/api/sso', SamlAuthRoutes(samlStrategy));
-}
+    case 'none':
+      console.log('Auth strategy: NONE — no authentication required');
+      break;
 
-// Register  unprotected routes
-app.get('/api', (req: Request, res: Response) => {
-  res.json({
-    success: true,
-    isAuthenticated: req.isAuthenticated(),
-    message: 'DMSP AI Tool API',
+    default:
+      console.warn(
+        `Unknown or unsupported auth strategy: ${config.auth.strategy}`
+      );
+  }
+
+  // Register  unprotected routes
+  app.get('/api', (req: Request, res: Response) => {
+    res.json({
+      success: true,
+      isAuthenticated: req.isAuthenticated(),
+      message: 'DMSP AI Tool API',
+    });
   });
-});
-if (config.auth.strategy === 'local') {
-  app.use('/api/auth', LocalAuthRoutes());
+
+  // Health-check for Kubernetes
+  app.get('/api/healthz', (req, res) => {
+    res.status(200).json({ status: 'Healthy' });
+  });
+
+  // Protected routes
+  app.use('/api/user', isAuthenticated, UserRoutes(userService));
+  app.use(
+    '/api/submissions',
+    isAuthenticated,
+    SubmissionRoutes(submissionService)
+  );
+  app.use('/api/rubrics', isAuthenticated, RubricRoutes(rubricService));
+  app.use('/api/dmp', isAuthenticated, DmpRoutes);
+
+  // 404 handler
+  app.use((req, res) => {
+    res.status(404).json({ message: 'Path Not Found' });
+  });
+
+  return app;
 }
 
-// Health-check for Kubernetes
-app.get('/api/healthz', (req, res) => {
-  res.status(200).json({ status: 'Healthy' });
-});
-
-// Protected routes
-app.use('/api/user', isAuthenticated, UserRoutes(userService));
-app.use(
-  '/api/submissions',
-  isAuthenticated,
-  SubmissionRoutes(submissionService)
-);
-app.use('/api/rubrics', isAuthenticated, RubricRoutes(rubricService));
-app.use('/api/dmp', isAuthenticated, DmpRoutes);
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ message: 'Path Not Found' });
-});
-
-export default app;
+export default createApp;
