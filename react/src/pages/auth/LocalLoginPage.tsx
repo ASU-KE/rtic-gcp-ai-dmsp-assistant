@@ -80,7 +80,7 @@ export const LocalLoginPage = () => {
               />
             </div>
 
-            <div className="mb-3">
+            <div className="mb-3 login-row-inline">
               <label htmlFor="password" className="form-label">
                 Password
               </label>
@@ -95,21 +95,12 @@ export const LocalLoginPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <img
-                  src={showPassword ? eyeIcon : eyeOffIcon}
-                  alt="Toggle visibility"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: '10px',
-                    transform: 'translateY(-50%)',
-                    width: '20px',
-                    height: '20px',
-                    cursor: 'pointer',
-                    opacity: 0.6,
-                  }}
-                />
+                <button type="button"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  onClick={() => setShowPassword((s) => !s)}
+                  className="password-toggle-btn"               >
+                  <img src={showPassword ? eyeIcon : eyeOffIcon} alt="" />
+                </button>
               </div>
             </div>
 

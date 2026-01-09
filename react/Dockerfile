@@ -28,9 +28,7 @@ WORKDIR ${APP_HOME}
 COPY ./package.json ${APP_HOME}/
 COPY ./package-lock.json ${APP_HOME}/
 
-RUN npm config set @asu:registry https://npm.pkg.github.com/ && \
-  npm config set -- '//npm.pkg.github.com/:_authToken' ${NPM_TOKEN} && \
-  npm ci
+RUN npm ci
 
 COPY . ${APP_HOME}
 

@@ -240,7 +240,7 @@ export function SubmitDmpText() {
 
           {/* Funding Agency Dropdown */}
           <Form.Group className="mt-3" controlId="fundingAgency">
-            <Form.Label className="fw-semibold">Funding Agency</Form.Label>
+            <Form.Label className="fw-semibold">Funding Agency: </Form.Label>
             <Form.Select {...register('agency')} defaultValue="NSF" disabled={submissionInProgress}>
               <option value="NSF">NSF</option>
               <option value="DOD" disabled>
@@ -282,17 +282,10 @@ export function SubmitDmpText() {
         {showLoadingIndicator && (
           <Row className="mt-2">
             <Col md={12}>
-              <div className="border p-2">
-                <div className="d-flex justify-content-center">
-                  <Row>
-                    <h4>Analyzing your DMP... please wait</h4>
-                  </Row>
-                </div>
-                <div className="d-flex justify-content-center">
-                  <Row>
-                    <Atom color="#000000" size="medium" />
-                  </Row>
-                </div>
+              {/* centered loading box */}
+              <div className="loading-box border p-2">
+                <h4 className="mb-3">Analyzing your DMP... please wait</h4>
+                <Atom color="#000000" size="medium" />
               </div>
             </Col>
           </Row>
@@ -303,17 +296,9 @@ export function SubmitDmpText() {
             <Col md={12}>
               <div className="border p-3" style={{ position: 'relative' }}>
                 <div className="d-flex justify-content-between align-items-start mb-3">
-                  {/* <div>
-                  <h5 className="m-0 fw-semibold">AI Analysis for DMP Text:</h5>
-                  <div className="dmp-info-box">
-                    {submittedDmpText.slice(0, 100)}
-                    {submittedDmpText.length > 100 ? '...' : ''}
-                  </div>
-                </div> */}
                   <div>
-                    {/* <h5 className="m-0 fw-semibold">AI Analysis for DMP Text:</h5> */}
                     <p>
-                      Thank you for using the ASU DMSP AI Feedback Tool! This AI-generated response is based on the{' '}
+                      Thank you for using the AI Feedback Tool! This AI-generated response is based on the{' '}
                       <a href="https://osf.io/mgjpp">DART Data Management Plan Rubric</a> to gauge your plan’s
                       effectiveness.{' '}
                       <strong>
@@ -324,22 +309,12 @@ export function SubmitDmpText() {
                     <p>
                       <strong>Consider this response as guidance only.</strong> As the author and investigator of your
                       project, you are ultimately responsible for the project's outcomes and adhering to your data
-                      management plan. The DMPTool generated this feedback to give you a quick response so that you can
+                      management plan. The tool generated this feedback to give you a quick response so that you can
                       adapt your plan immediately.
                     </p>
                     <p>
                       <strong>If you have any questions</strong> or would like the review of your plan to be done by a
-                      human, request a consultation with the{' '}
-                      <a href="https://asu.service-now.com/sp?sysparm_stack=no&sys_id=fcadee6d1b1c20d09a9cca2b234bcbf3&id=sc_category">
-                        Research Data Management Office
-                      </a>
-                      . Please allow three business days for someone to respond to your request.
-                    </p>
-                    <p>
-                      <strong>Staff may contact you</strong> to ensure your plan is connected with the most appropriate
-                      available resources. Contact the{' '}
-                      <a href="https://asu.service-now.com/sp?sysparm_stack=no">Research Technology Office</a> to ensure
-                      those services are available and determine if your proposal should include any costs.
+                      human, request a consultation with your local research support office.
                     </p>
                     <p>
                       <strong>Don’t wait for feedback on your plan before submitting your proposal.</strong> After
@@ -347,7 +322,7 @@ export function SubmitDmpText() {
                       questions about your plan.
                     </p>
                   </div>
-                  <div className="d-flex gap-2">
+                  <div className="d-flex gap-2 result-action-group">
                     <Button
                       disabled={submissionInProgress}
                       size="sm"
@@ -375,7 +350,7 @@ export function SubmitDmpText() {
 
                 {!submissionInProgress && (
                   <div className="d-flex justify-content-between align-items-start mt-3">
-                    <div className="d-flex gap-2">
+                    <div className="d-flex gap-2 result-action-group">
                       <Button
                         disabled={submissionInProgress}
                         size="sm"

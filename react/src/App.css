@@ -1,68 +1,1069 @@
+/* ==========================================================================
+   ASU DMSP AI Tool - Enhanced Stylesheet
+   Styles the existing HomePage without requiring HTML structure changes
+   ========================================================================== */
+
+/* ==========================================================================
+   TYPOGRAPHY & BASE STYLES
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ASU Colors */
+  --asu-maroon: #8c1d40;
+  --asu-maroon-dark: #731634;
+  --asu-gold: #ffc627;
+
+  /* Neutral Colors */
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #e5e5e5;
+  --gray-300: #d4d4d4;
+  --gray-600: #525252;
+  --gray-700: #404040;
+  --gray-900: #171717;
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --transition-base: 0.2s ease;
+}
+
+/* ==========================================================================
+   HOMEPAGE SPECIFIC STYLES
+   ========================================================================== */
+
+/* Container for all pages */
+.container,
+.container-fluid {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (max-width: 768px) {
+
+  .container,
+  .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Main heading */
+.mb-4 h2.mt-2 {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--asu-maroon);
+  margin-top: 2rem !important;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--asu-gold);
+  letter-spacing: -0.02em;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Paragraph styling */
+.mb-4 p.mt-2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--gray-700);
+  margin-top: 1.25rem !important;
+  margin-bottom: 1.25rem;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+/* Link styling */
+.mb-4 p a {
+  color: var(--asu-maroon);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-base);
+  padding-bottom: 1px;
+}
+
+.mb-4 p a:hover {
+  color: var(--asu-maroon-dark);
+  border-bottom-color: var(--asu-maroon);
+}
+
+/* Button container */
+.mb-4 .mt-4 {
+  margin-top: 2.5rem !important;
+  margin-bottom: 2rem;
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+/* Primary button styling */
+.mb-4 .mt-4 .btn-primary {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding: 1.125rem 3rem;
+  background: linear-gradient(135deg, var(--asu-maroon) 0%, #731634 100%) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(140, 29, 64, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.3px;
+}
+
+.mb-4 .mt-4 .btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mb-4 .mt-4 .btn-primary::after {
+  content: '→';
+  margin-left: 0.75rem;
+  font-size: 1.25rem;
+  transition: transform var(--transition-base);
+  display: inline-block;
+}
+
+.mb-4 .mt-4 .btn-primary:hover {
+  background: linear-gradient(135deg, #731634 0%, #5a1128 100%) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(140, 29, 64, 0.4);
+}
+
+.mb-4 .mt-4 .btn-primary:hover::before {
+  opacity: 1;
+}
+
+.mb-4 .mt-4 .btn-primary:hover::after {
+  transform: translateX(4px);
+}
+
+/* HR divider */
+.mb-4 hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--gray-200) 50%, transparent 100%);
+  margin: 3rem 0;
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+/* FAQ heading */
+.mb-4 h3.mt-2 {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--asu-maroon);
+  margin-top: 2rem !important;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+/* ==========================================================================
+   ACCORDION STYLES
+   ========================================================================== */
+
+.accordion {
+  margin-top: var(--spacing-md);
+  animation: fadeInUp 0.6s ease-out 0.7s both;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.accordion-item {
+  background: transparent;
+  border: none;
+  margin-bottom: var(--spacing-sm);
+  width: 100%;
+}
+
+/* Ensure accordion collapse works properly */
+.accordion-collapse {
+  transition: height 0.35s ease, opacity 0.2s ease;
+}
+
+.accordion-collapse.collapsing {
+  transition: height 0.35s ease;
+}
+
+.accordion-collapse:not(.show) {
+  display: none;
+}
+
+.accordion-collapse.show {
+  display: block;
+}
+
+.accordion-header {
+  width: 100%;
+}
+
+.accordion-button {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  background: white;
+  padding: 1.25rem 4rem 1.25rem 1.75rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.35s ease;
+  width: 100%;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.accordion-button.collapsed {
+  background: white;
+  color: var(--gray-900);
+  cursor: pointer;
+}
+
+.accordion-button.collapsed:hover {
+  background: #fafafa;
+  border-color: var(--asu-maroon);
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.15);
+  transform: translateY(-2px);
+}
+
+.accordion-button:not(.collapsed) {
+  background: linear-gradient(135deg, var(--asu-maroon) 0%, #731634 100%);
+  color: white;
+  border-color: var(--asu-maroon);
+  box-shadow: 0 4px 16px rgba(140, 29, 64, 0.3);
+}
+
+.accordion-button::after {
+  transition: transform 0.35s ease;
+  filter: brightness(0);
+  width: 1.5rem;
+  height: 1.5rem;
+  background-size: 1.5rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.accordion-button:not(.collapsed)::after {
+  filter: brightness(0) invert(1);
+  transform: rotate(180deg);
+  transition: transform 0.35s ease;
+}
+
+.accordion-button:focus {
+  box-shadow: var(--shadow-md);
+  border-color: var(--asu-maroon);
+}
+
+.accordion-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: var(--gray-700);
+  background: #fafafa;
+  padding: 1.75rem 1.75rem;
+  border: 2px solid var(--gray-200);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  margin-top: -2px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.accordion-body a {
+  color: var(--asu-maroon);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--transition-base);
+}
+
+.accordion-body a:hover {
+  border-bottom-color: var(--asu-maroon);
+}
+
+.accordion-body .markdown-body {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+/* ==========================================================================
+   ANIMATIONS
+   ========================================================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .mb-4 h2.mt-2 {
+    font-size: 1.75rem;
+    margin-top: 1.5rem !important;
+  }
+
+  .mb-4 h3.mt-2 {
+    font-size: 1.5rem;
+  }
+
+  .mb-4 p.mt-2 {
+    font-size: 1rem;
+  }
+
+  .mb-4 .mt-4 .btn-primary {
+    font-size: 1rem;
+    padding: 0.875rem 2rem;
+  }
+
+  .accordion-button {
+    font-size: 0.95rem;
+    padding: 1rem 3rem 1rem 1.25rem;
+    width: 100%;
+  }
+
+  .accordion-body {
+    padding: 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mb-4 h2.mt-2 {
+    font-size: 1.5rem;
+  }
+
+  .mb-4 .mt-4 .btn-primary {
+    width: 100%;
+    font-size: 0.95rem;
+  }
+}
+
+/* ==========================================================================
+   SUBMIT DMP TEXT PAGE STYLES
+   ========================================================================== */
+
+/* Submit page heading */
+.mt-4.mb-4 h2.mt-2 {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--asu-maroon);
+  margin-top: 2rem !important;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--asu-gold);
+  letter-spacing: -0.02em;
+}
+
+/* Submit page paragraphs */
+.mt-4.mb-4 p.mt-2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--gray-700);
+  margin-top: 1.25rem !important;
+  margin-bottom: 1.25rem;
+}
+
+/* Funding Agency Dropdown */
+.mt-4.mb-4 .form-select {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.mt-4.mb-4 .form-select:focus {
+  border-color: var(--asu-maroon);
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.15);
+  outline: none;
+}
+
+.mt-4.mb-4 .form-select:hover {
+  border-color: var(--asu-maroon);
+}
+
+.mt-4.mb-4 .form-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 0.5rem;
+}
+
+/* Submit button on upload page */
+.mt-4.mb-4 .btn-custom-medium {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0.875rem 2.5rem;
+  background: linear-gradient(135deg, var(--asu-maroon) 0%, #731634 100%) !important;
+  border: none !important;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(140, 29, 64, 0.3);
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.mt-4.mb-4 .btn-custom-medium:hover {
+  background: linear-gradient(135deg, #731634 0%, #5a1128 100%) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(140, 29, 64, 0.4);
+}
+
+.mt-4.mb-4 .btn-custom-medium:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Upload accordion styling */
+.mt-4.mb-4 .accordion {
+  margin-top: 0;
+}
+
+.mt-4.mb-4 .accordion .accordion-item {
+  background: transparent;
+  border: none;
+  margin-bottom: var(--spacing-sm);
+}
+
+.mt-4.mb-4 .accordion .accordion-button {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  background: white;
+  padding: 1.25rem 4rem 1.25rem 1.75rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.35s ease;
+  width: 100%;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.mt-4.mb-4 .accordion .accordion-button.collapsed {
+  background: white;
+  color: var(--gray-900);
+}
+
+.mt-4.mb-4 .accordion .accordion-button.collapsed:hover {
+  background: #fafafa;
+  border-color: var(--asu-maroon);
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.15);
+  transform: translateY(-2px);
+}
+
+.mt-4.mb-4 .accordion .accordion-button:not(.collapsed) {
+  background: linear-gradient(135deg, var(--asu-maroon) 0%, #731634 100%);
+  color: white;
+  border-color: var(--asu-maroon);
+  box-shadow: 0 4px 16px rgba(140, 29, 64, 0.3);
+}
+
+.mt-4.mb-4 .accordion .accordion-button::after {
+  transition: transform 0.35s ease;
+  filter: brightness(0);
+  width: 1.5rem;
+  height: 1.5rem;
+  background-size: 1.5rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.mt-4.mb-4 .accordion .accordion-button:not(.collapsed)::after {
+  filter: brightness(0) invert(1);
+  transform: rotate(180deg);
+}
+
+.mt-4.mb-4 .accordion .accordion-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: var(--gray-700);
+  background: #fafafa;
+  padding: 1.75rem 1.75rem;
+  border: 2px solid var(--gray-200);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  margin-top: -2px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* File upload input styling */
+.mt-4.mb-4 .form-control[type="file"] {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.75rem;
+  border: 2px dashed var(--gray-300);
+  border-radius: 8px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.mt-4.mb-4 .form-control[type="file"]:hover {
+  border-color: var(--asu-maroon);
+  background-color: #fafafa;
+}
+
+/* Textarea styling */
+.mt-4.mb-4 .form-control[as="textarea"] {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  padding: 1rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 8px;
+  background-color: white;
+  transition: all 0.3s ease;
+  line-height: 1.6;
+}
+
+.mt-4.mb-4 .form-control[as="textarea"]:focus {
+  border-color: var(--asu-maroon);
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.15);
+  outline: none;
+}
+
+/* Form text muted */
+.mt-4.mb-4 .text-muted {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  margin-top: 0.5rem;
+}
+
+/* Error text */
+.mt-4.mb-4 .text-danger {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #dc3545;
+  margin-top: 0.5rem;
+}
+
+/* Submit button container alignment */
+.mt-4.mb-4 .d-flex.justify-content-end {
+  margin-top: 1.5rem;
+}
+
+/* ==========================================================================
+   HEADER / NAVIGATION STYLES
+   ========================================================================== */
+
+/* Main header container */
+header.w-full {
+  background: white;
+  border-bottom: 2px solid var(--gray-200);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Logo/Brand */
+header a.text-lg.font-semibold {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--asu-maroon);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  letter-spacing: -0.02em;
+}
+
+header a.text-lg.font-semibold:hover {
+  color: var(--asu-maroon-dark);
+}
+
+/* Navigation links */
+header nav a {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  text-decoration: none;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+header nav a:hover {
+  color: var(--asu-maroon);
+  background-color: #fafafa;
+}
+
+/* Manage Users dropdown button */
+header nav button {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  background: transparent;
+  border: none;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+header nav button:hover {
+  color: var(--asu-maroon);
+  background-color: #fafafa;
+}
+
+/* Dropdown menu */
+header .absolute.mt-2 {
+  background: white;
+  border: 2px solid var(--gray-200);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 180px;
+  overflow: hidden;
+}
+
+header .absolute.mt-2 a {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--gray-700);
+  text-decoration: none;
+  display: block;
+  padding: 0.75rem 1.25rem;
+  transition: all 0.2s ease;
+  border-radius: 0;
+}
+
+header .absolute.mt-2 a:hover {
+  color: var(--asu-maroon);
+  background-color: #fafafa;
+}
+
+/* Username display */
+header .text-sm.text-gray-600 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--gray-700);
+}
+
+/* Logout button */
+header a.bg-gray-100 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+  text-decoration: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+header a.bg-gray-100:hover {
+  background-color: var(--gray-200);
+  color: var(--gray-900);
+}
+
+/* Login button */
+header a.bg-blue-600 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--asu-maroon) 0%, #731634 100%);
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(140, 29, 64, 0.2);
+}
+
+header a.bg-blue-600:hover {
+  background: linear-gradient(135deg, #731634 0%, #5a1128 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.3);
+}
+
+/* Mobile menu toggle button */
+header button.md\\:hidden {
+  color: var(--gray-600);
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+header button.md\\:hidden:hover {
+  color: var(--asu-maroon);
+  background-color: #fafafa;
+}
+
+/* Mobile menu */
+header .md\\:hidden.border-t {
+  background: white;
+  border-top: 2px solid var(--gray-200);
+}
+
+header .md\\:hidden a {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  text-decoration: none;
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+header .md\\:hidden a:hover {
+  color: var(--asu-maroon);
+  background-color: #fafafa;
+}
+
+/* Mobile menu section headers */
+header .md\\:hidden .text-sm.text-gray-500 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 0 0.25rem;
+}
+
+/* Mobile logout/login buttons */
+header .md\\:hidden a.bg-gray-100,
+header .md\\:hidden a.bg-blue-600 {
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+header .md\\:hidden a.bg-gray-100 {
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+}
+
+header .md\\:hidden a.bg-gray-100:hover {
+  background-color: var(--gray-200);
+}
+
+header .md\\:hidden a.bg-blue-600 {
+  background: linear-gradient(135deg, var(--asu-maroon) 0%, #731634 100%);
+  color: white;
+}
+
+header .md\\:hidden a.bg-blue-600:hover {
+  background: linear-gradient(135deg, #731634 0%, #5a1128 100%);
+}
+
+/* ==========================================================================
+   SUBMIT DMP ID PAGE STYLES
+   ========================================================================== */
+
+/* DMP ID page content wrapper */
+.mb-4 .mt-2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--gray-700);
+  margin-top: 1.25rem;
+}
+
+/* DMP ID list styling */
+.mb-4 ul.mt-2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--gray-700);
+  margin-top: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.mb-4 ul.mt-2 li {
+  margin-bottom: 0.75rem;
+}
+
+.mb-4 ul.mt-2 a {
+  color: var(--asu-maroon);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--transition-base);
+}
+
+.mb-4 ul.mt-2 a:hover {
+  color: var(--asu-maroon-dark);
+  border-bottom-color: var(--asu-maroon);
+}
+
+/* DMP ID form styling */
+.mb-4 form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.mb-4 form .form-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 0.5rem;
+}
+
+/* DMP ID text input */
+.mb-4 form .form-control[type="text"] {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  width: 250px;
+}
+
+.mb-4 form .form-control[type="text"]:focus {
+  border-color: var(--asu-maroon);
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.15);
+  outline: none;
+}
+
+.mb-4 form .form-control[type="text"]:hover:not(:disabled) {
+  border-color: var(--asu-maroon);
+}
+
+.mb-4 form .form-control[type="text"]:disabled {
+  background-color: var(--gray-100);
+  cursor: not-allowed;
+}
+
+/* DMP ID dropdown/select */
+.mb-4 form .form-select {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  width: 250px;
+}
+
+.mb-4 form .form-select:focus {
+  border-color: var(--asu-maroon);
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.15);
+  outline: none;
+}
+
+.mb-4 form .form-select:hover:not(:disabled) {
+  border-color: var(--asu-maroon);
+}
+
+/* Error text for DMP ID form */
+.mb-4 form .text-danger {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #dc3545;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+/* Submit button on DMP ID page */
+.mb-4 form .btn-custom-medium {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0.875rem 2.5rem;
+  background: linear-gradient(135deg, var(--asu-maroon) 0%, #731634 100%) !important;
+  border: none !important;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(140, 29, 64, 0.3);
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+  margin-top: 0.5rem;
+}
+
+.mb-4 form .btn-custom-medium:hover:not(:disabled) {
+  background: linear-gradient(135deg, #731634 0%, #5a1128 100%) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(140, 29, 64, 0.4);
+}
+
+.mb-4 form .btn-custom-medium:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading indicator box */
+.mb-4 .border.p-2 {
+  border: 2px solid var(--gray-200) !important;
+  border-radius: 12px;
+  padding: 2rem !important;
+  background: #fafafa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.mb-4 .border.p-2 h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 1.5rem;
+}
+
+/* Analysis result container */
+.mb-4 .border.p-3 {
+  border: 2px solid var(--gray-200) !important;
+  border-radius: 12px;
+  padding: 2rem !important;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.mb-4 .border.p-3 h5 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0;
+}
+
+/* DMP ID tag in results */
+.dmp-id-tag {
+  background: linear-gradient(135deg, var(--asu-maroon) 0%, #731634 100%);
+  color: white;
+  border-radius: 8px;
+  padding: 0.25rem 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  box-shadow: 0 2px 8px rgba(140, 29, 64, 0.2);
+}
+
+/* Copy and Download buttons in results */
+.mb-4 .btn-custom-yellow {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--asu-maroon) 0%, #731634 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 8px rgba(140, 29, 64, 0.2);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mb-4 .btn-custom-yellow:hover:not(:disabled) {
+  background: linear-gradient(135deg, #731634 0%, #5a1128 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.3);
+}
+
+.mb-4 .btn-custom-yellow:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Markdown body in results */
+.mb-4 .markdown-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--gray-700);
+  padding: 1.5rem 0;
+}
+
+.mb-4 .markdown-body h1,
+.mb-4 .markdown-body h2,
+.mb-4 .markdown-body h3 {
+  font-family: 'Source Serif 4', Georgia, serif;
+  color: var(--asu-maroon);
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.mb-4 .markdown-body a {
+  color: var(--asu-maroon);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--transition-base);
+}
+
+.mb-4 .markdown-body a:hover {
+  border-bottom-color: var(--asu-maroon);
+}
+
+/* ==========================================================================
+   LEGACY STYLES (Preserved for other pages)
+   ========================================================================== */
+
 .btn-custom-yellow {
   background-color: #8c1d40 !important;
   border: none !important;
   color: #fff !important;
   font-weight: 700 !important;
   box-shadow: none !important;
+  transition: background-color 0.2s ease;
 }
 
 .btn-custom-yellow:hover,
 .btn-custom-yellow:focus,
 .btn-custom-yellow:active,
 .btn-custom-yellow:focus-visible {
-  background-color: #8c1d40 !important;
+  background-color: #731634 !important;
   border: none !important;
   color: #fff !important;
   box-shadow: none !important;
-}
-
-/* Prevent content from breaking awkwardly across PDF pages */
-.markdown-body.pdf-print,
-.markdown-body.pdf-print * {
-  page-break-inside: avoid;
-  break-inside: avoid;
-  page-break-before: auto;
-  page-break-after: auto;
-  overflow-wrap: break-word;
-  word-break: break-word;
-}
-
-/* Ensure longer sections flow naturally */
-.markdown-body.pdf-print p,
-.markdown-body.pdf-print h1,
-.markdown-body.pdf-print h2,
-.markdown-body.pdf-print h3,
-.markdown-body.pdf-print ul,
-.markdown-body.pdf-print ol {
-  page-break-inside: avoid;
-  break-inside: avoid;
-  margin-bottom: 1em;
-}
-
-/* Optional: Add bottom padding for better last-page spacing */
-.markdown-body.pdf-print {
-  padding-bottom: 40px;
-}
-
-.dmp-id-tag {
-  background: #f0f0f0;
-  border-radius: 5px;
-  padding: 2px 8px;
-  font-family: monospace;
-  font-size: 0.95rem;
-  margin-left: 6px;
-}
-
-.dmp-info-box {
-  font-size: 0.85rem;
-  margin-top: 4px;
-  background: #f8f9fa;
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-family: monospace;
-  color: #555;
-  max-width: 100%;
-  overflow-wrap: break-word;
 }
 
 .btn-custom-medium {
@@ -70,11 +1071,10 @@
   color: #fff !important;
   font-weight: 600;
   font-size: 0.95rem;
-  /* medium size font */
   padding: 0.45rem 1.2rem;
-  /* top-bottom, left-right */
   border: none !important;
   border-radius: 0.375rem;
+  transition: background-color 0.2s ease;
 }
 
 .btn-custom-medium:hover,
@@ -84,20 +1084,21 @@
   box-shadow: none !important;
 }
 
-.asu-login-wrapper {
-  background-color: #f2f2f2;
-  font-family: 'Helvetica Neue', sans-serif;
-}
-
 .btn-maroon {
   background-color: #8c1d40;
   color: #fff;
   border: none;
+  transition: background-color 0.2s ease;
 }
 
 .btn-maroon:hover {
   background-color: #701c38;
   color: #fff;
+}
+
+.asu-login-wrapper {
+  background-color: #f2f2f2;
+  font-family: 'Helvetica Neue', sans-serif;
 }
 
 .modal-narrow {
@@ -138,6 +1139,378 @@
   margin: 0;
 }
 
+.dmp-id-tag {
+  background: #f0f0f0;
+  border-radius: 5px;
+  padding: 2px 8px;
+  font-family: monospace;
+  font-size: 0.95rem;
+  margin-left: 6px;
+}
+
+.dmp-info-box {
+  font-size: 0.85rem;
+  margin-top: 4px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: monospace;
+  color: #555;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
 .basic-info p {
   margin-bottom: 0.25rem;
+}
+
+/* ==========================================================================
+   PDF PRINT STYLES
+   ========================================================================== */
+
+.markdown-body.pdf-print,
+.markdown-body.pdf-print * {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  page-break-before: auto;
+  page-break-after: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.markdown-body.pdf-print p,
+.markdown-body.pdf-print h1,
+.markdown-body.pdf-print h2,
+.markdown-body.pdf-print h3,
+.markdown-body.pdf-print ul,
+.markdown-body.pdf-print ol {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  margin-bottom: 1em;
+}
+
+.markdown-body.pdf-print {
+  padding-bottom: 40px;
+}
+
+/* Result action group: right-aligned, compact buttons with consistent spacing */
+.result-action-group {
+  display: flex !important;
+  gap: 0.5rem;
+  /* spacing between buttons */
+  justify-content: flex-end;
+  /* push buttons to the right edge of their container */
+  align-items: center;
+}
+
+/* Make the small buttons visually compact */
+.result-action-group .btn-custom-yellow,
+.result-action-group .btn-custom-yellow.btn,
+/* fallback */
+.result-action-group .btn-custom-medium {
+  padding: 0.28rem 0.6rem;
+  /* smaller vertical padding and narrow horizontal */
+  font-size: 0.85rem;
+  /* slightly smaller text */
+  border-radius: 6px;
+  min-width: 56px;
+  /* consistent minimum width so icons + text fit */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  /* spacing between icon and label */
+}
+
+/* Slight visual separation from card content */
+.result-action-group {
+  margin-left: 8px;
+}
+
+/* If container width is tight on small screens, allow wrapping but keep right alignment */
+@media (max-width: 540px) {
+  .result-action-group {
+    justify-content: flex-end;
+    gap: 0.45rem;
+  }
+
+  .result-action-group .btn-custom-yellow,
+  .result-action-group .btn-custom-medium {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    min-width: 48px;
+  }
+}
+
+/* Loading box — centers text + spinner, scoped so it doesn't affect other .border.p-2 */
+.loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem !important;
+  border-radius: 12px;
+  background: #fafafa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Slightly reduce spinner size on small screens */
+@media (max-width: 540px) {
+  .loading-box h4 {
+    font-size: 1rem;
+  }
+
+  .loading-box .atom {
+    transform: scale(0.9);
+  }
+}
+
+/* =========================
+   dmp-id-tag — definitive override
+   Put this at the end of App.css
+   ========================= */
+
+.dmp-id-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #8c1d40 0%, #731634 100%);
+  /* color: #ffc627; */
+  /* ASU gold */
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.25rem 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(140, 29, 64, 0.25);
+  border: 1px solid rgba(255, 198, 39, 0.35);
+}
+
+/* small-screen tweak */
+@media (max-width: 540px) {
+  .dmp-id-tag {
+    padding: 0.175rem 0.5rem !important;
+    font-size: 0.82rem !important;
+  }
+}
+
+
+/* ================================
+   Header / Nav — Active tab & blue login
+   Place inside "HEADER / NAVIGATION STYLES"
+   ================================ */
+
+/* optional: brand blue variables (add inside :root if not present) */
+:root {
+  --brand-blue: #2563eb;
+  --brand-blue-dark: #1e40af;
+}
+
+/* base for nav-link (desktop & mobile) */
+header nav .nav-link {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.35rem;
+  /* space for underline */
+  color: var(--gray-700);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+/* hover/focus for nav-link */
+header nav .nav-link:hover,
+header nav .nav-link:focus {
+  color: var(--asu-maroon);
+  background-color: rgba(250, 250, 250, 0.6);
+  outline: none;
+}
+
+/* active state: color + underline using golden accent */
+header nav .nav-link.active {
+  color: var(--asu-maroon);
+}
+
+/* animated underline indicator (hidden by default) */
+header nav .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.35rem;
+  width: 100%;
+  height: 3px;
+  background-color: var(--asu-gold);
+  border-radius: 2px;
+  transform-origin: left center;
+  opacity: 0;
+  transform: scaleX(0);
+  transition: transform 220ms cubic-bezier(.2, .8, .2, 1), opacity 220ms ease;
+}
+
+/* reveal underline when active */
+header nav .nav-link.active::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* keyboard focus visible (accessibility) */
+header nav .nav-link:focus-visible {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-radius: 6px;
+}
+
+/* Mobile drawer links: keep similar active styling */
+.md\\:hidden a.nav-link,
+.md\\:hidden .nav-link {
+  display: block;
+}
+
+.md\\:hidden a.nav-link.active::after,
+.md\\:hidden .nav-link.active::after {
+  /* mobile: move underline into a top border rather than below */
+  bottom: auto;
+  top: calc(100% - 6px);
+}
+
+/* Small tweak so active + hover states do not conflict with the manage-users dropdown */
+header .relative .nav-link,
+header .relative button {
+  z-index: 20;
+}
+
+/* --- Make textareas fill their parent container --- */
+/* Targets textarea elements that have the bootstrap form-control class */
+.mt-4.mb-4 textarea.form-control {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* include padding & border in width calculation */
+  resize: vertical;
+  /* allow vertical resize only (good UX) */
+  min-height: 220px;
+  /* sensible default height; tweak as needed */
+  padding: 1rem;
+  /* consistent with your other controls */
+  border: 2px solid var(--gray-200);
+  border-radius: 8px;
+  background-color: white;
+}
+
+/* Smaller screens: slightly reduce min-height */
+@media (max-width: 540px) {
+  .mt-4.mb-4 textarea.form-control {
+    min-height: 160px;
+  }
+}
+/* =========================
+   Login row & password toggle — clean, minimal, stable
+   Replace all previous .login-row-inline / .position-relative / .password-toggle-btn blocks with this
+   ========================= */
+
+.login-row-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  /* small gap between label and input */
+  flex-wrap: nowrap;
+}
+
+.login-row-inline .form-label {
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0 0.5rem 0 0;
+  /* no bottom margin, small right gap */
+  white-space: nowrap;
+  text-align: left;
+}
+
+.login-row-inline .position-relative {
+  flex: 1 1 0;
+  min-width: 0;
+  /* prevents flex overflow issues */
+  position: relative;
+  /* for absolute-positioned toggle */
+  width: 100%;
+}
+
+/* Ensure the input does not resize when type toggles */
+.login-row-inline .form-control,
+.position-relative .form-control {
+  box-sizing: border-box;
+  width: 100% !important;
+  min-width: 10%;
+  max-width: 30%;
+  padding-right: 44px !important;
+  /* reserve fixed space for toggle button */
+  padding-left: 0.75rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 8px;
+  background: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: none !important;
+  /* avoid flicker when type changes */
+}
+
+/* Toggle button — fixed size, absolute positioned, and no focus reflow */
+.password-toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.9;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: none;
+  outline: none;
+}
+
+/* Prevent focus/active state from changing layout */
+.password-toggle-btn:focus,
+.password-toggle-btn:focus-visible,
+.password-toggle-btn:active {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* Icon sizing */
+.password-toggle-btn img {
+  width: 20px;
+  height: 20px;
+  display: block;
+  pointer-events: none;
+}
+
+/* Keep input focus visual but avoid layout shift */
+.login-row-inline .form-control:focus {
+  outline: none;
+  box-shadow: 0 4px 12px rgba(140, 29, 64, 0.12);
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 768px) {
+  .login-row-inline {
+    display: block;
+  }
+
+  .login-row-inline .form-label {
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .login-row-inline .position-relative {
+    width: 100%;
+    margin-left: 0;
+  }
 }

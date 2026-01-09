@@ -82,7 +82,7 @@ export const SubmissionsPage = () => {
         <p className="text-muted">List of submitted Data Management Plans with AI-generated analysis.</p>
 
         <div className="mb-3">
-          <Button variant="primary" onClick={() => window.open('/api/submissions/export', '_blank')}>
+          <Button className="btn-custom-medium" onClick={() => window.open('/api/submissions/export', '_blank')}>
             Download Excel Report
           </Button>
         </div>

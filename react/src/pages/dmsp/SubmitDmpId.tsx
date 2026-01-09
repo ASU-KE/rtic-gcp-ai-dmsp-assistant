@@ -170,7 +170,7 @@ export function SubmitDmpId() {
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* DMP ID */}
             <Form.Group className="mb-3" controlId="dmpId">
-              <Form.Label className="fw-semibold">Please submit DMP ID:</Form.Label>
+              <Form.Label className="fw-semibold form-label">Please submit DMP ID: </Form.Label>
               <Form.Control
                 type="text"
                 {...register('dmpId', { required: 'DMP ID is required' })}
@@ -193,7 +193,7 @@ export function SubmitDmpId() {
 
             {/* Funding Agency */}
             <Form.Group className="mb-3" controlId="fundingAgency">
-              <Form.Label className="fw-semibold">Funding Agency</Form.Label>
+              <Form.Label className="fw-semibold form-label">Funding Agency: </Form.Label>
               <Form.Select
                 {...register('agency')}
                 style={{ width: '250px' }}
@@ -236,17 +236,9 @@ export function SubmitDmpId() {
       {showLoadingIndicator && (
         <Row className="mt-2">
           <Col md={12}>
-            <div className="border p-2">
-              <div className="d-flex justify-content-center">
-                <Row>
-                  <h4>Analyzing your DMP... please wait</h4>
-                </Row>
-              </div>
-              <div className="d-flex justify-content-center">
-                <Row>
-                  <Atom color="#000000" size="medium" />
-                </Row>
-              </div>
+            <div className="loading-box border p-2">
+              <h4 className="mb-3">Analyzing your DMP... please wait</h4>
+              <Atom color="#000000" size="medium" />
             </div>
           </Col>
         </Row>
@@ -261,7 +253,7 @@ export function SubmitDmpId() {
                 <h5 className="m-0 fw-semibold">
                   AI Analysis for DMP ID: <span className="dmp-id-tag">{submittedDmpId}</span>
                 </h5>
-                <div className="d-flex gap-2">
+                <div className="d-flex gap-2 result-action-group">
                   <Button size="sm" className="btn-custom-yellow" disabled={submissionInProgress} onClick={handleCopy}>
                     {copied ? <CheckIcon /> : <CopyIcon />}
                     {copied ? 'Copied' : 'Copy'}
