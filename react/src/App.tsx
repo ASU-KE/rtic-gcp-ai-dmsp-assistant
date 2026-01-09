@@ -21,15 +21,13 @@ import {
 import { SamlLoginRedirect } from './components/samlAuth/LoginRedirect';
 import { SamlLoginCallbackWrapper, SamlLoginCallback } from './components/samlAuth/LoginCallback';
 
-import '@asu/unity-bootstrap-theme/dist/css/unity-bootstrap-theme.bundle.css';
+// Use your Tailwind entry CSS (ensure Tailwind is configured in your project)
+import './index.css';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  // If auth strategy is "none", allow access to child routes
   if (import.meta.env.VITE_FRONTEND_AUTH === 'none') {
     return children;
   }
-
-  // Otherwise, check if user is authenticated
   const { state } = useAuthContext();
   return state.isAuthenticated ? children : <Navigate to="/login" />;
 };
@@ -89,7 +87,6 @@ const App = (): JSX.Element => {
                       </SamlLoginCallbackWrapper>
                     }
                   />
-                  {/* <Route path="/logout" element={<LogoutPage />} /> */}
                 </>
               )}
 
