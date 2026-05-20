@@ -35,10 +35,10 @@ tools: ["microsoft/azure-devops-mcp/*", "github/*", "git/*", "edit", "execute", 
 
 **Execute these steps in order - you must take action to complete each:**
 
-1. **Detect Platform**: Inspect the git remote URL (`git remote get-url origin`) to determine whether the repository is hosted on **Azure DevOps** (contains `dev.azure.com` or `visualstudio.com`) or **GitHub** (contains `github.com`). All subsequent platform-specific steps depend on this detection.
-2. **Verify Branch Status**: Use git MCP tools to confirm you are working in a feature branch created from the latest main branch. If you are still on the main branch, create and switch to a new feature branch.
+1. **Detect Platform**: First check if the repository's `copilot-instructions.md` (typically at `.github/copilot-instructions.md`) specifies the **GitHub organization**, **repository name**, **default branch**, or **repository URL** under a "Source Control Platform" section. If these values are present, use them directly — do NOT run `git remote get-url origin` or other terminal commands that may hang. Only fall back to inspecting the git remote URL if copilot-instructions does not provide this information. Determine whether the repository is hosted on **Azure DevOps** (URL contains `dev.azure.com` or `visualstudio.com`) or **GitHub** (URL contains `github.com`).
+2. **Verify Branch Status**: Use git MCP tools to confirm you are working in a feature branch created from the latest main/default branch. If you are still on the default branch, create and switch to a new feature branch.
 3. **Push Changes**: Use `run_in_terminal` with `git push -u origin <branch-name>` to push any commits on the local branch to the remote feature branch.
-4. **Review Changes**: Use `run_in_terminal` with `git log main..<branch-name> --oneline` to review all changes in the git history
+4. **Review Changes**: Use git MCP tools (`git_log`) to review all commits on the branch. Only fall back to `run_in_terminal` with `git log` if MCP tools are unavailable.
 5. **Validate Tests**: Execute test commands to verify all tests pass locally
 6. **Check Documentation**: Verify that documentation is updated if needed - make updates if required
 7. **CREATE THE PULL REQUEST**:
