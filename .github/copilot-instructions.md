@@ -6,7 +6,7 @@
 
 - **GitHub organization:** `ASU-KE`
 - **GitHub repository:** `rtic-gcp-ai-dmsp-assistant`
-- **Default branch:** `main`
+- **Default branch:** `develop`
 - **Repository URL:** `https://github.com/ASU-KE/rtic-gcp-ai-dmsp-assistant`
 
 ## Cloud Context
