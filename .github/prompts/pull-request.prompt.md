@@ -22,6 +22,11 @@ tools: ["microsoft/azure-devops-mcp/*", "github/*", "git/*", "edit", "execute", 
 - **For GitHub repositories**: MUST use GitHub MCP tools for operations: create_pull_request, add_issue_comment, update_pull_request
 - Use `run_in_terminal` tool when MCP equivalents are not available
 
+**GIT DIFF TOOL GUIDANCE:**
+- The `git_diff` MCP tool does NOT support three-dot syntax (e.g., `main...feature-branch`). The tool validates refs with `git rev-parse` which fails on range expressions.
+- **Always use `origin/main`** (or `origin/<default-branch>`) as the `target` parameter — never use `main...<branch>` or `main`.
+- Using `origin/main` ensures you compare against the actual remote state, avoiding stale local ref issues.
+
 **THIS IS NOT A GUIDANCE DOCUMENT - YOU MUST EXECUTE THESE ACTIONS**
 
 ### Instructions
@@ -36,15 +41,16 @@ tools: ["microsoft/azure-devops-mcp/*", "github/*", "git/*", "edit", "execute", 
 **Execute these steps in order - you must take action to complete each:**
 
 1. **Detect Platform**: First check if the repository's `copilot-instructions.md` (typically at `.github/copilot-instructions.md`) specifies the **GitHub organization**, **repository name**, **default branch**, or **repository URL** under a "Source Control Platform" section. If these values are present, use them directly — do NOT run `git remote get-url origin` or other terminal commands that may hang. Only fall back to inspecting the git remote URL if copilot-instructions does not provide this information. Determine whether the repository is hosted on **Azure DevOps** (URL contains `dev.azure.com` or `visualstudio.com`) or **GitHub** (URL contains `github.com`).
-2. **Verify Branch Status**: Use git MCP tools to confirm you are working in a feature branch created from the latest main/default branch. If you are still on the default branch, create and switch to a new feature branch.
-3. **Push Changes**: Use `run_in_terminal` with `git push -u origin <branch-name>` to push any commits on the local branch to the remote feature branch.
-4. **Review Changes**: Use git MCP tools (`git_log`) to review all commits on the branch. Only fall back to `run_in_terminal` with `git log` if MCP tools are unavailable.
-5. **Validate Tests**: Execute test commands to verify all tests pass locally
-6. **Check Documentation**: Verify that documentation is updated if needed - make updates if required
-7. **CREATE THE PULL REQUEST**:
+2. **Sync Default Branch**: Use `run_in_terminal` to run `git fetch origin` to ensure remote refs are up to date. Then check if local `main` (or default branch) is behind `origin/main` by comparing their SHAs with `git rev-parse main` vs `git rev-parse origin/main`. If they differ, run `git checkout main && git pull origin main && git checkout -` to bring the local default branch up to date before proceeding. This prevents stale merge-base comparisons.
+3. **Verify Branch Status**: Use git MCP tools to confirm you are working in a feature branch created from the latest main/default branch. If you are still on the default branch, create and switch to a new feature branch.
+4. **Push Changes**: Use `run_in_terminal` with `git push -u origin <branch-name>` to push any commits on the local branch to the remote feature branch.
+5. **Review Changes**: Use git MCP tools (`git_log`) to review all commits on the branch. Use `git_diff` with `target` set to `origin/main` (NOT three-dot syntax) to review the full diff. Only fall back to `run_in_terminal` with `git log` if MCP tools are unavailable.
+6. **Validate Tests**: Execute test commands to verify all tests pass locally
+7. **Check Documentation**: Verify that documentation is updated if needed - make updates if required
+8. **CREATE THE PULL REQUEST**:
    - **Azure DevOps**: Use `mcp_ado_repo_create_pull_request` with required parameters: repositoryId, sourceRefName, targetRefName, title, description
    - **GitHub**: Use `mcp_github_create_pull_request` with required parameters: owner, repo, title, head (source branch), base (target branch), body (description)
-8. **Configure PR Settings**:
+9. **Configure PR Settings**:
    - **Azure DevOps**: Use `mcp_ado_repo_update_pull_request` to add reviewers/labels and `mcp_ado_repo_create_pull_request_thread` to add status comments
    - **GitHub**: Use `mcp_github_update_pull_request` to add reviewers/labels and `mcp_github_add_issue_comment` to add status comments
 
