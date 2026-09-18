@@ -132,8 +132,8 @@ const config: Config = {
   endpoints: {
     authEndpoint: 'https://auth.dmphub.uc3prd.cdlib.net/oauth2/token',
     getDmpEndpoint: 'https://api.dmphub.uc3prd.cdlib.net/dmps',
-    queryLlmRestEndpoint: 'https://api-main-beta.aiml.asu.edu/queryV2',
-    queryLlmWebsocketEndpoint: 'wss://apiws-main-beta.aiml.asu.edu',
+    queryLlmRestEndpoint: 'https://api-main.aiml.asu.edu/query',
+    queryLlmWebsocketEndpoint: 'wss://apiws-main.aiml.asu.edu',
   },
   llmOptions: {
     modelProvider: 'gcp-deepmind', // string (Required): "aws", "openai", "gcp", "gcp-deepmind", "azure"
