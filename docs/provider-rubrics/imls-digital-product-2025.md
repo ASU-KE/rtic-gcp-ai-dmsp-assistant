@@ -1,389 +1,226 @@
-# Rubric for Assessment of IMLS Digital Product Forms
+You are tasked with evaluating a Data Management and Sharing Plan (DMSP), also known as a Data Management Plan (DMP), using the "Rubric for the Assessment of The Institute of Museum and Library Services (IMLS)." Your evaluation should assess each section of the plan based on specific performance criteria outlined in the rubric. Follow these steps for a thorough evaluation:
+
+# Evaluate a DMSP Against the Rubric
+  
+ Evaluate a Data Management and Sharing Plan (DMSP) section by section against the
+ agency rubric. Produce one assessment block per rubric section, in rubric order.
+  
+ ## Steps
+  
+ 1. **Read the section.** For each rubric section, read the agency's questions and
+   the DMSP text that answers them. Done when every question in the section has
+   been matched against the DMSP (or confirmed unanswered).
+  
+ 2. **Rate the section.** Assign exactly one:
+   - **Complete/Detailed** — the DMSP fully answers every question in the section.
+   - **Details Provided but Incomplete** — the DMSP answers some questions, or
+    answers partially.
+   - **Did Not Address** — the DMSP does not answer the section. If the project
+    will not produce that digital product, say so. If it will, state which
+    answers are missing.
+  
+ 3. **Write the assessment block** (template below) for every section, applicable
+   or not. For **Did Not Address** and **Details Provided but Incomplete**, quote
+   the relevant DMSP text verbatim and list specific, actionable improvements that
+   name the missing answers. For **Not Applicable**, state why.
+  
+ ## Heading rule (hard requirement)
+  
+ Use the agency question's **full original wording** as the criterion heading,
+ copied verbatim, and keep its original section and question identifier
+ (e.g. `SECTION II — A.3`). Copy the question text character-for-character; a
+ generated or summarized title is a defect.
+  
+ - Correct:
+  **A.3: List all the digital file formats (e.g., XML, TIFF, MPEG, OBJ, DOC, PDF)
+  you plan to use. If digitizing content, describe the quality standards (e.g.,
+  resolution, sampling rate, pixel dimensions) you will use for the files you will
+  create.**
+ - Defective: **A.3: Digital File Formats and Digitization Quality Standards**
+  
+ ## Assessment block template
+  
+ Apply to every section:
+  
+ > **[Identifier]: [full original agency question, verbatim]**
+ >
+ > **Compliance Level:** [one of the four ratings]
+ >
+ > **Relevant Text from DMSP:** [verbatim quote, or "None" if the section is
+ > unaddressed or not applicable]
+ >
+ > **Recommended Improvements:** [actionable fixes naming the missing answers;
+ > omit when the rating is Complete/Detailed or Not Applicable]
+  
+ ## Objective
+  
+ Give a balanced read: name strengths and gaps so the authors can bring the DMSP
+ into full compliance.
+Use the following rubric to assess the data management plan:
 
-## Purpose and applicability
+# Title: Rubric for the Assessment of The Institute of Museum and Library Services (IMLS)
 
-This rubric converts the requirements in the **IMLS Digital Product Form** into review criteria. It is intended to assess whether a proposal clearly and completely addresses the information requested by IMLS.
+## I. INTRODUCTION
 
-**Applicability rules**
-- **Section I — Intellectual Property Rights and Permissions:** required for every project that proposes to create digital products.
-- **Section II — Digital Content, Resources, or Assets:** apply only if the project creates or collects digital content, resources, or assets.
-- **Section III — Software:** apply only if the project creates software, source code, algorithms, applications, or digital tools and accompanying documentation.
-- **Section IV — Research Data:** apply only if the project creates research data. This section constitutes the project's Data Management Plan (DMP).
-- Mark a criterion **Not Applicable (N/A)** only when the corresponding section or question genuinely does not apply to the proposed project.
+The Institute of Museum and Library Services (IMLS) is committed to expanding public access to digital products that are created using federal funds. This includes (1) digitized and born-digital content, resources, or assets; (2) software; and (3) research data (see below for more specific examples). Excluded are preliminary analyses, drafts of papers, plans for future research, peer-review assessments, and communications with colleagues.
 
-## Assessment levels
+The digital products you create with IMLS funding require effective stewardship to protect and enhance their value, and they should be freely and readily available for use and reuse by libraries, archives, museums, and the public. Because technology is dynamic and because we do not want to inhibit innovation, we do not want to prescribe set standards and practices that could become quickly outdated. Instead, we ask that you answer questions that address specific aspects of creating and managing digital products. Like all components of your IMLS application, your answers will be used by IMLS staff and by expert peer reviewers to evaluate your application, and they will be important in determining whether your project will be funded.
 
-For every applicable criterion, use one of the following ratings:
+## II. INSTRUCTIONS
 
-- **Complete / detailed:** Directly answers every component of the IMLS question with enough specific information to understand the proposed approach, decisions, and implementation.
-- **Addressed, but incomplete:** Addresses the topic but omits one or more requested components, gives vague/general information, or does not sufficiently explain or justify the approach.
-- **Did not address:** Provides no meaningful response to the requested information, or the response does not answer the criterion.
-- **N/A:** The criterion is demonstrably not applicable to the project.
+If you propose to create digital products in the course of your IMLS-funded project, you must first provide answers to the questions in **SECTION I: INTELLECTUAL PROPERTY RIGHTS AND PERMISSIONS.**
 
----
+Then consider which of the following types of digital products you will create in your project, and complete each section of the form that is applicable:
 
-# 1. Intellectual Property Rights and Permissions
+### SECTION II: DIGITAL CONTENT, RESOURCES, OR ASSETS
 
-> **Scope:** Intellectual property status, ownership, licensing, access/use conditions, permissions, privacy, rights, and cultural sensitivities for digital products.
+Complete this section if your project will create digital content, resources, or assets. These include both digitized and born-digital products created by individuals, project teams, or through community gatherings during your project. Examples include, but are not limited to, still images, audio files, moving images, microfilm, object inventories, object catalogs, artworks, books, posters, curricula, field books, maps, notebooks, scientific labels, metadata schema, charts, tables, drawings, workflows, and teacher toolkits. Your project may involve making these materials available through public or access-controlled websites, kiosks, or live or recorded programs.
 
-## Criterion 1.1 — Define intellectual property status, ownership, copyright, licensing, and conditions of access/use
+### SECTION III: SOFTWARE
 
-**Applies to:** All projects creating digital products.
+Complete this section if your project will create software, including any source code, algorithms, applications, and digital tools plus the accompanying documentation created by you during your project.
 
-### Complete / detailed
-Clearly identifies the intellectual property status of the digital products; states what ownership rights the organization will assert; identifies who will hold copyright; identifies and explains the license(s) under which files will be released; justifies the licensing choices; explains any restrictions or prohibitive terms on access/use; and explains how users will be notified of relevant terms and conditions.
+### SECTION IV: RESEARCH DATA
 
-### Addressed, but incomplete
-Discusses intellectual property, ownership, copyright, licensing, or access/use, but one or more requested elements are missing, vague, or not justified.
+Complete this section if your project will create research data, including recorded factual information and supporting documentation, commonly accepted as relevant to validating research findings and to supporting scholarly publications.
 
-### Did not address
-Does not meaningfully explain the intellectual property status, ownership/copyright, licensing, access/use conditions, or communication of those conditions.
+## III. REFERENCE QUESTIONS
 
-## Criterion 1.2 — Define organizational ownership rights and access/use conditions for new digital products
+### SECTION I: INTELLECTUAL PROPERTY RIGHTS AND PERMISSIONS
 
-**Applies to:** All projects creating digital products.
+> REQUIRED: Section I must be answered by all DMSPs.
 
-### Complete / detailed
-Clearly states the ownership rights the organization will assert over new digital products, identifies any conditions placed on access and use, justifies those conditions, and explains how potential users will be notified of them.
+### A.1
 
-### Addressed, but incomplete
-Mentions ownership or access/use conditions but does not fully explain the rights, justification, or user-notification approach.
+Applicants seeking federal funds for developing or creating digital products should release these files under open-source licenses to maximize access and promote reuse. 
+- What will be the intellectual property status of the digital products (i.e., digital content, resources, or assets; software; research data) you intend to create?
+- What ownership rights will your organization assert over the files you intend to create?
+- What conditions will you impose on their access and use?
+- Who will hold the copyright(s)?
+- Explain and justify your licensing selections.
+- Identify and explain the license under which you will release the files (e.g., a non-restrictive license such as BSD, GNU, MIT, Creative Commons licenses; RightsStatements.org statements).
+- Explain and justify any prohibitive terms or conditions of use or access.
+- Detail how you will notify potential users about relevant terms and conditions.
 
-### Did not address
-Does not state organizational ownership rights or conditions of access/use for the new digital products.
+### A.2
 
-## Criterion 1.3 — Address privacy, permissions/rights, and cultural sensitivities
+- What ownership rights will your organization assert over the new digital products?
+- What conditions will you impose on access and use?
+- Explain and justify any terms of access and conditions of use.
+- Detail how you will notify potential users about relevant terms or conditions.
 
-**Applies to:** Projects whose products may raise any of these concerns.
+### A.3 
+- If you will create any products that may involve privacy concerns, require obtaining permissions or rights, or raise any cultural sensitivities, describe the issues and how you plan to address them.
 
-### Complete / detailed
-Identifies relevant privacy concerns, required permissions or rights, and/or cultural sensitivities and clearly describes how each applicable issue will be addressed.
+## SECTION II: DIGITAL CONTENT, RESOURCES, OR ASSETS
 
-### Addressed, but incomplete
-Acknowledges applicable concerns but provides limited or unclear detail about how they will be handled.
+**A.1** Describe the digital content, resources, or assets you will create or collect, the quantities of each type, and the format(s) you will use.
 
-### Did not address
-Does not identify or address applicable privacy, permissions/rights, or cultural-sensitivity issues.
+**A.2** List the equipment, software, and supplies that you will use to create the digital content, resources, or assets, or the name of the service provider that will perform the work.
 
----
+**A.3** List all the digital file formats (e.g., XML, TIFF, MPEG, OBJ, DOC, PDF) you plan to use. If digitizing content, describe the quality standards (e.g., resolution, sampling rate, pixel dimensions) you will use for the files you will create.
 
-# 2. Digital Content, Resources, or Assets
+### Workflow and Asset Maintenance/Preservation
 
-> **Scope:** Creation, formats, workflow, quality control, preservation, metadata, discovery, public access, and prior examples of digital content/resources/assets.
+**B.1** Describe your quality control plan. How will you monitor and evaluate your workflow and products?
 
-## Criterion 2.1 — Describe digital content/resources/assets, quantities, and formats
+**B.2** Describe your plan for preserving and maintaining digital assets during and after the award period. Your plan should address storage systems, shared repositories, technical documentation, migration planning, and commitment of organizational funding for these purposes. Please note: You may charge the federal award before closeout for the costs of publication or sharing of research results if the costs are not incurred during the period of performance of the federal award (see 2 C.F.R. § 200.461).
 
-**Applies to:** Projects creating or collecting digital content, resources, or assets.
+### Metadata
 
-### Complete / detailed
-Clearly describes every type of digital content/resource/asset to be created or collected and provides the quantity and intended format(s) for each type.
+**C.1** Describe how you will produce any and all technical, descriptive, administrative, or preservation metadata or linked data. Specify which standards or data models you will use for the metadata structure (e.g., RDF, BIBFRAME, Dublin Core, Encoded Archival Description, PBCore, PREMIS) and metadata content (e.g., thesauri).
 
-### Addressed, but incomplete
-Describes the products but omits or gives vague information about types, quantities, and/or formats.
+**C.2** Explain your strategy for preserving and maintaining metadata created or collected during and after the award period of performance.
 
-### Did not address
-Does not adequately identify what digital content/resources/assets will be created or collected.
+**C.3** Explain what metadata sharing and/or other strategies you will use to facilitate widespread discovery and use of the digital content, resources, or assets created during your project (e.g., an API [Application Programming Interface], contributions to a digital platform, or other ways you might enable batch queries and retrieval of metadata).
 
-## Criterion 2.2 — Identify equipment, software, supplies, or service providers used to create the assets
+### Access and Use
 
-### Complete / detailed
-Lists the equipment, software, and supplies that will be used to create the digital products, or identifies the service provider that will perform the work, as applicable.
+**D.1** - Describe how you will make the digital content, resources, or assets available to the public. 
+- Include details about the delivery strategy, such as: 
+	- Openly available online?
+	- Available to specified audiences?
+- Describe the underlying hardware/software platforms and infrastructure, such as: 
+	- Specific digital repository software 
+	- Leased services 
+	- Accessibility via standard web browsers 
+	- Requirements for special software tools to use the content 
+	- Delivery enabled by IIIF specifications
 
-### Addressed, but incomplete
-Identifies some creation resources or a provider but leaves important components unspecified.
+**D.2**. Provide the name(s) and URL(s) (Universal Resource Locator), DOI (Digital Object Identifier), or other persistent identifier for any examples of previous digital content, resources, or assets your organization has created.
 
-### Did not address
-Does not identify the equipment, software, supplies, or service provider used to create the assets.
+## SECTION III: SOFTWARE
 
-## Criterion 2.3 — Identify digital file formats and digitization quality standards
+### General Information
 
-### Complete / detailed
-Lists all planned digital file formats. If content will be digitized, also specifies applicable quality standards such as resolution, sampling rate, pixel dimensions, or equivalent measures.
+**A.1** Describe the software you intend to create, including a summary of the major functions it will perform and the intended primary audience(s) it will serve.
 
-### Addressed, but incomplete
-Lists only some formats or, for digitization, does not adequately specify the quality standards that will govern file creation.
+**A.2** List other existing software that wholly or partially performs the same or similar functions, and explain how the software you intend to create is different, and justify why those differences are significant and necessary.
 
-### Did not address
-Does not identify planned file formats or applicable digitization quality standards.
+### Technical Information
 
-## Criterion 2.4 — Describe the quality-control plan
+**B.1** List the programming languages, platforms, frameworks, software, or other applications you will use to create your software and explain why you chose them.
 
-### Complete / detailed
-Clearly explains how the project will monitor and evaluate both its workflow and resulting digital products, including the quality-control approach used during production.
+**B.2** Describe how the software you intend to create will extend or interoperate with relevant existing software.
 
-### Addressed, but incomplete
-Mentions quality control or review but does not clearly explain how workflow and products will be monitored and evaluated.
+**B.3** Describe any underlying additional software or system dependencies necessary to run the software you intend to create.
 
-### Did not address
-Does not describe a quality-control plan.
+**B.4** Describe the processes you will use for development, documentation, and for maintaining and updating documentation for users of the software.
 
-## Criterion 2.5 — Describe preservation and maintenance of digital assets during and after the award
+**B.5** Provide the name(s), URL(s), and/or code repository locations for examples of any previous software your organization has created.
 
-### Complete / detailed
-Explains how digital assets will be preserved and maintained both during and after the award period, addressing **storage systems, shared repositories, technical documentation, migration planning, and organizational funding commitments** for preservation/maintenance.
+### Access and Use
 
-### Addressed, but incomplete
-Provides a preservation or maintenance plan but omits or inadequately addresses one or more of the required elements: storage, repositories, documentation, migration, or organizational funding commitment.
+**C.1** Describe how you will make the software and source code available to the public and/or its intended users.
 
-### Did not address
-Does not provide a meaningful plan for preserving and maintaining digital assets during and after the award period.
+**C.2** Identify where you will deposit the source code for the software you intend to develop:
 
-## Criterion 2.6 — Describe creation of metadata or linked data and applicable standards/models
+- Name of publicly accessible source code repository:
+- URL:
 
-### Complete / detailed
-Explains how technical, descriptive, administrative, preservation metadata, and/or linked data will be produced as applicable; identifies the standards or data models used for metadata structure; and identifies applicable standards or controlled vocabularies/thesauri for metadata content.
+## SECTION IV: RESEARCH DATA
 
-### Addressed, but incomplete
-Mentions metadata creation but does not adequately explain the process, metadata types, structure standards/data models, and/or content standards.
+As part of the federal government’s commitment to increase access to federally funded research data, Section IV represents the Data Management Plan (DMP) for research proposals and should reflect data management, dissemination, and preservation best practices in the applicant’s area of research appropriate to the data that the project will generate.
 
-### Did not address
-Does not describe how applicable metadata/linked data will be produced or what standards/models will be used.
+**A.1** Identify the type(s) of data you plan to collect or generate, and the purpose or intended use(s) to which you expect them to be put. 
+- Describe the method(s) you will use, the proposed scope and scale, and the approximate dates or intervals at which you will collect or generate data.
 
-## Criterion 2.7 — Describe preservation and maintenance of metadata
+**A.2** Does the proposed data collection or research activity require approval by any internal review panel or institutional review board (IRB)? If so, has the proposed research activity been approved? If not, what is your plan for securing approval?
 
-### Complete / detailed
-Clearly explains how metadata created or collected by the project will be preserved and maintained during and after the award period.
+**A.3** Will you collect any sensitive information?
+  - Personally identifiable information (PII)
+  - Confidential information (e.g., trade secrets)
+  - Proprietary information
+- If so, detail the specific steps you will take to protect the information while preparing it for public release, such as:
+  - Anonymizing individual identifiers
+  - Data aggregation
+- If the data will not be released publicly, explain why it cannot be shared due to the protection of:
+  - Privacy
+  - Confidentiality
+  - Security
+  - Intellectual property
+  - Other rights or requirements
 
-### Addressed, but incomplete
-Mentions metadata preservation or maintenance but lacks a clear plan covering both the award period and the period after it.
+**A.4** What technical (hardware and/or software) requirements or dependencies would be necessary for understanding retrieving, displaying, processing, or otherwise reusing the data?
 
-### Did not address
-Does not explain how metadata will be preserved and maintained.
+**A.5** What documentation will you capture or create along with the data, such as:
+  - Consent agreements
+  - Data documentation
+  - Codebooks
+  - Metadata
+  - Analytical information
+  - Procedural information
+- Where will the documentation be stored?
+- In what format(s) will the documentation be stored?
+- How will you permanently associate and manage the documentation with the data it describes to enable future reuse?
 
-## Criterion 2.8 — Describe metadata sharing and discovery strategies
+**A.6** What is your plan for managing, disseminating, and preserving data after the completion of the award-funded project?
 
-### Complete / detailed
-Explains how metadata will be shared or otherwise used to enable widespread discovery and use of project digital products, including applicable mechanisms such as APIs, contributions to digital platforms, batch querying, or metadata retrieval.
+**A.7** Identify where you will deposit the data:
 
-### Addressed, but incomplete
-Mentions discoverability or metadata sharing but provides limited detail about the strategy or mechanisms that will enable discovery/use.
+- Name of repository:
+- URL:
 
-### Did not address
-Does not describe a strategy for metadata sharing or widespread discovery of the digital products.
+**A.8** When and how frequently will you review this data management plan? How will the implementation be monitored?
 
-## Criterion 2.9 — Describe public availability, delivery strategy, and access infrastructure
-
-### Complete / detailed
-Explains how digital content/resources/assets will be made available; identifies the intended access model or audience; describes the delivery strategy; and identifies the underlying hardware/software platform or infrastructure, including browser accessibility, special software requirements, repository/services, or relevant delivery specifications where applicable.
-
-### Addressed, but incomplete
-States that products will be available but does not fully describe the audience/access model, delivery strategy, platform/infrastructure, or user technical requirements.
-
-### Did not address
-Does not explain how the digital products will be made available to the public or intended audience.
-
-## Criterion 2.10 — Provide persistent references to previous digital products
-
-### Complete / detailed
-Provides the name(s) and URL(s), DOI(s), or other persistent identifier(s) for applicable examples of previous digital content/resources/assets created by the organization.
-
-### Addressed, but incomplete
-References previous work but omits names and/or usable URLs, DOIs, or other persistent identifiers.
-
-### Did not address
-Does not provide requested examples or identifiers when previous organizational digital products exist.
-
----
-
-# 3. Software
-
-> **Scope:** Purpose, audience, differentiation, technology choices, interoperability, dependencies, development/documentation, prior work, source-code access, and repository deposit.
-
-## Criterion 3.1 — Describe the software, major functions, and primary audience(s)
-
-**Applies to:** Projects creating software.
-
-### Complete / detailed
-Clearly describes the software to be created, summarizes its major functions, and identifies its intended primary audience(s).
-
-### Addressed, but incomplete
-Describes the software but leaves its functions and/or intended audience vague or incomplete.
-
-### Did not address
-Does not adequately describe the proposed software, its major functions, or its intended audience.
-
-## Criterion 3.2 — Compare with existing software and justify significant differences
-
-### Complete / detailed
-Identifies existing software that wholly or partially performs similar functions, explains how the proposed software differs, and justifies why those differences are significant and necessary.
-
-### Addressed, but incomplete
-Mentions comparable software or differences but does not adequately explain the comparison or justify why the differences are significant and necessary.
-
-### Did not address
-Does not identify relevant existing software or explain and justify the proposed software's differences.
-
-## Criterion 3.3 — Identify technologies used and explain why they were chosen
-
-### Complete / detailed
-Lists the programming languages, platforms, frameworks, software, and/or other applications that will be used and explains the rationale for the relevant choices.
-
-### Addressed, but incomplete
-Lists some technologies but omits important components or provides little/no explanation for why they were selected.
-
-### Did not address
-Does not identify the technologies used to create the software or explain the choices.
-
-## Criterion 3.4 — Describe extension of or interoperability with existing software
-
-### Complete / detailed
-Clearly explains how the proposed software will extend or interoperate with relevant existing software.
-
-### Addressed, but incomplete
-Mentions integration, extension, or interoperability but does not clearly explain how it will work.
-
-### Did not address
-Does not describe how the proposed software will extend or interoperate with relevant existing software.
-
-## Criterion 3.5 — Identify software/system dependencies
-
-### Complete / detailed
-Identifies the underlying additional software and/or system dependencies necessary to run the proposed software.
-
-### Addressed, but incomplete
-Identifies some dependencies but leaves required software/system dependencies unclear or incomplete.
-
-### Did not address
-Does not identify dependencies necessary to run the software.
-
-## Criterion 3.6 — Describe development and documentation processes
-
-### Complete / detailed
-Explains the processes that will be used for software development, creation of user documentation, and ongoing maintenance and updating of that documentation.
-
-### Addressed, but incomplete
-Discusses development or documentation but does not fully address development, initial documentation, and documentation maintenance/updates.
-
-### Did not address
-Does not describe the software development and documentation processes.
-
-## Criterion 3.7 — Provide references to previous software
-
-### Complete / detailed
-Provides the name(s), URL(s), and/or code-repository location(s) for applicable examples of previous software created by the organization.
-
-### Addressed, but incomplete
-Mentions previous software but does not provide sufficient names, URLs, or repository locations to identify/access the examples.
-
-### Did not address
-Does not provide requested examples when previous organizational software exists.
-
-## Criterion 3.8 — Describe how software and source code will be made available
-
-### Complete / detailed
-Clearly explains how the software and its source code will be made available to the public and/or intended users.
-
-### Addressed, but incomplete
-States that software/source code will be available but gives insufficient detail about how intended users will obtain access.
-
-### Did not address
-Does not explain how the software and source code will be made available.
-
-## Criterion 3.9 — Identify the public source-code repository
-
-### Complete / detailed
-Identifies the publicly accessible repository where source code will be deposited and provides both the repository name and URL.
-
-### Addressed, but incomplete
-Identifies a repository but omits its name or URL, or does not clearly establish that it will be publicly accessible.
-
-### Did not address
-Does not identify where the source code will be deposited.
-
----
-
-# 4. Research Data / Data Management Plan
-
-> **Scope:** Data generation/collection, approvals, sensitive information, technical requirements, documentation, long-term management/dissemination/preservation, repository deposit, and DMP review/monitoring.
-
-## Criterion 4.1 — Describe data types, purpose/use, methods, scope/scale, and collection/generation schedule
-
-**Applies to:** Projects creating research data.
-
-### Complete / detailed
-Identifies the type(s) of data to be collected or generated; explains their purpose or intended use; describes the methods used; states the proposed scope and scale; and provides approximate dates or intervals for data collection/generation.
-
-### Addressed, but incomplete
-Describes the research data but omits or gives vague information about one or more required elements: data type, purpose/use, methods, scope/scale, or timing/frequency.
-
-### Did not address
-Does not adequately describe the research data to be collected/generated and the required collection/generation details.
-
-## Criterion 4.2 — Address internal review or IRB requirements and approval status
-
-### Complete / detailed
-States whether an internal review panel or IRB approval is required. If required, states whether approval has been obtained; if it has not, clearly explains the plan for securing approval.
-
-### Addressed, but incomplete
-Mentions review/IRB requirements but does not clearly state applicability, approval status, or the plan to obtain approval when needed.
-
-### Did not address
-Does not address internal review panel or IRB requirements.
-
-## Criterion 4.3 — Identify sensitive information and explain protections or non-release justification
-
-### Complete / detailed
-States whether sensitive information—including PII, confidential information, or proprietary information—will be collected. If so, describes specific protections used while preparing data for public release, such as anonymization or aggregation. If the data will not be publicly released, clearly explains why sharing is prevented by privacy, confidentiality, security, intellectual property, or other rights/requirements.
-
-### Addressed, but incomplete
-Acknowledges sensitive data or sharing restrictions but does not adequately explain the protection measures or justification for non-release.
-
-### Did not address
-Does not identify applicable sensitive-information concerns or explain protections/sharing restrictions.
-
-## Criterion 4.4 — Identify technical requirements or dependencies for future reuse
-
-### Complete / detailed
-Identifies the hardware and/or software requirements or dependencies needed to understand, retrieve, display, process, or otherwise reuse the data.
-
-### Addressed, but incomplete
-Mentions technical requirements/dependencies but does not adequately cover the requirements needed for meaningful access or reuse.
-
-### Did not address
-Does not identify technical requirements or dependencies needed to use the data.
-
-## Criterion 4.5 — Describe accompanying documentation, storage, formats, and permanent association with data
-
-### Complete / detailed
-Identifies documentation that will accompany the data—such as consent agreements, data documentation, codebooks, metadata, and analytical/procedural information; states where it will be stored; identifies its format(s); and explains how the documentation will be permanently associated and managed with the data to enable future reuse.
-
-### Addressed, but incomplete
-Describes some documentation but omits or inadequately addresses documentation types, storage location, formats, or the method for permanently associating/managing documentation with the data.
-
-### Did not address
-Does not describe the documentation needed to understand and reuse the data or how it will be managed with the data.
-
-## Criterion 4.6 — Describe post-project data management, dissemination, and preservation
-
-### Complete / detailed
-Provides a clear plan for managing, disseminating, and preserving the research data after completion of the award-funded project.
-
-### Addressed, but incomplete
-Discusses post-project handling of data but does not adequately address all three areas: management, dissemination, and preservation.
-
-### Did not address
-Does not provide a post-project plan for managing, disseminating, and preserving the data.
-
-## Criterion 4.7 — Identify the data repository
-
-### Complete / detailed
-Identifies where the research data will be deposited and provides both the repository name and URL.
-
-### Addressed, but incomplete
-Identifies a repository but omits its name or URL, or otherwise leaves the deposit location unclear.
-
-### Did not address
-Does not identify where the research data will be deposited.
-
-## Criterion 4.8 — Define DMP review frequency and implementation monitoring
-
-### Complete / detailed
-States when and how frequently the Data Management Plan will be reviewed and clearly explains how implementation of the plan will be monitored.
-
-### Addressed, but incomplete
-Mentions review or monitoring but does not clearly define both the review timing/frequency and implementation-monitoring process.
-
-### Did not address
-Does not describe how often the DMP will be reviewed or how its implementation will be monitored.
-
----
+<footer>OMB Control #: 3137-0092. Expiration Date: 8/31/2021. IMLS-CLR-F-0032</footer>
