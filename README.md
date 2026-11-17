@@ -48,7 +48,6 @@ This repository contains the necessary resources and configurations to host the 
 <br>
 <br>
 
-
 ## Local Development Instructions
 
 This application stack uses Docker Compose ([compose.yml](compose.yml)) to launch the necessary containers on a local workstation. Local development requires:
@@ -57,12 +56,12 @@ Prerequisite: Install the latest release version of Docker: [Get Docker](https:/
 
 ### API server setup
 
-Copy [api/.env.example](api/.env.example) to `api/.env`. Fill in token and access keys with values stored in ASU Stache:
+Copy [secrets/.env.backend.example](secrets/.env.backend.example) to `secrets/.env.backend`. Fill in token and access keys with values stored in ASU Stache:
 
-* ROLLBAR_TOKEN
-* DMPTOOL_CLIENT_ID
-* DMPTOOL_CLIENT_SECRET
-* LLM_ACCESS_SECRET
+- ROLLBAR_TOKEN
+- DMPTOOL_CLIENT_ID
+- DMPTOOL_CLIENT_SECRET
+- LLM_ACCESS_SECRET
 
 ### React application setup
 
@@ -83,7 +82,7 @@ Copy [api/.env.example](api/.env.example) to `api/.env`. Fill in token and acces
 
 ### Generate local SSL cert for testing
 
-In order for ASU SSO authentication to work, the React web app must be accessible through a secured HTTPS connection and using a `*.asu.edu` domain. For the purposes of local development, the React app will be hosted at `dmsp.local.asu.edu`. We will be using a free CLI tool, `mkcert`, to generate our testing SSL certificate and registering it in our local workstation so it will be automatically trusted by our browser.
+In order for ASU SSO authentication to work, the React web app must be accessible through a secured HTTPS connection and using a `*.asu.edu` domain. For the purposes of local development, the React app will be hosted at `dmsp.dev.rtd.asu.edu`. We will be using a free CLI tool, `mkcert`, to generate our testing SSL certificate and registering it in our local workstation so it will be automatically trusted by our browser.
 
 MacOS instructions follow:
 
@@ -93,22 +92,21 @@ From the project root folder, install `mkcert` and `nss` (for Firefox users) and
 brew install mkcert
 brew install nss # if you use Firefox
 
-mkcert -key-file secrets/certs/key.pem -cert-file secrets/certs/cert.pem "*.local.asu.edu"
+mkcert -key-file secrets/certs/key.pem -cert-file secrets/certs/cert.pem "*.dev.rtd.asu.edu"
 mkcert -install # to make certificate be trusted automatically
 ```
 
-You must also add the dev domain, `dmsp.local.asu.edu` to your machine's `/etc/hosts` file:
+You must also add the dev domain, `dmsp.dev.rtd.asu.edu` to your machine's `/etc/hosts` file:
 
 ```
-sudo echo "\n127.0.0.1 dmsp.local.asu.edu\n" >> /etc/hosts
+sudo echo "\n127.0.0.1 dmsp.dev.rtd.asu.edu\n" >> /etc/hosts
 ```
-
 
 ### Build and launch application stack
 
 In order to build the application container images and launch the application, you must insert the GitHub Personal Access Token into the command line: `docker compose build --build-arg NPM_TOKEN=TOKEN_VALUE`, and then launch the application: `docker compose up`.
 
-The React frontend application can be accessed at: [https://dmsp.local.asu.edu](https://dmsp.local.asu.edu).
+The React frontend application can be accessed at: [https://dmsp.dev.rtd.asu.edu](https://dmsp.dev.rtd.asu.edu).
 
 THe API server can be accessed using Postman or other API clients at [http://localhost:3001](http://localhost:3001).
 
@@ -124,10 +122,22 @@ docker compose exec api bash
 
 You will be logged into the container terminal, in the root folder of the application, where you can run NPM commands and scripts. The following DB migration-related scripts are available:
 
-* Run migrations: `npm run migration:run`
-* Generate migration: `npm run migration:generate --name=NameOfMigration` - Name the migration for the change to be performed, e.g. `--name=CreateUserTable`
-* Create new migration: `npm run migration:create --name=NameOfMigration`
-* Revert last migration: `npm run migration:revert`
+- Run migrations: `npm run migration:run`
+- Generate migration: `npm run migration:generate --name=NameOfMigration` - Name the migration for the change to be performed, e.g. `--name=CreateUserTable`
+- Create new migration: `npm run migration:create --name=NameOfMigration`
+- Revert last migration: `npm run migration:revert`
+
+### Seeding the Database
+
+Before launching the application for the first time, the data must be pre-loaded with the FUnding Agency rubrics. Again, shell into the api docker container:
+
+```
+docker compose exec api bash
+```
+
+For local development, run the database seeder: `npm run seed:dev`
+
+Note: if initializing a Cloud environment, run: `npm run seed:prod`.
 
 ## Server Hosting Overview
 
@@ -197,6 +207,7 @@ The script is used in the Cloud Build steps to ensure that the correct permissio
 | `_GSA_NAME`             | The name of the Google IAM Service Account which will be used for Workload Identity.                                                                                                                                                                                                                   |
 | `_KSA_NAME`             | The name of the Kubernetes Service Account that the workloads will run under in the cluster. This defaults to `example` plus any prefix or suffix defined in the overlay `kustomization.yaml` file.                                                                                                    |
 | `_GKE_NAMESPACE_NAME`   | The name of the namespace on the GKE cluster where the instance is being deployed.                                                                                                                                                                                                                     |
+
 ## Commit Message Guidelines
 
 We use [Commitizen](https://commitizen-tools.github.io/commitizen/) to standardize commit messages.
@@ -216,9 +227,12 @@ If you are setting up the application for the first time, follow these steps to 
 1. **Clean up existing containers and volumes (recommended for fresh setup)**
 
    Before building, remove any previously created containers or volumes to avoid conflicts:
+
    ```bash
    docker compose down -v
    docker system prune -f
+   ```
+
 2. **Build the application containers**
 
    Run this command from the project root, replacing `<YOUR_GITHUB_TOKEN>` with your GitHub Personal Access Token:
@@ -258,10 +272,9 @@ If you are setting up the application for the first time, follow these steps to 
    ```
 
    This command will:
-
-   * Insert missing rubrics.
-   * Update existing rubrics if their text has changed.
-   * Skip any that are already up to date.
+   - Insert missing rubrics.
+   - Update existing rubrics if their text has changed.
+   - Skip any that are already up to date.
 
    Example output:
 
@@ -270,7 +283,7 @@ If you are setting up the application for the first time, follow these steps to 
    No changes for agency: NIH
    Updated rubric for agency: DOE
    ```
-  
+
    You should see one entry per rubric (e.g., NSF, NIH, DOE).
-  
+
    Once this is done, your local environment is fully ready for use.
