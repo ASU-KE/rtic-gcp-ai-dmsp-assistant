@@ -4,5 +4,5 @@ metadata:
   name: ai-dmsp-backend-config
 spec:
   securityPolicy:
-    name: "websvcs-diverse-stack-dev-policy" # The name of the Cloud Armor security policy to apply to Ingress traffic.
+    name: "" # Detached; WAF rules handled by Cloudflare.
   timeoutSec: 300
